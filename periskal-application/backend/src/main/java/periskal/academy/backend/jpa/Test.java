@@ -17,6 +17,10 @@ public class Test {
         this.id = id;
     }
 
+    public Test() {
+
+    }
+
     public Test(long id, String test) {
         this.id = id;
         this.test = test;
