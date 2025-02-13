@@ -1,0 +1,67 @@
+services:
+  # MySQL Database Service
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - app-network
+      - proxy
+
+
+  # Spring Boot Backend Service
+  backend:
+    build: ./backend
+    container_name: spring-boot-app
+    restart: always
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/mydatabase?allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: myuser
+      SPRING_DATASOURCE_PASSWORD: mypassword
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SERVER_PORT: 8080
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+      - proxy
+
+  # Angular Frontend Service
+  frontend:
+    build: ./frontend/Periskal-frontend
+    container_name: angular-app
+    restart: always
+    ports:
+      - "4200:4200"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+      - proxy
+    #labels:  
+      #- "traefik.enable=true"
+      #- "traefik.http.routers.frontend.rule=Host(`frontend.s145212.tech`)"
+      #- "traefik.http.routers.frontend.entrypoints=websecure"
+      #- "traefik.http.routers.frontend.tls=true"
+      #- "traefik.docker.network=proxy"
+# Define Networks
+networks:
+  app-network:
+  proxy:
+    external: true
+    name: traefik
+
+# Persistent Volumes
+volumes:
+  mysql_data:
