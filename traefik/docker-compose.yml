@@ -4,8 +4,8 @@ services:
         container_name: "traefik"
         command:
             - "--log.level=DEBUG"
-            - "--api.insecure=true"
-            - "--api.dashboard=true"
+            #- "--api.insecure=true"
+            #- "--api.dashboard=true"
             - "--providers.docker=true"
             - "--providers.file.filename=/etc/traefik/dynamicconfig.yml"
             - "--providers.docker.exposedbydefault=false"
@@ -13,7 +13,7 @@ services:
             - "--entryPoints.websecure.address=:443"
             - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
             - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
-            - "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+            #- "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
             - "--certificatesresolvers.myresolver.acme.email=s151582@ap.be"
             - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
             - "--serverstransport.forwardingtimeouts.dialtimeout=30s"
@@ -31,7 +31,7 @@ services:
             - proxy
     
   frontend:
-      build: ../periskal-application/frontend/periskal-frontend
+      build: ../periskal-application/frontend/Periskal-frontend
       depends_on:
         - backend
         - traefik
@@ -39,12 +39,12 @@ services:
         - "4200:4200"
       labels:
           - "traefik.enable=true"
-          - "traefik.http.routers.frontend.rule=Host(`frontend.localhost`)"
+          - "traefik.http.routers.frontend.rule=Host(`project.th-dl.tech`)"
           - "traefik.http.services.frontend.loadbalancer.server.port=4200"
-          - "traefik.http.routers.frontend.entrypoints=web"
-          #- "traefik.http.routers.frontend.tls=true"
+          - "traefik.http.routers.frontend.entrypoints=websecure"
+          - "traefik.http.routers.frontend.tls=true"
           - "traefik.docker.network=proxy"
-          #- "traefik.http.routers.frontend.tls.certresolver=myresolver"
+          - "traefik.http.routers.frontend.tls.certresolver=myresolver"
       networks:
           - proxy
 
@@ -65,9 +65,11 @@ services:
       - "8080:8080"
     labels:
       - "traefik.enable=true"
-      - traefik.http.routers.backend.rule=Host(`backend.localhost`) && PathPrefix(`/api`)
+      - traefik.http.routers.backend.rule=Host(`project.th-dl.tech`) && PathPrefix(`/api`)
       - "traefik.http.services.backend.loadbalancer.server.port=8080"
-      - "traefik.http.routers.backend.entrypoints=web"
+      - "traefik.http.routers.backend.tls=true"
+      - "traefik.http.routers.backend.entrypoints=websecure"
+      - "traefik.http.routers.backend.tls.certresolver=myresolver"
       - "traefik.docker.network=proxy"
     networks:
       - proxy
@@ -92,7 +94,5 @@ services:
 volumes:
   mysql-data:
 
-
 networks:
     proxy:
-        external: true

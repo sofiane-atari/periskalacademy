@@ -16,11 +16,11 @@ export class TestComponent implements OnInit {
 
   backendMessage: string = 'Checking backend...';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
   tests: Test[] = [];
 
   ngOnInit(): void {
-    this.http.get<Test[]>('http://backend.localhost:8080/api/test').subscribe(
+    this.http.get<Test[]>('https://project.th-dl.tech/api/test').subscribe(
       (data) => {
         this.tests = data;
       },
