@@ -1,0 +1,11 @@
+http:
+  routers:
+    to-frontend:
+      rule: "Host(`devops.th-dl.tech`)"
+      service: "frontend-service"
+
+  services:
+    frontend-service:
+      loadBalancer:
+        servers:
+          - url: "http://frontend:80"

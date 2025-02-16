@@ -1,24 +1,98 @@
 services:
-  traefik-proxy:
-    image: traefik:v2.10
+  traefik:
+        image: "traefik:v3.2"
+        container_name: "traefik"
+        command:
+            - "--log.level=DEBUG"
+            - "--api.insecure=true"
+            - "--api.dashboard=true"
+            - "--providers.docker=true"
+            - "--providers.file.filename=/etc/traefik/dynamicconfig.yml"
+            - "--providers.docker.exposedbydefault=false"
+            - "--entryPoints.web.address=:80"
+            - "--entryPoints.websecure.address=:443"
+            - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
+            - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
+            - "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+            - "--certificatesresolvers.myresolver.acme.email=s151582@ap.be"
+            - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+            - "--serverstransport.forwardingtimeouts.dialtimeout=30s"
+            - "--serverstransport.forwardingtimeouts.responseheadertimeout=60s"
+            - "--entryPoints.traefik.address=:8080"
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - "./letsencrypt:/letsencrypt"
+            - "./dynamicconfig.yml:/etc/traefik/dynamicconfig.yml"
+            - "./staticconfig.yml:/etc/traefik/staticconfig.yml"
+            - "/var/run/docker.sock:/var/run/docker.sock"
+        networks:
+            - proxy
+    
+  frontend:
+      build: ../periskal-application/frontend/periskal-frontend
+      depends_on:
+        - backend
+        - traefik
+      ports:
+        - "4200:4200"
+      labels:
+          - "traefik.enable=true"
+          - "traefik.http.routers.frontend.rule=Host(`frontend.localhost`)"
+          - "traefik.http.services.frontend.loadbalancer.server.port=4200"
+          - "traefik.http.routers.frontend.entrypoints=web"
+          #- "traefik.http.routers.frontend.tls=true"
+          - "traefik.docker.network=proxy"
+          #- "traefik.http.routers.frontend.tls.certresolver=myresolver"
+      networks:
+          - proxy
+
+  backend:
+    build: ../periskal-application/backend
+    container_name: spring-boot-app
+    restart: always
+    depends_on:
+      - mysql
+      - traefik
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/periskal?allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SERVER_PORT: 8080
     ports:
-      - 80:80
-      - 443:443
-    volumes:
-      - ./traefik.yml:/etc/traefik/traefik.yml
-      - ./acme.json:/acme.json
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./passwd:/etc/traefik/passwd
-      - ./conf.d:/etc/traefik/conf.d
+      - "8080:8080"
     labels:
-      - "traefik.http.routers.dashboard.rule=Host(`traefik.s145212.tech`)"
-      - "traefik.http.routers.dashboard.service=api@internal"
-      - "traefik.http.routers.dashboard.middlewares=auth"
-      - "traefik.http.middlewares.auth.basicauth.usersfile=/etc/traefik/passwd"
-      - "traefik.http.routers.dashboard.tls=true"
-      - "traefik.http.routers.dashboard.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.dashboard.entrypoints=websecure"
+      - "traefik.enable=true"
+      - traefik.http.routers.backend.rule=Host(`backend.localhost`) && PathPrefix(`/api`)
+      - "traefik.http.services.backend.loadbalancer.server.port=8080"
+      - "traefik.http.routers.backend.entrypoints=web"
+      - "traefik.docker.network=proxy"
+    networks:
+      - proxy
+
+  mysql:
+    image: mysql:8.0
+    restart: always
+    depends_on:
+      - traefik
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: periskal
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - proxy
+
+volumes:
+  mysql-data:
+
+
 networks:
-  proxy:
-    external: true
-    name: traefik
+    proxy:
+        external: true

@@ -23,5 +23,7 @@ public class BackendApplication implements CommandLineRunner {
 	public void run(String... args) {
 		Test test = new Test(10, "hallo");
 		repository.save(test);
+		Test test2 = new Test(12, "test");
+		repository.save(test2);
 	}
 }
