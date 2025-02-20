@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AuthenticationService } from '../../services/authentication.service';
 
 @Component({
   selector: 'app-login',
@@ -14,14 +15,23 @@ export class LoginComponent {
   username: string = '';
   password: string = '';
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private authService: AuthenticationService,
+  ) { }
 
   onLogin() {
-    if (this.username === 'admin' && this.password === 'password') {
-      alert('Login successful!');
-      this.router.navigate(['/dashboard']); // Redirect after login (dashboard not created yet)
-    } else {
-      alert('Invalid credentials');
-    }
+    this.authService.authenticate(this.username, this.password).subscribe({
+      next: (response) => {
+        if (response) {
+          this.router.navigate(['/dashboard']);
+        } else {
+          alert('Authentication failed');
+        }
+      },
+      error: (error) => {
+        alert('Error during authentication');
+      },    
+    });
   }
 }
