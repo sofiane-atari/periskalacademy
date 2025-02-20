@@ -13,7 +13,6 @@ import periskal.academy.backend.jpa.TestRepository;
 
 import org.springframework.web.bind.annotation.RequestParam;
 
-@CrossOrigin(origins = "https://project.th-dl.tech/")
 @RestController
 public class HelloWorldController {
 
