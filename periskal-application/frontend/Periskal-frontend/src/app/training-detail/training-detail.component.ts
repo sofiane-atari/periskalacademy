@@ -15,16 +15,24 @@ export class TrainingDetailComponent {
 
   trainingSvc : TrainingService;
 
+  trainingId : number = 0;
+
   constructor(private route: ActivatedRoute, private svc: TrainingService) {
     this.trainingSvc = svc;
   }
 
-  // ngOnInit(): void {
-  //   const trainingId = +this.route.snapshot.paramMap.get('id')!;
-  //   const result = this.trainingSvc.getProductsData(trainingId);
-  //   if(result != null)
-  //     this.products = result;
-  //   else
-  //     alert("No products found");
-  // }
+  ngOnInit(): void {
+    // Get the training ID from the URL
+    this.trainingId = Number(this.route.snapshot.paramMap.get('id'));
+
+    // Call the service method to get the products for the specific training
+    this.trainingSvc.getProductsData(this.trainingId).subscribe(
+      (data) => {
+        this.products = data;  // Store the fetched data (training and its products)
+      },
+      (error) => {
+        console.error('Error fetching training products', error);
+      }
+    );
+  }
 }

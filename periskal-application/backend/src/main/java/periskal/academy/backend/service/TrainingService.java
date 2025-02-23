@@ -1,9 +1,11 @@
 package periskal.academy.backend.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import periskal.academy.backend.jpa.Product;
 import periskal.academy.backend.jpa.ProductRepository;
 import periskal.academy.backend.jpa.Training;
 import periskal.academy.backend.jpa.TrainingRepository;
@@ -20,5 +22,9 @@ public class TrainingService {
 
     public List<Training> getAllTrainings() {
         return (List<Training>) trainingRepository.findAll();
+    }
+
+    public Optional<Training> getTrainingWithProducts(Long id) {
+        return trainingRepository.findById(id);
     }
 }

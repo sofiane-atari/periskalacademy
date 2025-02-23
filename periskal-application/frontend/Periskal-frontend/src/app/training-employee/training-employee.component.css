@@ -3,6 +3,7 @@
   display: flex;
   justify-content: flex-start;
   gap: 10px;
+  padding-left: 3rem;
 }
 
 .training {
