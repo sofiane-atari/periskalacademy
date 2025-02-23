@@ -28,6 +28,9 @@ export class TrainingEmployeeComponent implements OnInit {
     this.router.navigate(['/training', trainingId]);
   }
 
+  goToAddPage() {
+    this.router.navigate(['/submit'])
+  }
 }
 
 export interface training {

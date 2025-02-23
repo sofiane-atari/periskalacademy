@@ -1,0 +1,26 @@
+<div class="columns">
+  <div class="column"></div>
+  <div class="column">
+    <div class="field">
+      <label>Naam van de training</label>
+      <input [(ngModel)]="name" class="input" placeholder="Geef je naam" />
+    </div>
+
+    <div class="field">
+      <label>Description</label>
+      <input
+        [(ngModel)]="description"
+        class="input"
+        placeholder="Geef de description van de training"
+      />
+    </div>
+
+    <h3>Modules</h3>
+    <div class="field">
+      <label>Module Titel</label>
+    </div>
+
+    <button (click)="AddProduct()">Nieuwe module toevoegen</button>
+  </div>
+  <div class="column"></div>
+</div>

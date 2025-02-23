@@ -26,3 +26,9 @@ button:hover {
   background-color: #f0d04b;
   color: black;
 }
+
+.add {
+  width: 200px;
+  height: 200px;
+  font-size: 150px;
+}

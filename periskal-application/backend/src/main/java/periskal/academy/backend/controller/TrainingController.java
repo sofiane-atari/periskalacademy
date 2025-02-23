@@ -14,6 +14,8 @@ import periskal.academy.backend.jpa.Product;
 import periskal.academy.backend.jpa.Training;
 import periskal.academy.backend.service.TrainingService;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/api/trainings")
@@ -35,5 +37,4 @@ public class TrainingController {
         Optional<Training> training = trainingService.getTrainingWithProducts(trainingId);
         return training.get();
     }
-
 }
