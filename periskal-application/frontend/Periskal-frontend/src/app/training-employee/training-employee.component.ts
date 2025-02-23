@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { TrainingService } from '../training.service';
 
 @Component({
   selector: 'app-training-employee',
@@ -8,66 +9,18 @@ import { Router } from '@angular/router';
   styleUrl: './training-employee.component.css'
 })
 export class TrainingEmployeeComponent {
-  public demoTrainingData: training[] = [
-    {
-      id: 1,
-      name: "Product management",
-      description: "Introduction to Product Management",
-      Products: [
-        {
-          id: 1,
-          name: "Product management",
-          description: "Product Management 101 Book",
-        },
-        {
-          id: 2,
-          name: "Roadmap template",
-          description: "Product Roadmap Template",
-        },
-      ],
-    },
-    {
-      id: 2,
-      name: "Marketing Strategies",
-      description: "Advanced Marketing Strategies",
-      Products: [
-        {
-          id: 3,
-          name: "Marketing Campaign intro",
-          description: "Marketing Campaign Planner",
-        },
-        {
-          id: 4,
-          name: "SEO mastery guide",
-          description: "SEO Mastery Guide",
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: "Design thinking",
-      description: "Design Thinking Fundamentals",
-      Products: [
-        {
-          id: 5,
-          name: "Toolkit",
-          description: "Design Thinking Toolkit",
-        },
-        {
-          id: 6,
-          name: "Empathy",
-          description: "Empathy Map Template",
-        },
-      ],
-    },
-  ];
-  
+  private trainingSvc : TrainingService;
+  public trainingsData : training[];
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private svc: TrainingService) {
+    this.trainingSvc = svc;
+    this.trainingsData = this.trainingSvc.getTrainingData();
+  }
 
   goToTrainingDetails(trainingId: number) {
     this.router.navigate(['/training', trainingId]);
   }
+
 }
 
 export interface training {
