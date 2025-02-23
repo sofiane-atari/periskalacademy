@@ -9,7 +9,7 @@ import { TrainingService } from '../training.service';
   templateUrl: './training-detail.component.html',
   styleUrl: './training-detail.component.css'
 })
-export class TrainingDetailComponent implements OnInit {
+export class TrainingDetailComponent {
   training: training | undefined;
   products : product[] = [];
 
@@ -19,12 +19,12 @@ export class TrainingDetailComponent implements OnInit {
     this.trainingSvc = svc;
   }
 
-  ngOnInit(): void {
-    const trainingId = +this.route.snapshot.paramMap.get('id')!;
-    const result = this.trainingSvc.getProductsData(trainingId);
-    if(result != null)
-      this.products = result;
-    else
-      alert("No products found");
-  }
+  // ngOnInit(): void {
+  //   const trainingId = +this.route.snapshot.paramMap.get('id')!;
+  //   const result = this.trainingSvc.getProductsData(trainingId);
+  //   if(result != null)
+  //     this.products = result;
+  //   else
+  //     alert("No products found");
+  // }
 }
