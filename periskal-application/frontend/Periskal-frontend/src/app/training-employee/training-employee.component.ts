@@ -34,7 +34,7 @@ export interface training {
   id: number
   name: String
   description: String
-  Products: product[]
+  products: product[]
 }
 export interface product {
   id: number

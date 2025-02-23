@@ -13,7 +13,7 @@ export class TrainingService {
     return this.client.get<training[]>("http://backend.localhost:8080/api/trainings");
   }
 
-  getProductsData(trainingId: number): Observable<product[]> {
-    return this.client.get<product[]>(`http://backend.localhost:8080/api/trainings/${trainingId}/products`);
+  getTrainingById(trainingId: number): Observable<training> {
+    return this.client.get<training>(`http://backend.localhost:8080/api/trainings/${trainingId}`);
   }
 }

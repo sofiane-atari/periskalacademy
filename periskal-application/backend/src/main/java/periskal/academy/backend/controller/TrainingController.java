@@ -30,14 +30,10 @@ public class TrainingController {
         return trainingService.getAllTrainings();
     }
 
-    @GetMapping("/{trainingId}/products")
-    public List<Product> getProductsForTraining(@PathVariable Long trainingId) {
+    @GetMapping("/{trainingId}")
+    public Training getProductsForTraining(@PathVariable Long trainingId) {
         Optional<Training> training = trainingService.getTrainingWithProducts(trainingId);
-
-        List<Product> products = training.map(Training::getProducts).orElse(Collections.emptyList());
-
-        return products;
-
+        return training.get();
     }
 
 }

@@ -1,13 +1,28 @@
 .container {
-  border: 1px solid black;
   display: flex;
   justify-content: flex-start;
   gap: 10px;
   padding-left: 3rem;
+  flex-direction: column;
 }
 
 .training {
   background-color: #f0d04b;
-  padding: 10px;
-  border: 1px solid black;
+  padding-left: 10%;
+  border: 4px solid black;
+  width: 20%;
+  border-radius: 12px;
+  flex-direction: row;
+}
+
+button {
+  border-radius: 12px;
+  background-color: #f0d04b;
+  transition-duration: 0.4s;
+  color: black;
+  margin-bottom: 1rem;
+}
+button:hover {
+  background-color: #f0d04b;
+  color: black;
 }

@@ -1,7 +1,16 @@
 nav {
   display: inline-block;
   background-color: #f0d04b;
+  width: 100%;
+  margin-bottom: 50px;
 }
 li {
   list-style-type: none;
+  padding: 1.5rem;
+  display: inline;
+  margin-right: 10px;
+}
+a {
+  text-decoration: none;
+  color: black;
 }
