@@ -1,0 +1,12 @@
+.container {
+  border: 1px solid black;
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+.training {
+  background-color: #f0d04b;
+  padding: 10px;
+  border: 1px solid black;
+}

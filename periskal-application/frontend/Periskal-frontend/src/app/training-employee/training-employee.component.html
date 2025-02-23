@@ -1,1 +1,9 @@
-<p>training-employee works!</p>
+<div class="container">
+  @for (item of demoTrainingData; track $index) {
+  <div class="training">
+    <h1>{{ item.name }}</h1>
+    <p>{{ item.description }}</p>
+    <button>Products</button>
+  </div>
+  }
+</div>
