@@ -1,9 +1,9 @@
 <div class="container">
-  @for (item of demoTrainingData; track $index) {
+  @for (training of demoTrainingData; track $index) {
   <div class="training">
-    <h1>{{ item.name }}</h1>
-    <p>{{ item.description }}</p>
-    <button>Products</button>
+    <h1>{{ training.name }}</h1>
+    <p>{{ training.description }}</p>
+    <button (click)="goToTrainingDetails(training.id)">Products</button>
   </div>
   }
 </div>

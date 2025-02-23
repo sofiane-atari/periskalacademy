@@ -1,0 +1,11 @@
+<div>
+  <h2>{{ training?.name }} Products</h2>
+  @for (product of products; track $index) {
+  <div>
+    <h3>{{ product.id }}</h3>
+    <h4>{{ product.name }}</h4>
+    <p>{{ product.description }}</p>
+    <button>Take Course</button>
+  </div>
+  }
+</div>

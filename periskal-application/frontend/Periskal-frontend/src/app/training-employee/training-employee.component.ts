@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-training-employee',
@@ -61,6 +62,12 @@ export class TrainingEmployeeComponent {
     },
   ];
   
+
+  constructor(private router: Router) {}
+
+  goToTrainingDetails(trainingId: number) {
+    this.router.navigate(['/training', trainingId]);
+  }
 }
 
 export interface training {
