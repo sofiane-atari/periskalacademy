@@ -3,6 +3,7 @@ import { FormArray, FormBuilder, FormGroup, FormsModule, Validators, ReactiveFor
 import { module } from '../training-employee/training-employee.component';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { TrainingService } from '../training.service';
 
 @Component({
   selector: 'app-add-training',
@@ -13,7 +14,7 @@ import { Router } from '@angular/router';
 export class AddTrainingComponent {
   trainingForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private client: HttpClient, private router : Router) {
+  constructor(private fb: FormBuilder, private client: HttpClient, private router : Router, private trainingsService : TrainingService) {
     this.trainingForm = this.fb.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
@@ -44,7 +45,7 @@ export class AddTrainingComponent {
     if (this.trainingForm.valid) {
       const trainingData = this.trainingForm.value;
       console.log(trainingData);
-      this.client.post('http://localhost:8080/api/trainings/create', trainingData).subscribe(
+      this.trainingsService.postTraining(trainingData).subscribe(
         (response) => {
           console.log('Training posted successfully!', response);
           this.resetForm();

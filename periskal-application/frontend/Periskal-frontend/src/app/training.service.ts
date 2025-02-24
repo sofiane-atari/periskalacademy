@@ -16,4 +16,8 @@ export class TrainingService {
   getTrainingById(trainingId: number): Observable<training> {
     return this.client.get<training>(`http://backend.localhost:8080/api/trainings/${trainingId}`);
   }
+
+  postTraining(trainingData: any): Observable<any> {
+    return this.client.post("http://localhost:8080/api/trainings/create", trainingData);
+  }
 }
