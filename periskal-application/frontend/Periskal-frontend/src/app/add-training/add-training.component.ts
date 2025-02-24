@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
 import { module } from '../training-employee/training-employee.component';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-training',
@@ -12,7 +13,7 @@ import { HttpClient } from '@angular/common/http';
 export class AddTrainingComponent {
   trainingForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private client: HttpClient) {
+  constructor(private fb: FormBuilder, private client: HttpClient, private router : Router) {
     this.trainingForm = this.fb.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
@@ -46,6 +47,8 @@ export class AddTrainingComponent {
       this.client.post('http://localhost:8080/api/trainings/create', trainingData).subscribe(
         (response) => {
           console.log('Training posted successfully!', response);
+          this.resetForm();
+          this.router.navigate(['/trainingEmployee'])
         },
         (error) => {
           console.error('Error posting training', error);
@@ -53,5 +56,14 @@ export class AddTrainingComponent {
       );
   
     }
+  }
+  
+  resetForm(): void {
+    this.trainingForm.reset();
+
+    while(this.modules.length) {
+      this.modules.removeAt(0);
+    }
+    this.addModule();
   }
 }
