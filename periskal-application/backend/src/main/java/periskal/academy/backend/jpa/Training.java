@@ -6,6 +6,8 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
@@ -13,7 +15,8 @@ import jakarta.persistence.OneToMany;
 @Entity
 public class Training {
     @Id
-    public long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
     public long getId() {
         return id;
@@ -26,13 +29,13 @@ public class Training {
     public Training() {
     }
 
-    public String name;
+    private String name;
 
-    public String description;
+    private String description;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "training_id")
-    public List<Product> products;
+    private List<Product> products;
 
     public List<Product> getProducts() {
         return products;
@@ -42,8 +45,7 @@ public class Training {
         this.products = products;
     }
 
-    public Training(long id, String name, String description, List<Product> products) {
-        this.id = id;
+    public Training(String name, String description, List<Product> products) {
         this.name = name;
         this.description = description;
         this.products = products;

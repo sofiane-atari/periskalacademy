@@ -43,7 +43,7 @@ export class AddTrainingComponent implements OnInit {
   postTraining() {
     const trainingData = this.trainingForm.value;
 
-    this.http.post('http://localhost:8080/api/training/create', trainingData).subscribe(
+    this.http.post('http://localhost:8080/api/trainings/create', trainingData).subscribe(
       (response) => {
         console.log('Training posted successfully!', response);
       },

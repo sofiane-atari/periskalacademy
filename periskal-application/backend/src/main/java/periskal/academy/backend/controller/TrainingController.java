@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,4 +39,11 @@ public class TrainingController {
         Optional<Training> training = trainingService.getTrainingWithProducts(trainingId);
         return training.get();
     }
+
+    @PostMapping("/create")
+    public ResponseEntity<Training> postTrainingWithModules(@RequestBody Training entity) {
+        Training savedTraining = trainingService.createTraining(entity);
+        return new ResponseEntity<>(savedTraining, HttpStatus.CREATED);
+    }
+
 }

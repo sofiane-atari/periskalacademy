@@ -1,19 +1,21 @@
 package periskal.academy.backend.jpa;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
 public class Product {
     @Id
-    public long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
-    public String name;
+    private String name;
 
-    public String description;
+    private String description;
 
-    public Product(long id, String name, String description) {
-        this.id = id;
+    public Product(String name, String description) {
         this.name = name;
         this.description = description;
     }

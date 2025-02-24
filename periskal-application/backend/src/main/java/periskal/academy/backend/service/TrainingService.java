@@ -27,4 +27,8 @@ public class TrainingService {
     public Optional<Training> getTrainingWithProducts(Long id) {
         return trainingRepository.findById(id);
     }
+
+    public Training createTraining(Training entity) {
+        return trainingRepository.save(entity);
+    }
 }
