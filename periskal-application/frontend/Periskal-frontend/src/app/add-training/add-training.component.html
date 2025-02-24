@@ -39,9 +39,11 @@
               placeholder="Enter module description"
             />
           </div>
+          @if($index!=0) {
           <button class="delete" type="button" (click)="removeModule($index)">
             Module verwijderen
           </button>
+          }
         </div>
         }
       </div>
