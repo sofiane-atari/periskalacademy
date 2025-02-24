@@ -1,41 +1,61 @@
 <div class="columns">
   <div class="column"></div>
   <div class="column">
-    <div class="field">
-      <label>Naam van de training</label>
-      <input [(ngModel)]="name" class="input" placeholder="Geef je naam" />
-    </div>
+    <form [formGroup]="trainingForm" (ngSubmit)="postTraining()">
+      <div class="field">
+        <label>Naam van de training</label>
+        <input
+          formControlName="name"
+          class="input"
+          placeholder="Geef je naam"
+        />
+      </div>
 
-    <div class="field">
-      <label>Description</label>
-      <input
-        [(ngModel)]="description"
-        class="input"
-        placeholder="Geef de description van de training"
-      />
-    </div>
+      <div class="field">
+        <label>Description</label>
+        <input
+          formControlName="description"
+          class="input"
+          placeholder="Geef de description van de training"
+        />
+      </div>
 
-    <h3 class="modules">Modules</h3>
-    <div class="module">
-      <label>Module {{ index }}</label>
-    </div>
-    @for (module of products; track $index) {
-    <div class="module">
-      <p>Module</p>
-      <label>Module Titel</label>
-      <input [(ngModel)]="nameModule" />
-      <label>Module Beschrijving</label>
-      <input [(ngModel)]="descriptionModule" />
-    </div>
-    }
-    <div>
-      <button class="delete" (click)="RemoveProduct()">
-        Module verwijderen
-      </button>
-    </div>
-    <div>
-      <button (click)="AddProduct()">Nieuwe module toevoegen</button>
-    </div>
+      <h3 class="modules">Modules</h3>
+      <div formArrayName="modules">
+        @for (module of modules.controls; track $index) {
+        <div [formGroupName]="$index" class="module">
+          <label>Module {{ $index + 1 }}</label>
+          <div>
+            <label>Module Titel</label>
+            <input
+              formControlName="nameModule"
+              placeholder="Enter module title"
+            />
+          </div>
+          <div>
+            <label>Module Beschrijving</label>
+            <input
+              formControlName="descriptionModule"
+              placeholder="Enter module description"
+            />
+          </div>
+          <button class="delete" type="button" (click)="removeModule($index)">
+            Module verwijderen
+          </button>
+        </div>
+        }
+      </div>
+      <div>
+        <button type="button" (click)="addModule()">
+          Nieuwe module toevoegen
+        </button>
+      </div>
+      <div>
+        <button type="submit" [disabled]="trainingForm.invalid">
+          Post Training
+        </button>
+      </div>
+    </form>
   </div>
   <div class="column"></div>
 </div>

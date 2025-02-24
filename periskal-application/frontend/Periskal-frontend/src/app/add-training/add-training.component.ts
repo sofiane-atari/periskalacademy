@@ -1,35 +1,55 @@
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
 import { product } from '../training-employee/training-employee.component';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-add-training',
-  imports: [FormsModule],
+  imports: [FormsModule, ReactiveFormsModule],
   templateUrl: './add-training.component.html',
   styleUrl: './add-training.component.css'
 })
-export class AddTrainingComponent {
-  name : String = "";
-  description : String = "";
-  index : number = 0;
-  products : number[] = [];
+export class AddTrainingComponent implements OnInit {
 
-  nameModule : String = "";
-  descriptionModule : String = "";
+  trainingForm!: FormGroup;
 
-  constructor() {
-    this.products.push(this.index++);
+  constructor(private fb : FormBuilder, private http: HttpClient) {};
+
+  ngOnInit(): void {
+      this.trainingForm = this.fb.group({
+        name: ['', Validators.required],
+        description: ['',Validators.required],
+        modules: this.fb.array([]),
+      });
+      this.addModule();
   }
-  AddProduct() {
-    this.products.push(this.index++);
-    console.log(this.products);
+
+  get modules() {
+    return this.trainingForm.get('modules') as FormArray;
   }
-  RemoveProduct() {
-    if(this.index===0) {
-      this.index = 0;
-    } else {
-      this.index--;
-      this.products.pop();
-    }
+
+  addModule() {
+    const moduleGroup = this.fb.group({
+      nameModule: ['', Validators.required],
+      descriptionModule: ['', Validators.required],
+    });
+    this.modules.push(moduleGroup);
+  }
+
+  removeModule(index: number) {
+    this.modules.removeAt(index);
+  }
+
+  postTraining() {
+    const trainingData = this.trainingForm.value;
+
+    this.http.post('http://localhost:8080/api/training/create', trainingData).subscribe(
+      (response) => {
+        console.log('Training posted successfully!', response);
+      },
+      (error) => {
+        console.error('Error posting training', error);
+      }
+    );
   }
 }
