@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { product, training } from '../training-employee/training-employee.component';
+import { module, training } from '../training-employee/training-employee.component';
 import { ActivatedRoute } from '@angular/router';
 import { TrainingService } from '../training.service';
 
@@ -11,7 +11,7 @@ import { TrainingService } from '../training.service';
 })
 export class TrainingDetailComponent {
   training: training | undefined;
-  products : product[] = [];
+  modules : module[] = [];
 
   trainingSvc : TrainingService;
 
@@ -29,8 +29,8 @@ export class TrainingDetailComponent {
     this.trainingSvc.getTrainingById(this.trainingId).subscribe(
       (data) => {
         this.training = data;
-        this.products = data.products
-        console.log(this.training.products);
+        this.modules = data.modules
+        console.log(this.training.modules);
       },
       (error) => {
         console.error('Error fetching training products', error);

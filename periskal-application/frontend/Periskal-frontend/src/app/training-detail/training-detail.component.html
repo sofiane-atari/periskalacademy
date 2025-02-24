@@ -1,13 +1,10 @@
 <div class="container">
-  <h2>{{ training?.name }} Products</h2>
-  @for (product of products; track $index) {
+  <h2>{{ training?.name }} modules</h2>
+  @for (module of modules; track $index) {
   <div class="product">
-    <h3>{{ product.id }} {{ product.name }}</h3>
-    <p>{{ product.description }}</p>
+    <h3>{{ module.id }} {{ module.nameModule }}</h3>
+    <p>{{ module.descriptionModule }}</p>
     <button>Take Course</button>
-  </div>
-  <div class="add">
-    <p>Add a new training</p>
   </div>
   }
 </div>

@@ -7,7 +7,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import periskal.academy.backend.jpa.Product;
+import periskal.academy.backend.jpa.Module;
 import periskal.academy.backend.jpa.Test;
 import periskal.academy.backend.jpa.TestRepository;
 import periskal.academy.backend.jpa.Training;
@@ -30,10 +30,10 @@ public class BackendApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) {
 		if (trainingRepository.count() == 0) {
-			Product product1 = new Product("Intro kaartlezen", "Intro naar het navigeren met kaart");
-			Product product2 = new Product("Advanced kaartlezen", "Advanced navigeren met kaart");
+			Module product1 = new Module("Intro kaartlezen", "Intro naar het navigeren met kaart");
+			Module product2 = new Module("Advanced kaartlezen", "Advanced navigeren met kaart");
 
-			List<Product> products = Arrays.asList(product1, product2);
+			List<Module> products = Arrays.asList(product1, product2);
 			Training training = new Training("Test", "test", products);
 			trainingRepository.save(training);
 		}

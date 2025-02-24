@@ -5,17 +5,17 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import periskal.academy.backend.jpa.Product;
-import periskal.academy.backend.jpa.ProductRepository;
+import periskal.academy.backend.jpa.Module;
+import periskal.academy.backend.jpa.ModuleRepository;
 import periskal.academy.backend.jpa.Training;
 import periskal.academy.backend.jpa.TrainingRepository;
 
 @Service
 public class TrainingService {
     private TrainingRepository trainingRepository;
-    private ProductRepository productRepository;
+    private ModuleRepository productRepository;
 
-    public TrainingService(TrainingRepository trainingRepository, ProductRepository productRepository) {
+    public TrainingService(TrainingRepository trainingRepository, ModuleRepository productRepository) {
         this.trainingRepository = trainingRepository;
         this.productRepository = productRepository;
     }

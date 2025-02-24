@@ -35,20 +35,20 @@ public class Training {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "training_id")
-    private List<Product> products;
+    private List<Module> modules;
 
-    public List<Product> getProducts() {
-        return products;
+    public List<Module> getModules() {
+        return modules;
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
+    public void setModules(List<Module> products) {
+        this.modules = products;
     }
 
-    public Training(String name, String description, List<Product> products) {
+    public Training(String name, String description, List<Module> products) {
         this.name = name;
         this.description = description;
-        this.products = products;
+        this.modules = products;
     }
 
     public String getName() {

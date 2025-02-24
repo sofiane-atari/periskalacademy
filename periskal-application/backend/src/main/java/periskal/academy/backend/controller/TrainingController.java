@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import periskal.academy.backend.jpa.Product;
+import periskal.academy.backend.jpa.Module;
 import periskal.academy.backend.jpa.Training;
 import periskal.academy.backend.service.TrainingService;
 import org.springframework.web.bind.annotation.RequestParam;

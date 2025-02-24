@@ -37,10 +37,10 @@ export interface training {
   id: number
   name: String
   description: String
-  products: product[]
+  modules: module[]
 }
-export interface product {
+export interface module {
   id: number
-  name: String
-  description: String
+  nameModule: String
+  descriptionModule: String
 }
