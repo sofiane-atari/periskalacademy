@@ -15,12 +15,27 @@
       />
     </div>
 
-    <h3>Modules</h3>
-    <div class="field">
-      <label>Module Titel</label>
+    <h3 class="modules">Modules</h3>
+    <div class="module">
+      <label>Module {{ index }}</label>
     </div>
-
-    <button (click)="AddProduct()">Nieuwe module toevoegen</button>
+    @for (module of products; track $index) {
+    <div class="module">
+      <p>Module</p>
+      <label>Module Titel</label>
+      <input [(ngModel)]="nameModule" />
+      <label>Module Beschrijving</label>
+      <input [(ngModel)]="descriptionModule" />
+    </div>
+    }
+    <div>
+      <button class="delete" (click)="RemoveProduct()">
+        Module verwijderen
+      </button>
+    </div>
+    <div>
+      <button (click)="AddProduct()">Nieuwe module toevoegen</button>
+    </div>
   </div>
   <div class="column"></div>
 </div>

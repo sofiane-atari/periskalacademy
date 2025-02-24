@@ -1,0 +1,13 @@
+.module {
+  border: 3px solid black;
+}
+
+.delete {
+  border: 3px solid red;
+  border-radius: 12px;
+  transition-duration: 0.4s;
+}
+
+.delete:hover {
+  background-color: red;
+}
