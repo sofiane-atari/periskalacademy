@@ -18,6 +18,7 @@ export class UpdateTrainingComponent {
   constructor(
     private trainingService: TrainingService,
     private route: ActivatedRoute,
+    private router : Router
   ) {}
 
   ngOnInit(): void {
@@ -41,6 +42,16 @@ export class UpdateTrainingComponent {
     );
   }
   updateTraining() {
-    //todo: implement update logic
+    if(this.training?.id) {
+      this.trainingService.updateTraining(this.training.id, this.training).subscribe(
+        (data) => {
+          this.router.navigate(['/trainingEmployee']);
+          alert('Training updated successfully!');
+        },
+        (error) => {
+          this.errorMessage = 'Failed to update training.';
+        }
+      )
+    }
   }
 }

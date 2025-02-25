@@ -35,23 +35,25 @@
     @for (module of training.modules; track $index) {
     <div>
       <div>
-        <label for="nameModule">Module {{ $index + 1 }} name</label>
+        <label for="nameModule{{ $index }}">Module {{ $index + 1 }} name</label>
         <input
           type="text"
-          id="nameModule"
+          id="nameModule{{ $index }}"
           class="form-control"
-          [(ngModel)]="training.modules[$index].nameModule"
-          name="name"
+          [(ngModel)]="module.nameModule"
+          name="nameModule{{ $index }}"
           required
         />
       </div>
       <div>
-        <label for="nameDescription">Module {{ $index + 1 }}.description</label>
+        <label for="nameDescription{{ $index }}"
+          >Module {{ $index + 1 }} description</label
+        >
         <textarea
-          id="descriptionModule"
+          id="descriptionModule{{ $index }}"
           class="form-control"
-          [(ngModel)]="training.modules[$index].descriptionModule"
-          name="description"
+          [(ngModel)]="module.descriptionModule"
+          name="descriptionModule{{ $index }}"
           required
         >
         </textarea>

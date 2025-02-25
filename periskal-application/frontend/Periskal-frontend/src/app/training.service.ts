@@ -20,4 +20,8 @@ export class TrainingService {
   postTraining(trainingData: any): Observable<any> {
     return this.client.post("http://localhost:8080/api/trainings/create", trainingData);
   }
+
+  updateTraining(trainingId : number, trainingData : any) : Observable<any> {
+    return this.client.put(`http://localhost:8080/api/trainings/edit/${trainingId}`, trainingData);
+  }
 }
