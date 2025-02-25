@@ -24,7 +24,7 @@
       <div formArrayName="modules">
         @for (module of modules.controls; track $index) {
         <div [formGroupName]="$index" class="module">
-          <label>Module {{ $index + 1 }}</label>
+          <label class="titelmodule">Module {{ $index + 1 }}</label>
           <div>
             <label>Module Titel</label>
             <input

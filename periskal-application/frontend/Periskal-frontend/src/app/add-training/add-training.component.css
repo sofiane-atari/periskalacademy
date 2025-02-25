@@ -1,13 +1,136 @@
+/* General container and layout */
+.columns {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 30px;
+  background-color: #f4f7fc;
+  font-family: Arial, sans-serif;
+}
+
+.column {
+  flex: 1;
+  max-width: 800px;
+  padding: 20px;
+}
+
+form {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+/* Field styling */
+.field {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.input {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+.input:focus {
+  border-color: #66afe9;
+  outline: none;
+}
+
+h3.modules {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  margin-top: 20px;
+  margin-bottom: 15px;
+}
+
+/* Module section styling */
 .module {
-  border: 3px solid black;
+  background-color: #f9f9f9;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+}
+
+.module label {
+  font-size: 14px;
+  font-weight: normal;
+  margin-bottom: 5px;
+}
+
+.module input {
+  padding: 10px;
+  width: 100%;
+  font-size: 16px;
+  margin-bottom: 15px;
 }
 
 .delete {
-  border: 3px solid red;
-  border-radius: 12px;
-  transition-duration: 0.4s;
+  background-color: #d9534f;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .delete:hover {
-  background-color: red;
+  background-color: #c12e2a;
+}
+
+button[type="button"] {
+  background-color: #f0d04b;
+  color: black;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+button[type="button"]:hover {
+  background-color: #b18e04;
+}
+
+button[type="submit"] {
+  background-color: #28a745;
+  color: white;
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  margin-top: 20px;
+}
+
+button[type="submit"]:hover {
+  background-color: #218838;
+}
+
+button[type="submit"]:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+
+.titelmodule {
+  font-size: 20px;
+  font-weight: 800;
 }
