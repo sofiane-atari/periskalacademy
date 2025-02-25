@@ -1,10 +1,14 @@
 <div class="container">
   @for (training of trainingsData; track $index) {
   <div class="training">
-    <h1>{{ training.name }}</h1>
-    <p>{{ training.description }}</p>
-    <button (click)="goToTrainingDetails(training.id)">Modules</button>
-    <button (click)="goToEditPage(training.id)">Edit</button>
+    <div>
+      <h1>{{ training.name }}</h1>
+      <p>{{ training.description }}</p>
+    </div>
+    <div class="training-buttons">
+      <button (click)="goToTrainingDetails(training.id)">Modules</button>
+      <button (click)="goToEditPage(training.id)">Edit</button>
+    </div>
   </div>
   }
 </div>

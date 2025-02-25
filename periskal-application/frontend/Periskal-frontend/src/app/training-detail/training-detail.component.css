@@ -1,33 +1,85 @@
+/* General container for the page */
 .container {
-  display: flex;
-  justify-content: flex-start;
-  gap: 10px;
-  padding-left: 3rem;
-  flex-direction: column;
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: "Arial", sans-serif;
 }
 
+/* Header style for the page */
+h2 {
+  text-align: center;
+  font-size: 26px;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+/* Product listing styling */
 .product {
-  background-color: #f0d04b;
-  padding-left: 10%;
-  border: 4px solid black;
-  width: 20%;
-  border-radius: 12px;
-  flex-direction: row;
+  background-color: #fff;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-button {
-  border-radius: 12px;
-  background-color: #f0d04b;
-  transition-duration: 0.4s;
-  color: black;
-  margin-bottom: 1rem;
-}
-button:hover {
-  background-color: #f0d04b;
-  color: black;
+.product h3 {
+  font-size: 20px;
+  color: #333;
+  margin-bottom: 15px;
+  font-weight: bold;
 }
 
-.add {
-  width: 200px;
-  height: 200px;
+.product p {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+/* Button styling for 'Take Course' */
+.product button {
+  background-color: #f0d04b;
+  color: darkgrey;
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.product button:hover {
+  background-color: #b18e04;
+}
+
+.product button:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+
+  .product {
+    padding: 15px;
+  }
+
+  .product h3 {
+    font-size: 18px;
+  }
+
+  .product p {
+    font-size: 14px;
+  }
+
+  .product button {
+    font-size: 14px;
+    padding: 10px 15px;
+  }
 }

@@ -1,16 +1,76 @@
+/* Navigation bar container */
 nav {
-  display: inline-block;
-  background-color: #f0d04b;
-  width: 100%;
-  margin-bottom: 50px;
+  background-color: #f9f9f9; /* Light background similar to your container */
+  padding: 15px 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow to lift the navbar */
+  border-radius: 8px;
+  font-family: "Arial", sans-serif;
+  margin-bottom: 30px; /* Space between the navbar and other content */
 }
-li {
+
+/* Navigation list styling */
+nav ul {
   list-style-type: none;
-  padding: 1.5rem;
-  display: inline;
-  margin-right: 10px;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-a {
+
+nav li {
+  margin: 0 20px;
+}
+
+nav a {
   text-decoration: none;
-  color: black;
+  color: #555; /* Similar color to labels in your design */
+  font-size: 16px;
+  font-weight: bold;
+  padding: 12px 20px;
+  border-radius: 4px;
+  display: inline-block;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Hover effect */
+nav a:hover {
+  background-color: #f0d04b; /* Gold background for hover */
+  color: darkgrey; /* Dark grey text when hovered */
+}
+
+/* Active link styling */
+nav a.active {
+  background-color: #f0d04b; /* Green background for active link */
+  color: white; /* White text for the active link */
+  font-weight: bold; /* Make active text bold */
+}
+
+/* Focus outline for accessibility */
+nav a:focus {
+  outline: 3px solid #66afe9;
+  outline-offset: 2px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  nav ul {
+    flex-direction: column; /* Stack links vertically on small screens */
+    align-items: stretch;
+  }
+
+  nav li {
+    margin: 15px 0;
+  }
+
+  nav a {
+    font-size: 18px;
+    text-align: center;
+  }
+}
+
+/* Styling for router outlet or active page indicator */
+router-outlet {
+  display: block;
+  margin-top: 20px;
 }
