@@ -1,43 +1,56 @@
 <div class="columns">
   <div class="column"></div>
   <div class="column">
+    <h1>Nieuwe training aanmaken</h1>
     <form [formGroup]="trainingForm" (ngSubmit)="postTraining()">
+      <h3 class="modules">Training informatie</h3>
       <div class="field">
         <label>Naam van de training</label>
         <input
           formControlName="name"
           class="input"
-          placeholder="Geef je naam"
+          placeholder="Geef de naam van de nieuwe training"
+          required
         />
       </div>
 
       <div class="field">
         <label>Description</label>
-        <input
+        <textarea
           formControlName="description"
-          class="input"
-          placeholder="Geef de description van de training"
-        />
+          id="description"
+          class="form-control"
+          placeholder="Geef de beschrijving van de nieuwe training"
+          name="description"
+          required
+        >
+        </textarea>
       </div>
 
-      <h3 class="modules">Modules</h3>
+      <h3 class="modules">Modules informatie</h3>
       <div formArrayName="modules">
         @for (module of modules.controls; track $index) {
         <div [formGroupName]="$index" class="module">
-          <label class="titelmodule">Module {{ $index + 1 }}</label>
+          <h4>Module {{ $index + 1 }}</h4>
           <div>
             <label>Module Titel</label>
             <input
               formControlName="nameModule"
-              placeholder="Enter module title"
+              placeholder="Geef de titel van module {{ $index + 1 }}"
+              required
             />
           </div>
           <div>
             <label>Module Beschrijving</label>
-            <input
+            <textarea
               formControlName="descriptionModule"
-              placeholder="Enter module description"
-            />
+              id="descriptionModule{{ $index }}"
+              class="form-control"
+              placeholder="Geef de beschrijving van module {{ $index + 1 }}"
+              name="descriptionModule{{ $index }}"
+              required
+            >
+            </textarea>
           </div>
           @if($index!=0) {
           <button class="delete" type="button" (click)="removeModule($index)">
@@ -54,7 +67,7 @@
       </div>
       <div>
         <button type="submit" [disabled]="trainingForm.invalid">
-          Post Training
+          Maak training aan
         </button>
       </div>
     </form>

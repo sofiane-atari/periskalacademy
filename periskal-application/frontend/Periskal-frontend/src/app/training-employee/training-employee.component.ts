@@ -29,7 +29,7 @@ export class TrainingEmployeeComponent implements OnInit {
   }
 
   goToAddPage() {
-    this.router.navigate(['/submit'])
+    this.router.navigate(['/add'])
   }
   goToEditPage(trainingId : number) {
     this.router.navigate(['/edit', trainingId])
