@@ -1,0 +1,70 @@
+<div class="container">
+  <h2>Update Training</h2>
+
+  @if (loading) {
+  <div>Loading...</div>
+  } @if (errorMessage) {
+  <div>
+    {{ errorMessage }}
+  </div>
+  } @if (training) {
+  <form (ngSubmit)="updateTraining()">
+    <div class="form-group">
+      <label for="name">Training Name</label>
+      <input
+        type="text"
+        id="name"
+        class="form-control"
+        [(ngModel)]="training.name"
+        name="name"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea
+        id="description"
+        class="form-control"
+        [(ngModel)]="training.description"
+        name="description"
+        required
+      ></textarea>
+    </div>
+
+    @for (module of training.modules; track $index) {
+    <div>
+      <div>
+        <label for="nameModule">Module {{ $index + 1 }} name</label>
+        <input
+          type="text"
+          id="nameModule"
+          class="form-control"
+          [(ngModel)]="training.modules[$index].nameModule"
+          name="name"
+          required
+        />
+      </div>
+      <div>
+        <label for="nameDescription">Module {{ $index + 1 }}.description</label>
+        <textarea
+          id="descriptionModule"
+          class="form-control"
+          [(ngModel)]="training.modules[$index].descriptionModule"
+          name="description"
+          required
+        >
+        </textarea>
+      </div>
+    </div>
+    }
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary" [disabled]="loading">
+        Save Changes
+      </button>
+    </div>
+  </form>
+  } @if (!training) {
+  <div>Training not found.</div>
+  }
+</div>

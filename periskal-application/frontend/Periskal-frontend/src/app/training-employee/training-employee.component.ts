@@ -31,6 +31,9 @@ export class TrainingEmployeeComponent implements OnInit {
   goToAddPage() {
     this.router.navigate(['/submit'])
   }
+  goToEditPage(trainingId : number) {
+    this.router.navigate(['/edit', trainingId])
+  }
 }
 
 export interface training {
