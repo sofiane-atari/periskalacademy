@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +19,7 @@ import periskal.academy.backend.service.TrainingService;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequestMapping("/api/trainings")
@@ -44,6 +46,19 @@ public class TrainingController {
     public ResponseEntity<Training> postTrainingWithModules(@RequestBody Training entity) {
         Training savedTraining = trainingService.createTraining(entity);
         return new ResponseEntity<>(savedTraining, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<Training> updateTrainingWithModules(@PathVariable Long id,
+            @RequestBody Training updatedTraining) {
+        Training existingTraining = trainingService.getTrainingById(id);
+
+        existingTraining.setName(updatedTraining.getName());
+        existingTraining.setDescription(updatedTraining.getDescription());
+        existingTraining.setModules(updatedTraining.getModules());
+
+        Training savedTraining = trainingService.updateTraining(existingTraining);
+        return new ResponseEntity<>(savedTraining, HttpStatus.OK);
     }
 
 }

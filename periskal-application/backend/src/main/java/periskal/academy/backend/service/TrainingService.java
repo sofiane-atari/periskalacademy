@@ -31,4 +31,17 @@ public class TrainingService {
     public Training createTraining(Training entity) {
         return trainingRepository.save(entity);
     }
+
+    public Training getTrainingById(Long id) {
+        Optional<Training> training = trainingRepository.findById(id);
+        if (training.isPresent()) {
+            return training.get();
+        } else {
+            return new Training();
+        }
+    }
+
+    public Training updateTraining(Training training) {
+        return trainingRepository.save(training);
+    }
 }
