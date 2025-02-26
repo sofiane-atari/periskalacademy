@@ -26,7 +26,8 @@ import periskal.academy.backend.util.EncryptionUtil;
 public class AuthenticationService {
 
    private final RestTemplate restTemplate = new RestTemplate();
-   private final String authenticateEndpointUrl = "https://academyws.periskal.com/Academy.asmx";
+   public final String authenticateEndpointUrl = "https://academyws.periskal.com/Academy.asmx";
+
 
     public AuthenticateResponse authenticate(String username, String password) throws Exception {
     
