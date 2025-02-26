@@ -24,6 +24,7 @@ export class LoginComponent {
     this.authService.authenticate(this.username, this.password).subscribe({
       next: (response) => {
         if (response) {
+          alert('Login successful!');
           this.router.navigate(['/dashboard']);
         } else {
           alert('Authentication failed');

@@ -7,7 +7,7 @@ import { AuthenticateResponse } from '../models/authenticate-response.model';
 @Injectable({ providedIn: 'root' })
 
 export class AuthenticationService {
-  private apiUrl = 'http://localhost:4200/api/auth/authenticate'; // change to proper api path later
+  private apiUrl = 'http://localhost:8080/api/auth/authenticate'; // change to proper api path later
 
   constructor(private http: HttpClient) {}
 
