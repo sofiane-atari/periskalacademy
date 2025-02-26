@@ -25,7 +25,7 @@ export class LoginComponent {
       next: (response) => {
         if (response) {
           alert('Login successful!');
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/trainingEmployee']);
         } else {
           alert('Authentication failed');
         }
