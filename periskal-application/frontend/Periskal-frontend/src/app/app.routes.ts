@@ -8,11 +8,11 @@ import { UpdateTrainingComponent } from './update-training/update-training.compo
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },  
-    { path: '**', redirectTo: 'login' },         // Redirect all unknown routes to login
     { path: 'trainingEmployee', component: TrainingEmployeeComponent },
     { path: 'test', component: TestComponent},
     { path: 'training/:id', component: TrainingDetailComponent }, 
     { path: 'add', component: AddTrainingComponent},
-    { path: 'edit/:id', component: UpdateTrainingComponent}
+    { path: 'edit/:id', component: UpdateTrainingComponent},
+    { path: '**', redirectTo: 'login' }        // Redirect all unknown routes to login, Has to be at the end of the list!!!
 ];
 
