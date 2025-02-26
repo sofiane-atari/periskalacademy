@@ -20,10 +20,10 @@ public class AuthenticationController {
     private AuthenticationService authenticationService;
     
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticateResponse> authenticate(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<AuthenticateResponse> authenticate(@RequestBody LoginRequest loginRequest) throws Exception {
         AuthenticateResponse response = authenticationService.authenticate(loginRequest.getUsername(), loginRequest.getPassword());
         
-        if (response != null && "Success".equalsIgnoreCase(response.getLoginResult())) {
+        if (response != null && "SuccesByToken".equalsIgnoreCase(response.getLoginResult())) {
             return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
