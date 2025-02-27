@@ -1,56 +1,26 @@
 package periskal.academy.backend.controller;
 
-import java.time.LocalDate;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import periskal.academy.backend.model.AuthenticateResponse;
+import periskal.academy.backend.model.LoginRequest;
+import periskal.academy.backend.service.AuthenticationService;
 import periskal.academy.backend.service.CryptoService;
 import periskal.academy.backend.service.DongleAuthenticationService;
 
-// @RestController
-// @RequestMapping("/api/auth")
-// public class AuthenticationController {
 
-//     private final DongleAuthenticationService dongleAuthenticationService;
 
-//     public AuthenticationController(DongleAuthenticationService dongleAuthenticationService) {
-//         this.dongleAuthenticationService = dongleAuthenticationService;
-//     }
-
-//     @GetMapping("/decode-token")
-//     public ResponseEntity<AuthenticateResponse> decodeToken(@RequestParam String login) throws Exception {
-//         // // Step 1: Decrypt the login token
-//         // String decryptedLogin = cryptoService.decode(login); // Decode the token
-
-//         // // Step 2: Encode the decrypted token before sending to SOAP API
-//         // String encodedLogin =
-//         // cryptoService.encode(Integer.parseInt(decryptedLogin.substring(3)),
-//         // LocalDate.now(),
-//         // "ThursdayKeyDEF"); // Replace with the appropriate day key
-
-//         // Step 3: Authenticate with the external SOAP service
-//         AuthenticateResponse userInfoJson = dongleAuthenticationService.authenticateDongle(login);
-
-//         // AuthenticateResponse userInfo = objectMapper.treeToValue(userInfoJson,
-//         // AuthenticateResponse.class);
-
-//         if (userInfoJson != null && "SuccesByToken".equalsIgnoreCase(userInfoJson.getLoginResult())) {
-//             return ResponseEntity.ok(userInfoJson);
-//         } else {
-//             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-//         }
-//     }
-
-// }
 @RestController
 @RequestMapping("/api/auth")
 public class AuthenticationController {
+
 
     private final DongleAuthenticationService dongleAuthenticationService;
 
@@ -70,3 +40,23 @@ public class AuthenticationController {
         }
     }
 }
+
+    @Autowired
+    private AuthenticationService authenticationService;
+    
+    @PostMapping("/authenticate")
+    public ResponseEntity<AuthenticateResponse> authenticate(@RequestBody LoginRequest loginRequest) throws Exception {
+        AuthenticateResponse response = authenticationService.authenticate(loginRequest.getUsername(), loginRequest.getPassword());
+        
+        if (response != null && "SuccesByToken".equalsIgnoreCase(response.getLoginResult())) {
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+    }
+
+
+
+}
+
+
