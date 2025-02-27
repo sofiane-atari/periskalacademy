@@ -1,5 +1,6 @@
 package periskal.academy.backend.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,9 +59,11 @@ public class TrainingService {
         Optional<Training> trainingOpt = trainingRepository.findById(trainingId);
         if (trainingOpt.isPresent()) {
             Training training = trainingOpt.get();
-            boolean removed = training.getModules().removeIf(module -> module.getId().equals(moduleId));
+            ArrayList<Module> modules = new ArrayList<>(training.getModules());
+            boolean removed = modules.removeIf(module -> module.getId().equals(moduleId));
 
             if (removed) {
+                training.setModules(modules);
                 trainingRepository.save(training);
                 return training;
             }
