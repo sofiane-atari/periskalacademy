@@ -7,14 +7,39 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import periskal.academy.backend.model.AuthenticateResponse;
 import periskal.academy.backend.model.LoginRequest;
 import periskal.academy.backend.service.AuthenticationService;
+import periskal.academy.backend.service.CryptoService;
+import periskal.academy.backend.service.DongleAuthenticationService;
+
+
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthenticationController {
+
+
+    private final DongleAuthenticationService dongleAuthenticationService;
+
+    public AuthenticationController(DongleAuthenticationService dongleAuthenticationService) {
+        this.dongleAuthenticationService = dongleAuthenticationService;
+    }
+
+    @GetMapping("/decode-token")
+    public ResponseEntity<AuthenticateResponse> decodeToken(@RequestParam String login) throws Exception {
+
+        AuthenticateResponse userInfo = dongleAuthenticationService.authenticateDongle(login);
+
+        if (userInfo != null && "SuccesByToken".equalsIgnoreCase(userInfo.getLoginResult())) {
+            return ResponseEntity.ok(userInfo);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+    }
+}
 
     @Autowired
     private AuthenticationService authenticationService;
@@ -33,4 +58,5 @@ public class AuthenticationController {
 
 
 }
+
 

@@ -5,6 +5,7 @@ import { TestComponent } from './test/test.component';
 import { TrainingDetailComponent } from './training-detail/training-detail.component';
 import { AddTrainingComponent } from './add-training/add-training.component';
 import { UpdateTrainingComponent } from './update-training/update-training.component';
+import { DongleLoginComponent } from './components/dongle-login/dongle-login.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },  
@@ -13,6 +14,8 @@ export const routes: Routes = [
     { path: 'training/:id', component: TrainingDetailComponent }, 
     { path: 'add', component: AddTrainingComponent},
     { path: 'edit/:id', component: UpdateTrainingComponent},
+    { path: 'decode-token', component: DongleLoginComponent },
     { path: '**', redirectTo: 'login' }        // Redirect all unknown routes to login, Has to be at the end of the list!!!
 ];
+
 
