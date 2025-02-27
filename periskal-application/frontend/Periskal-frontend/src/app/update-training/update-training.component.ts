@@ -18,8 +18,8 @@ export class UpdateTrainingComponent {
   constructor(
     private trainingService: TrainingService,
     private route: ActivatedRoute,
-    private router : Router
-  ) {}
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     const trainingId = Number(this.route.snapshot.paramMap.get('id'));
@@ -27,7 +27,7 @@ export class UpdateTrainingComponent {
       this.getTrainingDetails(trainingId);
     }
   }
-  
+
   //retrieve training data from database with id from the path
   getTrainingDetails(id: number): void {
     console.log(id);
@@ -42,7 +42,7 @@ export class UpdateTrainingComponent {
     );
   }
   updateTraining() {
-    if(this.training?.id) {
+    if (this.training?.id) {
       this.trainingService.updateTraining(this.training.id, this.training).subscribe(
         (data) => {
           this.router.navigate(['/trainingEmployee']);
@@ -53,5 +53,24 @@ export class UpdateTrainingComponent {
         }
       )
     }
+  }
+
+  confirmDelete() {
+    const confirmDelete = window.confirm('Are you sure you want to delete this training?');
+    if (confirmDelete && this.training?.id) {
+      this.deleteTraining(this.training?.id);
+    }
+  }
+
+  deleteTraining(id: number) {
+    this.trainingService.deleteTraining(id).subscribe({
+      next: () => {
+        console.log('Training deleted successfully');
+        this.router.navigate(['/trainingEmployee']);
+      },
+      error: (err) => {
+        console.error('Error deleting training:', err);
+      }
+    });
   }
 }

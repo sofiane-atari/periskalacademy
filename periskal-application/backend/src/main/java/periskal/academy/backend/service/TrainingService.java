@@ -44,4 +44,13 @@ public class TrainingService {
     public Training updateTraining(Training training) {
         return trainingRepository.save(training);
     }
+
+    public boolean deleteTraining(Long id) {
+        if (trainingRepository.existsById(id)) {
+            trainingRepository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
