@@ -1,13 +1,17 @@
 package periskal.academy.backend.controller;
 
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -61,4 +65,25 @@ public class TrainingController {
         return new ResponseEntity<>(savedTraining, HttpStatus.OK);
     }
 
+    @DeleteMapping("delete/{id}")
+    public ResponseEntity<Map<String, String>> deleteTraining(@PathVariable Long id) {
+        boolean deleted = trainingService.deleteTraining(id);
+        if (deleted) {
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Training deleted successfully");
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("delete/{trainingId}/modules/{moduleId}")
+    public ResponseEntity<Training> deleteModule(@PathVariable Long trainingId, @PathVariable Long moduleId) {
+        Training updatedTraining = trainingService.deleteModule(trainingId, moduleId);
+        if (updatedTraining != null) {
+            return ResponseEntity.ok(updatedTraining);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

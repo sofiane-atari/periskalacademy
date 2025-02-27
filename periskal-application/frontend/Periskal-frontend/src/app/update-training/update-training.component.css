@@ -118,3 +118,19 @@ div.error-message {
 div.error-message:hover {
   background-color: #c12e2a;
 }
+
+button.delete {
+    padding: 12px 20px;
+    margin-top: 20px;
+    background-color: red;
+    color: black;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+button.delete:hover {
+  background-color: darkred;
+}

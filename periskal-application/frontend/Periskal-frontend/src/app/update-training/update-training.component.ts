@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
 import { TrainingService } from '../training.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { training } from '../training-employee/training-employee.component';
@@ -18,8 +19,9 @@ export class UpdateTrainingComponent {
   constructor(
     private trainingService: TrainingService,
     private route: ActivatedRoute,
-    private router : Router
-  ) {}
+    private router: Router,
+    private cdr: ChangeDetectorRef
+  ) { }
 
   ngOnInit(): void {
     const trainingId = Number(this.route.snapshot.paramMap.get('id'));
@@ -27,7 +29,7 @@ export class UpdateTrainingComponent {
       this.getTrainingDetails(trainingId);
     }
   }
-  
+
   //retrieve training data from database with id from the path
   getTrainingDetails(id: number): void {
     console.log(id);
@@ -42,7 +44,7 @@ export class UpdateTrainingComponent {
     );
   }
   updateTraining() {
-    if(this.training?.id) {
+    if (this.training?.id) {
       this.trainingService.updateTraining(this.training.id, this.training).subscribe(
         (data) => {
           this.router.navigate(['/trainingEmployee']);
@@ -52,6 +54,44 @@ export class UpdateTrainingComponent {
           this.errorMessage = 'Failed to update training.';
         }
       )
+    }
+  }
+
+  confirmDelete() {
+    const confirmDelete = window.confirm('Are you sure you want to delete this training?');
+    if (confirmDelete && this.training?.id) {
+      this.deleteTraining(this.training?.id);
+    }
+  }
+
+  deleteTraining(id: number) {
+    this.trainingService.deleteTraining(id).subscribe({
+      next: () => {
+        console.log('Training deleted successfully');
+        this.router.navigate(['/trainingEmployee']);
+      },
+      error: (err) => {
+        console.error('Error deleting training:', err);
+      }
+    });
+  }
+
+  deleteModule(trainingId: number, moduleId: number) {
+    const confirmDelete = window.confirm('Are you sure you want to delete this module?');
+    if (confirmDelete) {
+      this.trainingService.deleteModule(trainingId, moduleId).subscribe({
+        next: (updatedTraining) => {
+          console.log('Module deleted successfully');
+
+          // Update the training object with the updated modules from the backend
+          if (this.training?.modules && updatedTraining && updatedTraining.modules) {
+            this.training.modules = updatedTraining.modules;
+          }
+        },
+        error: (err) => {
+          console.error('Error deleting module:', err);
+        }
+      });
     }
   }
 }

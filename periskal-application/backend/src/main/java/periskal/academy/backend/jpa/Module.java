@@ -9,7 +9,7 @@ import jakarta.persistence.Id;
 public class Module {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     private String nameModule;
 
@@ -23,11 +23,11 @@ public class Module {
     public Module() {
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
