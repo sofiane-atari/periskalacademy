@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { Observable } from 'rxjs';
 import { TestComponent } from "./test/test.component";
 
@@ -12,4 +12,10 @@ import { TestComponent } from "./test/test.component";
 })
 export class AppComponent  {
   title = 'Periskal-frontend';
+
+  constructor(private router : Router) {}
+
+  isLoginPage() : boolean {
+    return this.router.url === '/login'
+  }
 }
