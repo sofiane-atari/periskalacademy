@@ -3,15 +3,11 @@ package periskal.academy.backend.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import periskal.academy.backend.jpa.Test;
 import periskal.academy.backend.jpa.TestRepository;
-
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 public class HelloWorldController {
