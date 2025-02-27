@@ -77,4 +77,13 @@ public class TrainingController {
         }
     }
 
+    @DeleteMapping("delete/{trainingId}/modules/{moduleId}")
+    public ResponseEntity<Training> deleteModule(@PathVariable Long trainingId, @PathVariable Long moduleId) {
+        Training updatedTraining = trainingService.deleteModule(trainingId, moduleId);
+        if (updatedTraining != null) {
+            return ResponseEntity.ok(updatedTraining);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

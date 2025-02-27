@@ -28,4 +28,8 @@ export class TrainingService {
   deleteTraining(trainingId: number): Observable<any> {
     return this.client.delete(`http://localhost:8080/api/trainings/delete/${trainingId}`)
   }
+
+  deleteModule(trainingId: number, moduleId: number): Observable<any> {
+    return this.client.delete(`http://localhost:8080/api/trainings/delete/${trainingId}/modules/${moduleId}`)
+  }
 }

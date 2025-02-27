@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
 import { TrainingService } from '../training.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { training } from '../training-employee/training-employee.component';
@@ -18,7 +19,8 @@ export class UpdateTrainingComponent {
   constructor(
     private trainingService: TrainingService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -72,5 +74,24 @@ export class UpdateTrainingComponent {
         console.error('Error deleting training:', err);
       }
     });
+  }
+
+  deleteModule(trainingId: number, moduleId: number) {
+    const confirmDelete = window.confirm('Are you sure you want to delete this module?');
+    if (confirmDelete) {
+      this.trainingService.deleteModule(trainingId, moduleId).subscribe({
+        next: (updatedTraining) => {
+          console.log('Module deleted successfully');
+
+          // Update the training object with the updated modules from the backend
+          if (this.training?.modules && updatedTraining && updatedTraining.modules) {
+            this.training.modules = updatedTraining.modules;
+          }
+        },
+        error: (err) => {
+          console.error('Error deleting module:', err);
+        }
+      });
+    }
   }
 }

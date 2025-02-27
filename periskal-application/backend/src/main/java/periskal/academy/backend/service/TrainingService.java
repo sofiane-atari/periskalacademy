@@ -53,4 +53,18 @@ public class TrainingService {
             return false;
         }
     }
+
+    public Training deleteModule(Long trainingId, Long moduleId) {
+        Optional<Training> trainingOpt = trainingRepository.findById(trainingId);
+        if (trainingOpt.isPresent()) {
+            Training training = trainingOpt.get();
+            boolean removed = training.getModules().removeIf(module -> module.getId().equals(moduleId));
+
+            if (removed) {
+                trainingRepository.save(training);
+                return training;
+            }
+        }
+        return null;
+    }
 }
