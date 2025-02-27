@@ -92,4 +92,52 @@ class TrainingServiceTest {
         assertTrue(result);
         verify(trainingRepository, times(1)).deleteById(1L);
     }
+
+    @Test
+    void testDeleteTraining_NotFound() {
+        // Mock the behavior for when training does not exist
+        when(trainingRepository.existsById(1L)).thenReturn(false);
+
+        boolean result = trainingService.deleteTraining(1L);
+
+        assertFalse(result);
+        verify(trainingRepository, never()).deleteById(1L);
+    }
+
+    @Test
+    void testCreateTraining() {
+        Training newTraining = new Training();
+        newTraining.setId(2L);
+        newTraining.setName("New Training");
+
+        // Mock save behavior
+        when(trainingRepository.save(newTraining)).thenReturn(newTraining);
+
+        Training savedTraining = trainingService.createTraining(newTraining);
+
+        assertNotNull(savedTraining);
+        assertEquals("New Training", savedTraining.getName());
+        verify(trainingRepository, times(1)).save(newTraining);
+    }
+
+    @Test
+    void testGetTrainingById_Found() {
+        when(trainingRepository.findById(1L)).thenReturn(Optional.of(training));
+
+        Training foundTraining = trainingService.getTrainingById(1L);
+
+        assertNotNull(foundTraining);
+        assertEquals("Test Training", foundTraining.getName());
+    }
+
+    @Test
+    void testGetTrainingById_NotFound() {
+        when(trainingRepository.findById(1L)).thenReturn(Optional.empty());
+
+        Training foundTraining = trainingService.getTrainingById(1L);
+
+        assertNotNull(foundTraining); // Should return an empty training if not found
+        assertEquals(null, foundTraining.getName());
+    }
+
 }
