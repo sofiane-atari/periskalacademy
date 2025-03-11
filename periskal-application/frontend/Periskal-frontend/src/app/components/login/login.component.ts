@@ -23,7 +23,7 @@ export class LoginComponent {
   onLogin() {
     this.authService.authenticate(this.username, this.password).subscribe({
       next: (response) => {
-        if (response) {
+        if (response.token) {
           alert('Login successful!');
           this.router.navigate(['/trainingEmployee']);
         } else {
@@ -31,8 +31,13 @@ export class LoginComponent {
         }
       },
       error: (error) => {
-        alert('Error during authentication');
-      },    
+        if (error.status === 401) {
+          alert('Invalid credentials');
+        } else {
+          alert('Something went wrong. Please try again later.');
+        }
+      }
+
     });
   }
 }
