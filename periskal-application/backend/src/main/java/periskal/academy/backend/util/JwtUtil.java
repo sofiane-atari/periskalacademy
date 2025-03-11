@@ -1,18 +1,20 @@
 package periskal.academy.backend.util;
 
+import java.util.Date;
+
+import javax.crypto.SecretKey;
+
+import org.springframework.stereotype.Component;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.MacAlgorithm;
-import org.springframework.stereotype.Component;
-
-import javax.crypto.SecretKey;
-import java.util.Date;
 
 @Component
 public class JwtUtil {
-    private static final String SECRET_KEY = "YourSecretKey"; // Replace with a properly secured key
+    private static final String SECRET_KEY = "YourSecretKey"; // Replace with a properly secured key, Generate a random key using a secure random number generator later? Leave to periskal?
     private static final MacAlgorithm ALGORITHM = Jwts.SIG.HS256; 
 
     // Generate the SecretKey instance from the base64-encoded secret key

@@ -11,9 +11,9 @@ public class AuthenticateResponse {
     private String role;
     private List<String> products;
     private String loginResult;
+    private String token;
 
-
-    // Getters and Setters
+    // Getters and Setters - Remove later and send it with the payload in the jeson web token
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
@@ -35,7 +35,23 @@ public class AuthenticateResponse {
     public List<String> getProducts() { return products; }
     public void setProducts(List<String> products) { this.products = products; }
 
-    public String getLoginResult() { return loginResult; }
-    public void setLoginResult(String loginResult) { this.loginResult = loginResult; }
+
+    
+
+    public String getLoginResult() {
+        return loginResult;
+    }
+
+    public void setLoginResult(String loginResult) {
+        this.loginResult = loginResult;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 
 }
