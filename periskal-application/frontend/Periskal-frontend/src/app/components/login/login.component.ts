@@ -23,7 +23,9 @@ export class LoginComponent {
   onLogin() {
     this.authService.authenticate(this.username, this.password).subscribe({
       next: (response) => {
+        console.log('Auth Response:', response);
         if (response.token) {
+          console.log('JWT Token:', response.token);
           alert('Login successful!');
           this.router.navigate(['/trainingEmployee']);
         } else {

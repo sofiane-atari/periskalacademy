@@ -27,8 +27,13 @@ public class AuthenticationController {
     public ResponseEntity<AuthenticateResponse> authenticate(@RequestBody LoginRequest loginRequest) throws Exception {
         AuthenticateResponse response = authenticationService.authenticate(loginRequest.getUsername(), loginRequest.getPassword());
         
+        //System.out.println("LoginResult: " + response.getLoginResult());
+        //System.out.println("Authentication Response: " + response);
+        
+
         if (response != null && "SuccesByToken".equalsIgnoreCase(response.getLoginResult())) {
             String token = jwtUtil.generateToken(loginRequest.getUsername());
+            System.out.println("Generated JWT Token: " + token);
             response.setToken(token);
             return ResponseEntity.ok(response);
         } else {

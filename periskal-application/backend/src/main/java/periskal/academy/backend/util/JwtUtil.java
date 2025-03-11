@@ -14,7 +14,7 @@ import io.jsonwebtoken.security.MacAlgorithm;
 
 @Component
 public class JwtUtil {
-    private static final String SECRET_KEY = "YourSecretKey"; // Replace with a properly secured key, Generate a random key using a secure random number generator later? Leave to periskal?
+    private static final String SECRET_KEY = "qX12L3J8RkMbX9n5z2k7nA3j8yPw9DAbF2LtR3m+5Fw="; // Replace with a properly secured key, Generate a random key using a secure random number generator later? Leave to periskal?
     private static final MacAlgorithm ALGORITHM = Jwts.SIG.HS256; 
 
     // Generate the SecretKey instance from the base64-encoded secret key
