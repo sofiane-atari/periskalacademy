@@ -20,6 +20,13 @@ export class LoginComponent {
     private authService: AuthenticationService,
   ) { }
 
+  ngOnInit() {
+    const token = localStorage.getItem('jwt_token');
+    if (token) {
+      this.router.navigate(['/trainingEmployee']);
+    }
+  }
+
   onLogin() {
     this.authService.authenticate(this.username, this.password).subscribe({
       next: (response) => {
