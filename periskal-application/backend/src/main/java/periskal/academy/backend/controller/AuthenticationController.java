@@ -3,20 +3,18 @@ package periskal.academy.backend.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import periskal.academy.backend.model.AuthenticateResponse;
 import periskal.academy.backend.model.LoginRequest;
 import periskal.academy.backend.service.AuthenticationService;
-
-import periskal.academy.backend.util.JwtUtil;
-
-import periskal.academy.backend.service.CryptoService;
 import periskal.academy.backend.service.DongleAuthenticationService;
+import periskal.academy.backend.util.JwtUtil;
 
 
 
@@ -42,7 +40,7 @@ public class AuthenticationController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }
-}
+
 
     @Autowired
     private AuthenticationService authenticationService;

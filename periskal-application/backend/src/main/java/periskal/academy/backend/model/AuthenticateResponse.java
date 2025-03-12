@@ -31,8 +31,9 @@ public class AuthenticateResponse {
     private String token;
 
     // Getters and Setters - Remove later and send it with the payload in the jeson web token
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    public String getId() { 
+        return id; 
+    }
 
     public void setId(String id) {
         this.id = id;
@@ -58,8 +59,9 @@ public class AuthenticateResponse {
         return lastname;
     }
 
-
-    
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
 
     public String getLoginResult() {
         return loginResult;
@@ -99,13 +101,5 @@ public class AuthenticateResponse {
 
     public void setProducts(List<String> products) {
         this.products = products;
-    }
-
-    public String getLoginResult() {    
-        return loginResult;
-    }
-
-    public void setLoginResult(String loginResult) {
-        this.loginResult = loginResult;
     }
 }
