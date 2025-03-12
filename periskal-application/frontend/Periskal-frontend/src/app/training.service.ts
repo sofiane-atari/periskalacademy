@@ -7,9 +7,9 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class TrainingService {
-  constructor(private client : HttpClient) { }
+  constructor(private client: HttpClient) { }
 
-  getTrainingData() : Observable<training[]> {
+  getTrainingData(): Observable<training[]> {
     return this.client.get<training[]>("http://backend.localhost:8080/api/trainings");
   }
 
@@ -21,7 +21,15 @@ export class TrainingService {
     return this.client.post("http://localhost:8080/api/trainings/create", trainingData);
   }
 
-  updateTraining(trainingId : number, trainingData : any) : Observable<any> {
+  updateTraining(trainingId: number, trainingData: any): Observable<any> {
     return this.client.put(`http://localhost:8080/api/trainings/edit/${trainingId}`, trainingData);
+  }
+
+  deleteTraining(trainingId: number): Observable<any> {
+    return this.client.delete(`http://localhost:8080/api/trainings/delete/${trainingId}`)
+  }
+
+  deleteModule(trainingId: number, moduleId: number): Observable<any> {
+    return this.client.delete(`http://localhost:8080/api/trainings/delete/${trainingId}/modules/${moduleId}`)
   }
 }
