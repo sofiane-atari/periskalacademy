@@ -20,10 +20,19 @@ export class LoginComponent {
     private authService: AuthenticationService,
   ) { }
 
+  ngOnInit() {
+    const token = localStorage.getItem('jwt_token');
+    if (token) {
+      this.router.navigate(['/trainingEmployee']);
+    }
+  }
+
   onLogin() {
     this.authService.authenticate(this.username, this.password).subscribe({
       next: (response) => {
-        if (response) {
+        console.log('Auth Response:', response);
+        if (response.token) {
+          console.log('JWT Token:', response.token);
           alert('Login successful!');
           this.router.navigate(['/trainingEmployee']);
         } else {
@@ -31,8 +40,13 @@ export class LoginComponent {
         }
       },
       error: (error) => {
-        alert('Error during authentication');
-      },    
+        if (error.status === 401) {
+          alert('Invalid credentials');
+        } else {
+          alert('Something went wrong. Please try again later.');
+        }
+      }
+
     });
   }
 }

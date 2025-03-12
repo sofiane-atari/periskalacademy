@@ -28,14 +28,11 @@ public class AuthenticateResponse {
 
     @JsonProperty("LoginResult")
     private String loginResult;
+    private String token;
 
-    @JsonProperty("Password")
-    private String password;
-
-    // Getters and Setters
-    public String getId() {
-        return id;
-    }
+    // Getters and Setters - Remove later and send it with the payload in the jeson web token
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
 
     public void setId(String id) {
         this.id = id;
@@ -61,8 +58,23 @@ public class AuthenticateResponse {
         return lastname;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+
+    
+
+    public String getLoginResult() {
+        return loginResult;
+    }
+
+    public void setLoginResult(String loginResult) {
+        this.loginResult = loginResult;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getShipname() {

@@ -5,5 +5,6 @@ export interface AuthenticateResponse {
     lastname: string;
     role: string;
     loginResult: string;
+    token: string;
   }
     

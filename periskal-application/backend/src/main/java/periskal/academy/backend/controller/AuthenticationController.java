@@ -12,6 +12,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import periskal.academy.backend.model.AuthenticateResponse;
 import periskal.academy.backend.model.LoginRequest;
 import periskal.academy.backend.service.AuthenticationService;
+
+import periskal.academy.backend.util.JwtUtil;
+
 import periskal.academy.backend.service.CryptoService;
 import periskal.academy.backend.service.DongleAuthenticationService;
 
@@ -43,12 +46,22 @@ public class AuthenticationController {
 
     @Autowired
     private AuthenticationService authenticationService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
     
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticateResponse> authenticate(@RequestBody LoginRequest loginRequest) throws Exception {
         AuthenticateResponse response = authenticationService.authenticate(loginRequest.getUsername(), loginRequest.getPassword());
         
+        //System.out.println("LoginResult: " + response.getLoginResult());
+        //System.out.println("Authentication Response: " + response);
+        
+
         if (response != null && "SuccesByToken".equalsIgnoreCase(response.getLoginResult())) {
+            String token = jwtUtil.generateToken(loginRequest.getUsername());
+            //System.out.println("Generated JWT Token: " + token);
+            response.setToken(token);
             return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
