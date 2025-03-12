@@ -33,7 +33,7 @@ public class AuthenticationController {
 
         if (response != null && "SuccesByToken".equalsIgnoreCase(response.getLoginResult())) {
             String token = jwtUtil.generateToken(loginRequest.getUsername());
-            System.out.println("Generated JWT Token: " + token);
+            //System.out.println("Generated JWT Token: " + token);
             response.setToken(token);
             return ResponseEntity.ok(response);
         } else {
