@@ -18,4 +18,7 @@ export class AppComponent  {
   isLoginPage() : boolean {
     return this.router.url === '/login'
   }
+  isDonglePage(): boolean{
+    return this.router.url === '/decode-token'
+  }
 }

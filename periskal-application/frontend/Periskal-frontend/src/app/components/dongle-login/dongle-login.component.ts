@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthenticationService } from '../../services/authentication-service.service';
+import { AuthenticationService } from '../../services/authenticationServiceDongle/dongle-authentication.service';
 
 @Component({
   selector: 'app-dongle-login',
@@ -8,20 +8,29 @@ import { AuthenticationService } from '../../services/authentication-service.ser
   styleUrls: ['./dongle-login.component.css']
 })
 export class DongleLoginComponent implements OnInit {
+  isLoading: boolean = false; // Show loading state
+  errorMessage: string = '';  // Show error message if login fails
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private authService: AuthenticationService,
   ) {}
 
-  ngOnInit(): void {    
-    // Lees de token uit de URL (query parameters)
+  ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-      const login = params['login']; // Haal de token uit de URL
-      if (login) {
-        this.authenticateUser(login); // Start de authenticatie
-      } else {
-        console.error('❌ Geen login token gevonden in de URL.');
+
+      if (!params['login']) {
+        this.errorMessage = '❌ Token not found';
+        setTimeout(() => this.router.navigate(['/login']), 3000);
+        return;
+      }else{
+        let decodedLogin = decodeURIComponent(params['login']).replace(/ /g, '+');
+
+        this.isLoading = true;
+        this.errorMessage = '';
+    
+        this.authenticateUser(decodedLogin);
       }
     });
   }
@@ -29,15 +38,17 @@ export class DongleLoginComponent implements OnInit {
   // Functie om de token te authenticeren
   private authenticateUser(login: string) {
 
-    // Call de authenticate service
     this.authService.authenticate(login).subscribe({
       next: (response) => {
-        console.log('✅ Login succesvol:', response);
-        this.router.navigate(['/trainingEmployee']); // Redirect bij succes
+        setTimeout(() => {
+          this.router.navigate(['/trainingEmployee']); 
+        }, 2000);
       },
       error: (error) => {
-        console.error('❌ Login mislukt:', error);
-        this.router.navigate(['/decode-token']); // Blijf op loginpagina bij fout
+        this.errorMessage = '❌ Invalid token!';
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        }, 3000);
       }
     });
   }

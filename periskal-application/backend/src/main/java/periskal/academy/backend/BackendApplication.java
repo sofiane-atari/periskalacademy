@@ -6,20 +6,20 @@ import java.util.List;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.ComponentScan;
 
 import periskal.academy.backend.jpa.Module;
-import periskal.academy.backend.jpa.Test;
-import periskal.academy.backend.jpa.TestRepository;
 import periskal.academy.backend.jpa.Training;
 import periskal.academy.backend.jpa.TrainingRepository;
 
 @SpringBootApplication
+@EntityScan("periskal.academy.backend.jpa")
+
 public class BackendApplication implements CommandLineRunner {
-	private final TestRepository testrepository;
 	private final TrainingRepository trainingRepository;
 
-	public BackendApplication(TestRepository testrepository, TrainingRepository trainingRepository) {
-		this.testrepository = testrepository;
+	public BackendApplication(TrainingRepository trainingRepository) {
 		this.trainingRepository = trainingRepository;
 	}
 

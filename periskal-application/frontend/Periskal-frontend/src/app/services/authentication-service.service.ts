@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthenticationService {
-  public apiUrl = 'http://localhost:8080/api/auth/decode-token';  // Zorg ervoor dat dit correct is
+  public apiUrl = 'http://backend.localhost:8080/api/auth/decode-token';  // Zorg ervoor dat dit correct is
 
   constructor(private http: HttpClient) {}
 

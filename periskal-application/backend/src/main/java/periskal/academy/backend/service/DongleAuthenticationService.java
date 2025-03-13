@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -28,19 +29,25 @@ public class DongleAuthenticationService {
     private final String authenticateEndpointUrl = "https://academyws.periskal.com/Academy.asmx";
 
     public AuthenticateResponse authenticateDongle(String token) throws Exception {
+        // Replace spaces in the token
+        token = token.replace(" ", "+");
 
-        // Build the SOAP request with the token
+        // Build the SOAP request with the modified token
         String soapRequest = buildSoapRequest(token);
 
         // Set headers for the SOAP request
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.valueOf("application/soap+xml; charset=utf-8"));
+
         HttpEntity<String> requestEntity = new HttpEntity<>(soapRequest, headers);
 
-        // Send the SOAP request and receive the response
         ResponseEntity<String> soapResponseEntity;
         try {
+            // Send the SOAP request and receive the response
             soapResponseEntity = restTemplate.postForEntity(authenticateEndpointUrl, requestEntity, String.class);
+        } catch (HttpServerErrorException ex) {
+            ex.printStackTrace();
+            return null;
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
@@ -48,10 +55,10 @@ public class DongleAuthenticationService {
 
         // Check if the response status is OK
         if (soapResponseEntity.getStatusCode() == HttpStatus.OK) {
-            // Parse the SOAP response XML
             String responseXml = soapResponseEntity.getBody();
             return parseSoapResponse(responseXml);
         }
+
         return null;
     }
 
