@@ -1,76 +1,102 @@
-/* Navigation bar container */
-nav {
-  background-color: #f9f9f9; /* Light background similar to your container */
-  padding: 15px 0;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow to lift the navbar */
-  border-radius: 8px;
-  font-family: "Arial", sans-serif;
-  margin-bottom: 30px; /* Space between the navbar and other content */
+.custom-navbar {
+  background-color: #ffd700;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 12px 0;
 }
 
-/* Navigation list styling */
-nav ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.navbar-brand {
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: 0.5px;
 }
 
-nav li {
-  margin: 0 20px;
-}
-
-nav a {
-  text-decoration: none;
-  color: #555; /* Similar color to labels in your design */
-  font-size: 16px;
-  font-weight: bold;
-  padding: 12px 20px;
+.nav-link {
+  font-weight: 500;
+  margin: 0 8px;
+  padding: 8px 16px !important;
   border-radius: 4px;
-  display: inline-block;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
-/* Hover effect */
-nav a:hover {
-  background-color: #f0d04b; /* Gold background for hover */
-  color: darkgrey; /* Dark grey text when hovered */
+.nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
 }
 
-/* Active link styling */
-nav a.active {
-  background-color: #f0d04b; /* Green background for active link */
-  color: white; /* White text for the active link */
-  font-weight: bold; /* Make active text bold */
+.nav-link.active {
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
-/* Focus outline for accessibility */
-nav a:focus {
-  outline: 3px solid #66afe9;
-  outline-offset: 2px;
+.navbar-toggler {
+  border: none;
+  padding: 8px;
 }
 
-/* Mobile responsiveness */
-@media (max-width: 768px) {
-  nav ul {
-    flex-direction: column; /* Stack links vertically on small screens */
-    align-items: stretch;
-  }
+.navbar-toggler:focus {
+  box-shadow: none;
+  outline: none;
+}
 
-  nav li {
-    margin: 15px 0;
-  }
+.profile-icon {
+  font-size: 1.2rem;
+  color: #000;
+  transition: color 0.3s ease;
+}
 
-  nav a {
-    font-size: 18px;
-    text-align: center;
+.profile-icon:hover {
+  color: #0073e6;
+}
+
+@media (min-width: 992px) {
+  .navbar-collapse {
+    justify-content: flex-end;
   }
 }
 
-/* Styling for router outlet or active page indicator */
-router-outlet {
-  display: block;
-  margin-top: 20px;
+body {
+  background-color: #f8f9fa;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container {
+  padding: 0 20px;
+}
+
+/* Dropdown styling */
+.dropdown-toggle {
+  background-color: rgba(255, 255, 255, 0.3);
+  border: none;
+  color: #000;
+  padding: 8px 16px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.dropdown-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Verwijder focus-border bij klikken */
+.dropdown-toggle:focus,
+.dropdown-toggle:active {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Stijl voor dropdown */
+.dropdown-menu {
+  border: 1px solid #ffd700;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background-color: #ffd700;
+}
+
+/* Stijl voor dropdown items */
+.dropdown-item {
+  color: #000;
+  transition: background-color 0.3s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #f8f9fa;
 }
