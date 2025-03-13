@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthenticationService } from '../../services/authentication.service';
+import { JwtService } from '../../services/JwtDecode/jwt-decoder.service';
 
 @Component({
   selector: 'app-login',
@@ -18,11 +19,14 @@ export class LoginComponent {
   constructor(
     private router: Router,
     private authService: AuthenticationService,
+    private jwtService: JwtService,
   ) { }
 
   ngOnInit() {
     const token = localStorage.getItem('jwt_token');
     if (token) {
+      //const userRole = this.jwtService.getUserRole(token);
+      //console.log('User role from stored token:', userRole);
       this.router.navigate(['/trainingEmployee']);
     }
   }
