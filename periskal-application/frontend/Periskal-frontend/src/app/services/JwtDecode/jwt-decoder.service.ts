@@ -1,24 +1,42 @@
 import { Injectable } from '@angular/core';
+import { jwtDecode } from 'jwt-decode';
+
+interface JwtPayload {
+  sub: string;
+  role: string;
+  exp: number;
+  iat: number;
+}
 
 @Injectable({
   providedIn: 'root'
 })
-export class JwtService {
+export class JwtDecoderService {
+  private readonly TOKEN_KEY = 'jwt_token'; 
 
-  constructor() { }
+  constructor() {}
 
-  parseJwt(token: string): any {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
-      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
-
-    return JSON.parse(jsonPayload);
+  private getToken(): string | null {
+    return localStorage.getItem(this.TOKEN_KEY);
   }
 
-  getUserRole(token: string): string {
-    const parsedToken = this.parseJwt(token);
-    return parsedToken?.['role'];
+  private parseJwt(): JwtPayload | null {
+    const token = this.getToken();
+    if (!token) return null;
+    try {
+      return jwtDecode<JwtPayload>(token);
+    } catch (error) {
+      console.error('Error decoding JWT:', error);
+      return null;
+    }
+  }
+
+  getUsername(): string | null {
+    return this.parseJwt()?.sub ?? null;
+  }
+
+  getUserRole(): string | null {
+    return this.parseJwt()?.role ?? null;
   }
 }
+
