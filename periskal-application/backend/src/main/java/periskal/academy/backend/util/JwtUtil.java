@@ -11,6 +11,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.MacAlgorithm;
+import periskal.academy.backend.model.AuthenticateResponse;
 
 @Component
 public class JwtUtil {
@@ -23,10 +24,11 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    // Generate JWT Token
-    public String generateToken(String username) {
+   // Generate JWT Token
+    public String generateToken(AuthenticateResponse authResponse) {
         return Jwts.builder()
-                .subject(username)
+                .subject(authResponse.getUsername())
+                .claim("role", authResponse.getRole())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours validity
                 .signWith(getSigningKey(), ALGORITHM) // Use the new JJWT signature API
