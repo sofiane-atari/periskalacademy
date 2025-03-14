@@ -13,7 +13,7 @@
           required
         />
       </div>
-
+      
       <div class="field">
         <label>Description</label>
         <textarea
@@ -26,7 +26,7 @@
         >
         </textarea>
       </div>
-
+      
       <h3 class="modules">Modules informatie</h3>
       <div formArrayName="modules">
         @for (module of modules.controls; track $index) {
@@ -52,6 +52,53 @@
             >
             </textarea>
           </div>
+          
+          <div>
+            <h4>Module {{ $index + 1 }} hoofdstukken</h4>
+            <div formArrayName="chapters">
+              <div class="chapter">
+                <h5>Hoofdstuk 1</h5>
+                <div>
+                  <label>Hoofdstuk Titel</label>
+                  <input
+                    formControlName="nameChapter"
+                    placeholder="Geef de titel van hoofdstuk 1"
+                    required
+                  />
+                </div>
+                <div>
+                  <label>Hoofdstuk Beschrijving</label>
+                  <textarea
+                    formControlName="descriptionChapter"
+                    id="descriptionChapter{{ $index }}_1"
+                    class="form-control"
+                    placeholder="Geef de beschrijving van hoofdstuk 1"
+                    name="descriptionChapter{{ $index }}_1"
+                    required
+                  >
+                  </textarea>
+                </div>
+                <div>
+                  <label>Hoofdstuk Tekst</label>
+                  <textarea
+                    formControlName="textChapter"
+                    id="textChapter{{ $index }}_1"
+                    class="form-control"
+                    placeholder="Geef de tekst van hoofdstuk 1"
+                    name="textChapter{{ $index }}_1"
+                    required
+                  >
+                  </textarea>
+                </div>
+              </div>
+            </div>
+            <div>
+              <button type="button">
+                Nieuw hoofdstuk toevoegen
+              </button>
+            </div>
+          </div>
+          
           @if($index!=0) {
           <button class="delete" type="button" (click)="removeModule($index)">
             Module verwijderen
