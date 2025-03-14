@@ -29,14 +29,14 @@
       
       <h3 class="modules">Modules informatie</h3>
       <div formArrayName="modules">
-        @for (module of modules.controls; track $index) {
-        <div [formGroupName]="$index" class="module">
-          <h4>Module {{ $index + 1 }}</h4>
+        @for (module of modules.controls; track moduleIndex; let moduleIndex = $index) {
+        <div [formGroupName]="moduleIndex" class="module">
+          <h4>Module {{ moduleIndex + 1 }}</h4>
           <div>
             <label>Module Titel</label>
             <input
               formControlName="nameModule"
-              placeholder="Geef de titel van module {{ $index + 1 }}"
+              placeholder="Geef de titel van module {{ moduleIndex + 1 }}"
               required
             />
           </div>
@@ -44,25 +44,26 @@
             <label>Module Beschrijving</label>
             <textarea
               formControlName="descriptionModule"
-              id="descriptionModule{{ $index }}"
+              id="descriptionModule{{ moduleIndex }}"
               class="form-control"
-              placeholder="Geef de beschrijving van module {{ $index + 1 }}"
-              name="descriptionModule{{ $index }}"
+              placeholder="Geef de beschrijving van module {{ moduleIndex + 1 }}"
+              name="descriptionModule{{ moduleIndex }}"
               required
             >
             </textarea>
           </div>
           
           <div>
-            <h4>Module {{ $index + 1 }} hoofdstukken</h4>
+            <h4>Hoofdstukken module {{ moduleIndex + 1 }}</h4>
             <div formArrayName="chapters">
-              <div class="chapter">
-                <h5>Hoofdstuk 1</h5>
+              @for (chapter of getChaptersControls(moduleIndex); track chapterIndex; let chapterIndex = $index) {
+              <div [formGroupName]="chapterIndex" class="chapter">
+                <h5>Hoofdstuk {{ chapterIndex + 1 }}</h5>
                 <div>
                   <label>Hoofdstuk Titel</label>
                   <input
                     formControlName="nameChapter"
-                    placeholder="Geef de titel van hoofdstuk 1"
+                    placeholder="Geef de titel van hoofdstuk {{ chapterIndex + 1 }}"
                     required
                   />
                 </div>
@@ -70,10 +71,10 @@
                   <label>Hoofdstuk Beschrijving</label>
                   <textarea
                     formControlName="descriptionChapter"
-                    id="descriptionChapter{{ $index }}_1"
+                    id="descriptionChapter{{ moduleIndex }}_{{ chapterIndex }}"
                     class="form-control"
-                    placeholder="Geef de beschrijving van hoofdstuk 1"
-                    name="descriptionChapter{{ $index }}_1"
+                    placeholder="Geef de beschrijving van hoofdstuk {{ chapterIndex + 1 }}"
+                    name="descriptionChapter{{ moduleIndex }}_{{ chapterIndex }}"
                     required
                   >
                   </textarea>
@@ -82,25 +83,31 @@
                   <label>Hoofdstuk Tekst</label>
                   <textarea
                     formControlName="textChapter"
-                    id="textChapter{{ $index }}_1"
+                    id="textChapter{{ moduleIndex }}_{{ chapterIndex }}"
                     class="form-control"
-                    placeholder="Geef de tekst van hoofdstuk 1"
-                    name="textChapter{{ $index }}_1"
+                    placeholder="Geef de tekst van hoofdstuk {{ chapterIndex + 1 }}"
+                    name="textChapter{{ moduleIndex }}_{{ chapterIndex }}"
                     required
                   >
                   </textarea>
                 </div>
+                @if(chapterIndex!=0) {
+                <button class="delete" type="button" (click)="removeChapter(moduleIndex, chapterIndex)">
+                  Hoofdstuk verwijderen
+                </button>
+                }
               </div>
+              }
             </div>
             <div>
-              <button type="button">
+              <button type="button" (click)="addChapter(moduleIndex)">
                 Nieuw hoofdstuk toevoegen
               </button>
             </div>
           </div>
           
-          @if($index!=0) {
-          <button class="delete" type="button" (click)="removeModule($index)">
+          @if(moduleIndex!=0) {
+          <button class="delete" type="button" (click)="removeModule(moduleIndex)">
             Module verwijderen
           </button>
           }

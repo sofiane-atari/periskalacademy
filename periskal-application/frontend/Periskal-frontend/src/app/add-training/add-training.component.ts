@@ -14,7 +14,7 @@ import { TrainingService } from '../training.service';
 export class AddTrainingComponent {
   trainingForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private client: HttpClient, private router : Router, private trainingsService : TrainingService) {
+  constructor(private fb: FormBuilder, private client: HttpClient, private router: Router, private trainingsService: TrainingService) {
     this.trainingForm = this.fb.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
@@ -26,10 +26,23 @@ export class AddTrainingComponent {
     return this.trainingForm.get('modules') as FormArray;
   }
 
+  getChaptersControls(moduleIndex: number): any[] {
+    return (this.modules.at(moduleIndex).get('chapters') as FormArray).controls;
+  }
+
   createModule(): FormGroup {
     return this.fb.group({
       nameModule: ['', Validators.required],
-      descriptionModule: ['', Validators.required]
+      descriptionModule: ['', Validators.required],
+      chapters: this.fb.array([this.createChapter()])
+    });
+  }
+
+  createChapter(): FormGroup {
+    return this.fb.group({
+      nameChapter: ['', Validators.required],
+      descriptionChapter: ['', Validators.required],
+      textChapter: ['', Validators.required]
     });
   }
 
@@ -38,7 +51,20 @@ export class AddTrainingComponent {
   }
 
   removeModule(index: number): void {
+    console.log(index);
+    console.log(this.modules);
     this.modules.removeAt(index);
+    console.log(this.modules);
+  }
+
+  addChapter(moduleIndex: number): void {
+    const chapters = this.modules.at(moduleIndex).get('chapters') as FormArray;
+    chapters.push(this.createChapter());
+  }
+
+  removeChapter(moduleIndex: number, chapterIndex: number): void {
+    const chapters = this.modules.at(moduleIndex).get('chapters') as FormArray;
+    chapters.removeAt(chapterIndex);
   }
 
   postTraining(): void {
@@ -55,14 +81,13 @@ export class AddTrainingComponent {
           console.error('Error posting training', error);
         }
       );
-  
     }
   }
-  
+
   resetForm(): void {
     this.trainingForm.reset();
 
-    while(this.modules.length) {
+    while (this.modules.length) {
       this.modules.removeAt(0);
     }
     this.addModule();
