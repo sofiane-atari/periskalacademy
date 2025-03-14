@@ -26,7 +26,6 @@
         >
         </textarea>
       </div>
-      
       <h3 class="modules">Modules informatie</h3>
       <div formArrayName="modules">
         @for (module of modules.controls; track moduleIndex; let moduleIndex = $index) {
@@ -92,7 +91,7 @@
                   </textarea>
                 </div>
                 @if(chapterIndex!=0) {
-                <button class="delete" type="button" (click)="removeChapter(moduleIndex, chapterIndex)">
+                <button type="delete" (click)="removeChapter(moduleIndex, chapterIndex)">
                   Hoofdstuk verwijderen
                 </button>
                 }
@@ -107,7 +106,7 @@
           </div>
           
           @if(moduleIndex!=0) {
-          <button class="delete" type="button" (click)="removeModule(moduleIndex)">
+          <button type="delete" (click)="removeModule(moduleIndex)">
             Module verwijderen
           </button>
           }
