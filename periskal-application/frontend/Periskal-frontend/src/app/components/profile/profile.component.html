@@ -1,45 +1,60 @@
 <div class="profile-container">
-  <h2>User Profile</h2>
-  <div class="profile-info">
-    <div class="info-row">
-      <span class="label">ID:</span>
-      <span class="value">{{userProfile.id}}</span>
-    </div>
-    <div class="info-row">
-      <span class="label">Username:</span>
-      <span class="value">{{userProfile.username}}</span>
-    </div>
-    <div class="info-row">
-      <span class="label">First Name:</span>
-      <span class="value">{{userProfile.firstname}}</span>
-    </div>
-    <div class="info-row">
-      <span class="label">Last Name:</span>
-      <span class="value">{{userProfile.lastname}}</span>
-    </div>
-    <div class="info-row">
-      <span class="label">Ship Name:</span>
-      <span class="value">{{userProfile.shipname}}</span>
-    </div>
-    <div class="info-row">
-      <span class="label">Role:</span>
-      <span class="value">{{userProfile.role}}</span>
-    </div>
-    <div class="info-row products-row">
-      <span class="label">Products:</span>
-      <div class="value products-list">
-          @if (userProfile.products?.length) {
-              <ul>
-                  @for (product of userProfile.products; track product) {
-                      <li>{{product}}</li>
-                  }
-              </ul>
-          } @else {
-              <span>No products available</span>
-          }
-      </div>
+  <div class="profile-header">
+    <h2>User Profile</h2>
+    <div class="tabs">
+      <button class="tab-button" [class.active]="activeTab === 'info'" (click)="setActiveTab('info')">Information</button>
+      <button class="tab-button" [class.active]="activeTab === 'products'" (click)="setActiveTab('products')">Products</button>
+      <button class="tab-button" [class.active]="activeTab === 'settings'" (click)="setActiveTab('settings')">Settings</button>
     </div>
   </div>
+
+  <div [ngSwitch]="activeTab">
+    <div *ngSwitchCase="'info'" class="profile-info">
+      <div class="info-row">
+        <span class="label">ID:</span>
+        <span class="value">{{userProfile.id}}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Username:</span>
+        <span class="value">{{userProfile.username}}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">First Name:</span>
+        <span class="value">{{userProfile.firstname}}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Last Name:</span>
+        <span class="value">{{userProfile.lastname}}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Ship Name:</span>
+        <span class="value">{{userProfile.shipname}}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Role:</span>
+        <span class="value">{{userProfile.role}}</span>
+      </div>
+    </div>
+
+    <div *ngSwitchCase="'products'" class="products-section">
+      <div class="products-grid">
+        @if (userProfile.products?.length) {
+          @for (product of userProfile.products; track product) {
+            <div class="product-card">
+              <h4>{{product}}</h4>
+            </div>
+          }
+        } @else {
+          <p class="no-products">No products available</p>
+        }
+      </div>
+    </div>
+
+    <div *ngSwitchCase="'settings'" class="settings-section">
+      <p class="settings-placeholder">Settings will be available in a future update.</p>
+    </div>
+  </div>
+
   <div class="logout-container">
     <button class="logout-button" (click)="logout()">Logout</button>
   </div>

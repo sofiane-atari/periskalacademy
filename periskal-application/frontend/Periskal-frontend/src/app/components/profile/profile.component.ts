@@ -14,6 +14,7 @@ import { AuthenticateResponse } from '../../models/authenticate-response.model';
 })
 export class ProfileComponent implements OnInit {
   userProfile: Partial<AuthenticateResponse> = {};
+  activeTab: 'info' | 'products' | 'settings' = 'info';
 
   constructor(
     private jwtDecoderService: JwtDecoderService,
@@ -42,6 +43,10 @@ export class ProfileComponent implements OnInit {
       products: products ?? []
       };
  
+  }
+
+  setActiveTab(tab: 'info' | 'products' | 'settings') {
+    this.activeTab = tab;
   }
 
   logout() { 
