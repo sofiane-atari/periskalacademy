@@ -22,6 +22,8 @@ export class ProfileComponent implements OnInit {
     const id = this.jwtDecoderService.getId();
     const firstname = this.jwtDecoderService.getFirstname();
     const lastname = this.jwtDecoderService.getLastname();
+    const shipname = this.jwtDecoderService.getShipname();
+    const products = this.jwtDecoderService.getProducts();
 
 
       this.userProfile = {
@@ -29,7 +31,9 @@ export class ProfileComponent implements OnInit {
       role: role ?? 'Not available',
       id: id ?? 'Not available',
       firstname: firstname ?? 'Not available',
-      lastname: lastname ?? 'Not available'
+      lastname: lastname ?? 'Not available',
+      shipname: shipname ?? 'Not available',
+      products: products ?? []
       };
  
   }

@@ -34,3 +34,22 @@ h2 {
   flex: 1;
   color: #333;
 }
+
+.products-row {
+  align-items: flex-start;
+}
+
+.products-list {
+  padding: 0.5rem 0;
+}
+
+.products-list ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.products-list li {
+  padding: 0.25rem 0;
+  color: #333;
+}

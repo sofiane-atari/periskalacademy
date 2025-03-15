@@ -7,6 +7,8 @@ interface JwtPayload {
   id: string;
   firstname: string;
   lastname: string;
+  shipname: string;
+  products: string[];
   exp: number;
   iat: number;
 }
@@ -53,6 +55,14 @@ export class JwtDecoderService {
   getLastname(): string | null {
     return this.parseJwt()?.lastname ?? null;
   }
-  
+
+  getProducts(): string[] | null {
+    return this.parseJwt()?.products ?? null;
+  }
+
+  getShipname(): string | null {
+        return this.parseJwt()?.shipname ?? null;
+    }
+
 }
 

@@ -32,6 +32,8 @@ public class JwtUtil {
                 .claim("id", authResponse.getId())
                 .claim("firstname", authResponse.getFirstname())
                 .claim("lastname", authResponse.getLastname())
+                .claim("shipname", authResponse.getShipname())
+                .claim("products", authResponse.getProducts())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours validity, change to less for more security later and add refresh tokens? 
                 .signWith(getSigningKey(), ALGORITHM) // Use the new JJWT signature API

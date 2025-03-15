@@ -18,8 +18,25 @@
       <span class="value">{{userProfile.lastname}}</span>
     </div>
     <div class="info-row">
+      <span class="label">Ship Name:</span>
+      <span class="value">{{userProfile.shipname}}</span>
+    </div>
+    <div class="info-row">
       <span class="label">Role:</span>
       <span class="value">{{userProfile.role}}</span>
     </div>
+    <div class="info-row products-row">
+      <span class="label">Products:</span>
+      <div class="value products-list">
+          @if (userProfile.products?.length) {
+              <ul>
+                  @for (product of userProfile.products; track product) {
+                      <li>{{product}}</li>
+                  }
+              </ul>
+          } @else {
+              <span>No products available</span>
+          }
+      </div>
   </div>
 </div>
