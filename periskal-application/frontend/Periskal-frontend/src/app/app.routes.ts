@@ -5,7 +5,7 @@ import { TrainingDetailComponent } from './training-detail/training-detail.compo
 import { AddTrainingComponent } from './add-training/add-training.component';
 import { UpdateTrainingComponent } from './update-training/update-training.component';
 import { DongleLoginComponent } from './components/dongle-login/dongle-login.component';
-import { ProfileComponent } from './components/profile/profile/profile.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 
 export const routes: Routes = [

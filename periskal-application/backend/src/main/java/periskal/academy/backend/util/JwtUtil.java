@@ -29,13 +29,16 @@ public class JwtUtil {
         return Jwts.builder()
                 .subject(authResponse.getUsername())
                 .claim("role", authResponse.getRole())
+                .claim("id", authResponse.getId())
+                .claim("firstname", authResponse.getFirstname())
+                .claim("lastname", authResponse.getLastname())
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours validity
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours validity, change to less for more security later and add refresh tokens? 
                 .signWith(getSigningKey(), ALGORITHM) // Use the new JJWT signature API
                 .compact();
     }
 
-    // Extract the username (subject) from the token
+    
     public String extractUsername(String token) {
         return extractClaims(token).getSubject();
     }
@@ -49,12 +52,12 @@ public class JwtUtil {
                 .getPayload();
     }
 
-    // Validate the token
+    
     public boolean isTokenExpired(String token) {
         return extractClaims(token).getExpiration().before(new Date());
     }
 
-    // Validate the token and check if the username matches
+    // Validate token and check if username matches, must be a better way of validationn check later.
     public boolean validateToken(String token, String username) {
         return (username.equals(extractUsername(token)) && !isTokenExpired(token));
     }

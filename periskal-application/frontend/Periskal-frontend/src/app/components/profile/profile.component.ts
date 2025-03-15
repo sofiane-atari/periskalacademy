@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { JwtDecoderService } from '../../../services/JwtDecode/jwt-decoder.service';
-import { AuthenticateResponse } from '../../../models/authenticate-response.model';
+import { JwtDecoderService } from '../../services/JwtDecode/jwt-decoder.service';
+import { AuthenticateResponse } from '../../models/authenticate-response.model';
 
 @Component({
   selector: 'app-profile',
@@ -19,18 +19,18 @@ export class ProfileComponent implements OnInit {
     
     const username = this.jwtDecoderService.getUsername();
     const role = this.jwtDecoderService.getUserRole();
+    const id = this.jwtDecoderService.getId();
+    const firstname = this.jwtDecoderService.getFirstname();
+    const lastname = this.jwtDecoderService.getLastname();
 
-    if (username && role) {
+
       this.userProfile = {
-      username: username,
-      role: role,
-      id: 'Will be available',
-      firstname: 'Will be available',
-      lastname: 'Will be available'
+      username: username ?? 'Not available',
+      role: role ?? 'Not available',
+      id: id ?? 'Not available',
+      firstname: firstname ?? 'Not available',
+      lastname: lastname ?? 'Not available'
       };
-    } else {
-      // Handle the case where username or role is null
-      console.error('Username or role is null');
-    }
+ 
   }
 }
