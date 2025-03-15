@@ -4,6 +4,11 @@ import { jwtDecode } from 'jwt-decode';
 interface JwtPayload {
   sub: string;
   role: string;
+  id: string;
+  firstname: string;
+  lastname: string;
+  shipname: string;
+  products: string[];
   exp: number;
   iat: number;
 }
@@ -38,5 +43,26 @@ export class JwtDecoderService {
   getUserRole(): string | null {
     return this.parseJwt()?.role ?? null;
   }
+
+  getId(): string | null {
+    return this.parseJwt()?.id ?? null;
+  }
+
+  getFirstname(): string | null {
+    return this.parseJwt()?.firstname ?? null;
+  }
+
+  getLastname(): string | null {
+    return this.parseJwt()?.lastname ?? null;
+  }
+
+  getProducts(): string[] | null {
+    return this.parseJwt()?.products ?? null;
+  }
+
+  getShipname(): string | null {
+        return this.parseJwt()?.shipname ?? null;
+    }
+
 }
 
