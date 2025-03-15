@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { JwtDecoderService } from '../../services/JwtDecode/jwt-decoder.service';
+import { AuthenticationService } from '../../services/authentication.service';
 import { AuthenticateResponse } from '../../models/authenticate-response.model';
 
 @Component({
@@ -13,7 +15,11 @@ import { AuthenticateResponse } from '../../models/authenticate-response.model';
 export class ProfileComponent implements OnInit {
   userProfile: Partial<AuthenticateResponse> = {};
 
-  constructor(private jwtDecoderService: JwtDecoderService) {}
+  constructor(
+    private jwtDecoderService: JwtDecoderService,
+    private authService: AuthenticationService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     
@@ -36,5 +42,10 @@ export class ProfileComponent implements OnInit {
       products: products ?? []
       };
  
+  }
+
+  logout() { 
+    this.authService.logout();
+    this.router.navigate(['/login']); // there is probably a better way to do this but this works for now
   }
 }
