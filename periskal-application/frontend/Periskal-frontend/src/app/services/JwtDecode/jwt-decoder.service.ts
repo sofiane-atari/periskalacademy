@@ -36,6 +36,22 @@ export class JwtDecoderService {
     }
   }
 
+  isTokenExpired(): boolean {
+    const payload = this.parseJwt();
+    if (!payload || !payload.exp) return true; 
+    return payload.exp * 1000 < Date.now(); 
+  }
+
+  getTokenTimeToExpiry(): number | null {
+    const payload = this.parseJwt();
+    if (!payload || !payload.exp) return null;
+    return Math.max(0, payload.exp - Math.floor(Date.now() / 1000));
+  }
+
+  getDecodedToken(): JwtPayload | null {
+    return this.parseJwt();
+  }
+
   getUsername(): string | null {
     return this.parseJwt()?.sub ?? null;
   }
