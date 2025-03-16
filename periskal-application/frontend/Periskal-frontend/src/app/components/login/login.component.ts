@@ -38,7 +38,7 @@ export class LoginComponent {
     this.errorMessage = null;
 
     if (!this.username || !this.password) {
-      this.errorMessage = 'Please enter both username and password';
+      alert('Please enter both username and password');
       this.isLoading = false;
       return;
     }
@@ -49,19 +49,19 @@ export class LoginComponent {
           console.log('Authentication successful'); // debug
           this.router.navigate(['/trainingEmployee']); // change to /dashboard when we have a Single Dashboard with Conditional Rendering
         } else {
-          this.errorMessage = 'Authentication failed';
+          alert('Authentication failed');
         }
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Login error:', error);
         if (error.status === 401) {
-          this.errorMessage = 'Invalid username or password';
+          alert('Invalid username or password');
         } else if (error.status === 0) {
-          this.errorMessage = 'Cannot connect to server. Please check your connection.';
+          alert('Cannot connect to server. Please check your connection.');
         } else {
-          this.errorMessage = 'Something went wrong. Please try again later.';
+          alert('An error occurred. Please try again later.');
         }
+        console.error('Login error:', error);
         this.isLoading = false;
       }
     });
