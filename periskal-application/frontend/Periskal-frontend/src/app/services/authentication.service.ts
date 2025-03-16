@@ -8,7 +8,7 @@ import { JwtDecoderService } from './JwtDecode/jwt-decoder.service';
 @Injectable({ providedIn: 'root' })
 
 export class AuthenticationService {
-  private apiUrl = 'http://localhost:8080/api/auth/authenticate'; // change to proper api path later
+  private apiUrl = 'http://localhost:8080/api/auth/authenticate'; // change to proper api path later, really have to start using environment variables for this
   private readonly TOKEN_KEY = 'jwt_token';
 
   constructor(private http: HttpClient,
