@@ -58,8 +58,9 @@
         },
         "serve": {
           "options": {
+            "proxyConfig": "proxy.conf.json",
             "allowedHosts": [
-              "project.th-dl.tech"
+                "project.th-dl.tech"
             ]
           },
           "builder": "@angular-devkit/build-angular:dev-server",

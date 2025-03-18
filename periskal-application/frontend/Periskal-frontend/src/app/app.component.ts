@@ -14,6 +14,7 @@ import { AuthenticationService } from './services/authentication.service';
 })
 export class AppComponent  {
   title = 'Periskal-frontend';
+  showNavbar = true;
 
   constructor(private router : Router, private authService: AuthenticationService) {}
 
