@@ -4,6 +4,8 @@ export interface AuthenticateResponse {
     firstname: string;
     lastname: string;
     role: string;
+    shipname: string;
+    products: string[];
     loginResult: string;
     token: string;
   }
