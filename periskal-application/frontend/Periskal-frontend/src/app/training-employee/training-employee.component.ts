@@ -9,7 +9,7 @@ import { TrainingService } from '../training.service';
   styleUrl: './training-employee.component.css'
 })
 export class TrainingEmployeeComponent implements OnInit {
-  public trainingsData : training[] = [];
+  public trainingsData: training[] = [];
 
   constructor(private router: Router, private svc: TrainingService) { }
 
@@ -31,7 +31,7 @@ export class TrainingEmployeeComponent implements OnInit {
   goToAddPage() {
     this.router.navigate(['/add'])
   }
-  goToEditPage(trainingId : number) {
+  goToEditPage(trainingId: number) {
     this.router.navigate(['/edit', trainingId])
   }
 }
@@ -46,4 +46,12 @@ export interface module {
   id: number
   nameModule: String
   descriptionModule: String
+  chapters: chapter[]
+}
+
+export interface chapter {
+  id: number
+  nameChapter: String
+  descriptionChapter: String
+  textChapter: String
 }
