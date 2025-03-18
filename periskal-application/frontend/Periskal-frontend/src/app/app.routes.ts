@@ -7,17 +7,34 @@ import { UpdateTrainingComponent } from './update-training/update-training.compo
 import { DongleLoginComponent } from './components/dongle-login/dongle-login.component';
 import { ModuleDetailComponent } from './module-detail/module-detail.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
-    { path: 'login', component: LoginComponent },
-    { path: 'trainingEmployee', component: TrainingEmployeeComponent },
-    { path: 'training/:id', component: TrainingDetailComponent },
-    { path: 'add', component: AddTrainingComponent },
-    { path: 'edit/:id', component: UpdateTrainingComponent },
-    { path: 'decode-token', component: DongleLoginComponent },
-    { path: 'training/:id/module/:moduleid', component: ModuleDetailComponent },
-    { path: 'profile', component: ProfileComponent },
-    { path: '**', redirectTo: 'login' }        // Redirect all unknown routes to login, Has to be at the end of the list!!!
-];
 
+    // Public Routes
+    {
+        path: '',
+        children: [
+            { path: 'login', component: LoginComponent },
+            { path: 'decode-token', component: DongleLoginComponent },
+        ]
+    },
+
+    // Protected Routes
+    {
+        path: '',
+        canActivate: [authGuard],
+        children: [
+            { path: 'trainingEmployee', component: TrainingEmployeeComponent },
+            { path: 'add', component: AddTrainingComponent },
+            { path: 'training/:id', component: TrainingDetailComponent },
+            { path: 'edit/:id', component: UpdateTrainingComponent },
+            { path: 'training/:id/module/:moduleid', component: ModuleDetailComponent },
+            { path: 'profile', component: ProfileComponent }
+        ]
+    },
+
+    // Fallback Route
+    { path: '**', redirectTo: 'login' }
+];
 

@@ -1,9 +1,14 @@
 package periskal.academy.backend.util;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import javax.crypto.SecretKey;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
@@ -17,6 +22,7 @@ import periskal.academy.backend.model.AuthenticateResponse;
 public class JwtUtil {
     private static final String SECRET_KEY = "qX12L3J8RkMbX9n5z2k7nA3j8yPw9DAbF2LtR3m+5Fw="; // Replace with a properly secured key, Generate a random key using a secure random number generator later? Leave to periskal?
     private static final MacAlgorithm ALGORITHM = Jwts.SIG.HS256; 
+    private static final long JWT_TOKEN_VALIDITY = 10 * 60 * 60 * 1000; // 10 hours in milliseconds, change to less for more security later and add refresh tokens? 
 
     // Generate the SecretKey instance from the base64-encoded secret key
     private SecretKey getSigningKey() {
@@ -35,8 +41,8 @@ public class JwtUtil {
                 .claim("shipname", authResponse.getShipname())
                 .claim("products", authResponse.getProducts())
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours validity, change to less for more security later and add refresh tokens? 
-                .signWith(getSigningKey(), ALGORITHM) // Use the new JJWT signature API
+                .expiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY)) 
+                .signWith(getSigningKey(), ALGORITHM) 
                 .compact();
     }
 
@@ -63,4 +69,16 @@ public class JwtUtil {
     public boolean validateToken(String token, String username) {
         return (username.equals(extractUsername(token)) && !isTokenExpired(token));
     }
+
+    public Collection<? extends GrantedAuthority> extractAuthorities(String token) {
+        Claims claims = extractClaims(token);
+        String role = claims.get("role", String.class);
+        
+        if (role != null) {
+            return List.of(new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()));
+        }
+        
+        return Collections.emptyList();
+    }
+
 }
