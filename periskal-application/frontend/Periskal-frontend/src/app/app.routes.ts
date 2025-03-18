@@ -5,16 +5,17 @@ import { TrainingDetailComponent } from './training-detail/training-detail.compo
 import { AddTrainingComponent } from './add-training/add-training.component';
 import { UpdateTrainingComponent } from './update-training/update-training.component';
 import { DongleLoginComponent } from './components/dongle-login/dongle-login.component';
+import { ModuleDetailComponent } from './module-detail/module-detail.component';
 import { ProfileComponent } from './components/profile/profile.component';
 
-
 export const routes: Routes = [
-    { path: 'login', component: LoginComponent },  
+    { path: 'login', component: LoginComponent },
     { path: 'trainingEmployee', component: TrainingEmployeeComponent },
-    { path: 'training/:id', component: TrainingDetailComponent }, 
-    { path: 'add', component: AddTrainingComponent},
-    { path: 'edit/:id', component: UpdateTrainingComponent},
+    { path: 'training/:id', component: TrainingDetailComponent },
+    { path: 'add', component: AddTrainingComponent },
+    { path: 'edit/:id', component: UpdateTrainingComponent },
     { path: 'decode-token', component: DongleLoginComponent },
+    { path: 'training/:id/module/:moduleid', component: ModuleDetailComponent },
     { path: 'profile', component: ProfileComponent },
     { path: '**', redirectTo: 'login' }        // Redirect all unknown routes to login, Has to be at the end of the list!!!
 ];

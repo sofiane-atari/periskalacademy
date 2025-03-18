@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { module, training } from '../training-employee/training-employee.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TrainingService } from '../training.service';
 
 @Component({
@@ -11,13 +11,13 @@ import { TrainingService } from '../training.service';
 })
 export class TrainingDetailComponent {
   training: training | undefined;
-  modules : module[] = [];
+  modules: module[] = [];
 
-  trainingSvc : TrainingService;
+  trainingSvc: TrainingService;
 
-  trainingId : number = 0;
+  trainingId: number = 0;
 
-  constructor(private route: ActivatedRoute, private svc: TrainingService) {
+  constructor(private route: ActivatedRoute, private svc: TrainingService, private router: Router) {
     this.trainingSvc = svc;
   }
 
@@ -36,5 +36,9 @@ export class TrainingDetailComponent {
         console.error('Error fetching training products', error);
       }
     );
+  }
+
+  goToChaptersPage(moduleId: number) {
+    this.router.navigate(['/training', this.trainingId, 'module', moduleId])
   }
 }
