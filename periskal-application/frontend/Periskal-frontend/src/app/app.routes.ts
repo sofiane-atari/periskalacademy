@@ -8,35 +8,31 @@ import { DongleLoginComponent } from './components/dongle-login/dongle-login.com
 import { ProfileComponent } from './components/profile/profile.component';
 import { authGuard } from './guards/auth.guard';
 
-
 export const routes: Routes = [
-    { path: 'login', component: LoginComponent },
-    { path: 'decode-token', component: DongleLoginComponent },
-    { 
-        path: 'trainingEmployee', 
-        component: TrainingEmployeeComponent,
-        canActivate: [authGuard]
+
+    // Public Routes
+    {
+        path: '',
+        children: [
+            { path: 'login', component: LoginComponent },
+            { path: 'decode-token', component: DongleLoginComponent },
+        ]
     },
-    { 
-        path: 'training/:id', 
-        component: TrainingDetailComponent,
-        canActivate: [authGuard]
+
+    // Protected Routes
+    {
+        path: '',
+        canActivate: [authGuard],
+        children: [
+            { path: 'trainingEmployee', component: TrainingEmployeeComponent },
+            { path: 'add', component: AddTrainingComponent },
+            { path: 'training/:id', component: TrainingDetailComponent },
+            { path: 'edit/:id', component: UpdateTrainingComponent },
+            { path: 'profile', component: ProfileComponent }
+        ]
     },
-    { 
-        path: 'add', 
-        component: AddTrainingComponent,
-        canActivate: [authGuard]
-    },
-    { 
-        path: 'edit/:id', 
-        component: UpdateTrainingComponent,
-        canActivate: [authGuard]
-    },
-    { 
-        path: 'profile', 
-        component: ProfileComponent,
-        canActivate: [authGuard]
-    },
-    { path: '**', redirectTo: 'login' } // Redirect all unknown routes to login, Has to be at the end of the list!!!
+
+    // Fallback Route
+    { path: '**', redirectTo: 'login' }
 ];
 
