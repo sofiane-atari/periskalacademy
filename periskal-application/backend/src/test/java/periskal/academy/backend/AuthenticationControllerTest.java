@@ -45,17 +45,19 @@ class AuthenticationControllerTest {
         loginRequest.setPassword("testPass");
 
         AuthenticateResponse mockResponse = new AuthenticateResponse();
+        mockResponse.setUsername("testUser");
+        mockResponse.setRole("USER");
         mockResponse.setLoginResult("SuccesByToken");
 
         String mockToken = "mockJwtToken";
 
         when(authenticationService.authenticate("testUser", "testPass")).thenReturn(mockResponse);
-        when(jwtUtil.generateToken("testUser")).thenReturn(mockToken);
+        when(jwtUtil.generateToken(mockResponse)).thenReturn(mockToken);
 
-        
+
         ResponseEntity<AuthenticateResponse> result = authenticationController.authenticate(loginRequest);
 
-        
+
         assertNotNull(result);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertNotNull(result.getBody());
@@ -65,7 +67,7 @@ class AuthenticationControllerTest {
 
     @Test
     void authenticate_InvalidCredentials_ReturnsUnauthorized() throws Exception {
-        
+
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setUsername("wrongUser");
         loginRequest.setPassword("wrongPass");
@@ -75,10 +77,10 @@ class AuthenticationControllerTest {
 
         when(authenticationService.authenticate("wrongUser", "wrongPass")).thenReturn(mockResponse);
 
-        
+
         ResponseEntity<AuthenticateResponse> result = authenticationController.authenticate(loginRequest);
 
-        
+
         assertNotNull(result);
         assertEquals(HttpStatus.UNAUTHORIZED, result.getStatusCode());
         assertNotNull(result.getBody());
@@ -87,17 +89,17 @@ class AuthenticationControllerTest {
 
     @Test
     void authenticate_NullResponse_ReturnsUnauthorized() throws Exception {
-        
+
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setUsername("testUser");
         loginRequest.setPassword("testPass");
 
         when(authenticationService.authenticate("testUser", "testPass")).thenReturn(null);
 
-        
+
         ResponseEntity<AuthenticateResponse> result = authenticationController.authenticate(loginRequest);
 
-        
+
         assertNotNull(result);
         assertEquals(HttpStatus.UNAUTHORIZED, result.getStatusCode());
         assertNull(result.getBody());

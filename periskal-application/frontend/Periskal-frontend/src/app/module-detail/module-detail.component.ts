@@ -1,0 +1,66 @@
+import { Component, OnInit } from '@angular/core';
+import { chapter, module, training } from '../training-employee/training-employee.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { TrainingService } from '../training.service';
+
+@Component({
+  selector: 'app-training-detail',
+  imports: [],
+  templateUrl: './module-detail.component.html',
+  styleUrl: './module-detail.component.css'
+})
+export class ModuleDetailComponent {
+  training: training | undefined;
+  modules: module[] = [];
+  chapters: chapter[] = [];
+  text: string = "";
+
+  trainingSvc: TrainingService;
+
+  trainingId: number = 0;
+  moduleId: number = 0;
+  activeChapterId: number = 0;
+
+  constructor(private route: ActivatedRoute, private svc: TrainingService, private router: Router) {
+    this.trainingSvc = svc;
+  }
+
+
+  formatText(text: string): string {
+    return text.replace(/\n/g, '<br>');
+  }
+
+  ngOnInit(): void {
+    // Get the training ID from the URL
+    this.trainingId = Number(this.route.snapshot.paramMap.get('id'));
+    this.moduleId = Number(this.route.snapshot.paramMap.get('moduleid'))
+
+    // Call the service method to get the products for the specific training
+    this.trainingSvc.getTrainingById(this.trainingId).subscribe(
+      (data) => {
+        this.training = data;
+        this.modules = data.modules
+        this.chapters = this.modules[this.moduleId - 1].chapters;
+
+        if (this.chapters.length > 0) {
+          this.text = this.chapters[this.activeChapterId]?.textChapter?.toString() ?? "";
+        }
+
+        console.log(this.modules[this.moduleId]);
+        console.log(this.modules[this.moduleId - 1].chapters);
+        console.log(this.chapters);
+      },
+      (error) => {
+        console.error('Error fetching training products', error);
+      }
+    );
+  }
+
+  goToChaptersPage(moduleId: number) {
+    this.router.navigate(['/training', this.trainingId, 'module', moduleId])
+  }
+
+  setActiveChapter(chapterId: number) {
+    this.activeChapterId = chapterId;
+  }
+}

@@ -6,19 +6,22 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import periskal.academy.backend.model.AuthenticateResponse;
 import periskal.academy.backend.util.JwtUtil;
 
 public class JwtUtilTest {
 
     private JwtUtil jwtUtil;
     private String token;
-    private String username;
+    private AuthenticateResponse authResponse;
 
     @BeforeEach
     public void setUp() {
         jwtUtil = new JwtUtil();
-        username = "testUser";
-        token = jwtUtil.generateToken(username);
+        authResponse = new AuthenticateResponse();
+        authResponse.setUsername("testUser");
+        authResponse.setRole("USER");
+        token = jwtUtil.generateToken(authResponse);
     }
 
     @Test
@@ -29,7 +32,7 @@ public class JwtUtilTest {
     @Test
     public void testExtractUsername() {
         String extractedUsername = jwtUtil.extractUsername(token);
-        assertEquals(username, extractedUsername);
+        assertEquals(authResponse.getUsername(), extractedUsername);
     }
 
     @Test
@@ -39,8 +42,8 @@ public class JwtUtilTest {
 
     @Test
     public void testValidateToken() {
-        assertTrue(jwtUtil.validateToken(token, username));
+        assertTrue(jwtUtil.validateToken(token, authResponse.getUsername()));
     }
 
-
+    
 }
