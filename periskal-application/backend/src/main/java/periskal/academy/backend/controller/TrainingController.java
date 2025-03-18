@@ -46,6 +46,12 @@ public class TrainingController {
         return training.get();
     }
 
+    @GetMapping("/{trainingId}/chapters")
+    public List<Module> getModuleWithChapters(@PathVariable Long trainingId) {
+        Optional<Training> training = trainingService.getTrainingWithProducts(trainingId);
+        return training.get().getModules();
+    }
+
     @PostMapping("/create")
     public ResponseEntity<Training> postTrainingWithModules(@RequestBody Training entity) {
         Training savedTraining = trainingService.createTraining(entity);

@@ -1,5 +1,6 @@
 package periskal.academy.backend;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import periskal.academy.backend.jpa.Chapter;
 import periskal.academy.backend.jpa.Module;
 import periskal.academy.backend.jpa.Test;
 import periskal.academy.backend.jpa.TestRepository;
@@ -30,7 +32,10 @@ public class BackendApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) {
 		if (trainingRepository.count() == 0) {
-			Module product1 = new Module("Intro kaartlezen", "Intro naar het navigeren met kaart");
+			Chapter chapter1 = new Chapter("test", "descriptiontest", "texttest");
+			Chapter chapter2 = new Chapter("test2", "descriptiontest2", "texttest2");
+			List<Chapter> chapters = Arrays.asList(chapter1, chapter2);
+			Module product1 = new Module("Intro kaartlezen", "Intro naar het navigeren met kaart", chapters);
 			Module product2 = new Module("Advanced kaartlezen", "Advanced navigeren met kaart");
 
 			List<Module> products = Arrays.asList(product1, product2);

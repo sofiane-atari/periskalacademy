@@ -5,6 +5,7 @@ import { TrainingDetailComponent } from './training-detail/training-detail.compo
 import { AddTrainingComponent } from './add-training/add-training.component';
 import { UpdateTrainingComponent } from './update-training/update-training.component';
 import { DongleLoginComponent } from './components/dongle-login/dongle-login.component';
+import { ModuleDetailComponent } from './module-detail/module-detail.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { authGuard } from './guards/auth.guard';
 
@@ -28,6 +29,7 @@ export const routes: Routes = [
             { path: 'add', component: AddTrainingComponent },
             { path: 'training/:id', component: TrainingDetailComponent },
             { path: 'edit/:id', component: UpdateTrainingComponent },
+            { path: 'training/:id/module/:moduleid', component: ModuleDetailComponent },
             { path: 'profile', component: ProfileComponent }
         ]
     },

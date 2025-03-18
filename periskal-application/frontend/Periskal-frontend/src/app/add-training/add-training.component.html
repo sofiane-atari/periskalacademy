@@ -13,7 +13,7 @@
           required
         />
       </div>
-
+      
       <div class="field">
         <label>Description</label>
         <textarea
@@ -26,37 +26,102 @@
         >
         </textarea>
       </div>
-
       <h3 class="modules">Modules informatie</h3>
       <div formArrayName="modules">
-        @for (module of modules.controls; track $index) {
-        <div [formGroupName]="$index" class="module">
-          <h4>Module {{ $index + 1 }}</h4>
-          <div>
-            <label>Module Titel</label>
-            <input
-              formControlName="nameModule"
-              placeholder="Geef de titel van module {{ $index + 1 }}"
-              required
-            />
+        @for (module of modules.controls; track moduleIndex; let moduleIndex = $index) {
+        <div [formGroupName]="moduleIndex" class="module">
+          <div class="module-header" (click)="toggleModule(moduleIndex)">
+            <span class="toggle-icon">{{ isModuleCollapsed(moduleIndex) ? '►' : '▼' }}</span>
+            <h4>Module {{ moduleIndex + 1 }}: {{ getModuleTitle(moduleIndex) }}</h4>
           </div>
-          <div>
-            <label>Module Beschrijving</label>
-            <textarea
-              formControlName="descriptionModule"
-              id="descriptionModule{{ $index }}"
-              class="form-control"
-              placeholder="Geef de beschrijving van module {{ $index + 1 }}"
-              name="descriptionModule{{ $index }}"
-              required
-            >
-            </textarea>
+          
+          <div [hidden]="isModuleCollapsed(moduleIndex)" class="module-content">
+            <div>
+              <label>Module Titel</label>
+              <input
+                formControlName="nameModule"
+                placeholder="Geef de titel van module {{ moduleIndex + 1 }}"
+                required
+              />
+            </div>
+            <div>
+              <label>Module Beschrijving</label>
+              <textarea
+                formControlName="descriptionModule"
+                id="descriptionModule{{ moduleIndex }}"
+                class="form-control"
+                placeholder="Geef de beschrijving van module {{ moduleIndex + 1 }}"
+                name="descriptionModule{{ moduleIndex }}"
+                required
+              >
+              </textarea>
+            </div>
+            
+            <div>
+              <h4>Hoofdstukken module {{ moduleIndex + 1 }}</h4>
+              <div formArrayName="chapters">
+                @for (chapter of getChaptersControls(moduleIndex); track chapterIndex; let chapterIndex = $index) {
+                <div [formGroupName]="chapterIndex" class="chapter">
+                  <div class="chapter-header" (click)="toggleChapter(moduleIndex, chapterIndex)">
+                    <span class="toggle-icon">{{ isChapterCollapsed(moduleIndex, chapterIndex) ? '►' : '▼' }}</span>
+                    <h5>Hoofdstuk {{ chapterIndex + 1 }}: {{ getChapterTitle(moduleIndex, chapterIndex) }}</h5>
+                  </div>
+                  
+                  <div [hidden]="isChapterCollapsed(moduleIndex, chapterIndex)" class="chapter-content">
+                    <div>
+                      <label>Hoofdstuk Titel</label>
+                      <input
+                        formControlName="nameChapter"
+                        placeholder="Geef de titel van hoofdstuk {{ chapterIndex + 1 }}"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label>Hoofdstuk Beschrijving</label>
+                      <textarea
+                        formControlName="descriptionChapter"
+                        id="descriptionChapter{{ moduleIndex }}_{{ chapterIndex }}"
+                        class="form-control"
+                        placeholder="Geef de beschrijving van hoofdstuk {{ chapterIndex + 1 }}"
+                        name="descriptionChapter{{ moduleIndex }}_{{ chapterIndex }}"
+                        required
+                      >
+                      </textarea>
+                    </div>
+                    <div>
+                      <label>Hoofdstuk Tekst</label>
+                      <textarea
+                        formControlName="textChapter"
+                        id="textChapter{{ moduleIndex }}_{{ chapterIndex }}"
+                        class="form-control"
+                        placeholder="Geef de tekst van hoofdstuk {{ chapterIndex + 1 }}"
+                        name="textChapter{{ moduleIndex }}_{{ chapterIndex }}"
+                        required
+                      >
+                      </textarea>
+                    </div>
+                    @if(chapterIndex!=0) {
+                    <button class="delete" type="button" (click)="removeChapter(moduleIndex, chapterIndex)">
+                      Hoofdstuk verwijderen
+                    </button>
+                    }
+                  </div>
+                </div>
+                }
+              </div>
+              <div>
+                <button type="button" (click)="addChapter(moduleIndex)">
+                  Nieuw hoofdstuk toevoegen
+                </button>
+              </div>
+            </div>
+            
+            @if(moduleIndex!=0) {
+            <button class="delete" type="button" (click)="removeModule(moduleIndex)">
+              Module verwijderen
+            </button>
+            }
           </div>
-          @if($index!=0) {
-          <button class="delete" type="button" (click)="removeModule($index)">
-            Module verwijderen
-          </button>
-          }
         </div>
         }
       </div>
