@@ -1,28 +1,28 @@
-<div>
-    <div>
+<div class="container">
+    <div class="navigation">
       <h4>Hoofdstukken</h4>
-      <ul>
+      <ul class="chapter-list">
         @for (chapter of chapters; track $index) {
-            <li
-                [class.active]="$index === activeChapterId"
-                (click)="setActiveChapter($index)">
-              {{ chapter.id }} {{ chapter.nameChapter }}
-            </li>
-          }
+          <li class="chapter-item" 
+              [class.active]="$index === activeChapterId"
+              (click)="setActiveChapter($index)">
+            {{ chapter.id }} {{ chapter.nameChapter }}
+          </li>
+        }
       </ul>
     </div>
     
-    <div>
-      <div>
-        <div>
+    <div class="content">
+      <div class="chapter-card">
+        <div class="chapter-header">
           <h3>Hoofdstuk {{activeChapterId+1}}: {{ chapters[activeChapterId].nameChapter }}</h3>
         </div>
-        <div>
-          <h5>Beschrijving</h5>
-          <p>{{ chapters[activeChapterId].descriptionChapter }}</p>
+        <div class="chapter-body">
+          <h5 class="section-title">Beschrijving</h5>
+          <p class="section-text">{{ chapters[activeChapterId].descriptionChapter }}</p>
           
-          <h5>Inhoud</h5>
-          <p [innerHTML]="formatText(chapters[activeChapterId].textChapter.toString())"></p>
+          <h5 class="section-title">Inhoud</h5>
+          <p class="section-text" [innerHTML]="formatText(chapters[activeChapterId].textChapter.toString())"></p>
         </div>
       </div>
     </div>
