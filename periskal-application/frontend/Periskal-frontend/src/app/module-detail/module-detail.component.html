@@ -2,23 +2,27 @@
     <div>
       <h4>Hoofdstukken</h4>
       <ul>
-          <li>
-            1 Kaartlezen
-          </li>
+        @for (chapter of chapters; track $index) {
+            <li
+                [class.active]="$index === activeChapterId"
+                (click)="setActiveChapter($index)">
+              {{ chapter.id }} {{ chapter.nameChapter }}
+            </li>
+          }
       </ul>
     </div>
     
     <div>
       <div>
         <div>
-          <h3>Hoofdstuk 1: Kaartlezen intro</h3>
+          <h3>Hoofdstuk {{activeChapterId+1}}: {{ chapters[activeChapterId].nameChapter }}</h3>
         </div>
         <div>
           <h5>Beschrijving</h5>
-          <p>beschrijving van hoofdstuk 1</p>
+          <p>{{ chapters[activeChapterId].descriptionChapter }}</p>
           
           <h5>Inhoud</h5>
-          <p>inhoud van hoofdstuk 1</p>
+          <p [innerHTML]="formatText(chapters[activeChapterId].textChapter.toString())"></p>
         </div>
       </div>
     </div>
