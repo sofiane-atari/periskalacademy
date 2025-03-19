@@ -94,4 +94,21 @@ export class UpdateTrainingComponent {
       });
     }
   }
+
+  addModule() {
+    if (!this.training) return;
+
+    if (!this.training.modules) {
+      this.training.modules = [];
+    }
+
+    const newModule = {
+      id: Date.now(),
+      nameModule: '',
+      descriptionModule: '',
+      chapters: [] // or default empty array
+    };
+    this.training?.modules.push(newModule);
+    console.log(this.training?.modules);
+  }
 }
