@@ -6,6 +6,8 @@ import { NavigationEnd,
   RouterLinkActive,
   RouterOutlet,
 } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+
 import { filter, Observable } from 'rxjs';
 import { AuthenticationService } from './services/authentication.service';
 
@@ -20,7 +22,12 @@ export class AppComponent implements OnInit {
   title = 'Periskal-frontend';
   showNavbar = true;
 
-  constructor(private router : Router, private authService: AuthenticationService) {
+  lang: string = '';
+
+  constructor(private router : Router, private authService: AuthenticationService, private translateService: TranslateService) {
+
+    this.translateService.setDefaultLang('nl');
+    this.translateService.use(localStorage.getItem('lang') || 'nl');
 
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
@@ -33,8 +40,6 @@ export class AppComponent implements OnInit {
     if (!this.router.url) return false;
     return this.router.url === '/login' || this.router.url.includes('decode-token');
   }
-  ChangeLang(Lang: any) {
-    const selectedLanguage = Lang.target.value;}
 
   ngOnInit(): void {   
     // Only validate token when not on login-related pages
@@ -49,8 +54,19 @@ export class AppComponent implements OnInit {
             this.router.navigate(['/login']);
           }
         });
-      }
-    });
-  }
+        this.lang = localStorage.getItem('lang') || 'nl';
+    }}
+    )};
 
+    ChangeLang(Lang: any) {
+      const selectedLanguage = Lang.target.value;
+  
+      localStorage.setItem('lang', selectedLanguage);
+  
+      this.translateService.use(selectedLanguage); 
+    }
 }
+
+
+
+

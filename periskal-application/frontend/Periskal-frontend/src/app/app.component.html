@@ -53,10 +53,12 @@
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
               <select class="form-select" (change)="ChangeLang($event)" id="">
-                <option value="nl">Nederlands</option>
-                <option value="en">English</option>
-                <option value="fr">Français</option>
-                <option value="de">Deutsch</option>
+                <option [selected]="lang === 'nl'" value="nl">
+                  Nederlands
+                </option>
+                <option [selected]="lang === 'en'" value="en">English</option>
+                <option [selected]="lang === 'fr'" value="fr">Français</option>
+                <option [selected]="lang === 'de'" value="de">Deutsch</option>
               </select>
             </li>
           </ul>
