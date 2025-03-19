@@ -6,14 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Periskal Navbar</title>
     <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
       rel="stylesheet"
     />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg custom-navbar">
@@ -55,59 +50,17 @@
             </li>
           </ul>
           <!-- Taal dropdown -->
-          <div class="dropdown language-dropdown ms-3">
-            <button
-              class="btn dropdown-toggle"
-              type="button"
-              id="languageDropdown"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <i class="fas fa-globe"></i> Taal
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="languageDropdown">
-              <li>
-                <a class="dropdown-item" href="#">
-                  <img
-                    src="https://flagcdn.com/w40/nl.png"
-                    width="20"
-                    class="me-2"
-                  />
-                  Nederlands
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#">
-                  <img
-                    src="https://flagcdn.com/w40/gb.png"
-                    width="20"
-                    class="me-2"
-                  />
-                  English
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#">
-                  <img
-                    src="https://flagcdn.com/w40/fr.png"
-                    width="20"
-                    class="me-2"
-                  />
-                  Français
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#">
-                  <img
-                    src="https://flagcdn.com/w40/de.png"
-                    width="20"
-                    class="me-2"
-                  />
-                  Deutsch
-                </a>
-              </li>
-            </ul>
-          </div>
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <select class="form-select" (change)="ChangeLang($event)" id="">
+                <option value="nl">Nederlands</option>
+                <option value="en">English</option>
+                <option value="fr">Français</option>
+                <option value="de">Deutsch</option>
+              </select>
+            </li>
+          </ul>
+
           <!-- Profiel icoontje -->
           <div class="ms-auto">
             <a class="nav-link text-dark" href="#">
