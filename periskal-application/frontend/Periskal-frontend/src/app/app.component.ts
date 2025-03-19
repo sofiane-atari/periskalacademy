@@ -1,11 +1,13 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { Component, NgModule, OnInit } from '@angular/core';
 import {
   Router,
   RouterLink,
   RouterLinkActive,
   RouterOutlet,
 } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+
 import { Observable } from 'rxjs';
 
 @Component({
@@ -14,10 +16,22 @@ import { Observable } from 'rxjs';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'Periskal-frontend';
 
-  constructor(private router: Router) {}
+  lang: string = '';
+
+  constructor(
+    private router: Router,
+    private translateService: TranslateService
+  ) {
+    this.translateService.setDefaultLang('nl');
+    this.translateService.use(localStorage.getItem('lang') || 'nl');
+  }
+
+  ngOnInit(): void {
+    this.lang = localStorage.getItem('lang') || 'nl';
+  }
 
   isLoginPage(): boolean {
     return this.router.url === '/login';
@@ -26,6 +40,8 @@ export class AppComponent {
   ChangeLang(Lang: any) {
     const selectedLanguage = Lang.target.value;
 
-    alert(selectedLanguage);
+    localStorage.setItem('lang', selectedLanguage);
+
+    this.translateService.use(selectedLanguage);
   }
 }

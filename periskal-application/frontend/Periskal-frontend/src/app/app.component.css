@@ -161,12 +161,6 @@ body {
   color: #0073e6;
 }
 
-@media (min-width: 992px) {
-  .navbar-collapse {
-    justify-content: flex-end;
-  }
-}
-
 body {
   background-color: #f8f9fa;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
