@@ -1,52 +1,52 @@
 services:
   traefik:
-        image: "traefik:v3.2"
-        container_name: "traefik"
-        command:
-            - "--log.level=DEBUG"
-            #- "--api.insecure=true"
-            #- "--api.dashboard=true"
-            - "--providers.docker=true"
-            - "--providers.file.filename=/etc/traefik/dynamicconfig.yml"
-            - "--providers.docker.exposedbydefault=false"
-            - "--entryPoints.web.address=:80"
-            - "--entryPoints.websecure.address=:443"
-            - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
-            - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
-            #- "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
-            - "--certificatesresolvers.myresolver.acme.email=s151582@ap.be"
-            - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
-            - "--serverstransport.forwardingtimeouts.dialtimeout=30s"
-            - "--serverstransport.forwardingtimeouts.responseheadertimeout=60s"
-            - "--entryPoints.traefik.address=:8080"
-        ports:
-            - "80:80"
-            - "443:443"
-        volumes:
-            - "./letsencrypt:/letsencrypt"
-            - "./dynamicconfig.yml:/etc/traefik/dynamicconfig.yml"
-            - "./staticconfig.yml:/etc/traefik/staticconfig.yml"
-            - "/var/run/docker.sock:/var/run/docker.sock"
-        networks:
-            - proxy
-    
+    image: "traefik:v3.2"
+    container_name: "traefik"
+    command:
+      - "--log.level=DEBUG"
+      #- "--api.insecure=true"
+      #- "--api.dashboard=true"
+      - "--providers.docker=true"
+      - "--providers.file.filename=/etc/traefik/dynamicconfig.yml"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entryPoints.web.address=:80"
+      - "--entryPoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
+      #- "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+      - "--certificatesresolvers.myresolver.acme.email=s151582@ap.be"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+      - "--serverstransport.forwardingtimeouts.dialtimeout=30s"
+      - "--serverstransport.forwardingtimeouts.responseheadertimeout=60s"
+      - "--entryPoints.traefik.address=:8080"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "./letsencrypt:/letsencrypt"
+      - "./dynamicconfig.yml:/etc/traefik/dynamicconfig.yml"
+      - "./staticconfig.yml:/etc/traefik/staticconfig.yml"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    networks:
+      - proxy
+
   frontend:
-      build: ../periskal-application/frontend/Periskal-frontend
-      depends_on:
-        - backend
-        - traefik
-      ports:
-        - "4200:4200"
-      labels:
-          - "traefik.enable=true"
-          - "traefik.http.routers.frontend.rule=Host(`project.th-dl.tech`)"
-          - "traefik.http.services.frontend.loadbalancer.server.port=4200"
-          - "traefik.http.routers.frontend.entrypoints=websecure"
-          - "traefik.http.routers.frontend.tls=true"
-          - "traefik.docker.network=proxy"
-          - "traefik.http.routers.frontend.tls.certresolver=myresolver"
-      networks:
-          - proxy
+    build: ../periskal-application/frontend/Periskal-frontend
+    depends_on:
+      - backend
+      - traefik
+    ports:
+      - "4200:4200"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`frontend.localhost`)"
+      - "traefik.http.services.frontend.loadbalancer.server.port=4200"
+      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.routers.frontend.tls=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.frontend.tls.certresolver=myresolver"
+    networks:
+      - proxy
 
   backend:
     build: ../periskal-application/backend
@@ -95,4 +95,4 @@ volumes:
   mysql-data:
 
 networks:
-    proxy:
+  proxy:

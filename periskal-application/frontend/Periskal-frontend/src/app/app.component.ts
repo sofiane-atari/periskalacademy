@@ -1,16 +1,20 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { NavigationEnd,
+  Router,
+  RouterLink,
+  RouterLinkActive,
+  RouterOutlet,
+} from '@angular/router';
 import { filter, Observable } from 'rxjs';
 import { AuthenticationService } from './services/authentication.service';
-
 
 
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, RouterLink, RouterLinkActive],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
   title = 'Periskal-frontend';
@@ -29,6 +33,8 @@ export class AppComponent implements OnInit {
     if (!this.router.url) return false;
     return this.router.url === '/login' || this.router.url.includes('decode-token');
   }
+  ChangeLang(Lang: any) {
+    const selectedLanguage = Lang.target.value;}
 
   ngOnInit(): void {   
     // Only validate token when not on login-related pages

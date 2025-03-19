@@ -1,41 +1,77 @@
-@if(showNavbar) {
-<nav>
-  <ul>
-    <li>
-      <a
-        routerLink="/trainingEmployee"
-        routerLinkActive="active"
-        ariaCurrentWhenActive="page"
-        >Employee dashboard</a
-      >
-    </li>
-    <li>
-      <a
-        routerLink="/test"
-        routerLinkActive="active"
-        ariaCurrentWhenActive="page"
-        >Test Component</a
-      >
-    </li>
-    <li>
-      <a href="">Filler Component</a>
-    </li>
-    <li>
-      <a href="">Filler Component</a>
-    </li>
-    <li>
-      <a href="">Filler Component</a>
-    </li>
-    <li>
-      <a
-        routerLink="/profile"
-        routerLinkActive="active"
-        ariaCurrentWhenActive="page"
-        >Profile</a
-      >
-    </li>
-  </ul>
-</nav>
+@if(!isLoginPage()) {
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Periskal Navbar</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg custom-navbar">
+      <div class="container">
+        <a class="navbar-brand text-dark" href="#">Periskal</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a
+                class="nav-link text-dark"
+                routerLink="/trainingEmployee"
+                routerLinkActive="active"
+                ariaCurrentWhenActive="page"
+                >Employee dashboard</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link text-dark"
+                routerLink="/test"
+                routerLinkActive="active"
+                ariaCurrentWhenActive="page"
+                >Test Component</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-dark" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-dark" href="#">Skippers</a>
+            </li>
+          </ul>
+          <!-- Taal dropdown -->
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <select class="form-select" (change)="ChangeLang($event)" id="">
+                <option value="nl">Nederlands</option>
+                <option value="en">English</option>
+                <option value="fr">Français</option>
+                <option value="de">Deutsch</option>
+              </select>
+            </li>
+          </ul>
+
+          <!-- Profiel icoontje -->
+          <div class="ms-auto">
+            <a class="nav-link text-dark" href="#">
+              <i class="fas fa-user profile-icon"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </body>
+</html>
 
 }
 <router-outlet></router-outlet>
