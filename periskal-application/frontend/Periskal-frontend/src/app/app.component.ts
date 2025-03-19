@@ -6,7 +6,7 @@ import { NavigationEnd,
   RouterLinkActive,
   RouterOutlet,
 } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { filter, Observable } from 'rxjs';
 import { AuthenticationService } from './services/authentication.service';
@@ -14,7 +14,7 @@ import { AuthenticationService } from './services/authentication.service';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, TranslateModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
