@@ -1,0 +1,22 @@
+{
+  "EMPLOYEE_DASHBOARD": "Employee Dashboard",
+  "TEST_COMPONENT": "Test Component",
+  "HOME": "Home",
+  "SKIPPERS": "Skippers",
+  "MODULES": "Modules",
+  "TAKE_COURSE": "Take Course",
+  "NEW_TRAINING_CREATE": "Create New Training",
+  "TRAINING_INFORMATION": "Training Information",
+  "TRAINING_NAME": "Training Name",
+  "DESCRIPTION": "Description",
+  "MODULE_INFORMATION": "Module Information",
+  "MODULE_TITLE": "Module Title",
+  "MODULE_DESCRIPTION": "Module Description",
+  "ADD_NEW_MODULE": "Add New Module",
+  "CREATE_TRAINING": "Create Training",
+  "EDIT": "Edit",
+  "UPDATE_TRAINING": "Update Training",
+  "DELETE_MODULE": "Delete Module",
+  "SAVE_CHANGES": "Save Changes",
+  "TRAINING_NOT_FOUND": "Training not found"
+}
