@@ -1,0 +1,42 @@
+package periskal.academy.backend.service.Authentication;
+
+import org.springframework.stereotype.Service;
+import periskal.academy.backend.model.AuthenticateResponse;
+import periskal.academy.backend.util.EncryptionUtil;
+
+@Service
+public class AuthenticationService extends BaseAuthenticationService {
+
+    @Override
+    protected String buildSoapRequest(String token) {
+        return "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+               "<soap12:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
+               "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
+               "xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\">\n" +
+               "  <soap12:Body>\n" +
+               "    <Authenticate xmlns=\"http://tempuri.org/\">\n" +
+               "      <Token>" + token + "</Token>\n" +
+               "    </Authenticate>\n" +
+               "  </soap12:Body>\n" +
+                       "</soap12:Envelope>";
+            }
+
+    /**
+     * Public method for username/password authentication.
+     */
+    public AuthenticateResponse authenticate(String username, String password) {
+        try {
+            // Pre-process the token using your encryption utility.
+            String token = EncryptionUtil.encode(username, password);
+            return super.authenticate(token);
+        } catch (Exception e) {
+            // Handle the exception appropriately
+            e.printStackTrace();
+            return null;
+        }
+    }
+}
+
+
+
+

@@ -1,87 +1,60 @@
-package periskal.academy.backend.service;
+package periskal.academy.backend.service.Authentication;
 
+import org.springframework.http.*;
+import org.springframework.web.client.RestTemplate;
+import org.w3c.dom.*;
+
+import periskal.academy.backend.model.AuthenticateResponse;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
+public abstract class BaseAuthenticationService {
 
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.RestTemplate;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+    protected final RestTemplate restTemplate = new RestTemplate();
+    protected final String authenticateEndpointUrl = "https://academyws.periskal.com/Academy.asmx";
 
-import periskal.academy.backend.model.AuthenticateResponse;
-
-@Service
-public class DongleAuthenticationService {
-
-    private final RestTemplate restTemplate = new RestTemplate();
-    private final String authenticateEndpointUrl = "https://academyws.periskal.com/Academy.asmx";
-
-    public AuthenticateResponse authenticateDongle(String token) throws Exception {
-        // Replace spaces in the token
-        token = token.replace(" ", "+");
-
-        // Build the SOAP request with the modified token
+   
+    public AuthenticateResponse authenticate(String token) {
         String soapRequest = buildSoapRequest(token);
-
-        // Set headers for the SOAP request
+        
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.valueOf("application/soap+xml; charset=utf-8"));
-
         HttpEntity<String> requestEntity = new HttpEntity<>(soapRequest, headers);
-
+        
         ResponseEntity<String> soapResponseEntity;
         try {
-            // Send the SOAP request and receive the response
             soapResponseEntity = restTemplate.postForEntity(authenticateEndpointUrl, requestEntity, String.class);
-        } catch (HttpServerErrorException ex) {
-            ex.printStackTrace();
-            return null;
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
         }
-
-        // Check if the response status is OK
+        
         if (soapResponseEntity.getStatusCode() == HttpStatus.OK) {
             String responseXml = soapResponseEntity.getBody();
             return parseSoapResponse(responseXml);
         }
-
         return null;
     }
 
-    private String buildSoapRequest(String token) {
-        return "<soap12:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\">"
-                + "<soap12:Body>"
-                + "<Authenticate_Dongle xmlns=\"http://tempuri.org/\">"
-                + "<Dongle>" + token + "</Dongle>"
-                + "</Authenticate_Dongle>"
-                + "</soap12:Body>"
-                + "</soap12:Envelope>";
-    }
+    
+    //Child classes need to implement how to build the SOAP request.
+     
+    protected abstract String buildSoapRequest(String token);
 
-    private AuthenticateResponse parseSoapResponse(String responseXml) {
+   
+    protected AuthenticateResponse parseSoapResponse(String responseXml) {
         AuthenticateResponse authResponse = new AuthenticateResponse();
         try {
-            // Initialize an XML document parser
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setNamespaceAware(true);
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.parse(new ByteArrayInputStream(responseXml.getBytes(StandardCharsets.UTF_8)));
-
-            // Extract required values using getElementsByTagName
+    
             authResponse.setId(getElementValue(doc, "ID"));
             authResponse.setUsername(getElementValue(doc, "Username"));
             authResponse.setFirstname(getElementValue(doc, "Firstname"));
@@ -89,7 +62,7 @@ public class DongleAuthenticationService {
             authResponse.setShipname(getElementValue(doc, "Shipname"));
             authResponse.setRole(getElementValue(doc, "Role"));
             authResponse.setLoginResult(getElementValue(doc, "LoginResult"));
-
+    
             // Extract products as a list of strings
             NodeList productNodes = doc.getElementsByTagName("Products");
             List<String> products = new ArrayList<>();
@@ -104,14 +77,17 @@ public class DongleAuthenticationService {
                 }
             }
             authResponse.setProducts(products);
-
+    
         } catch (Exception e) {
             e.printStackTrace();
         }
         return authResponse;
     }
 
-    private String getElementValue(Document doc, String tagName) {
+    
+     //Helper method to extract XML element text content.
+     
+    protected String getElementValue(Document doc, String tagName) {
         NodeList nodes = doc.getElementsByTagName(tagName);
         if (nodes.getLength() > 0) {
             return nodes.item(0).getTextContent();

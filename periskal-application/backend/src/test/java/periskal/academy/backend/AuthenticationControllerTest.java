@@ -17,7 +17,7 @@ import org.springframework.http.ResponseEntity;
 import periskal.academy.backend.controller.AuthenticationController;
 import periskal.academy.backend.model.AuthenticateResponse;
 import periskal.academy.backend.model.LoginRequest;
-import periskal.academy.backend.service.AuthenticationService;
+import periskal.academy.backend.service.Authentication.AuthenticationService;
 import periskal.academy.backend.util.JwtUtil;
 
 @ExtendWith(MockitoExtension.class)
