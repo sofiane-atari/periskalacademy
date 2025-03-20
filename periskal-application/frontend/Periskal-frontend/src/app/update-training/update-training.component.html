@@ -31,41 +31,6 @@
         required
       ></textarea>
     </div>
-
-    @for (module of training.modules; track $index) {
-    <div class="module">
-      <div>
-        <label for="nameModule{{ $index }}">Module {{ $index + 1 }} name</label>
-        <input
-          type="text"
-          id="nameModule{{ $index }}"
-          class="form-control"
-          [(ngModel)]="module.nameModule"
-          name="nameModule{{ $index }}"
-          required
-        />
-      </div>
-      <div>
-        <label for="nameDescription{{ $index }}"
-          >Module {{ $index + 1 }} description</label
-        >
-        <textarea
-          id="descriptionModule{{ $index }}"
-          class="form-control"
-          [(ngModel)]="module.descriptionModule"
-          name="descriptionModule{{ $index }}"
-          required
-        >
-        </textarea>
-      </div>
-      <button type="button" class="btn btn-danger" (click)="deleteModule(training.id, module.id)">
-        Delete Module
-      </button>
-    </div>
-    }
-    <div class="form-group">
-      <button type="button" (click)="addModule()">Add a new module</button>
-    </div>
     <div class="form-group">
       <button type="submit" class="btn btn-primary" [disabled]="loading">
         Save Changes
@@ -73,6 +38,7 @@
     </div>
   </form>
   <button (click)="confirmDelete()" class="delete">Delete training</button>
+  <button (click)="goToModuleEditPage()">Edit modules</button>
   } @if (!training) {
   <div>Training not found.</div>
   }

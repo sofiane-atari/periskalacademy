@@ -58,17 +58,15 @@ public class TrainingController {
         return new ResponseEntity<>(savedTraining, HttpStatus.CREATED);
     }
 
-    @PutMapping("/edit/{id}")
-    public ResponseEntity<Training> updateTrainingWithModules(@PathVariable Long id,
-            @RequestBody Training updatedTraining) {
-        Training existingTraining = trainingService.getTrainingById(id);
-
-        existingTraining.setName(updatedTraining.getName());
-        existingTraining.setDescription(updatedTraining.getDescription());
-        existingTraining.setModules(updatedTraining.getModules());
-
-        Training savedTraining = trainingService.updateTraining(existingTraining);
-        return new ResponseEntity<>(savedTraining, HttpStatus.OK);
+    @PutMapping("edit/{id}")
+    public ResponseEntity<Training> updateTraining(@PathVariable Long id, @RequestBody Training updatedTraining) {
+        try {
+            Training savedTraining = trainingService.updateTraining(id, updatedTraining);
+            return ResponseEntity.ok(savedTraining);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @DeleteMapping("delete/{id}")

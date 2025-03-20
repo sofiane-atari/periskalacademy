@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { TrainingService } from '../training.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, UrlTree } from '@angular/router';
 import { training } from '../training-employee/training-employee.component';
 import { FormsModule } from '@angular/forms';
 
@@ -15,6 +15,7 @@ export class UpdateTrainingComponent {
   training: training | null = null;
   loading: boolean = false;
   errorMessage: string = '';
+  trainingId: number = 0;
 
   constructor(
     private trainingService: TrainingService,
@@ -24,9 +25,9 @@ export class UpdateTrainingComponent {
   ) { }
 
   ngOnInit(): void {
-    const trainingId = Number(this.route.snapshot.paramMap.get('id'));
-    if (trainingId) {
-      this.getTrainingDetails(trainingId);
+    this.trainingId = Number(this.route.snapshot.paramMap.get('id'));
+    if (this.trainingId) {
+      this.getTrainingDetails(this.trainingId);
     }
   }
 
@@ -43,11 +44,12 @@ export class UpdateTrainingComponent {
       }
     );
   }
+
   updateTraining() {
+    console.log(this.training);
     if (this.training?.id) {
       this.trainingService.updateTraining(this.training.id, this.training).subscribe(
         (data) => {
-          this.router.navigate(['/trainingEmployee']);
           alert('Training updated successfully!');
         },
         (error) => {
@@ -76,25 +78,6 @@ export class UpdateTrainingComponent {
     });
   }
 
-  deleteModule(trainingId: number, moduleId: number) {
-    const confirmDelete = window.confirm('Are you sure you want to delete this module?');
-    if (confirmDelete) {
-      this.trainingService.deleteModule(trainingId, moduleId).subscribe({
-        next: (updatedTraining) => {
-          console.log('Module deleted successfully');
-
-          // Update the training object with the updated modules from the backend
-          if (this.training?.modules && updatedTraining && updatedTraining.modules) {
-            this.training.modules = updatedTraining.modules;
-          }
-        },
-        error: (err) => {
-          console.error('Error deleting module:', err);
-        }
-      });
-    }
-  }
-
   addModule() {
     if (!this.training) return;
 
@@ -112,5 +95,9 @@ export class UpdateTrainingComponent {
     };
     this.training?.modules.push(newModule);
     console.log(this.training?.modules);
+  }
+
+  goToModuleEditPage() {
+    this.router.navigate(['edit', this.trainingId, 'modules']);
   }
 }

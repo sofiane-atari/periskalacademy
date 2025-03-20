@@ -4,8 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.OptimisticLockException;
+import jakarta.transaction.Transactional;
 import periskal.academy.backend.jpa.Module;
 import periskal.academy.backend.jpa.ModuleRepository;
 import periskal.academy.backend.jpa.Training;
@@ -42,8 +50,12 @@ public class TrainingService {
         }
     }
 
-    public Training updateTraining(Training training) {
-        return trainingRepository.save(training);
+    public Training updateTraining(Long id, Training updatedTraining) {
+        Training existingTraining = trainingRepository.findById(id).get();
+        if (existingTraining != null) {
+            updatedTraining.setModules(existingTraining.getModules());
+        }
+        return trainingRepository.save(updatedTraining);
     }
 
     public boolean deleteTraining(Long id) {

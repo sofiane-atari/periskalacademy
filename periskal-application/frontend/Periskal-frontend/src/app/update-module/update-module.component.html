@@ -1,0 +1,40 @@
+<form (ngSubmit)="updateModules()">
+@if(training===null) {
+    <div>
+        <p>Training is not found.</p>
+    </div>
+}
+@for (module of training?.modules; track $index) {
+    <div class="module">
+      <div>
+        <label for="nameModule{{ $index }}">Module {{ $index + 1 }} name</label>
+        <input
+          type="text"
+          id="nameModule{{ $index }}"
+          class="form-control"
+          [(ngModel)]="module.nameModule"
+          name="nameModule{{ $index }}"
+          required
+        />
+      </div>
+      <div>
+        <label for="nameDescription{{ $index }}"
+          >Module {{ $index + 1 }} description</label
+        >
+        <textarea
+          id="descriptionModule{{ $index }}"
+          class="form-control"
+          [(ngModel)]="module.descriptionModule"
+          name="descriptionModule{{ $index }}"
+          required
+        >
+        </textarea>
+      </div>
+      @if(training!=null) {
+        <button type="button" class="btn btn-danger" (click)="deleteModule(training.id, module.id)">
+            Delete Module
+          </button>
+      } 
+    </div>
+    }
+</form>
