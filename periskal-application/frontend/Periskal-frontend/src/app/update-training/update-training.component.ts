@@ -101,6 +101,6 @@ export class UpdateTrainingComponent {
     this.router.navigate(['edit', this.trainingId, 'modules']);
   }
   goToModuleAddPage() {
-    this.router.navigate([this.trainingId, 'addModule'])
+    this.router.navigate(['add', this.trainingId, 'module'])
   }
 }
