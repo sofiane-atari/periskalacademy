@@ -82,4 +82,17 @@ public class TrainingService {
         }
         return null;
     }
+
+    public Training updateModules(Long trainingId, List<Module> modules) {
+        Optional<Training> trainingOpt = trainingRepository.findById(trainingId);
+        if (trainingOpt.isPresent()) {
+            Training training = trainingOpt.get();
+            if (modules != null) {
+                training.setModules(modules);
+                trainingRepository.save(training);
+                return training;
+            }
+        }
+        return null;
+    }
 }

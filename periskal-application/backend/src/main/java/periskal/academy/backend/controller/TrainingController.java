@@ -90,4 +90,15 @@ public class TrainingController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PutMapping("{id}/modules")
+    public ResponseEntity<Training> updateModules(@PathVariable Long id, @RequestBody List<Module> modules) {
+        // TODO: process PUT request
+        Training updatedTraining = trainingService.updateModules(id, modules);
+        if (updatedTraining.getModules() == modules) {
+            return ResponseEntity.ok(updatedTraining);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }

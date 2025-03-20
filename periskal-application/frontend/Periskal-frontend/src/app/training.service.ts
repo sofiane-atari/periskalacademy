@@ -33,6 +33,6 @@ export class TrainingService {
     return this.client.delete(`http://localhost:8080/api/trainings/delete/${trainingId}/modules/${moduleId}`)
   }
   updateModules(trainingId: number, modules: any): Observable<any> {
-    return this.client.put(`http://localhost:8080/api/trainings/delete/${trainingId}/modules`, modules)
+    return this.client.put(`http://localhost:8080/api/trainings/${trainingId}/modules`, modules)
   }
 }
