@@ -21,5 +21,6 @@
   "TRAINING_NOT_FOUND": "Training not found",
   "LOADING": "Loading...",
   "MODULE": "Module",
-  "NAME": "Name"
+  "NAME": "Name",
+  "DELETE_TRAINING": "Delete Training"
 }
