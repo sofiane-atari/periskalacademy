@@ -19,18 +19,14 @@ export class DongleLoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-      console.log('Query Params:', params); // <-- Check if params exist
-  
+
       if (!params['login']) {
         this.errorMessage = '❌ Token not found';
         console.error('Login token missing in query parameters');
         return;
       }
-  
       try {
         const decodedLogin = decodeURIComponent(params['login']).replace(/ /g, '+');
-        console.log('Decoded Login:', decodedLogin); // <-- Log token before API call
-  
         this.isLoading = true;
         this.errorMessage = '';
         this.authenticateUser(decodedLogin);
@@ -42,21 +38,20 @@ export class DongleLoginComponent implements OnInit {
 
   // Functie om de token te authenticeren
   private authenticateUser(login: string) {
-    console.log('Calling decodeDongle with login:', login); // <-- Check if function runs
-  
     this.authService.decodeDongle(login).subscribe({
       next: (response) => {
-        console.log('Dongle authentication successful', response);
         setTimeout(() => {
-          localStorage.setItem('jwt_token', response.token);
-          this.router.navigate(['/trainingEmployee']);
+          console.log('Dongle authentication successful', response);
+          localStorage.setItem('jwt_token', response.token); // Ensure token is stored
+          this.router.navigate(['/trainingEmployee']); 
         }, 2000);
       },
       error: (error) => {
         console.error('Dongle authentication failed', error);
         this.errorMessage = '❌ Authentication failed. Please try again.';
-        this.isLoading = false;
+        this.isLoading = false; // Stop loading state
       }
     });
   }
-}
+}  
+
