@@ -1,28 +1,28 @@
 package periskal.academy.backend;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.*;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.*;
+
 import java.lang.reflect.Field;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertIterableEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.header;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
-import static org.springframework.test.web.client.response.MockRestResponseCreators.withBadRequest;
-import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
-import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 import org.springframework.web.client.RestTemplate;
 
 import periskal.academy.backend.model.AuthenticateResponse;
-import periskal.academy.backend.service.AuthenticationService;
+import periskal.academy.backend.service.Authentication.AuthenticationService;
+import periskal.academy.backend.util.EncryptionUtil;
 
 public class AuthenticationServiceTest {
 
@@ -34,12 +34,18 @@ public class AuthenticationServiceTest {
     void setUp() throws Exception {
         authenticationService = new AuthenticationService();
         
-        // Use reflection to access the private RestTemplate instance
-        Field restTemplateField = AuthenticationService.class.getDeclaredField("restTemplate");
+        // Use reflection to access the protected RestTemplate instance from parent class
+        Field restTemplateField = AuthenticationService.class.getSuperclass().getDeclaredField("restTemplate");
         restTemplateField.setAccessible(true);
         restTemplate = (RestTemplate) restTemplateField.get(authenticationService);
         
         mockServer = MockRestServiceServer.createServer(restTemplate);
+    }
+
+    private String getAuthenticateEndpointUrl() throws Exception {
+        Field endpointUrlField = AuthenticationService.class.getSuperclass().getDeclaredField("authenticateEndpointUrl");
+        endpointUrlField.setAccessible(true);
+        return (String) endpointUrlField.get(authenticationService);
     }
 
     @Test
@@ -66,61 +72,93 @@ public class AuthenticationServiceTest {
                                      </soap12:Body>
                                    </soap12:Envelope>""";
 
-        mockServer.expect(requestTo(authenticationService.authenticateEndpointUrl))
-                .andExpect(method(HttpMethod.POST))
-                .andExpect(header("Content-Type", "application/soap+xml;charset=utf-8"))
-                .andRespond(withSuccess(sampleResponseXml, MediaType.TEXT_XML));
+        // Mock the EncryptionUtil.encode method
+        try (MockedStatic<EncryptionUtil> mockedStatic = Mockito.mockStatic(EncryptionUtil.class)) {
+            mockedStatic.when(() -> EncryptionUtil.encode(anyString(), anyString()))
+                    .thenReturn("encoded_token");
 
-        AuthenticateResponse response = authenticationService.authenticate("user", "pass");
+            mockServer.expect(requestTo(getAuthenticateEndpointUrl()))
+                    .andExpect(method(HttpMethod.POST))
+                    .andExpect(header("Content-Type", "application/soap+xml;charset=utf-8"))
+                    .andRespond(withSuccess(sampleResponseXml, MediaType.TEXT_XML));
 
-        assertNotNull(response);
-        assertEquals("12345", response.getId());
-        assertEquals("testUser", response.getUsername());
-        assertEquals("John", response.getFirstname());
-        assertEquals("Doe", response.getLastname());
-        assertEquals("TestShip", response.getShipname());
-        assertEquals("Admin", response.getRole());
-        assertEquals("Success", response.getLoginResult());
-        assertIterableEquals(List.of("ProductA", "ProductB"), response.getProducts());
+            AuthenticateResponse response = authenticationService.authenticate("user", "pass");
 
-        mockServer.verify();
+            assertNotNull(response);
+            assertEquals("12345", response.getId());
+            assertEquals("testUser", response.getUsername());
+            assertEquals("John", response.getFirstname());
+            assertEquals("Doe", response.getLastname());
+            assertEquals("TestShip", response.getShipname());
+            assertEquals("Admin", response.getRole());
+            assertEquals("Success", response.getLoginResult());
+            assertIterableEquals(List.of("ProductA", "ProductB"), response.getProducts());
+
+            mockServer.verify();
+        }
     }
 
     @Test
     void authenticate_HttpError_ReturnsNull() throws Exception {
-        mockServer.expect(requestTo(authenticationService.authenticateEndpointUrl))
-                .andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR));
+        try (MockedStatic<EncryptionUtil> mockedStatic = Mockito.mockStatic(EncryptionUtil.class)) {
+            mockedStatic.when(() -> EncryptionUtil.encode(anyString(), anyString()))
+                    .thenReturn("encoded_token");
 
-        AuthenticateResponse response = authenticationService.authenticate("user", "pass");
+            mockServer.expect(requestTo(getAuthenticateEndpointUrl()))
+                    .andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR));
 
-        assertNull(response);
-        mockServer.verify();
+            AuthenticateResponse response = authenticationService.authenticate("user", "pass");
+
+            assertNull(response);
+            mockServer.verify();
+        }
     }
 
     @Test
     void authenticate_InvalidXmlResponse_ReturnsPartiallyParsedResponse() throws Exception {
         String invalidXml = "<InvalidXml></InvalidXml>";
 
-        mockServer.expect(requestTo(authenticationService.authenticateEndpointUrl))
-                .andRespond(withSuccess(invalidXml, MediaType.TEXT_XML));
+        try (MockedStatic<EncryptionUtil> mockedStatic = Mockito.mockStatic(EncryptionUtil.class)) {
+            mockedStatic.when(() -> EncryptionUtil.encode(anyString(), anyString()))
+                    .thenReturn("encoded_token");
 
-        AuthenticateResponse response = authenticationService.authenticate("user", "pass");
+            mockServer.expect(requestTo(getAuthenticateEndpointUrl()))
+                    .andRespond(withSuccess(invalidXml, MediaType.TEXT_XML));
 
-        assertNotNull(response);
-        assertNull(response.getId());
-        assertNull(response.getUsername());
-        
+            AuthenticateResponse response = authenticationService.authenticate("user", "pass");
+
+            assertNotNull(response);
+            assertNull(response.getId());
+            assertNull(response.getUsername());
+            mockServer.verify();
+        }
     }
 
     @Test
     void authenticate_RestTemplateThrowsException_ReturnsNull() throws Exception {
-        // Simulate a network error (e.g., connection refused)
-        mockServer.expect(requestTo(authenticationService.authenticateEndpointUrl))
-                .andRespond(withBadRequest());
+        try (MockedStatic<EncryptionUtil> mockedStatic = Mockito.mockStatic(EncryptionUtil.class)) {
+            mockedStatic.when(() -> EncryptionUtil.encode(anyString(), anyString()))
+                    .thenReturn("encoded_token");
 
-        AuthenticateResponse response = authenticationService.authenticate("user", "invalid");
+            mockServer.expect(requestTo(getAuthenticateEndpointUrl()))
+                    .andRespond(withBadRequest());
 
-        assertNull(response);
-        mockServer.verify();
+            AuthenticateResponse response = authenticationService.authenticate("user", "invalid");
+
+            assertNull(response);
+            mockServer.verify();
+        }
+    }
+
+    @Test
+    void authenticate_EncryptionUtilThrowsException_ReturnsNull() throws Exception {
+        try (MockedStatic<EncryptionUtil> mockedStatic = Mockito.mockStatic(EncryptionUtil.class)) {
+            mockedStatic.when(() -> EncryptionUtil.encode(anyString(), anyString()))
+                    .thenThrow(new RuntimeException("Encryption failed"));
+
+            AuthenticateResponse response = authenticationService.authenticate("user", "pass");
+
+            assertNull(response);
+        }
     }
 }

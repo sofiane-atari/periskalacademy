@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 
 @Entity
 public class Chapter {
@@ -15,6 +16,7 @@ public class Chapter {
 
     private String descriptionChapter;
 
+    @Lob
     private String textChapter;
 
     public Chapter(String nameChapter, String descriptionChapter, String textChapter) {

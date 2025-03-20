@@ -8,11 +8,13 @@ import { JwtDecoderService } from './JwtDecode/jwt-decoder.service';
 @Injectable({ providedIn: 'root' })
 
 export class AuthenticationService {
-  private apiUrl = 'http://localhost:8080/api/auth/authenticate'; // change to proper api path later, really have to start using environment variables for this
-  private baseUrl = 'http://localhost:8080/api';
+  private baseUrl = 'http://localhost:8080/api'; // change to proper api path later, really have to start using environment variables for these urls
+  private authUrl  = `${this.baseUrl}/auth/authenticate`; // Main authentication endpoint
+  private dongleTokenUrl = `${this.baseUrl}/auth/decode-token`; // Dongle authentication endpoint
   private readonly TOKEN_KEY = 'jwt_token';
 
-  constructor(private http: HttpClient,
+  constructor(
+    private http: HttpClient,
     private jwtDecoder: JwtDecoderService
   ) { }
 
@@ -28,14 +30,23 @@ export class AuthenticationService {
     return !!this.getAuthToken() && !this.isTokenExpired(); // !! is a double negative , just a trick to convert the value to boolean.
   }
 
+
+  private handleAuthSuccess(response: any): void {
+    if (response.token) {
+      localStorage.setItem(this.TOKEN_KEY, response.token);
+    }
+  }
+
   authenticate(username: string, password: string): Observable<AuthenticateResponse> {
-    return this.http.post<AuthenticateResponse>(this.apiUrl, { username, password }).pipe(
-        tap(response => {
-          if (response.token) {
-            localStorage.setItem(this.TOKEN_KEY, response.token); // can store userdata in localstorage here later like usrer role maybe,or decode from token later instead of storing in localstorage
-          }
-        })
+    return this.http.post<AuthenticateResponse>(this.authUrl, { username, password }).pipe(
+        tap(response => this.handleAuthSuccess(response))
       );
+  }
+
+  decodeDongle(login: string): Observable<any> {
+    return this.http.get<any>(`${this.dongleTokenUrl}?login=${login}`).pipe(
+      tap(response => this.handleAuthSuccess(response))
+    );
   }
 
   logout(): void {

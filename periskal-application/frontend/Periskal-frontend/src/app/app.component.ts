@@ -12,7 +12,7 @@ import { AuthenticationService } from './services/authentication.service';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent  {
+export class AppComponent implements OnInit {
   title = 'Periskal-frontend';
   showNavbar = true;
 
@@ -27,16 +27,22 @@ export class AppComponent  {
 
   isLoginPage(): boolean {
     if (!this.router.url) return false;
-    return this.router.url === '/login' || this.router.url.includes('/decode-token');
+    return this.router.url === '/login' || this.router.url.includes('decode-token');
   }
 
-
-   ngOnInit(): void {   
-    // Validate token on dashboard load
-    this.authService.validateToken().subscribe(isValid => {
-      if (!isValid) {
-        // Redirect to login if token is invalid
-        this.router.navigate(['/login']);
+  ngOnInit(): void {   
+    // Only validate token when not on login-related pages
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      // Check if we're on a page that needs authentication
+      if (!this.isLoginPage()) {
+        this.authService.validateToken().subscribe(isValid => {
+          if (!isValid) {
+            // Redirect to login if token is invalid
+            this.router.navigate(['/login']);
+          }
+        });
       }
     });
   }
