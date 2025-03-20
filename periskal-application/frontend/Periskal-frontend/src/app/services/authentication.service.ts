@@ -41,11 +41,14 @@ export class AuthenticationService {
   }
 
   decodeDongle(login: string): Observable<any> {
-    return this.http.get<any>(`${this.dongleTokenUrl}?login=${login}`).pipe(
+    const url = `${this.dongleTokenUrl}?login=${login}`;
+    console.log('Making API request to:', url); // <-- Log request URL
+  
+    return this.http.get<any>(url, { responseType: 'json' }).pipe(
       tap(response => {
-        // Add token storage logic similar to regular login
+        console.log('API Response:', response);
         if (response.token) {
-          localStorage.setItem(this.TOKEN_KEY, response.token);
+          localStorage.setItem('jwt_token', response.token);
         }
       })
     );

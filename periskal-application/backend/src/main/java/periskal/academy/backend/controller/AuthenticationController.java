@@ -27,19 +27,6 @@ public class AuthenticationController {
         this.dongleAuthenticationService = dongleAuthenticationService;
     }
 
-    @GetMapping("/decode-token")
-    public ResponseEntity<AuthenticateResponse> decodeToken(
-            @RequestParam String login,
-            HttpServletResponse response) throws Exception {
-
-        AuthenticateResponse userInfo = dongleAuthenticationService.authenticateDongle(login);
-
-        if (userInfo != null && "SuccesByToken".equalsIgnoreCase(userInfo.getLoginResult())) {
-            return ResponseEntity.ok(userInfo);
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-        }
-    }
 
     @Autowired
     private AuthenticationService authenticationService;
@@ -62,6 +49,21 @@ public class AuthenticationController {
             return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+    }
+
+    
+    @GetMapping("/decode-token")
+    public ResponseEntity<AuthenticateResponse> decodeToken(@RequestParam String login) throws Exception {
+
+        AuthenticateResponse responseD = dongleAuthenticationService.authenticateDongle(login);
+
+        if (responseD != null && "SuccesByToken".equalsIgnoreCase(responseD.getLoginResult())) {
+            String token = jwtUtil.generateToken(responseD);
+            responseD.setToken(token);
+            return ResponseEntity.ok(responseD);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }
 }
