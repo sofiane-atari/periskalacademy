@@ -18,5 +18,8 @@
   "UPDATE_TRAINING": "Training aktualisieren",
   "DELETE_MODULE": "Modul löschen",
   "SAVE_CHANGES": "Änderungen speichern",
-  "TRAINING_NOT_FOUND": "Training nicht gefunden"
+  "TRAINING_NOT_FOUND": "Training nicht gefunden",
+  "LOADING": "Laden...",
+  "MODULE": "Modul",
+  "NAME": "Name"
 }

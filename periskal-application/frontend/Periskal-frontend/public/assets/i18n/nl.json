@@ -18,5 +18,8 @@
   "UPDATE_TRAINING": "Training bewerken",
   "DELETE_MODULE": "Module verwijderen",
   "SAVE_CHANGES": "Wijzigingen opslaan",
-  "TRAINING_NOT_FOUND": "Training niet gevonden"
+  "TRAINING_NOT_FOUND": "Training niet gevonden",
+  "LOADING": "Laden...",
+  "MODULE": "Module",
+  "NAME": "Naam"
 }
