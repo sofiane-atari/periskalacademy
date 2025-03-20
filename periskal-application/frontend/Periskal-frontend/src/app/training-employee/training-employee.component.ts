@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TrainingService } from '../training.service';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-training-employee',
-  imports: [],
+  imports: [TranslatePipe],
   templateUrl: './training-employee.component.html',
   styleUrl: './training-employee.component.css'
 })
@@ -23,6 +24,8 @@ export class TrainingEmployeeComponent implements OnInit {
         console.error('Error fetching trainings', error);
       }
     );
+
+    
   }
   goToTrainingDetails(trainingId: number) {
     this.router.navigate(['/training', trainingId]);

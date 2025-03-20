@@ -14,7 +14,7 @@ import { AuthenticationService } from './services/authentication.service';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, TranslateModule],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, TranslatePipe],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })

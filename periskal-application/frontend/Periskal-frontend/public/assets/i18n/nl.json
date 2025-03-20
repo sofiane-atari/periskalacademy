@@ -1,10 +1,10 @@
 {
   "EMPLOYEE_DASHBOARD": "Medewerker Dashboard",
   "TEST_COMPONENT": "Test Component",
-  "HOME": "Home",
-  "SKIPPERS": "Skippers",
+  "HOME": "Homepagina",
+  "SKIPPERS": "Schippers",
   "MODULES": "Modules",
-  "TAKE_COURSE": "Take Course",
+  "TAKE_COURSE": "Cursus volgen",
   "NEW_TRAINING_CREATE": "Nieuwe training aanmaken",
   "TRAINING_INFORMATION": "Training informatie",
   "TRAINING_NAME": "Naam van de training",
@@ -15,7 +15,7 @@
   "ADD_NEW_MODULE": "Nieuwe module toevoegen",
   "CREATE_TRAINING": "Maak training aan",
   "EDIT": "Bewerken",
-  "UPDATE_TRAINING": "Training bijwerken",
+  "UPDATE_TRAINING": "Training bewerken",
   "DELETE_MODULE": "Module verwijderen",
   "SAVE_CHANGES": "Wijzigingen opslaan",
   "TRAINING_NOT_FOUND": "Training niet gevonden"
