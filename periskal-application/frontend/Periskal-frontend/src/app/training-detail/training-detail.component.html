@@ -1,10 +1,10 @@
 <div class="container">
-  <h2>{{ training?.name }} modules</h2>
+  <h2>{{ training?.name }} {{'MODULES' | translate }}</h2>
   @for (module of modules; track $index) {
   <div class="product">
     <h3>{{ module.id }} {{ module.nameModule }}</h3>
     <p>{{ module.descriptionModule }}</p>
-    <button (click)="goToChaptersPage($index+1)">Chapters</button>
+    <button (click)="goToChaptersPage($index+1)">{{'TAKE_COURSE' | translate }}</button>
   </div>
   }
 </div>

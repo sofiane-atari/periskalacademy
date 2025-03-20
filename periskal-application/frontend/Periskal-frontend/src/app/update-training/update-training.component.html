@@ -1,8 +1,8 @@
 <div class="container">
-  <h2>Update Training</h2>
+  <h2>{{'UPDATE_TRAINING' | translate }}</h2>
 
   @if (loading) {
-  <div>Loading...</div>
+  <div>{{'LOADING' | translate}}</div>
   } @if (errorMessage) {
   <div>
     {{ errorMessage }}
@@ -10,7 +10,7 @@
   } @if (training) {
   <form (ngSubmit)="updateTraining()">
     <div class="form-group">
-      <label for="name">Training Name</label>
+      <label for="name">{{'TRAINING_NAME' | translate}}</label>
       <input
         type="text"
         id="name"
@@ -22,7 +22,7 @@
     </div>
 
     <div class="form-group">
-      <label for="description">Description</label>
+      <label for="description">{{'DESCRIPTION' | translate}}</label>
       <textarea
         id="description"
         class="form-control"
@@ -35,7 +35,7 @@
     @for (module of training.modules; track $index) {
     <div class="module">
       <div>
-        <label for="nameModule{{ $index }}">Module {{ $index + 1 }} name</label>
+        <label for="nameModule{{ $index }}">{{'MODULE' | translate}} {{ $index + 1 }} {{'NAME' | translate}}</label>
         <input
           type="text"
           id="nameModule{{ $index }}"
@@ -47,7 +47,7 @@
       </div>
       <div>
         <label for="nameDescription{{ $index }}"
-          >Module {{ $index + 1 }} description</label
+          >{{'MODULE' | translate}} {{ $index + 1 }} {{'DESCRIPTION' | translate}}</label
         >
         <textarea
           id="descriptionModule{{ $index }}"
@@ -59,18 +59,18 @@
         </textarea>
       </div>
       <button type="button" class="btn btn-danger" (click)="deleteModule(training.id, module.id)">
-        Delete Module
+        {{'DELETE_MODULE' | translate}}
       </button>
     </div>
     }
     <div class="form-group">
       <button type="submit" class="btn btn-primary" [disabled]="loading">
-        Save Changes
+        {{'SAVE_CHANGES' | translate}}
       </button>
     </div>
   </form>
   <button (click)="confirmDelete()" class="delete">Delete training</button>
   } @if (!training) {
-  <div>Training not found.</div>
+  <div>{{'TRAINING_NOT_FOUND' | translate}}</div>
   }
 </div>

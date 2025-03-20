@@ -1,11 +1,11 @@
 <div class="columns">
   <div class="column"></div>
   <div class="column">
-    <h1>Nieuwe training aanmaken</h1>
+    <h1>{{'NEW_TRAINING_CREATE' | translate}}</h1>
     <form [formGroup]="trainingForm" (ngSubmit)="postTraining()">
-      <h3 class="modules">Training informatie</h3>
+      <h3 class="modules">{{'TRAINING_INFORMATION' | translate}}</h3>
       <div class="field">
-        <label>Naam van de training</label>
+        <label>{{'TRAINING_NAME' | translate}}</label>
         <input
           formControlName="name"
           class="input"
@@ -15,7 +15,7 @@
       </div>
       
       <div class="field">
-        <label>Description</label>
+        <label>{{'DESCRIPTION' | translate}}</label>
         <textarea
           formControlName="description"
           id="description"
@@ -127,12 +127,12 @@
       </div>
       <div>
         <button type="button" (click)="addModule()">
-          Nieuwe module toevoegen
+          {{'ADD_NEW_MODULE' | translate}}
         </button>
       </div>
       <div>
         <button type="submit" [disabled]="trainingForm.invalid">
-          Maak training aan
+          {{'CREATE_TRAINING' | translate}}
         </button>
       </div>
     </form>

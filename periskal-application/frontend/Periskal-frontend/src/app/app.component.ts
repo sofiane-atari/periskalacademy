@@ -1,22 +1,34 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { NavigationEnd,
+  Router,
+  RouterLink,
+  RouterLinkActive,
+  RouterOutlet,
+} from '@angular/router';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+
 import { filter, Observable } from 'rxjs';
 import { AuthenticationService } from './services/authentication.service';
 
 
-
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, TranslatePipe],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrl: './app.component.css',
 })
+
 export class AppComponent implements OnInit {
   title = 'Periskal-frontend';
   showNavbar = true;
 
-  constructor(private router : Router, private authService: AuthenticationService) {
+  lang: string = '';
+
+  constructor(private router : Router, private authService: AuthenticationService, private translateService: TranslateService) {
+
+    this.translateService.setDefaultLang('nl');
+    this.translateService.use(localStorage.getItem('lang') || 'nl');
 
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
@@ -43,8 +55,19 @@ export class AppComponent implements OnInit {
             this.router.navigate(['/login']);
           }
         });
-      }
-    });
-  }
+        this.lang = localStorage.getItem('lang') || 'nl';
+    }}
+    )};
 
+    ChangeLang(Lang: any) {
+      const selectedLanguage = Lang.target.value;
+  
+      localStorage.setItem('lang', selectedLanguage);
+  
+      this.translateService.use(selectedLanguage); 
+    }
 }
+
+
+
+

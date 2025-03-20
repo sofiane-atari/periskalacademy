@@ -4,10 +4,11 @@ import { TrainingService } from '../training.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { training } from '../training-employee/training-employee.component';
 import { FormsModule } from '@angular/forms';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-update-training',
-  imports: [FormsModule],
+  imports: [FormsModule, TranslatePipe],
   templateUrl: './update-training.component.html',
   styleUrl: './update-training.component.css'
 })
