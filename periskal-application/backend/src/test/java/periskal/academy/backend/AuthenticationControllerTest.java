@@ -32,11 +32,6 @@ class AuthenticationControllerTest {
     @InjectMocks
     private AuthenticationController authenticationController;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
-
     @Test
     void authenticate_ValidCredentials_ReturnsTokenAndOkStatus() throws Exception {
         // Arrange
@@ -53,11 +48,11 @@ class AuthenticationControllerTest {
 
         when(authenticationService.authenticate("testUser", "testPass")).thenReturn(mockResponse);
         when(jwtUtil.generateToken(mockResponse)).thenReturn(mockToken);
-
-
+        
+        // Act
         ResponseEntity<AuthenticateResponse> result = authenticationController.authenticate(loginRequest);
-
-
+        
+        // Assert
         assertNotNull(result);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertNotNull(result.getBody());
@@ -67,7 +62,7 @@ class AuthenticationControllerTest {
 
     @Test
     void authenticate_InvalidCredentials_ReturnsUnauthorized() throws Exception {
-
+        // Arrange
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setUsername("wrongUser");
         loginRequest.setPassword("wrongPass");
@@ -76,11 +71,11 @@ class AuthenticationControllerTest {
         mockResponse.setLoginResult("Failed");
 
         when(authenticationService.authenticate("wrongUser", "wrongPass")).thenReturn(mockResponse);
-
-
+        
+        // Act
         ResponseEntity<AuthenticateResponse> result = authenticationController.authenticate(loginRequest);
-
-
+        
+        // Assert
         assertNotNull(result);
         assertEquals(HttpStatus.UNAUTHORIZED, result.getStatusCode());
         assertNotNull(result.getBody());
@@ -89,17 +84,18 @@ class AuthenticationControllerTest {
 
     @Test
     void authenticate_NullResponse_ReturnsUnauthorized() throws Exception {
-
+        // Arrange
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setUsername("testUser");
         loginRequest.setPassword("testPass");
 
+        // Here's the only stubbing we need for this test
         when(authenticationService.authenticate("testUser", "testPass")).thenReturn(null);
-
-
+        
+        // Act
         ResponseEntity<AuthenticateResponse> result = authenticationController.authenticate(loginRequest);
-
-
+        
+        // Assert
         assertNotNull(result);
         assertEquals(HttpStatus.UNAUTHORIZED, result.getStatusCode());
         assertNull(result.getBody());
