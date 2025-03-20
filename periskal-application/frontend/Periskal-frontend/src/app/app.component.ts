@@ -30,6 +30,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.lang = localStorage.getItem('lang') || 'nl';
+    this.translateService.use(this.lang);
   }
 
   isLoginPage(): boolean {
