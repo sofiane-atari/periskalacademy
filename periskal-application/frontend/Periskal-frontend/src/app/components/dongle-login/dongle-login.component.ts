@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthenticationService } from '../../services/authenticationServiceDongle/dongle-authentication.service';
+import { AuthenticationService } from '../../services/authentication.service';
 
 @Component({
   selector: 'app-dongle-login',
@@ -38,7 +38,7 @@ export class DongleLoginComponent implements OnInit {
   // Functie om de token te authenticeren
   private authenticateUser(login: string) {
 
-    this.authService.authenticate(login).subscribe({
+    this.authService.decodeDongle(login).subscribe({
       next: (response) => {
         setTimeout(() => {
           this.router.navigate(['/trainingEmployee']); 
