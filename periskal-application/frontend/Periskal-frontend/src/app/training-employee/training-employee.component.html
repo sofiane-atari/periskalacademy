@@ -7,11 +7,15 @@
     </div>
     <div class="training-buttons">
       <button (click)="goToTrainingDetails(training.id)">{{'MODULES' | translate}}</button>
-      <button (click)="goToEditPage(training.id)">{{'EDIT' | translate}}</button>
+      @if (roleAuth.canEditContent()) {
+        <button (click)="goToEditPage(training.id)">{{'EDIT' | translate}}</button>
+      }
     </div>
   </div>
   }
 </div>
-<div class="add">
-  <button class="add" (click)="goToAddPage()">+</button>
-</div>
+@if (roleAuth.canAddContent()) {
+  <div class="add">
+    <button class="add" (click)="goToAddPage()">+</button>
+  </div>
+}
