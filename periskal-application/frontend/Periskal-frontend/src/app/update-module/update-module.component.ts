@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { TrainingService } from '../training.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { training } from '../training-employee/training-employee.component';
+import { module, training } from '../training-employee/training-employee.component';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class UpdateModuleComponent {
   training: training | null = null;
+  modules: module[] = [];
   loading: boolean = false;
   errorMessage: string = '';
 
@@ -30,11 +31,13 @@ export class UpdateModuleComponent {
 
   //retrieve training data from database with id from the path
   getTrainingDetails(id: number): void {
-    console.log(id);
+    //console.log(id);
     this.trainingService.getTrainingById(id).subscribe(
       (training) => {
         this.training = training;
         console.log(this.training);
+        if (this.training)
+          this.modules = this.training.modules;
       },
       (error) => {
         this.errorMessage = 'Failed to load training details.';
@@ -61,5 +64,16 @@ export class UpdateModuleComponent {
   }
   updateModules() {
     //todo: implement post into database
+    //console.log(this.modules);
+    if (this.training?.id) {
+      this.trainingService.updateModules(this.training.id, this.modules).subscribe(
+        (data) => {
+          alert('Training updated successfully!');
+        },
+        (error) => {
+          this.errorMessage = 'Failed to update training.';
+        }
+      )
+    }
   }
 }

@@ -33,11 +33,11 @@ export class UpdateTrainingComponent {
 
   //retrieve training data from database with id from the path
   getTrainingDetails(id: number): void {
-    console.log(id);
+    //console.log(id);
     this.trainingService.getTrainingById(id).subscribe(
       (training) => {
         this.training = training;
-        console.log(this.training);
+        //console.log(this.training);
       },
       (error) => {
         this.errorMessage = 'Failed to load training details.';
@@ -46,7 +46,7 @@ export class UpdateTrainingComponent {
   }
 
   updateTraining() {
-    console.log(this.training);
+    //console.log(this.training);
     if (this.training?.id) {
       this.trainingService.updateTraining(this.training.id, this.training).subscribe(
         (data) => {

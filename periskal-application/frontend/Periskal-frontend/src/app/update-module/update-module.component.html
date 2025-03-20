@@ -4,7 +4,7 @@
         <p>Training is not found.</p>
     </div>
 }
-@for (module of training?.modules; track $index) {
+@for (module of modules; track $index) {
     <div class="module">
       <div>
         <label for="nameModule{{ $index }}">Module {{ $index + 1 }} name</label>
@@ -37,4 +37,5 @@
       } 
     </div>
     }
+    <button type="submit">Save changes</button>
 </form>
