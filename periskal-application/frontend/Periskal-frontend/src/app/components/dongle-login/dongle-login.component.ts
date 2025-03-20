@@ -41,8 +41,16 @@ export class DongleLoginComponent implements OnInit {
     this.authService.decodeDongle(login).subscribe({
       next: (response) => {
         console.log('Dongle authentication successful', response);
-
-        this.router.navigate(['/trainingEmployee']);
+        // Wait for token to be fully saved and processed before navigation
+        setTimeout(() => {
+          this.isLoading = false;
+          // Verify token exists before navigating
+          if (this.authService.isAuthenticated()) {
+            this.router.navigate(['/trainingEmployee']);
+          } else {
+            this.errorMessage = '❌ Authentication token not stored properly';
+          }
+        }, 300);
       },
       error: (error) => {
         console.error('Dongle authentication failed', error);
