@@ -100,4 +100,7 @@ export class UpdateTrainingComponent {
   goToModuleEditPage() {
     this.router.navigate(['edit', this.trainingId, 'modules']);
   }
+  goToModuleAddPage() {
+    this.router.navigate([this.trainingId, 'addModule'])
+  }
 }
