@@ -22,15 +22,16 @@ export class DongleLoginComponent implements OnInit {
 
       if (!params['login']) {
         this.errorMessage = '❌ Token not found';
-        setTimeout(() => this.router.navigate(['/login']), 3000);
+        console.error('Login token missing in query parameters');
         return;
-      }else{
-        let decodedLogin = decodeURIComponent(params['login']).replace(/ /g, '+');
-
+      }
+      try {
+        const decodedLogin = decodeURIComponent(params['login']).replace(/ /g, '+');
         this.isLoading = true;
         this.errorMessage = '';
-    
         this.authenticateUser(decodedLogin);
+      } catch (error) {
+        console.error('Token decoding failed', error);
       }
     });
   }
@@ -41,15 +42,12 @@ export class DongleLoginComponent implements OnInit {
     this.authService.decodeDongle(login).subscribe({
       next: (response) => {
         setTimeout(() => {
+          console.log('Dongle authentication successful', response);
           this.router.navigate(['/trainingEmployee']); 
         }, 2000);
       },
-      error: (error) => {
-        this.errorMessage = '❌ Invalid token!';
-        setTimeout(() => {
-          this.router.navigate(['/login']);
-        }, 3000);
-      }
+      error: (error) => console.log('Dongle authentication failed', error)
     });
   }
 }
+

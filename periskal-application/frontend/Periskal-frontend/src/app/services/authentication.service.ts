@@ -41,7 +41,14 @@ export class AuthenticationService {
   }
 
   decodeDongle(login: string): Observable<any> {
-    return this.http.get<any>(`${this.dongleTokenUrl}?login=${login}`);
+    return this.http.get<any>(`${this.dongleTokenUrl}?login=${login}`).pipe(
+      tap(response => {
+        // Add token storage logic similar to regular login
+        if (response.token) {
+          localStorage.setItem(this.TOKEN_KEY, response.token);
+        }
+      })
+    );
   }
 
   logout(): void {
