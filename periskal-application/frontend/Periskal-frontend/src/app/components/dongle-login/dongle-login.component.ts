@@ -36,22 +36,19 @@ export class DongleLoginComponent implements OnInit {
     });
   }
 
-  // Functie om de token te authenticeren
+
   private authenticateUser(login: string) {
     this.authService.decodeDongle(login).subscribe({
       next: (response) => {
-        setTimeout(() => {
-          console.log('Dongle authentication successful', response);
-          localStorage.setItem('jwt_token', response.token); // Ensure token is stored
-          this.router.navigate(['/trainingEmployee']); 
-        }, 2000);
+        console.log('Dongle authentication successful', response);
+
+        this.router.navigate(['/trainingEmployee']);
       },
       error: (error) => {
         console.error('Dongle authentication failed', error);
         this.errorMessage = '❌ Authentication failed. Please try again.';
-        this.isLoading = false; // Stop loading state
+        this.isLoading = false;
       }
     });
   }
-}  
-
+}

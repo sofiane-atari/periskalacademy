@@ -30,23 +30,22 @@ export class AuthenticationService {
     return !!this.getAuthToken() && !this.isTokenExpired(); // !! is a double negative , just a trick to convert the value to boolean.
   }
 
+
+  private handleAuthSuccess(response: any): void {
+    if (response.token) {
+      localStorage.setItem(this.TOKEN_KEY, response.token);
+    }
+  }
+
   authenticate(username: string, password: string): Observable<AuthenticateResponse> {
     return this.http.post<AuthenticateResponse>(this.authUrl, { username, password }).pipe(
-        tap(response => {
-          if (response.token) {
-            localStorage.setItem(this.TOKEN_KEY, response.token); // Change to cookie storage later
-          }
-        })
+        tap(response => this.handleAuthSuccess(response))
       );
   }
 
   decodeDongle(login: string): Observable<any> {
     return this.http.get<any>(`${this.dongleTokenUrl}?login=${login}`).pipe(
-      tap(response => {
-        if (response.token) {
-          localStorage.setItem(this.TOKEN_KEY, response.token);
-        }
-      })
+      tap(response => this.handleAuthSuccess(response))
     );
   }
 

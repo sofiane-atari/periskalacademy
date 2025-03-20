@@ -32,13 +32,15 @@ export class AppComponent  {
 
 
    ngOnInit(): void {   
-    // Validate token on dashboard load
-    this.authService.validateToken().subscribe(isValid => {
-      if (!isValid) {
-        // Redirect to login if token is invalid
-        this.router.navigate(['/login']);
-      }
-    });
+    // Only validate token when not on login-related pages
+    if (!this.isLoginPage()) {
+      this.authService.validateToken().subscribe(isValid => {
+        if (!isValid) {
+          // Redirect to login if token is invalid
+          this.router.navigate(['/login']);
+        }
+      });
+    }
   }
 
 }
