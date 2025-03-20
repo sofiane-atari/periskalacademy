@@ -49,7 +49,6 @@ export class UpdateModuleComponent {
         next: (updatedTraining) => {
           console.log('Module deleted successfully');
 
-          // Update the training object with the updated modules from the backend
           if (this.training?.modules && updatedTraining && updatedTraining.modules) {
             this.training.modules = updatedTraining.modules;
           }

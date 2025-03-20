@@ -91,7 +91,7 @@ export class UpdateTrainingComponent {
       id: highestId + 1,
       nameModule: '',
       descriptionModule: '',
-      chapters: [] // or default empty array
+      chapters: []
     };
     this.training?.modules.push(newModule);
     console.log(this.training?.modules);
