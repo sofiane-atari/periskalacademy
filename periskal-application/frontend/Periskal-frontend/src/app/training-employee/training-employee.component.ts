@@ -3,7 +3,8 @@ import { Router } from '@angular/router';
 import { TrainingService } from '../training.service';
 import { TranslatePipe } from '@ngx-translate/core';
 import { JwtDecoderService } from '../services/JwtDecode/jwt-decoder.service';
-import { RoleAuthorizationService } from '../services/role-authorization.service';
+import { RoleAuthorizationService } from '../services/RoleAuthorization/role-authorization.service';
+
 
 @Component({
   selector: 'app-training-employee',
