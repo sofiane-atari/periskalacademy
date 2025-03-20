@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { TrainingService } from '../training.service';
 import { TranslatePipe } from '@ngx-translate/core';
 import { JwtDecoderService } from '../services/JwtDecode/jwt-decoder.service';
+import { RoleAuthorizationService } from '../services/role-authorization.service';
 
 @Component({
   selector: 'app-training-employee',
@@ -14,7 +15,12 @@ import { JwtDecoderService } from '../services/JwtDecode/jwt-decoder.service';
 export class TrainingEmployeeComponent implements OnInit {
   public trainingsData: training[] = [];
 
-  constructor(private router: Router, private svc: TrainingService, private jwtDecoderService: JwtDecoderService ) { }
+  constructor(
+    private router: Router, 
+    private svc: TrainingService, 
+    private jwtDecoderService: JwtDecoderService,
+    public roleAuth: RoleAuthorizationService
+  ) { }
 
 
   ngOnInit(): void {
