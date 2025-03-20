@@ -102,8 +102,10 @@ export class UpdateTrainingComponent {
       this.training.modules = [];
     }
 
+    const highestId = Math.max(...this.training.modules.map(module => module.id));
+
     const newModule = {
-      id: Date.now(),
+      id: highestId + 1,
       nameModule: '',
       descriptionModule: '',
       chapters: [] // or default empty array
