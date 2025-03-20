@@ -4,10 +4,11 @@ import { module } from '../training-employee/training-employee.component';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { TrainingService } from '../training.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-add-training',
-  imports: [FormsModule, ReactiveFormsModule],
+  imports: [FormsModule, ReactiveFormsModule, TranslatePipe],
   templateUrl: './add-training.component.html',
   styleUrl: './add-training.component.css'
 })
