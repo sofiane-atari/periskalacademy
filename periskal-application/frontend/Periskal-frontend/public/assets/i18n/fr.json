@@ -21,5 +21,6 @@
   "TRAINING_NOT_FOUND": "Formation non trouvée",
   "LOADING": "Chargement...",
   "MODULE": "Module",
-  "NAME": "Nom"
+  "NAME": "Nom",
+  "DELETE_TRAINING": "Supprimer la formation"
 }
