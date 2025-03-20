@@ -26,7 +26,7 @@
                 routerLink="/trainingEmployee"
                 routerLinkActive="active"
                 ariaCurrentWhenActive="page"
-                >Employee dashboard</a
+                >{{'EMPLOYEE_DASHBOARD' | translate}}</a
               >
             </li>
             <li class="nav-item">
@@ -35,23 +35,21 @@
                 routerLink="/test"
                 routerLinkActive="active"
                 ariaCurrentWhenActive="page"
-                >Test Component</a
+                >{{'TEST_COMPONENT' | translate}}</a
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link text-dark" href="#">Home</a>
+              <a class="nav-link text-dark" href="#">{{'HOME' | translate }}</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-dark" href="#">Skippers</a>
+              <a class="nav-link text-dark" href="#">{{'SKIPPERS' | translate}}</a>
             </li>
           </ul>
           <!-- Taal dropdown -->
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
               <select class="form-select" (change)="ChangeLang($event)" id="">
-                <option [selected]="lang === 'nl'" value="nl">
-                  Nederlands
-                </option>
+                <option [selected]="lang === 'nl'" value="nl">Nederlands</option>
                 <option [selected]="lang === 'en'" value="en">English</option>
                 <option [selected]="lang === 'fr'" value="fr">Français</option>
                 <option [selected]="lang === 'de'" value="de">Deutsch</option>
