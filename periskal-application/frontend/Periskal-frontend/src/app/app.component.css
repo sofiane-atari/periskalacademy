@@ -1,121 +1,7 @@
-/* .custom-navbar {
-  background-color: #ffd700;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  padding: 12px 0;
-}
-
-.navbar-brand {
-  font-weight: 700;
-  font-size: 1.5rem;
-  letter-spacing: 0.5px;
-}
-
-.nav-link {
-  font-weight: 500;
-  margin: 0 8px;
-  padding: 8px 16px !important;
-  border-radius: 4px;
-  transition: all 0.3s ease;
-}
-
-.nav-link:hover {
-  background-color: rgba(255, 255, 255, 0.3);
-  transform: translateY(-2px);
-}
-
-.nav-link.active {
-  background-color: rgba(0, 0, 0, 0.1);
-}
-
-.navbar-toggler {
-  border: none;
-  padding: 8px;
-}
-
-.navbar-toggler:focus {
-  box-shadow: none;
-  outline: none;
-}
-
-.profile-icon {
-  font-size: 1.2rem;
-  color: #000;
-  transition: color 0.3s ease;
-}
-
-.profile-icon:hover {
-  color: #0073e6;
-}
-
-@media (min-width: 992px) {
-  .navbar-collapse {
-    justify-content: flex-end;
-  }
-}
-
-body {
-  background-color: #f8f9fa;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.container {
-  padding: 0 20px;
-}
-
-
-
-
-
-
-
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  background-color: #ffd700;
-}
-
-.dropdown {
-  position: relative;
-}
-
-.dropdown-toggle {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.dropdown-menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background: white;
-  border: 1px solid #ccc;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  width: 120px;
-  display: none;
-}
-
-.dropdown-menu.show {
-  display: block;
-}
-
-.dropdown-menu li {
-  padding: 8px 12px;
-}
-
-.dropdown-menu li:hover {
-  background: #f0f0f0;
-}
- */
 
 .custom-navbar {
   background-color: #ffd700;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   padding: 12px 0;
 }
 
@@ -131,14 +17,14 @@ body {
   padding: 8px 16px !important;
   border-radius: 4px;
   transition: all 0.3s ease;
-  color: #000; /* Voeg deze regel toe om de tekstkleur consistent te maken */
+  color: #000; 
 }
 
 .nav-link:hover,
 .nav-link.active {
   background-color: rgba(255, 255, 255, 0.3);
   transform: translateY(-2px);
-  color: #000; /* Zorg ervoor dat de tekstkleur hetzelfde blijft bij hover en active */
+  color: #000; /* Zorgt ervoor dat de tekstkleur hetzelfde blijft bij hover en active */
 }
 
 .navbar-toggler {
@@ -161,10 +47,6 @@ body {
   color: #0073e6;
 }
 
-body {
-  background-color: #f8f9fa;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-}
 
 .container {
   padding: 0 20px;
@@ -176,40 +58,6 @@ body {
   align-items: center;
   padding: 10px 20px;
   background-color: #ffd700;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.dropdown {
-  position: relative;
-}
-
-.dropdown-toggle {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.dropdown-menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background: white;
-  border: 1px solid #ccc;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  width: 120px;
-  display: none;
-}
-
-.dropdown-menu.show {
-  display: block;
-}
-
-.dropdown-menu li {
-  padding: 8px 12px;
-}
-
-.dropdown-menu li:hover {
-  background: #f0f0f0;
-}
