@@ -6,27 +6,26 @@ import {
   RouterLinkActive,
   RouterOutlet,
 } from '@angular/router';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, TranslateModule],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, TranslatePipe],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
   title = 'Periskal-frontend';
 
-  lang: string = '';
+  lang:string = '';
 
   constructor(
-    private router: Router,
-    private translateService: TranslateService
-  ) {
-    this.translateService.setDefaultLang('nl');
-    this.translateService.use(localStorage.getItem('lang') || 'nl');
+    private router: Router, private translateService: TranslateService
+  ) 
+  {
+    this.translateService.setDefaultLang('nl')
   }
 
   ngOnInit(): void {
@@ -39,6 +38,7 @@ export class AppComponent implements OnInit {
 
   ChangeLang(Lang: any) {
     const selectedLanguage = Lang.target.value;
+    console.log(selectedLanguage);
 
     localStorage.setItem('lang', selectedLanguage);
 
