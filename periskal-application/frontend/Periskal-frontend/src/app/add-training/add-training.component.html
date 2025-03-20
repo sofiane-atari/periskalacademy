@@ -2,12 +2,9 @@
   <div class="column"></div>
   <div class="column">
     <h1>{{'NEW_TRAINING_CREATE' | translate}}</h1>
-    <h1>{{'NEW_TRAINING_CREATE' | translate}}</h1>
     <form [formGroup]="trainingForm" (ngSubmit)="postTraining()">
       <h3 class="modules">{{'TRAINING_INFORMATION' | translate}}</h3>
-      <h3 class="modules">{{'TRAINING_INFORMATION' | translate}}</h3>
       <div class="field">
-        <label>{{'TRAINING_NAME' | translate}}</label>
         <label>{{'TRAINING_NAME' | translate}}</label>
         <input
           formControlName="name"
@@ -18,7 +15,6 @@
       </div>
       
       <div class="field">
-        <label>{{'DESCRIPTION' | translate}}</label>
         <label>{{'DESCRIPTION' | translate}}</label>
         <textarea
           formControlName="description"
@@ -132,12 +128,10 @@
       <div>
         <button type="button" (click)="addModule()">
           {{'ADD_NEW_MODULE' | translate}}
-          {{'ADD_NEW_MODULE' | translate}}
         </button>
       </div>
       <div>
         <button type="submit" [disabled]="trainingForm.invalid">
-          {{'CREATE_TRAINING' | translate}}
           {{'CREATE_TRAINING' | translate}}
         </button>
       </div>

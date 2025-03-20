@@ -15,12 +15,10 @@ import { AuthenticationService } from './services/authentication.service';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, RouterLink, RouterLinkActive, TranslatePipe],
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, TranslatePipe],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
-  styleUrl: './app.component.css',
 })
-export class AppComponent implements OnInit {
+
 export class AppComponent implements OnInit {
   title = 'Periskal-frontend';
   showNavbar = true;

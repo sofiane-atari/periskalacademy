@@ -1,5 +1,4 @@
-@if(!isLoginPage()) {
-<!DOCTYPE html>
+@if(showNavbar) {
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -59,7 +58,7 @@
 
           <!-- Profiel icoontje -->
           <div class="ms-auto">
-            <a class="nav-link text-dark" href="#">
+            <a class="nav-link text-dark" routerLink="/profile" routerLinkActive="active" ariaCurrentWhenActive="page">
               <i class="fas fa-user profile-icon"></i>
             </a>
           </div>

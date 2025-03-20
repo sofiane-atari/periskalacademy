@@ -4,7 +4,7 @@
   <div class="product">
     <h3>{{ module.id }} {{ module.nameModule }}</h3>
     <p>{{ module.descriptionModule }}</p>
-    <button>{{'TAKE_COURSE' | translate }}</button>
+    <button (click)="goToChaptersPage($index+1)">{{'TAKE_COURSE' | translate }}</button>
   </div>
   }
 </div>
