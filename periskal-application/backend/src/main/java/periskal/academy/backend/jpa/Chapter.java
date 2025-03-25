@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Lob;
 
 @Entity
 public class Chapter {
@@ -19,6 +20,7 @@ public class Chapter {
 
     private String descriptionChapter;
 
+    @Lob
     private String textChapter;
 
     @ManyToOne

@@ -1,4 +1,4 @@
-import { Routes } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { TrainingEmployeeComponent } from './training-employee/training-employee.component';
 import { TrainingDetailComponent } from './training-detail/training-detail.component';
@@ -42,3 +42,7 @@ export const routes: Routes = [
     { path: '**', redirectTo: 'login' }
 ];
 
+RouterModule.forRoot(routes, {
+    enableTracing: true // ✅ This will log route changes in the console
+  })
+  

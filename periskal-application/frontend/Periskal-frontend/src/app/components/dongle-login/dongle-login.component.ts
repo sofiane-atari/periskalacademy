@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthenticationService } from '../../services/authenticationServiceDongle/dongle-authentication.service';
+import { AuthenticationService } from '../../services/authentication.service';
 
 @Component({
   selector: 'app-dongle-login',
@@ -22,33 +22,40 @@ export class DongleLoginComponent implements OnInit {
 
       if (!params['login']) {
         this.errorMessage = '❌ Token not found';
-        setTimeout(() => this.router.navigate(['/login']), 3000);
+        console.error('Login token missing in query parameters');
         return;
-      }else{
-        let decodedLogin = decodeURIComponent(params['login']).replace(/ /g, '+');
-
+      }
+      try {
+        const decodedLogin = decodeURIComponent(params['login']).replace(/ /g, '+');
         this.isLoading = true;
         this.errorMessage = '';
-    
         this.authenticateUser(decodedLogin);
+      } catch (error) {
+        console.error('Token decoding failed', error);
       }
     });
   }
 
-  // Functie om de token te authenticeren
-  private authenticateUser(login: string) {
 
-    this.authService.authenticate(login).subscribe({
+  private authenticateUser(login: string) {
+    this.authService.decodeDongle(login).subscribe({
       next: (response) => {
+        console.log('Dongle authentication successful', response);
+        // Wait for token to be fully saved and processed before navigation
         setTimeout(() => {
-          this.router.navigate(['/trainingEmployee']); 
-        }, 2000);
+          this.isLoading = false;
+          // Verify token exists before navigating
+          if (this.authService.isAuthenticated()) {
+            this.router.navigate(['/trainingEmployee']);
+          } else {
+            this.errorMessage = '❌ Authentication token not stored properly';
+          }
+        }, 300);
       },
       error: (error) => {
-        this.errorMessage = '❌ Invalid token!';
-        setTimeout(() => {
-          this.router.navigate(['/login']);
-        }, 3000);
+        console.error('Dongle authentication failed', error);
+        this.errorMessage = '❌ Authentication failed. Please try again.';
+        this.isLoading = false;
       }
     });
   }
