@@ -67,11 +67,15 @@ public class TrainingService {
     }
 
     public Training updateTraining(Long id, Training updatedTraining) {
-        Training existingTraining = trainingRepository.findById(id).get();
-        if (existingTraining != null) {
+        Optional<Training> existingTrainingOpt = trainingRepository.findById(id);
+
+        if (existingTrainingOpt.isPresent()) {
+            Training existingTraining = existingTrainingOpt.get();
             updatedTraining.setModules(existingTraining.getModules());
+            return trainingRepository.save(updatedTraining);
+        } else {
+            throw new EntityNotFoundException("Training not found with id: " + id);
         }
-        return trainingRepository.save(updatedTraining);
     }
 
     public boolean deleteTraining(Long id) {
