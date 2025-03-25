@@ -3,6 +3,8 @@ package periskal.academy.backend.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.OptimisticLockException;
 import jakarta.transaction.Transactional;
+import periskal.academy.backend.dto.ModuleDTO;
+import periskal.academy.backend.dto.TrainingDTO;
 import periskal.academy.backend.jpa.Module;
 import periskal.academy.backend.jpa.ModuleRepository;
 import periskal.academy.backend.jpa.Training;
@@ -22,15 +26,27 @@ import periskal.academy.backend.jpa.TrainingRepository;
 @Service
 public class TrainingService {
     private TrainingRepository trainingRepository;
-    private ModuleRepository productRepository;
+    private ModuleRepository moduleRepository;
 
-    public TrainingService(TrainingRepository trainingRepository, ModuleRepository productRepository) {
+    public TrainingService(TrainingRepository trainingRepository, ModuleRepository moduleRepository) {
         this.trainingRepository = trainingRepository;
-        this.productRepository = productRepository;
+        this.moduleRepository = moduleRepository;
     }
 
-    public List<Training> getAllTrainings() {
-        return (List<Training>) trainingRepository.findAll();
+    private TrainingDTO convertToDto(Training training) {
+        TrainingDTO dto = new TrainingDTO();
+        dto.setId(training.getId());
+        dto.setName(training.getName());
+        dto.setDescription(training.getDescription());
+        return dto;
+    }
+
+    @Transactional
+    public List<TrainingDTO> getAllTrainings() {
+        return trainingRepository.findAllAsList()
+                .stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     public Optional<Training> getTrainingWithProducts(Long id) {
@@ -94,5 +110,20 @@ public class TrainingService {
             }
         }
         return null;
+    }
+
+    @Transactional
+    public Module addModuleWithDto(Long trainingId, ModuleDTO moduleDto) {
+        Training existingTraining = trainingRepository.findById(trainingId)
+                .orElseThrow(() -> new RuntimeException("Training not found with id: " + trainingId));
+
+        Module newModule = new Module();
+        System.out.println(moduleDto.getNameModule());
+        System.out.println(moduleDto.getDescriptionModule());
+        newModule.setNameModule(moduleDto.getNameModule());
+        newModule.setDescriptionModule(moduleDto.getDescriptionModule());
+        newModule.setTraining(existingTraining);
+
+        return moduleRepository.save(newModule);
     }
 }
