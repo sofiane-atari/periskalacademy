@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import periskal.academy.backend.dto.ModuleDTO;
+import periskal.academy.backend.dto.TrainingDTO;
 import periskal.academy.backend.jpa.Module;
 import periskal.academy.backend.jpa.Training;
 import periskal.academy.backend.service.TrainingService;
@@ -35,9 +38,10 @@ public class TrainingController {
         this.trainingService = trainingService;
     }
 
-    @GetMapping()
-    public List<Training> getAllTrainings() {
-        return trainingService.getAllTrainings();
+    @GetMapping
+    public ResponseEntity<List<TrainingDTO>> getAllTrainings() {
+        List<TrainingDTO> trainings = trainingService.getAllTrainings();
+        return ResponseEntity.ok(trainings);
     }
 
     @GetMapping("/{trainingId}")
@@ -101,4 +105,13 @@ public class TrainingController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @PostMapping("/{trainingId}/modules")
+    public ResponseEntity<Module> addModuleToTraining(
+            @PathVariable Long trainingId,
+            @RequestBody ModuleDTO moduleDto) {
+        Module addedModule = trainingService.addModuleWithDto(trainingId, moduleDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(addedModule);
+    }
+
 }
