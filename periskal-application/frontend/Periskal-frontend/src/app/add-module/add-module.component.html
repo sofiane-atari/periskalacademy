@@ -1,1 +1,23 @@
-<p>add-module works!</p>
+<form [formGroup]="moduleForm" (ngSubmit)="postModule()" class="module-form">
+  <h2>Nieuw Module Toevoegen</h2>
+
+  <!-- Module Name -->
+  <div class="form-group">
+    <label for="nameModule">Module Naam:</label>
+    <input id="nameModule" formControlName="nameModule" placeholder="Voer module naam in" />
+  </div>
+
+  <!-- Module Description -->
+  <div class="form-group">
+    <label for="descriptionModule">Module Beschrijving:</label>
+    <textarea id="descriptionModule" formControlName="descriptionModule" placeholder="Voer module beschrijving in"></textarea>
+  </div>
+
+   <!-- chapters to be implemented-->
+
+  <!-- Form Buttons -->
+  <div class="form-buttons">
+    <button type="submit" [disabled]="!moduleForm.valid">Opslaan</button>
+    <button type="button" (click)="resetForm()">Reset</button>
+  </div>
+</form>
