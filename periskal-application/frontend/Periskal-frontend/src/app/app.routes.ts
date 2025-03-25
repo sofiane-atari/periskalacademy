@@ -8,6 +8,8 @@ import { DongleLoginComponent } from './components/dongle-login/dongle-login.com
 import { ModuleDetailComponent } from './module-detail/module-detail.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { authGuard } from './guards/auth.guard';
+import { UpdateModuleComponent } from './update-module/update-module.component';
+import { AddModuleComponent } from './add-module/add-module.component';
 
 export const routes: Routes = [
 
@@ -29,6 +31,8 @@ export const routes: Routes = [
             { path: 'add', component: AddTrainingComponent },
             { path: 'training/:id', component: TrainingDetailComponent },
             { path: 'edit/:id', component: UpdateTrainingComponent },
+            { path: 'edit/:id/modules', component: UpdateModuleComponent },
+            { path: 'add/:id/module', component: AddModuleComponent },
             { path: 'training/:id/module/:moduleid', component: ModuleDetailComponent },
             { path: 'profile', component: ProfileComponent }
         ]

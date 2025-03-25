@@ -1,9 +1,13 @@
 package periskal.academy.backend.jpa;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Lob;
 
 @Entity
@@ -18,6 +22,19 @@ public class Chapter {
 
     @Lob
     private String textChapter;
+
+    @ManyToOne
+    @JoinColumn(name = "module_id", nullable = false)
+    @JsonBackReference
+    private Module module;
+
+    public Module getModule() {
+        return module;
+    }
+
+    public void setModule(Module module) {
+        this.module = module;
+    }
 
     public Chapter(String nameChapter, String descriptionChapter, String textChapter) {
         this.nameChapter = nameChapter;

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import periskal.academy.backend.dto.ModuleDTO;
+import periskal.academy.backend.dto.TrainingDTO;
 import periskal.academy.backend.jpa.Module;
 import periskal.academy.backend.jpa.Training;
 import periskal.academy.backend.service.TrainingService;
@@ -35,9 +38,10 @@ public class TrainingController {
         this.trainingService = trainingService;
     }
 
-    @GetMapping()
-    public List<Training> getAllTrainings() {
-        return trainingService.getAllTrainings();
+    @GetMapping
+    public ResponseEntity<List<TrainingDTO>> getAllTrainings() {
+        List<TrainingDTO> trainings = trainingService.getAllTrainings();
+        return ResponseEntity.ok(trainings);
     }
 
     @GetMapping("/{trainingId}")
@@ -58,17 +62,15 @@ public class TrainingController {
         return new ResponseEntity<>(savedTraining, HttpStatus.CREATED);
     }
 
-    @PutMapping("/edit/{id}")
-    public ResponseEntity<Training> updateTrainingWithModules(@PathVariable Long id,
-            @RequestBody Training updatedTraining) {
-        Training existingTraining = trainingService.getTrainingById(id);
-
-        existingTraining.setName(updatedTraining.getName());
-        existingTraining.setDescription(updatedTraining.getDescription());
-        existingTraining.setModules(updatedTraining.getModules());
-
-        Training savedTraining = trainingService.updateTraining(existingTraining);
-        return new ResponseEntity<>(savedTraining, HttpStatus.OK);
+    @PutMapping("edit/{id}")
+    public ResponseEntity<Training> updateTraining(@PathVariable Long id, @RequestBody Training updatedTraining) {
+        try {
+            Training savedTraining = trainingService.updateTraining(id, updatedTraining);
+            return ResponseEntity.ok(savedTraining);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @DeleteMapping("delete/{id}")
@@ -92,4 +94,24 @@ public class TrainingController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PutMapping("{id}/modules")
+    public ResponseEntity<Training> updateModules(@PathVariable Long id, @RequestBody List<Module> modules) {
+        // TODO: process PUT request
+        Training updatedTraining = trainingService.updateModules(id, modules);
+        if (updatedTraining.getModules() == modules) {
+            return ResponseEntity.ok(updatedTraining);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PostMapping("/{trainingId}/modules")
+    public ResponseEntity<Module> addModuleToTraining(
+            @PathVariable Long trainingId,
+            @RequestBody ModuleDTO moduleDto) {
+        Module addedModule = trainingService.addModuleWithDto(trainingId, moduleDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(addedModule);
+    }
+
 }

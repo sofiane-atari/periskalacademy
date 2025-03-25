@@ -70,6 +70,8 @@
     </div>
   </form>
   <button (click)="confirmDelete()" class="delete">Delete training</button>
+  <button (click)="goToModuleEditPage()">Edit modules</button>
+  <button (click)="goToModuleAddPage()">Add a new module</button>
   } @if (!training) {
   <div>{{'TRAINING_NOT_FOUND' | translate}}</div>
   }
