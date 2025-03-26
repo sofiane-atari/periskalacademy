@@ -4,28 +4,32 @@
     <h1>{{'NEW_TRAINING_CREATE' | translate}}</h1>
     <form [formGroup]="trainingForm" (ngSubmit)="postTraining()">
       <h3 class="modules">{{'TRAINING_INFORMATION' | translate}}</h3>
+      
+      @for (lang of languages; track $index) {
       <div class="field">
         <label>{{'TRAINING_NAME' | translate}}</label>
         <input
-          formControlName="name"
+          formControlName="name_{{lang}}"
           class="input"
-          placeholder="Geef de naam van de nieuwe training"
+          placeholder="Geef de naam van de nieuwe training in {{lang}}"
           required
         />
       </div>
-      
+    }
+    @for (lang of languages; track $index) {
       <div class="field">
         <label>{{'DESCRIPTION' | translate}}</label>
         <textarea
-          formControlName="description"
+          formControlName="description_{{lang}}"
           id="description"
           class="form-control"
-          placeholder="Geef de beschrijving van de nieuwe training"
+          placeholder="Geef de beschrijving van de nieuwe training in {{lang}}"
           name="description"
           required
         >
         </textarea>
       </div>
+    }
       <h3 class="modules">Modules informatie</h3>
       <div formArrayName="modules">
         @for (module of modules.controls; track moduleIndex; let moduleIndex = $index) {

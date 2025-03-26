@@ -47,7 +47,7 @@ class TrainingServiceTest {
         // Setup dummy training and module
         training = new Training();
         training.setId(1L);
-        training.setName("Test Training");
+        training.setName_en("Test Training");
 
         module = new Module();
         module.setId(1L);
@@ -153,7 +153,7 @@ class TrainingServiceTest {
         Training foundTraining = trainingService.getTrainingById(1L);
 
         assertNotNull(foundTraining);
-        assertEquals("Test Training", foundTraining.getName());
+        assertEquals("Test Training", foundTraining.getName_en());
     }
 
     @Test
@@ -163,7 +163,7 @@ class TrainingServiceTest {
         Training foundTraining = trainingService.getTrainingById(1L);
 
         assertNotNull(foundTraining); // Should return an empty training if not found
-        assertEquals(null, foundTraining.getName());
+        assertEquals(null, foundTraining.getName_en());
     }
 
     @Test
@@ -196,7 +196,7 @@ class TrainingServiceTest {
     void testUpdateTraining_Success() {
         Training updatedTraining = new Training();
         updatedTraining.setId(1L);
-        updatedTraining.setName("Updated Training");
+        updatedTraining.setName_en("Updated Training");
 
         // Mock trainingRepository to return an existing training
         when(trainingRepository.findById(1L)).thenReturn(Optional.of(training));
@@ -205,7 +205,7 @@ class TrainingServiceTest {
         Training result = trainingService.updateTraining(1L, updatedTraining);
 
         assertNotNull(result);
-        assertEquals("Updated Training", result.getName());
+        assertEquals("Updated Training", result.getName_en());
 
         // Verify that trainingRepository.save() was called
         verify(trainingRepository, times(1)).save(updatedTraining);
@@ -215,7 +215,7 @@ class TrainingServiceTest {
     void testUpdateTraining_NotFound() {
         Training updatedTraining = new Training();
         updatedTraining.setId(1L);
-        updatedTraining.setName("Updated Training");
+        updatedTraining.setName_en("Updated Training");
 
         // Mock trainingRepository to return an empty Optional
         when(trainingRepository.findById(1L)).thenReturn(Optional.empty());
@@ -240,7 +240,7 @@ class TrainingServiceTest {
 
         assertNotNull(result);
         assertEquals(1, result.size());
-        assertEquals("Test Training", result.get(0).getName());
+        assertEquals("Test Training", result.get(0).getName_en());
 
         // Verify that findAllAsList() method was called once
         verify(trainingRepository, times(1)).findAllAsList();

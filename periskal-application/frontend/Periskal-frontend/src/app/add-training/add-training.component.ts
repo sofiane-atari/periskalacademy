@@ -17,13 +17,25 @@ export class AddTrainingComponent {
   trainingForm: FormGroup;
   collapsedModules: { [key: number]: boolean } = {};
   collapsedChapters: { [key: string]: boolean } = {};
+  selectedLanguage: String = "";
+  languages = ['en', 'nl', 'fr', 'de'];
 
   constructor(private fb: FormBuilder, private client: HttpClient, private router: Router, private trainingsService: TrainingService) {
     this.trainingForm = this.fb.group({
-      name: ['', Validators.required],
-      description: ['', Validators.required],
+      name_en: ['', Validators.required],
+      name_nl: ['', Validators.required],
+      name_fr: ['', Validators.required],
+      name_de: ['', Validators.required],
+      description_en: ['', Validators.required],
+      description_nl: ['', Validators.required],
+      description_fr: ['', Validators.required],
+      description_de: ['', Validators.required],
       modules: this.fb.array([this.createModule()])
     });
+  }
+
+  onLanguageChange(event: any) {
+    this.selectedLanguage = event.target.value;
   }
 
   get modules(): FormArray {

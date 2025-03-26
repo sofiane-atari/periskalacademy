@@ -65,8 +65,14 @@ export class TrainingEmployeeComponent implements OnInit {
 
 export interface training {
   id: number
-  name: String
-  description: String
+  name_en: String
+  name_nl: String
+  name_fr: String
+  name_de: String
+  description_en: String
+  description_nl: String
+  description_fr: String
+  description_de: String
   modules: module[]
 }
 export interface module {
