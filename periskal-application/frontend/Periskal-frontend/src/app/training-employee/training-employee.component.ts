@@ -34,7 +34,7 @@ export class TrainingEmployeeComponent implements OnInit {
           if (products && products.length > 0) {
             this.trainingsData = data.filter(training => {
               return products.some(product =>
-                training.name_en.toLowerCase().includes(product.toLowerCase())
+                training.name.toLowerCase().includes(product.toLowerCase())
               );
             });
           } else {
@@ -43,7 +43,6 @@ export class TrainingEmployeeComponent implements OnInit {
         }
         else if (role === "ADMIN" || role === "Support") {
           this.trainingsData = data;
-          console.log(this.trainingsData);
         }
       },
       (error) => {
@@ -88,4 +87,10 @@ export interface chapter {
   nameChapter: String
   descriptionChapter: String
   textChapter: String
+  photos: Photo[]
+}
+
+export interface Photo {
+  id: number;
+  imageData: string;
 }

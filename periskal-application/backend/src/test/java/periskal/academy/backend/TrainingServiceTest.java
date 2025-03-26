@@ -9,13 +9,17 @@ import org.mockito.MockitoAnnotations;
 import jakarta.persistence.EntityNotFoundException;
 import periskal.academy.backend.dto.ModuleDTO;
 import periskal.academy.backend.dto.TrainingDTO;
+import periskal.academy.backend.jpa.Chapter;
 import periskal.academy.backend.jpa.Module;
 import periskal.academy.backend.jpa.ModuleRepository;
+import periskal.academy.backend.jpa.Photo;
 import periskal.academy.backend.jpa.Training;
 import periskal.academy.backend.jpa.TrainingRepository;
 import periskal.academy.backend.service.TrainingService;
 
 import java.util.Optional;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -109,19 +113,37 @@ class TrainingServiceTest {
     }
 
     @Test
-    void testCreateTraining() {
-        Training newTraining = new Training();
-        newTraining.setId(2L);
-        newTraining.setName_en("New Training");
+    public void testCreateTraining() {
+        Training training = new Training();
+        training.setName("Sample Training");
+        training.setDescription("Sample Description");
 
-        // Mock save behavior
-        when(trainingRepository.save(newTraining)).thenReturn(newTraining);
+        Module module = new Module();
+        module.setNameModule("Module 1");
 
-        Training savedTraining = trainingService.createTraining(newTraining);
+        Chapter chapter = new Chapter();
+        chapter.setNameChapter("Chapter 1");
+
+        Photo photo = new Photo();
+        photo.setImageData("data:image/jpeg;base64,placeholder");
+
+        chapter.setPhotos(Collections.singletonList(photo));
+        module.setChapters(Collections.singletonList(chapter));
+        training.setModules(Collections.singletonList(module));
+
+        when(trainingRepository.save(any(Training.class))).thenReturn(training);
+
+        Training savedTraining = trainingService.createTraining(training);
+
+        verify(trainingRepository, times(1)).save(training);
 
         assertNotNull(savedTraining);
-        assertEquals("New Training", savedTraining.getName_en());
-        verify(trainingRepository, times(1)).save(newTraining);
+        assertEquals("Sample Training", savedTraining.getName());
+        assertFalse(savedTraining.getModules().isEmpty());
+        assertFalse(savedTraining.getModules().get(0).getChapters().isEmpty());
+        assertFalse(savedTraining.getModules().get(0).getChapters().get(0).getPhotos().isEmpty());
+        assertEquals("data:image/jpeg;base64,placeholder",
+                savedTraining.getModules().get(0).getChapters().get(0).getPhotos().get(0).getImageData());
     }
 
     @Test
