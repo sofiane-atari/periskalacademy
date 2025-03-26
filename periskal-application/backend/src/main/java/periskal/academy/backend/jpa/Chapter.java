@@ -38,6 +38,10 @@ public class Chapter {
     @JsonManagedReference
     private List<Photo> photos = new ArrayList<>();
 
+    public void setPhotos(List<Photo> photos) {
+        this.photos = photos;
+    }
+
     public Module getModule() {
         return module;
     }
