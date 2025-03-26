@@ -9,31 +9,37 @@ public class Photo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String url; // Opslaan als URL
+    @Lob
+    @Column(columnDefinition = "LONGBLOB")
+    private String imageData;
 
     @ManyToOne
-    @JoinColumn(name = "chapter_id")
+    @JoinColumn(name = "chapter_id", nullable = false)
     @JsonBackReference
     private Chapter chapter;
 
-    public Photo() {
+    public Photo(String imageData, Chapter chapter) {
+        this.imageData = imageData;
+        this.chapter = chapter;
     }
 
-    public Photo(String url, Chapter chapter) {
-        this.url = url;
-        this.chapter = chapter;
+    public Photo() {
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getUrl() {
-        return url;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public String getImageData() {
+        return imageData;
+    }
+
+    public void setImageData(String imageData) {
+        this.imageData = imageData;
     }
 
     public Chapter getChapter() {

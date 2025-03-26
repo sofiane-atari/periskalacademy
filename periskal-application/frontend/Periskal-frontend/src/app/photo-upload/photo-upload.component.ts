@@ -43,7 +43,7 @@ export class PhotoUploadComponent implements ControlValueAccessor {
       reader.onload = (e: any) => {
         const newPhoto: PhotoUpload = {
           file: file,
-          preview: e.target.result
+          imageData: e.target.result
         };
         this.photos.push(newPhoto);
         this.onChange(this.photos);
@@ -62,5 +62,5 @@ export class PhotoUploadComponent implements ControlValueAccessor {
 
 interface PhotoUpload {
   file: File;
-  preview: string;
+  imageData: string;
 }

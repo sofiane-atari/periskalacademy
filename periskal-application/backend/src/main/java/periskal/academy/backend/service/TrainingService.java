@@ -1,6 +1,7 @@
 package periskal.academy.backend.service;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -13,13 +14,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.OptimisticLockException;
 import jakarta.transaction.Transactional;
 import periskal.academy.backend.dto.ModuleDTO;
 import periskal.academy.backend.dto.TrainingDTO;
+import periskal.academy.backend.jpa.Chapter;
 import periskal.academy.backend.jpa.Module;
 import periskal.academy.backend.jpa.ModuleRepository;
+import periskal.academy.backend.jpa.Photo;
 import periskal.academy.backend.jpa.Training;
 import periskal.academy.backend.jpa.TrainingRepository;
 
@@ -27,10 +32,13 @@ import periskal.academy.backend.jpa.TrainingRepository;
 public class TrainingService {
     private TrainingRepository trainingRepository;
     private ModuleRepository moduleRepository;
+    private final ObjectMapper objectMapper;
 
-    public TrainingService(TrainingRepository trainingRepository, ModuleRepository moduleRepository) {
+    public TrainingService(TrainingRepository trainingRepository, ModuleRepository moduleRepository,
+            ObjectMapper objectMapper) {
         this.trainingRepository = trainingRepository;
         this.moduleRepository = moduleRepository;
+        this.objectMapper = objectMapper;
     }
 
     private TrainingDTO convertToDto(Training training) {
@@ -54,6 +62,17 @@ public class TrainingService {
     }
 
     public Training createTraining(Training entity) {
+        for (Module module : entity.getModules()) {
+            for (Chapter chapter : module.getChapters()) {
+                for (Photo photo : chapter.getPhotos()) {
+                    System.out.println("Photos: " + chapter.getPhotos());
+                    String base64ImageData = photo.getImageData();
+                    System.out.println("Received base64 image data: " + base64ImageData);
+
+                    photo.setChapter(chapter);
+                }
+            }
+        }
         return trainingRepository.save(entity);
     }
 

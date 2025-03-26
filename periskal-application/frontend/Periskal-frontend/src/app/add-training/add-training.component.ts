@@ -126,19 +126,62 @@ export class AddTrainingComponent {
   postTraining(): void {
     if (this.trainingForm.valid) {
       const trainingData = this.trainingForm.value;
-      console.log(trainingData);
-      this.trainingsService.postTraining(trainingData).subscribe(
-        (response) => {
-          console.log('Training posted successfully!', response);
-          this.resetForm();
-          this.router.navigate(['/trainingEmployee'])
-        },
-        (error) => {
-          console.error('Error posting training', error);
-        }
-      );
+
+      const fileInput = this.trainingForm.get('image')?.value;
+
+      // If there's a file, convert it to base64
+      if (fileInput) {
+        this.convertToBase64(fileInput).then((base64Image: string) => {
+          // Add the base64 image to the trainingData
+          trainingData.modules.forEach((module: { chapters: any[]; }) => {
+            module.chapters.forEach(chapter => {
+              chapter.photos.forEach((photo: { imageData: string; }) => {
+                photo.imageData = base64Image;
+              });
+            });
+          });
+
+          // Now send the updated data with base64 image to the backend
+          //console.log(trainingData);
+          this.trainingsService.postTraining(trainingData).subscribe(
+            (response) => {
+              console.log('Training posted successfully!', response);
+              this.resetForm();
+              this.router.navigate(['/trainingEmployee']);
+            },
+            (error) => {
+              console.error('Error posting training', error);
+            }
+          );
+        });
+      } else {
+        //console.log(trainingData);
+        this.trainingsService.postTraining(trainingData).subscribe(
+          (response) => {
+            console.log('Training posted successfully!', response);
+            this.resetForm();
+            this.router.navigate(['/trainingEmployee']);
+          },
+          (error) => {
+            console.error('Error posting training', error);
+          }
+        );
+      }
     }
   }
+
+  // Helper method to convert file to base64
+  convertToBase64(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        resolve(reader.result as string);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
 
   resetForm(): void {
     this.trainingForm.reset();
