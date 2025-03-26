@@ -218,7 +218,7 @@ class TrainingServiceTest {
 
         assertNotNull(result);
         assertEquals(1, result.size());
-        assertEquals("Test Training", result.get(0).getName());
+        assertEquals("Test Training", result.get(0).getName_en());
 
         // Verify that findAllAsList() method was called once
         verify(trainingRepository, times(1)).findAllAsList();
