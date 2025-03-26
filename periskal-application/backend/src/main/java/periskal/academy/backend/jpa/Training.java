@@ -35,6 +35,64 @@ public class Training {
 
     private String description;
 
+    private String nameNL;
+
+    private String descriptionNL;
+
+    private String nameDE;
+    private String descriptionDE;
+
+    private String nameFR;
+    private String descriptionFR;
+
+    public String getNameNL() {
+        return nameNL;
+    }
+
+    public void setNameNL(String nameNL) {
+        this.nameNL = nameNL;
+    }
+
+    public String getDescriptionNL() {
+        return descriptionNL;
+    }
+
+    public void setDescriptionNL(String descriptionNL) {
+        this.descriptionNL = descriptionNL;
+    }
+
+    public String getNameDE() {
+        return nameDE;
+    }
+
+    public void setNameDE(String nameDE) {
+        this.nameDE = nameDE;
+    }
+
+    public String getDescriptionDE() {
+        return descriptionDE;
+    }
+
+    public void setDescriptionDE(String descriptionDE) {
+        this.descriptionDE = descriptionDE;
+    }
+
+    public String getNameFR() {
+        return nameFR;
+    }
+
+    public void setNameFR(String nameFR) {
+        this.nameFR = nameFR;
+    }
+
+    public String getDescriptionFR() {
+        return descriptionFR;
+    }
+
+    public void setDescriptionFR(String descriptionFR) {
+        this.descriptionFR = descriptionFR;
+    }
+
     @OneToMany(mappedBy = "training", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Module> modules;
