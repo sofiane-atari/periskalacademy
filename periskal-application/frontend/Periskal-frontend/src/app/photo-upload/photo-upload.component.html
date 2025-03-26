@@ -1,0 +1,16 @@
+<div>
+    <input 
+      type="file" 
+      multiple 
+      (change)="onFileSelected($event)"
+      accept="image/*"
+    >
+    <div class="photo-previews">
+      @for(preview of photoPreviewUrls; track $index) {
+      <div>
+        <img [src]="preview" width="300">
+        <button (click)="removePhoto($index)">Remove</button>
+      </div>
+    }
+    </div>
+  </div>

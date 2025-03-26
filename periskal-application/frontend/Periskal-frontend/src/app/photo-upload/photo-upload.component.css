@@ -1,0 +1,35 @@
+.photo-upload-container {
+    border: 2px dashed #ccc;
+    padding: 20px;
+  }
+  
+  .uploaded-photos {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  .photo-thumbnail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .photo-thumbnail img {
+    max-width: 150px;
+    max-height: 150px;
+    object-fit: cover;
+  }
+  
+  .progress-bar {
+    width: 100%;
+    background-color: #f0f0f0;
+    margin-top: 10px;
+  }
+  
+  .progress-bar div {
+    height: 10px;
+    background-color: #4CAF50;
+    width: 0;
+    transition: width 0.5s ease;
+  }
