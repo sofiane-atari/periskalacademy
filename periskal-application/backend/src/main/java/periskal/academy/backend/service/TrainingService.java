@@ -36,8 +36,8 @@ public class TrainingService {
     private TrainingDTO convertToDto(Training training) {
         TrainingDTO dto = new TrainingDTO();
         dto.setId(training.getId());
-        dto.setName(training.getName());
-        dto.setDescription(training.getDescription());
+        dto.setName(training.getName_en());
+        dto.setDescription(training.getDescription_en());
         return dto;
     }
 

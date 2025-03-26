@@ -17,8 +17,8 @@ export class TrainingEmployeeComponent implements OnInit {
   public trainingsData: training[] = [];
 
   constructor(
-    private router: Router, 
-    private svc: TrainingService, 
+    private router: Router,
+    private svc: TrainingService,
     private jwtDecoderService: JwtDecoderService,
     public roleAuth: RoleAuthorizationService
   ) { }
@@ -27,13 +27,13 @@ export class TrainingEmployeeComponent implements OnInit {
   ngOnInit(): void {
     const role = this.jwtDecoderService.getUserRole();
     const products: string[] = this.jwtDecoderService.getProducts() || [];
-  
+
     this.svc.getTrainingData().subscribe(
-      (data: training[]) => {       
+      (data: training[]) => {
         if (role === "Skipper" || role === "Fleetmanager") {
           if (products && products.length > 0) {
             this.trainingsData = data.filter(training => {
-              return products.some(product => 
+              return products.some(product =>
                 training.name.toLowerCase().includes(product.toLowerCase())
               );
             });
@@ -43,14 +43,15 @@ export class TrainingEmployeeComponent implements OnInit {
         }
         else if (role === "ADMIN" || role === "Support") {
           this.trainingsData = data;
-        } 
+          console.log(this.trainingsData);
+        }
       },
       (error) => {
         console.error('Error fetching trainings', error);
       }
     );
   }
-  
+
   goToTrainingDetails(trainingId: number) {
     this.router.navigate(['/training', trainingId]);
   }

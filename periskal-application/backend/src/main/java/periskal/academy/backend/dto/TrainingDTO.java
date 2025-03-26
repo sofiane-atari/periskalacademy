@@ -48,7 +48,7 @@ public class TrainingDTO {
 
     public TrainingDTO(Training training) {
         this.id = training.getId();
-        this.name = training.getName();
+        this.name = training.getName_en();
         this.modules = training.getModules().stream().map(ModuleDTO::new).toList();
     }
 }

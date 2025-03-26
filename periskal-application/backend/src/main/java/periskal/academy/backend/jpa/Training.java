@@ -31,71 +31,84 @@ public class Training {
     public Training() {
     }
 
-    private String name;
+    private String name_en;
 
-    private String description;
+    private String description_en;
 
-    private String nameNL;
+    private String name_nl;
 
-    private String descriptionNL;
+    private String description_nl;
 
-    private String nameDE;
-    private String descriptionDE;
+    private String name_de;
+    private String description_de;
 
-    private String nameFR;
-    private String descriptionFR;
+    private String name_fr;
+    private String description_fr;
 
-    public String getNameNL() {
-        return nameNL;
+    public String getName_nl() {
+        return name_nl;
     }
 
-    public void setNameNL(String nameNL) {
-        this.nameNL = nameNL;
+    public void setName_nl(String nameNL) {
+        this.name_nl = nameNL;
     }
 
-    public String getDescriptionNL() {
-        return descriptionNL;
+    public String getDescription_nl() {
+        return description_nl;
     }
 
-    public void setDescriptionNL(String descriptionNL) {
-        this.descriptionNL = descriptionNL;
+    public void setDescription_nl(String descriptionNL) {
+        this.description_nl = descriptionNL;
     }
 
-    public String getNameDE() {
-        return nameDE;
+    public String getName_de() {
+        return name_de;
     }
 
-    public void setNameDE(String nameDE) {
-        this.nameDE = nameDE;
+    public void setName_de(String nameDE) {
+        this.name_de = nameDE;
     }
 
-    public String getDescriptionDE() {
-        return descriptionDE;
+    public String getDescription_de() {
+        return description_de;
     }
 
-    public void setDescriptionDE(String descriptionDE) {
-        this.descriptionDE = descriptionDE;
+    public void setDescription_de(String descriptionDE) {
+        this.description_de = descriptionDE;
     }
 
-    public String getNameFR() {
-        return nameFR;
+    public String getName_fr() {
+        return name_fr;
     }
 
-    public void setNameFR(String nameFR) {
-        this.nameFR = nameFR;
+    public void setName_fr(String nameFR) {
+        this.name_fr = nameFR;
     }
 
-    public String getDescriptionFR() {
-        return descriptionFR;
+    public String getDescription_fr() {
+        return description_fr;
     }
 
-    public void setDescriptionFR(String descriptionFR) {
-        this.descriptionFR = descriptionFR;
+    public void setDescription_fr(String descriptionFR) {
+        this.description_fr = descriptionFR;
     }
 
     @OneToMany(mappedBy = "training", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Module> modules;
+
+    public Training(String name_en, String description_en, String name_nl, String description_nl, String name_de,
+            String description_de, String name_fr, String description_fr, List<Module> modules) {
+        this.name_en = name_en;
+        this.description_en = description_en;
+        this.name_nl = name_nl;
+        this.description_nl = description_nl;
+        this.name_de = name_de;
+        this.description_de = description_de;
+        this.name_fr = name_fr;
+        this.description_fr = description_fr;
+        this.modules = modules;
+    }
 
     public List<Module> getModules() {
         return modules;
@@ -106,24 +119,24 @@ public class Training {
     }
 
     public Training(String name, String description, List<Module> products) {
-        this.name = name;
-        this.description = description;
+        this.name_en = name;
+        this.description_en = description;
         this.modules = products;
     }
 
-    public String getName() {
-        return name;
+    public String getName_en() {
+        return name_en;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName_en(String name) {
+        this.name_en = name;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDescription_en() {
+        return description_en;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDescription_en(String description) {
+        this.description_en = description;
     }
 }
