@@ -5,10 +5,11 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { TrainingService } from '../training.service';
 import { TranslatePipe } from '@ngx-translate/core';
+import { PhotoUploadComponent } from "../photo-upload/photo-upload.component";
 
 @Component({
   selector: 'app-add-training',
-  imports: [FormsModule, ReactiveFormsModule, TranslatePipe],
+  imports: [FormsModule, ReactiveFormsModule, TranslatePipe, PhotoUploadComponent],
   templateUrl: './add-training.component.html',
   styleUrl: './add-training.component.css'
 })
@@ -45,7 +46,8 @@ export class AddTrainingComponent {
     return this.fb.group({
       nameChapter: ['', Validators.required],
       descriptionChapter: ['', Validators.required],
-      textChapter: ['', Validators.required]
+      textChapter: ['', Validators.required],
+      photos: [[]]
     });
   }
 

@@ -1,16 +1,19 @@
-<div>
-    <input 
-      type="file" 
-      multiple 
-      (change)="onFileSelected($event)"
-      accept="image/*"
-    >
-    <div class="photo-previews">
-      @for(preview of photoPreviewUrls; track $index) {
-      <div>
-        <img [src]="preview" width="300">
-        <button (click)="removePhoto($index)">Remove</button>
-      </div>
-    }
+<div class="photo-upload-container">
+  <input 
+    type="file" 
+    multiple 
+    (change)="onFileSelected($event)"
+    accept="image/*"
+    #fileInput
+  >
+  <div class="photo-previews">
+    @for(photo of photos; track $index) {
+    <div class="photo-preview">
+      <img [src]="photo.preview" alt="Photo preview">
+      <button type="button" (click)="removePhoto($index)" class="remove-photo">
+        Verwijderen
+      </button>
     </div>
+  }
   </div>
+</div>
