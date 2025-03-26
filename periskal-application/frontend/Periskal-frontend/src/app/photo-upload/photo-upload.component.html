@@ -1,0 +1,19 @@
+<div class="photo-upload-container">
+  <input 
+    type="file" 
+    multiple 
+    (change)="onFileSelected($event)"
+    accept="image/*"
+    #fileInput
+  >
+  <div class="photo-previews">
+    @for(photo of photos; track $index) {
+    <div class="photo-preview">
+      <img [src]="photo.imageData" alt="Photo preview">
+      <button type="button" (click)="removePhoto($index)" class="remove-photo">
+        Verwijderen
+      </button>
+    </div>
+  }
+  </div>
+</div>

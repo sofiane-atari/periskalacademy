@@ -1,13 +1,19 @@
 package periskal.academy.backend.jpa;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Lob;
 
 @Entity
@@ -27,6 +33,14 @@ public class Chapter {
     @JoinColumn(name = "module_id", nullable = false)
     @JsonBackReference
     private Module module;
+
+    @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Photo> photos = new ArrayList<>();
+
+    public void setPhotos(List<Photo> photos) {
+        this.photos = photos;
+    }
 
     public Module getModule() {
         return module;
@@ -75,5 +89,19 @@ public class Chapter {
 
     public void setTextChapter(String textChapter) {
         this.textChapter = textChapter;
+    }
+
+    public List<Photo> getPhotos() {
+        return photos;
+    }
+
+    public void addPhoto(Photo photo) {
+        photos.add(photo);
+        photo.setChapter(this);
+    }
+
+    public void removePhoto(Photo photo) {
+        photos.remove(photo);
+        photo.setChapter(null);
     }
 }
