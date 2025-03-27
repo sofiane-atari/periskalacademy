@@ -30,18 +30,18 @@
         </textarea>
       </div>
     }
-      <h3 class="modules">Modules informatie</h3>
+      <h3 class="modules">{{"MODULE_INFORMATION" | translate}}</h3>
       <div formArrayName="modules">
         @for (module of modules.controls; track moduleIndex; let moduleIndex = $index) {
         <div [formGroupName]="moduleIndex" class="module">
           <div class="module-header" (click)="toggleModule(moduleIndex)">
             <span class="toggle-icon">{{ isModuleCollapsed(moduleIndex) ? '►' : '▼' }}</span>
-            <h4>Module {{ moduleIndex + 1 }}: {{ getModuleTitle(moduleIndex) }}</h4>
+            <h4>{{"MODULE" | translate}} {{ moduleIndex + 1 }}: {{ getModuleTitle(moduleIndex) }}</h4>
           </div>
           
           <div [hidden]="isModuleCollapsed(moduleIndex)" class="module-content">
             <div>
-              <label>Module Titel</label>
+              <label>{{"MODULE_TITLE" | translate}}</label>
               <input
                 formControlName="nameModule"
                 placeholder="Geef de titel van module {{ moduleIndex + 1 }}"
@@ -49,7 +49,7 @@
               />
             </div>
             <div>
-              <label>Module Beschrijving</label>
+              <label>{{"MODULE_DESCRIPTION" | translate}}</label>
               <textarea
                 formControlName="descriptionModule"
                 id="descriptionModule{{ moduleIndex }}"
@@ -62,18 +62,18 @@
             </div>
             
             <div>
-              <h4>Hoofdstukken module {{ moduleIndex + 1 }}</h4>
+              <h4>{{"CHAPTERS_MODULE" | translate}} {{ moduleIndex + 1 }}</h4>
               <div formArrayName="chapters">
                 @for (chapter of getChaptersControls(moduleIndex); track chapterIndex; let chapterIndex = $index) {
                 <div [formGroupName]="chapterIndex" class="chapter">
                   <div class="chapter-header" (click)="toggleChapter(moduleIndex, chapterIndex)">
                     <span class="toggle-icon">{{ isChapterCollapsed(moduleIndex, chapterIndex) ? '►' : '▼' }}</span>
-                    <h5>Hoofdstuk {{ chapterIndex + 1 }}: {{ getChapterTitle(moduleIndex, chapterIndex) }}</h5>
+                    <h5>{{"CHAPTER" | translate}} {{ chapterIndex + 1 }}: {{ getChapterTitle(moduleIndex, chapterIndex) }}</h5>
                   </div>
                   
                   <div [hidden]="isChapterCollapsed(moduleIndex, chapterIndex)" class="chapter-content">
                     <div>
-                      <label>Hoofdstuk Titel</label>
+                      <label>{{"CHAPTER_TITLE" | translate}}</label>
                       <input
                         formControlName="nameChapter"
                         placeholder="Geef de titel van hoofdstuk {{ chapterIndex + 1 }}"
@@ -81,7 +81,7 @@
                       />
                     </div>
                     <div>
-                      <label>Hoofdstuk Beschrijving</label>
+                      <label>{{"CHAPTER_DESCRIPTION" | translate}}</label>
                       <textarea
                         formControlName="descriptionChapter"
                         id="descriptionChapter{{ moduleIndex }}_{{ chapterIndex }}"
@@ -93,7 +93,7 @@
                       </textarea>
                     </div>
                     <div>
-                      <label>Hoofdstuk Tekst</label>
+                      <label>{{"CHAPTER_TEXT" | translate}}</label>
                       <textarea
                         formControlName="textChapter"
                         id="textChapter{{ moduleIndex }}_{{ chapterIndex }}"
@@ -107,7 +107,7 @@
                     </div>
                     @if(chapterIndex!=0) {
                     <button class="delete" type="button" (click)="removeChapter(moduleIndex, chapterIndex)">
-                      Hoofdstuk verwijderen
+                      {{"DELETE_CHAPTER" | translate}}
                     </button>
                     }
                   </div>
@@ -116,14 +116,14 @@
               </div>
               <div>
                 <button type="button" (click)="addChapter(moduleIndex)">
-                  Nieuw hoofdstuk toevoegen
+                  {{"ADD_NEW_CHAPTER" | translate}}
                 </button>
               </div>
             </div>
             
             @if(moduleIndex!=0) {
             <button class="delete" type="button" (click)="removeModule(moduleIndex)">
-              Module verwijderen
+              {{"DELETE_MODULE" | translate}}
             </button>
             }
           </div>

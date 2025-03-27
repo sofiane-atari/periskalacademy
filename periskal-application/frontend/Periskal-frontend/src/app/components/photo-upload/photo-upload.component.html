@@ -11,7 +11,7 @@
     <div class="photo-preview">
       <img [src]="photo.imageData" alt="Photo preview">
       <button type="button" (click)="removePhoto($index)" class="remove-photo">
-        Verwijderen
+        {{"DELETE" | translate}}
       </button>
     </div>
   }

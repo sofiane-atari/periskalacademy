@@ -1,26 +1,69 @@
 {
-  "EMPLOYEE_DASHBOARD": "Tableau de bord employé",
-  "TEST_COMPONENT": "Composant de test",
   "HOME": "Accueil",
+  "EMPLOYEE_DASHBOARD": "Tableau de bord employé",
   "SKIPPERS": "Skippers",
-  "MODULES": "Modules",
-  "TAKE_COURSE": "Suivre le cours",
+
+
   "NEW_TRAINING_CREATE": "Créer une nouvelle formation",
-  "TRAINING_INFORMATION": "Informations sur la formation",
+  "CREATE_TRAINING": "Créer une formation",
   "TRAINING_NAME": "Nom de la formation",
   "DESCRIPTION": "Description",
+  "TRAINING_INFORMATION": "Informations sur la formation",
+  "UPDATE_TRAINING": "Mettre à jour la formation",
+  "TRAINING_NOT_FOUND": "Formation non trouvée",
+  "DELETE_TRAINING": "Supprimer la formation",
+
+
+  "MODULES": "Modules",
+  "MODULE": "Module",
   "MODULE_INFORMATION": "Informations sur le module",
   "MODULE_TITLE": "Titre du module",
   "MODULE_DESCRIPTION": "Description du module",
   "ADD_NEW_MODULE": "Ajouter un nouveau module",
-  "CREATE_TRAINING": "Créer une formation",
-  "EDIT": "Modifier",
-  "UPDATE_TRAINING": "Mettre à jour la formation",
   "DELETE_MODULE": "Supprimer le module",
+  "EDIT_MODULES": "Modifier les modules",
+  "MODULE_NAME": "Nom du module",
+
+
+  "EDIT": "Modifier",
   "SAVE_CHANGES": "Enregistrer les modifications",
-  "TRAINING_NOT_FOUND": "Formation non trouvée",
   "LOADING": "Chargement...",
-  "MODULE": "Module",
-  "NAME": "Nom",
-  "DELETE_TRAINING": "Supprimer la formation"
+  "TAKE_COURSE": "Suivre le cours",
+  "SUCCESFULL_LOGIN": "Connexion réussie !",
+  "REDIRECTING": "Redirection en cours...",
+  "REDIRECTING_TO_DASHBOARD": "Redirection vers le tableau de bord...",
+  "DELETE": "Supprimer",
+  "LOGOUT": "Déconnexion",
+  "SAVE": "Enregistrer",
+  "RESET": "Réinitialiser",
+
+
+
+  "USER_PROFILE": "Profil Utilisateur",
+  "INFORMATION": "Informations",
+  "PRODUCTS": "Produits",
+  "SETTINGS": "Paramètres",
+  "ID": "ID :",
+  "USERNAME": "Nom d'utilisateur",
+  "FIRST_NAME": "Prénom",
+  "LAST_NAME": "Nom",
+  "SHIP_NAME": "Nom du Navire",
+  "ROLE": "Rôle",
+  "NO_PRODUCTS_AVAILABLE": "Aucun produit disponible",
+  
+
+
+  "CHAPTERS_MODULE": "Module des chapitres",
+  "CHAPTERS": "Chapitres",
+  "CONTENT": "Contenu",
+  "CHAPTER": "Chapitre",
+  "CHAPTER_TITLE": "Titre du chapitre",
+  "CHAPTER_DESCRIPTION": "Description du chapitre",
+  "CHAPTER_TEXT": "Texte du chapitre",
+  "DELETE_CHAPTER": "Supprimer le chapitre",
+  "ADD_NEW_CHAPTER": "Ajouter un nouveau chapitre",
+
+
+  "TEST_COMPONENT": "Composant de test",
+  "NAME": "Nom"
 }

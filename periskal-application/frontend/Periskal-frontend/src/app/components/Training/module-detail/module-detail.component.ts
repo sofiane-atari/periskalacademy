@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { chapter, module, training } from '../training-employee/training-employee.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TrainingService } from '../../../services/Training/training.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-training-detail',
-  imports: [],
+  imports: [TranslatePipe],
   templateUrl: './module-detail.component.html',
   styleUrl: './module-detail.component.css'
 })

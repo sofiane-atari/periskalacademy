@@ -1,26 +1,72 @@
 {
-  "EMPLOYEE_DASHBOARD": "Employee Dashboard",
-  "TEST_COMPONENT": "Test Component",
   "HOME": "Home",
+  "EMPLOYEE_DASHBOARD": "Employee Dashboard",
   "SKIPPERS": "Skippers",
-  "MODULES": "Modules",
-  "TAKE_COURSE": "Take Course",
+
+
   "NEW_TRAINING_CREATE": "Create New Training",
-  "TRAINING_INFORMATION": "Training Information",
+  "CREATE_TRAINING": "Create Training",
   "TRAINING_NAME": "Training Name",
   "DESCRIPTION": "Description",
+  "TRAINING_INFORMATION": "Training Information",
+  "UPDATE_TRAINING": "Update Training",
+  "TRAINING_NOT_FOUND": "Training not found",
+  "DELETE_TRAINING": "Delete Training",
+
+
+  "MODULES": "Modules",
+  "MODULE": "Module",
   "MODULE_INFORMATION": "Module Information",
   "MODULE_TITLE": "Module Title",
   "MODULE_DESCRIPTION": "Module Description",
   "ADD_NEW_MODULE": "Add New Module",
-  "CREATE_TRAINING": "Create Training",
-  "EDIT": "Edit",
-  "UPDATE_TRAINING": "Update Training",
   "DELETE_MODULE": "Delete Module",
+  "EDIT_MODULES": "Edit modules",
+  "MODULE_NAME": "Module name",
+
+
+
+  "EDIT": "Edit",
   "SAVE_CHANGES": "Save Changes",
-  "TRAINING_NOT_FOUND": "Training not found",
   "LOADING": "Loading...",
-  "MODULE": "Module",
-  "NAME": "Name",
-  "DELETE_TRAINING": "Delete Training"
+  "TAKE_COURSE": "Take Course",
+  "SUCCESFULL_LOGIN": "Successfully Logged In!",
+  "REDIRECTING": "Redirecting...",
+  "REDIRECTING_TO_DASHBOARD": "Redirecting to dashboard...",
+  "DELETE": "Delete",
+  "LOGOUT": "Logout",
+  "SAVE": "Save",
+  "RESET": "Reset",
+
+
+
+  "USER_PROFILE": "User Profile",
+  "INFORMATION": "Information",
+  "PRODUCTS": "Products",
+  "SETTINGS": "Settings",
+  "ID": "ID:",
+  "USERNAME": "Username",
+  "FIRST_NAME": "First Name",
+  "LAST_NAME": "Last Name",
+  "SHIP_NAME": "Ship Name",
+  "ROLE": "Role",
+  "NO_PRODUCTS_AVAILABLE": "No products available",
+  
+
+
+  
+  "CHAPTERS_MODULE": "Chapters module",
+  "CHAPTERS": "Chapters",
+  "CONTENT": "Content",
+  "CHAPTER": "Chapter",
+  "CHAPTER_TITLE": "Chapter title",
+  "CHAPTER_DESCRIPTION": "Chapter description",
+  "CHAPTER_TEXT": "Chapter text",
+  "DELETE_CHAPTER": "Delete chapter",
+  "ADD_NEW_CHAPTER": "Add new chapter",
+  
+
+
+  "TEST_COMPONENT": "Test Component",
+  "NAME": "Name"
 }

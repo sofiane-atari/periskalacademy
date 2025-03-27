@@ -1,10 +1,11 @@
 import { Component, Input, Output, EventEmitter, forwardRef } from '@angular/core';
 import { PhotoUploadService } from '../../services/Photoupload/photo-upload.service';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-photo-upload',
-  imports: [],
+  imports: [TranslatePipe],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

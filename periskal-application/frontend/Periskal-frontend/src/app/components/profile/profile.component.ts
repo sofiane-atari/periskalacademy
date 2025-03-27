@@ -4,11 +4,12 @@ import { Router } from '@angular/router';
 import { JwtDecoderService } from '../../services/JwtDecode/jwt-decoder.service';
 import { AuthenticationService } from '../../services/Authentication/authentication.service';
 import { AuthenticateResponse } from '../../models/authenticate-response.model';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslatePipe],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
