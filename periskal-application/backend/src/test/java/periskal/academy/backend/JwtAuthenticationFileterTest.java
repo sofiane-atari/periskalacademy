@@ -103,7 +103,7 @@ class JwtAuthenticationFilterTest {
         
         when(request.getHeader("Authorization")).thenReturn("Bearer " + token);
         when(JwtUtil.extractUsername(token)).thenReturn(username);
-        when(jwtUtil.validateToken(eq(token), eq(username))).thenReturn(false);
+        when(JwtUtil.validateToken(eq(token), eq(username))).thenReturn(false);
         
         doFilterInternalMethod.invoke(filter, request, response, filterChain);
         
@@ -116,7 +116,7 @@ class JwtAuthenticationFilterTest {
         String token = "expired.jwt.token";
         
         when(request.getHeader("Authorization")).thenReturn("Bearer " + token);
-        when(jwtUtil.extractUsername(token)).thenThrow(
+        when(JwtUtil.extractUsername(token)).thenThrow(
             new ExpiredJwtException(null, null, "JWT token has expired")
         );
         
