@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import periskal.academy.backend.dto.ModuleDTO;
 import periskal.academy.backend.dto.TrainingDTO;
 import periskal.academy.backend.jpa.Chapter;
@@ -18,8 +21,11 @@ import periskal.academy.backend.jpa.Photo;
 import periskal.academy.backend.jpa.Training;
 import periskal.academy.backend.jpa.TrainingRepository;
 
+@Slf4j
 @Service
 public class TrainingService {
+
+    
     private TrainingRepository trainingRepository;
     private ModuleRepository moduleRepository;
     private final ObjectMapper objectMapper;
@@ -55,6 +61,34 @@ public class TrainingService {
 
     public Optional<Training> getTrainingWithProducts(Long id) {
         return trainingRepository.findById(id);
+    }
+    
+
+    // TODO: Current implementation checks if product name is contained in training_name_en
+    // Future implementation will check a dedicated products field in the Training model
+    public List<TrainingDTO> getFilteredTrainings(String role, List<String> products) {
+        // If Admin/Support, return all trainings
+        if ("Administrator".equals(role) || "Support".equals(role)) {
+            return getAllTrainings();
+        }
+        
+        // For other roles (Skipper/Fleetmanager), check products
+        if (products == null || products.isEmpty()) {
+            log.error("Products list cannot be empty for role: {}", role);
+            return new ArrayList<>(); 
+        }
+        
+        // For Skipper/Fleetmanager with products
+        return trainingRepository.findAllAsList()
+            .stream()
+            .filter(training -> 
+                // TODO: This filtering logic will be replaced when trainings have direct product associations
+                products.stream().anyMatch(product -> 
+                    training.getName_en().toLowerCase().contains(product.toLowerCase())
+                )
+            )
+            .map(this::convertToDto)
+            .collect(Collectors.toList());
     }
 
     public Training createTraining(Training entity) {

@@ -27,24 +27,14 @@ export class TrainingEmployeeComponent implements OnInit {
 
   ngOnInit(): void {
     this.lang = localStorage.getItem('lang');
-    const role = this.jwtDecoderService.getUserRole();
+    const role = this.jwtDecoderService.getUserRole() || "noRole"; 
     const products: string[] = this.jwtDecoderService.getProducts() || [];
 
-    this.svc.getTrainingData().subscribe({
+    // Use filtered endpoint instead of fetching all trainings and filtering client-side
+    // TODO: This implementation will remain the same even after the backend is updated to use direct product associations instead of name matching
+    this.svc.getFilteredTrainingData(role, products).subscribe({
       next: (data: training[]) => {
-        if (role === "Skipper" || role === "Fleetmanager") {
-          if (products && products.length > 0) {
-            this.trainingsData = data.filter(training =>
-              products.some(product =>
-                training.name_en.toLowerCase().includes(product.toLowerCase())
-              )
-            );
-          } else {
-            this.trainingsData = [];
-          }
-        } else if (role === "Administrator" || role === "Support") {
-          this.trainingsData = data;
-        }
+        this.trainingsData = data;
       },
       error: (error) => {
         console.error('Error fetching trainings', error);
