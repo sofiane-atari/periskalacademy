@@ -43,7 +43,7 @@ export class TrainingEmployeeComponent implements OnInit {
             this.trainingsData = [];
           }
         }
-        else if (role === "ADMIN" || role === "Support") {
+        else if (role === "Administrator" || role === "Support") {
           this.trainingsData = data;
         }
       },

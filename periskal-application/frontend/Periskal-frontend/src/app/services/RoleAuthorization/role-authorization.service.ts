@@ -11,7 +11,7 @@ export class RoleAuthorizationService {
   hasPermission(requiredPermissions: string[]): boolean {
     const userRole = this.jwtDecoderService.getUserRole();
     // If user has Admin role, they can do everything atm
-    if (userRole === 'ADMIN') {
+    if (userRole === 'Administrator') {
       return true;
     }
     
@@ -20,10 +20,10 @@ export class RoleAuthorizationService {
   }
   
   canEditContent(): boolean {
-    return this.hasPermission(['ADMIN']);
+    return this.hasPermission(['Administrator']);
   }
   
   canAddContent(): boolean {
-    return this.hasPermission(['ADMIN']);
+    return this.hasPermission(['Administrator']);
   }
 }
