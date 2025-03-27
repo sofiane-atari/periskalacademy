@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { JwtDecoderService } from '../../services/JwtDecode/jwt-decoder.service';
-import { AuthenticationService } from '../../services/authentication.service';
+import { AuthenticationService } from '../../services/Authentication/authentication.service';
 import { AuthenticateResponse } from '../../models/authenticate-response.model';
 
 @Component({

@@ -1,15 +1,15 @@
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
-import { TrainingEmployeeComponent } from './training-employee/training-employee.component';
-import { TrainingDetailComponent } from './training-detail/training-detail.component';
-import { AddTrainingComponent } from './add-training/add-training.component';
-import { UpdateTrainingComponent } from './update-training/update-training.component';
+import { TrainingEmployeeComponent } from './components/Training/training-employee/training-employee.component';
+import { TrainingDetailComponent } from './components/Training/training-detail/training-detail.component';
+import { AddTrainingComponent } from './components/Training/add-training/add-training.component';
+import { UpdateTrainingComponent } from './components/Training/update-training/update-training.component';
 import { DongleLoginComponent } from './components/dongle-login/dongle-login.component';
-import { ModuleDetailComponent } from './module-detail/module-detail.component';
+import { ModuleDetailComponent } from './components/Training/module-detail/module-detail.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { authGuard } from './guards/auth.guard';
-import { UpdateModuleComponent } from './update-module/update-module.component';
-import { AddModuleComponent } from './add-module/add-module.component';
+import { UpdateModuleComponent } from './components/Training/update-module/update-module.component';
+import { AddModuleComponent } from './components/Training/add-module/add-module.component';
 
 export const routes: Routes = [
 

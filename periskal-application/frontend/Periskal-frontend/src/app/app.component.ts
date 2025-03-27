@@ -10,7 +10,7 @@ import {
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 import { filter, Observable } from 'rxjs';
-import { AuthenticationService } from './services/authentication.service';
+import { AuthenticationService } from './services/Authentication/authentication.service';
 
 
 @Component({

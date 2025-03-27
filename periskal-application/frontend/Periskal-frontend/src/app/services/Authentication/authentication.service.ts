@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap, of, catchError, map } from 'rxjs';
-import { AuthenticateResponse } from '../models/authenticate-response.model';
-import { JwtDecoderService } from './JwtDecode/jwt-decoder.service';
+import { AuthenticateResponse } from '../../models/authenticate-response.model';
+import { JwtDecoderService } from '../JwtDecode/jwt-decoder.service';
 
 
 @Injectable({ providedIn: 'root' })

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { module, training } from '../training-employee/training-employee.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TrainingService } from '../training.service';
+import { TrainingService } from '../../../services/Training/training.service';
 import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
