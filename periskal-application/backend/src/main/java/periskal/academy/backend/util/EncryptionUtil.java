@@ -8,8 +8,9 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
-public class EncryptionUtil {
+public final class EncryptionUtil {
 
+    private EncryptionUtil() {} // Private constructor to prevent instantiation
     private static final String SALT = "PeriskalAcademy2024";
 
     public static String encode(String username, String password) throws Exception {
