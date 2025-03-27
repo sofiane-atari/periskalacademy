@@ -31,44 +31,46 @@ public class AuthenticationServiceTest {
     @BeforeEach
     void setUp() throws Exception {
         authenticationService = new AuthenticationService();
-        
-        // Use reflection to access the protected RestTemplate instance from parent class
+
+        // Use reflection to access the protected RestTemplate instance from parent
+        // class
         Field restTemplateField = AuthenticationService.class.getSuperclass().getDeclaredField("restTemplate");
         restTemplateField.setAccessible(true);
         restTemplate = (RestTemplate) restTemplateField.get(authenticationService);
-        
+
         mockServer = MockRestServiceServer.createServer(restTemplate);
     }
 
     private String getAuthenticateEndpointUrl() throws Exception {
-        Field endpointUrlField = AuthenticationService.class.getSuperclass().getDeclaredField("authenticateEndpointUrl");
+        Field endpointUrlField = AuthenticationService.class.getSuperclass()
+                .getDeclaredField("authenticateEndpointUrl");
         endpointUrlField.setAccessible(true);
         return (String) endpointUrlField.get(authenticationService);
     }
 
     @Test
-    void authenticate_SuccessfulResponse_ReturnsParsedAuthResponse() throws Exception {
+    void givenValidSoapResponse_whenAuthenticate_thenReturnsParsedAuthResponse() throws Exception {
         String sampleResponseXml = """
-                                   <?xml version="1.0" encoding="utf-8"?>
-                                   <soap12:Envelope xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
-                                     <soap12:Body>
-                                       <AuthenticateResponse>
-                                         <AuthenticateResult>
-                                           <ID>12345</ID>
-                                           <Username>testUser</Username>
-                                           <Firstname>John</Firstname>
-                                           <Lastname>Doe</Lastname>
-                                           <Shipname>TestShip</Shipname>
-                                           <Role>Admin</Role>
-                                           <LoginResult>Success</LoginResult>
-                                           <Products>
-                                             <string>ProductA</string>
-                                             <string>ProductB</string>
-                                           </Products>
-                                         </AuthenticateResult>
-                                       </AuthenticateResponse>
-                                     </soap12:Body>
-                                   </soap12:Envelope>""";
+                <?xml version="1.0" encoding="utf-8"?>
+                <soap12:Envelope xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
+                  <soap12:Body>
+                    <AuthenticateResponse>
+                      <AuthenticateResult>
+                        <ID>12345</ID>
+                        <Username>testUser</Username>
+                        <Firstname>John</Firstname>
+                        <Lastname>Doe</Lastname>
+                        <Shipname>TestShip</Shipname>
+                        <Role>Admin</Role>
+                        <LoginResult>Success</LoginResult>
+                        <Products>
+                          <string>ProductA</string>
+                          <string>ProductB</string>
+                        </Products>
+                      </AuthenticateResult>
+                    </AuthenticateResponse>
+                  </soap12:Body>
+                </soap12:Envelope>""";
 
         // Mock the EncryptionUtil.encode method
         try (MockedStatic<EncryptionUtil> mockedStatic = Mockito.mockStatic(EncryptionUtil.class)) {
@@ -97,7 +99,7 @@ public class AuthenticationServiceTest {
     }
 
     @Test
-    void authenticate_HttpError_ReturnsNull() throws Exception {
+    void givenHttpError_whenAuthenticate_thenReturnsNull() throws Exception {
         try (MockedStatic<EncryptionUtil> mockedStatic = Mockito.mockStatic(EncryptionUtil.class)) {
             mockedStatic.when(() -> EncryptionUtil.encode(anyString(), anyString()))
                     .thenReturn("encoded_token");
@@ -113,7 +115,7 @@ public class AuthenticationServiceTest {
     }
 
     @Test
-    void authenticate_InvalidXmlResponse_ReturnsPartiallyParsedResponse() throws Exception {
+    void givenInvalidXmlResponse_whenAuthenticate_thenReturnsPartiallyParsedResponse() throws Exception {
         String invalidXml = "<InvalidXml></InvalidXml>";
 
         try (MockedStatic<EncryptionUtil> mockedStatic = Mockito.mockStatic(EncryptionUtil.class)) {
@@ -133,7 +135,7 @@ public class AuthenticationServiceTest {
     }
 
     @Test
-    void authenticate_RestTemplateThrowsException_ReturnsNull() throws Exception {
+    void givenRestTemplateThrowsException_whenAuthenticate_thenReturnsNull() throws Exception {
         try (MockedStatic<EncryptionUtil> mockedStatic = Mockito.mockStatic(EncryptionUtil.class)) {
             mockedStatic.when(() -> EncryptionUtil.encode(anyString(), anyString()))
                     .thenReturn("encoded_token");
@@ -149,7 +151,7 @@ public class AuthenticationServiceTest {
     }
 
     @Test
-    void authenticate_EncryptionUtilThrowsException_ReturnsNull() throws Exception {
+    void givenEncryptionUtilThrowsException_whenAuthenticate_thenReturnsNull() throws Exception {
         try (MockedStatic<EncryptionUtil> mockedStatic = Mockito.mockStatic(EncryptionUtil.class)) {
             mockedStatic.when(() -> EncryptionUtil.encode(anyString(), anyString()))
                     .thenThrow(new RuntimeException("Encryption failed"));

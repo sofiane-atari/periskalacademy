@@ -42,5 +42,5 @@ export const routes: Routes = [
 
 RouterModule.forRoot(routes, {
     enableTracing: true // ✅ This will log route changes in the console
-  })
-  
+})
+

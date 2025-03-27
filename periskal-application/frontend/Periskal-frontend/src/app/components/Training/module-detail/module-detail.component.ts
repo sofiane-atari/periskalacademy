@@ -37,20 +37,21 @@ export class ModuleDetailComponent {
     this.moduleId = Number(this.route.snapshot.paramMap.get('moduleid'))
 
     // Call the service method to get the products for the specific training
-    this.trainingSvc.getTrainingById(this.trainingId).subscribe(
-      (data) => {
+    this.trainingSvc.getTrainingById(this.trainingId).subscribe({
+      next: (data) => {
         this.training = data;
-        this.modules = data.modules
-        this.chapters = this.modules[this.moduleId - 1].chapters;
+        this.modules = data.modules;
+        this.chapters = this.modules[this.moduleId - 1]?.chapters ?? [];
 
         if (this.chapters.length > 0) {
           this.text = this.chapters[this.activeChapterId]?.textChapter?.toString() ?? "";
         }
       },
-      (error) => {
+      error: (error) => {
         console.error('Error fetching training products', error);
       }
-    );
+    });
+
   }
 
   goToChaptersPage(moduleId: number) {

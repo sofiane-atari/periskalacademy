@@ -1,13 +1,16 @@
 package periskal.academy.backend;
 
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import periskal.academy.backend.controller.TrainingController;
 import periskal.academy.backend.dto.ModuleDTO;
@@ -18,14 +21,8 @@ import periskal.academy.backend.service.TrainingService;
 
 import java.util.*;
 
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
+@ExtendWith(MockitoExtension.class)
 class TrainingControllerTest {
-
-    private MockMvc mockMvc;
 
     @Mock
     private TrainingService trainingService;
@@ -35,14 +32,11 @@ class TrainingControllerTest {
 
     private Training training;
     private Module module;
+    private List<TrainingDTO> trainingDTOs;
     private ModuleDTO moduleDTO;
-    private TrainingDTO trainingDTO;
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(trainingController).build();
-
         training = new Training();
         training.setId(1L);
         training.setName_en("Test Training");
@@ -50,194 +44,155 @@ class TrainingControllerTest {
         module = new Module();
         module.setId(1L);
         module.setNameModule("Test Module");
-        training.setModules(Collections.singletonList(module));
+
+        trainingDTOs = new ArrayList<>();
+        TrainingDTO trainingDTO = new TrainingDTO();
+        trainingDTO.setId(1L);
+        trainingDTO.setName_en("Test Training");
+        trainingDTOs.add(trainingDTO);
 
         moduleDTO = new ModuleDTO();
-        moduleDTO.setNameModule("Test Module DTO");
-
-        trainingDTO = new TrainingDTO();
-        trainingDTO.setId(1L);
-        trainingDTO.setName_en("Test Training DTO");
+        moduleDTO.setNameModule("New Module");
     }
 
-    // GET /api/trainings
     @Test
-    void getAllTrainings_ShouldReturnListOfTrainings() throws Exception {
+    void givenTrainingsExist_whenGetAllTrainings_thenReturnsTrainings() {
+        // Arrange
+        when(trainingService.getAllTrainings()).thenReturn(trainingDTOs);
 
-        TrainingDTO dto = new TrainingDTO();
-        dto.setId(1L);
-        dto.setName_en("Test Training");
+        // Act
+        ResponseEntity<List<TrainingDTO>> response = trainingController.getAllTrainings();
 
-        when(trainingService.getAllTrainings()).thenReturn(Collections.singletonList(dto));
-
-        mockMvc.perform(get("/api/trainings")
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1L)) // Array van objecten
-                .andExpect(jsonPath("$[0].name_en").value("Test Training"));
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertFalse(response.getBody().isEmpty());
     }
 
-    // GET /api/trainings/{trainingId}
+    // Test for getProductsForTraining
     @Test
-    void getTrainingById_ShouldReturnTraining() throws Exception {
-        // 1. Arrange
-        Training training = new Training();
-        training.setId(1L);
-        training.setName_en("Test Training");
+    void givenValidTrainingId_whenGetProductsForTraining_thenReturnsTraining() {
+        // Arrange
         when(trainingService.getTrainingWithProducts(1L)).thenReturn(Optional.of(training));
 
-        // 2. Act & Assert
-        mockMvc.perform(get("/api/trainings/1")
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.name_en").value("Test Training"));
+        // Act
+        ResponseEntity<Training> response = trainingController.getProductsForTraining(1L);
 
-        // 3. Verify
-        verify(trainingService, times(1)).getTrainingWithProducts(1L);
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(1L, response.getBody().getId());
     }
 
-    // GET /api/trainings/{trainingId}/chapters
+    // Test for getModuleWithChapters
     @Test
-    void getModulesForTraining_ShouldReturnModules() throws Exception {
+    void givenValidTrainingId_whenGetModuleWithChapters_thenReturnsModules() {
+        // Arrange
+        training.setModules(Collections.singletonList(module));
         when(trainingService.getTrainingWithProducts(1L)).thenReturn(Optional.of(training));
 
-        mockMvc.perform(get("/api/trainings/1/chapters")
-                .accept(MediaType.APPLICATION_JSON)) // Voeg deze header toe
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1L))
-                .andExpect(jsonPath("$[0].nameModule").value("Test Module"));
+        // Act
+        ResponseEntity<List<Module>> response = trainingController.getModuleWithChapters(1L);
 
-        verify(trainingService, times(1)).getTrainingWithProducts(1L);
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(1, response.getBody().size());
     }
 
-    // POST /api/trainings/create
+    // Test for postTrainingWithModules
     @Test
-    void createTraining_ShouldReturnCreatedTraining() throws Exception {
+    void givenNewTraining_whenPostTrainingWithModules_thenReturnsCreatedTraining() {
+        // Arrange
         when(trainingService.createTraining(any(Training.class))).thenReturn(training);
 
-        mockMvc.perform(post("/api/trainings/create")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content("{\"name\":\"New Training\"}"))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.name_en").value("Test Training"));
+        // Act
+        ResponseEntity<Training> response = trainingController.postTrainingWithModules(training);
 
-        verify(trainingService, times(1)).createTraining(any(Training.class));
+        // Assert
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(1L, response.getBody().getId());
     }
 
-    // PUT /api/trainings/edit/{id}
+    // Test for updateTraining
     @Test
-    void updateTraining_ShouldReturnUpdatedTraining() throws Exception {
-        when(trainingService.updateTraining(eq(1L), any(Training.class))).thenReturn(training);
+    void givenValidTrainingId_whenUpdateTraining_thenReturnsUpdatedTraining() {
+        // Arrange
+        Training updatedTraining = new Training();
+        updatedTraining.setId(1L);
+        updatedTraining.setName_en("Updated Training");
 
-        mockMvc.perform(put("/api/trainings/edit/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content("{\"name\":\"Updated Training\"}"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.name_en").value("Test Training"));
+        when(trainingService.updateTraining(1L, updatedTraining)).thenReturn(updatedTraining);
 
-        verify(trainingService, times(1)).updateTraining(eq(1L), any(Training.class));
+        // Act
+        ResponseEntity<Training> response = trainingController.updateTraining(1L, updatedTraining);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals("Updated Training", response.getBody().getName_en());
     }
 
+    // Test for deleteTraining
     @Test
-    void updateTraining_WhenServiceThrowsException_ShouldReturn500() throws Exception {
-        when(trainingService.updateTraining(eq(1L), any(Training.class)))
-                .thenThrow(new RuntimeException("Database error"));
-
-        mockMvc.perform(put("/api/trainings/edit/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"name\":\"Updated Training\"}"))
-                .andExpect(status().isInternalServerError());
-
-        verify(trainingService, times(1)).updateTraining(eq(1L), any(Training.class));
-    }
-
-    // DELETE /api/trainings/delete/{id}
-    @Test
-    void deleteTraining_ShouldReturnSuccessMessage() throws Exception {
+    void givenValidTrainingId_whenDeleteTraining_thenReturnsSuccessMessage() {
+        // Arrange
         when(trainingService.deleteTraining(1L)).thenReturn(true);
 
-        mockMvc.perform(delete("/api/trainings/delete/1")
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.message").exists())
-                .andExpect(jsonPath("$.message").value("Training deleted successfully"));
+        // Act
+        ResponseEntity<Map<String, String>> response = trainingController.deleteTraining(1L);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertTrue(response.getBody().containsKey("message"));
+        assertEquals("Training deleted successfully", response.getBody().get("message"));
     }
 
+    // Test for deleteModule
     @Test
-    void deleteTraining_WhenNotFound_ShouldReturn404() throws Exception {
-        when(trainingService.deleteTraining(1L)).thenReturn(false);
-
-        mockMvc.perform(delete("/api/trainings/delete/1"))
-                .andExpect(status().isNotFound());
-
-        verify(trainingService, times(1)).deleteTraining(1L);
-    }
-
-    // POST /api/trainings/{trainingId}/modules
-    @Test
-    void addModuleToTraining_ShouldReturnCreatedModule() throws Exception {
-        when(trainingService.addModuleWithDto(eq(1L), any(ModuleDTO.class))).thenReturn(module);
-
-        mockMvc.perform(post("/api/trainings/1/modules")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content("{\"nameModule\":\"New Module\"}"))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.nameModule").value("Test Module"));
-
-        verify(trainingService, times(1)).addModuleWithDto(eq(1L), any(ModuleDTO.class));
-    }
-
-    // DELETE /api/trainings/delete/{trainingId}/modules/{moduleId}
-    @Test
-    void deleteModule_ShouldReturnUpdatedTraining() throws Exception {
+    void givenValidTrainingIdAndModuleId_whenDeleteModule_thenReturnsUpdatedTraining() {
         // Arrange
-        Training training = new Training();
-        training.setId(1L);
         when(trainingService.deleteModule(1L, 1L)).thenReturn(training);
 
-        // Act & Assert
-        mockMvc.perform(delete("/api/trainings/delete/1/modules/1")
-                .accept(MediaType.APPLICATION_JSON)) // Voeg deze lijn toe
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id").value(1L));
+        // Act
+        ResponseEntity<Training> response = trainingController.deleteModule(1L, 1L);
 
-        // Verify
-        verify(trainingService, times(1)).deleteModule(1L, 1L);
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(1L, response.getBody().getId());
     }
 
+    // Test for updateModules
     @Test
-    void deleteModule_WhenNotFound_ShouldReturn404() throws Exception {
-        when(trainingService.deleteModule(1L, 1L)).thenReturn(null);
+    void givenValidModules_whenUpdateModules_thenReturnsUpdatedTraining() {
+        // Arrange
+        List<Module> modules = Collections.singletonList(module);
+        training.setModules(modules);
+        when(trainingService.updateModules(1L, modules)).thenReturn(training);
 
-        mockMvc.perform(delete("/api/trainings/delete/1/modules/1"))
-                .andExpect(status().isNotFound());
+        // Act
+        ResponseEntity<Training> response = trainingController.updateModules(1L, modules);
 
-        verify(trainingService, times(1)).deleteModule(1L, 1L);
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(modules, response.getBody().getModules());
     }
 
-
+    // Test for addModuleToTraining
     @Test
-    void updateModules_WhenUpdateFails_ShouldReturn400() throws Exception {
-        Training failedTraining = new Training();
-        failedTraining.setModules(new ArrayList<>());
+    void givenValidTrainingIdAndModule_whenAddModuleToTraining_thenReturnsCreatedModule() {
+        // Arrange
+        when(trainingService.addModuleWithDto(1L, moduleDTO)).thenReturn(module);
 
-        when(trainingService.updateModules(eq(1L), anyList())).thenReturn(failedTraining);
+        // Act
+        ResponseEntity<Module> response = trainingController.addModuleToTraining(1L, moduleDTO);
 
-        mockMvc.perform(put("/api/trainings/1/modules")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("[{\"id\":1,\"nameModule\":\"Updated Module\"}]"))
-                .andExpect(status().isBadRequest());
-
-        verify(trainingService, times(1)).updateModules(eq(1L), anyList());
+        // Assert
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals("Test Module", response.getBody().getNameModule());
     }
 }

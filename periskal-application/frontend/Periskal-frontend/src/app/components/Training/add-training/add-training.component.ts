@@ -154,26 +154,27 @@ export class AddTrainingComponent {
           });
 
           // Now send the updated data with base64 image to the backend
-          this.trainingsService.postTraining(trainingData).subscribe(
-            (response) => {
+          this.trainingsService.postTraining(trainingData).subscribe({
+            next: (response) => {
               this.resetForm();
               this.router.navigate(['/trainingEmployee']);
             },
-            (error) => {
+            error: (error) => {
               console.error('Error posting training', error);
             }
-          );
+          });
         });
       } else {
-        this.trainingsService.postTraining(trainingData).subscribe(
-          (response) => {
+        this.trainingsService.postTraining(trainingData).subscribe({
+          next: (response) => {
             this.resetForm();
             this.router.navigate(['/trainingEmployee']);
           },
-          (error) => {
+          error: (error) => {
             console.error('Error posting training', error);
           }
-        );
+        });
+
       }
     }
   }
