@@ -15,8 +15,8 @@ import java.util.List;
 
 public abstract class BaseAuthenticationService {
 
-    protected final RestTemplate restTemplate = new RestTemplate();
-    protected final String authenticateEndpointUrl = "https://academyws.periskal.com/Academy.asmx";
+    protected final static RestTemplate restTemplate = new RestTemplate();
+    protected final static String authenticateEndpointUrl = "https://academyws.periskal.com/Academy.asmx";
 
    
     public AuthenticateResponse authenticate(String token) {
