@@ -1,5 +1,6 @@
 package periskal.academy.backend.jpa;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
@@ -32,7 +33,7 @@ public class Training {
 
     @OneToMany(mappedBy = "training", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<Module> modules;
+    private List<Module> modules = new ArrayList<>();
 
     public Training(String name_en, String description_en, String name_nl, String description_nl,
                     String name_de, String description_de, String name_fr, String description_fr,

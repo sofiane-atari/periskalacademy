@@ -23,25 +23,24 @@ public class JwtUtilTest {
     }
 
     @Test
-    public void testGenerateToken() {
+    public void givenValidAuthenticateResponse_whenGenerateToken_thenTokenIsNotEmpty() {
         assertFalse(token.isEmpty());
     }
 
     @Test
-    public void testExtractUsername() {
+    public void givenValidToken_whenExtractUsername_thenReturnsCorrectUsername() {
         String extractedUsername = JwtUtil.extractUsername(token);
         assertEquals(authResponse.getUsername(), extractedUsername);
     }
 
     @Test
-    public void testIsTokenExpired() {
+    public void givenValidToken_whenCheckIfExpired_thenTokenIsNotExpired() {
         assertFalse(JwtUtil.isTokenExpired(token));
     }
 
     @Test
-    public void testValidateToken() {
+    public void givenValidToken_whenValidateToken_thenTokenIsValid() {
         assertTrue(JwtUtil.validateToken(token, authResponse.getUsername()));
     }
 
-    
 }
