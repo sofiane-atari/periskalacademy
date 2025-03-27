@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { TrainingService } from '../training.service';
+import { TrainingService } from '../../../services/Training/training.service';
 import { TranslatePipe } from '@ngx-translate/core';
-import { JwtDecoderService } from '../services/JwtDecode/jwt-decoder.service';
-import { RoleAuthorizationService } from '../services/RoleAuthorization/role-authorization.service';
+import { JwtDecoderService } from '../../../services/JwtDecode/jwt-decoder.service';
+import { RoleAuthorizationService } from '../../../services/RoleAuthorization/role-authorization.service';
 
 
 @Component({

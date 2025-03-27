@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
-import { TrainingService } from '../training.service';
+import { TrainingService } from '../../../services/Training/training.service';
 import { ActivatedRoute, Router, UrlTree } from '@angular/router';
 import { training } from '../training-employee/training-employee.component';
 import { FormsModule } from '@angular/forms';

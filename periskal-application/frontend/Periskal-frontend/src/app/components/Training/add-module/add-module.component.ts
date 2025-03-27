@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TrainingService } from '../training.service';
+import { TrainingService } from '../../../services/Training/training.service';
 
 @Component({
   selector: 'app-add-module',

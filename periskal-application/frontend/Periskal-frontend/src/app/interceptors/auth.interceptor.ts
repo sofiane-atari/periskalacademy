@@ -1,6 +1,6 @@
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { AuthenticationService } from '../services/authentication.service';
+import { AuthenticationService } from '../services/Authentication/authentication.service';
 import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
 

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { TrainingService } from '../training.service';
+import { TrainingService } from '../../../services/Training/training.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { module, training } from '../training-employee/training-employee.component';
 import { FormsModule } from '@angular/forms';
