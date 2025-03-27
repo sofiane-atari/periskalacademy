@@ -31,7 +31,6 @@ export class TrainingDetailComponent {
       (data) => {
         this.training = data;
         this.modules = data.modules
-        console.log(this.training.modules);
       },
       (error) => {
         console.error('Error fetching training products', error);

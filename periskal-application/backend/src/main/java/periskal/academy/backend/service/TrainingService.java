@@ -71,9 +71,7 @@ public class TrainingService {
         for (Module module : entity.getModules()) {
             for (Chapter chapter : module.getChapters()) {
                 for (Photo photo : chapter.getPhotos()) {
-                    System.out.println("Photos: " + chapter.getPhotos());
                     String base64ImageData = photo.getImageData();
-                    System.out.println("Received base64 image data: " + base64ImageData);
 
                     photo.setChapter(chapter);
                 }
@@ -147,8 +145,6 @@ public class TrainingService {
                 .orElseThrow(() -> new RuntimeException("Training not found with id: " + trainingId));
 
         Module newModule = new Module();
-        System.out.println(moduleDto.getNameModule());
-        System.out.println(moduleDto.getDescriptionModule());
         newModule.setNameModule(moduleDto.getNameModule());
         newModule.setDescriptionModule(moduleDto.getDescriptionModule());
         newModule.setTraining(existingTraining);

@@ -16,7 +16,6 @@ import periskal.academy.backend.service.Authentication.AuthenticationService;
 import periskal.academy.backend.service.Authentication.DongleAuthenticationService;
 import periskal.academy.backend.util.JwtUtil;
 
-
 @RestController
 @RequestMapping("/api/auth")
 public class AuthenticationController {
@@ -40,12 +39,8 @@ public class AuthenticationController {
         AuthenticateResponse response = authenticationService.authenticate(loginRequest.getUsername(),
                 loginRequest.getPassword());
 
-        // System.out.println("LoginResult: " + response.getLoginResult());
-        // System.out.println("Authentication Response: " + response);
-
         if (response != null && "SuccesByToken".equalsIgnoreCase(response.getLoginResult())) {
             String token = jwtUtil.generateToken(response);
-            //System.out.println("Generated JWT Token: " + token);
             response.setToken(token);
             return ResponseEntity.ok(response);
         } else {
@@ -53,7 +48,6 @@ public class AuthenticationController {
         }
     }
 
-    
     @GetMapping("/decode-token")
     public ResponseEntity<AuthenticateResponse> decodeToken(@RequestParam String login) throws Exception {
 

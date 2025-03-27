@@ -65,7 +65,6 @@ class TrainingServiceTest {
         // Test deleteModule method
         Training updatedTraining = trainingService.deleteModule(1L, 1L);
 
-        System.out.println("Modules after deletion: " + updatedTraining.getModules());
         // Verify that the module got deleted
         assertNotNull(updatedTraining);
 

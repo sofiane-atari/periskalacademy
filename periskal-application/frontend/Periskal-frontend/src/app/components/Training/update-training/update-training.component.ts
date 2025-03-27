@@ -34,11 +34,9 @@ export class UpdateTrainingComponent {
 
   //retrieve training data from database with id from the path
   getTrainingDetails(id: number): void {
-    //console.log(id);
     this.trainingService.getTrainingById(id).subscribe(
       (training) => {
         this.training = training;
-        //console.log(this.training);
       },
       (error) => {
         this.errorMessage = 'Failed to load training details.';
@@ -47,7 +45,6 @@ export class UpdateTrainingComponent {
   }
 
   updateTraining() {
-    //console.log(this.training);
     if (this.training?.id) {
       this.trainingService.updateTraining(this.training.id, this.training).subscribe(
         (data) => {
@@ -70,7 +67,6 @@ export class UpdateTrainingComponent {
   deleteTraining(id: number) {
     this.trainingService.deleteTraining(id).subscribe({
       next: () => {
-        console.log('Training deleted successfully');
         this.router.navigate(['/trainingEmployee']);
       },
       error: (err) => {
@@ -95,7 +91,6 @@ export class UpdateTrainingComponent {
       chapters: []
     };
     this.training?.modules.push(newModule);
-    console.log(this.training?.modules);
   }
 
   goToModuleEditPage() {

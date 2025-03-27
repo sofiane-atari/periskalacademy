@@ -154,10 +154,8 @@ export class AddTrainingComponent {
           });
 
           // Now send the updated data with base64 image to the backend
-          //console.log(trainingData);
           this.trainingsService.postTraining(trainingData).subscribe(
             (response) => {
-              console.log('Training posted successfully!', response);
               this.resetForm();
               this.router.navigate(['/trainingEmployee']);
             },
@@ -167,10 +165,8 @@ export class AddTrainingComponent {
           );
         });
       } else {
-        //console.log(trainingData);
         this.trainingsService.postTraining(trainingData).subscribe(
           (response) => {
-            console.log('Training posted successfully!', response);
             this.resetForm();
             this.router.navigate(['/trainingEmployee']);
           },

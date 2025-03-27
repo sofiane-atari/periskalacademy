@@ -45,10 +45,6 @@ export class ModuleDetailComponent {
         if (this.chapters.length > 0) {
           this.text = this.chapters[this.activeChapterId]?.textChapter?.toString() ?? "";
         }
-
-        console.log(this.modules[this.moduleId]);
-        console.log(this.modules[this.moduleId - 1].chapters);
-        console.log(this.chapters);
       },
       (error) => {
         console.error('Error fetching training products', error);

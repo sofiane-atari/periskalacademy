@@ -31,11 +31,9 @@ export class UpdateModuleComponent {
 
   //retrieve training data from database with id from the path
   getTrainingDetails(id: number): void {
-    //console.log(id);
     this.trainingService.getTrainingById(id).subscribe(
       (training) => {
         this.training = training;
-        console.log(this.training);
         if (this.training)
           this.modules = this.training.modules;
       },
@@ -50,8 +48,6 @@ export class UpdateModuleComponent {
     if (confirmDelete) {
       this.trainingService.deleteModule(trainingId, moduleId).subscribe({
         next: (updatedTraining) => {
-          console.log('Module deleted successfully');
-
           if (this.training?.modules && updatedTraining && updatedTraining.modules) {
             this.training.modules = updatedTraining.modules;
           }
@@ -64,7 +60,6 @@ export class UpdateModuleComponent {
   }
   updateModules() {
     //todo: implement post into database
-    //console.log(this.modules);
     if (this.training?.id) {
       this.trainingService.updateModules(this.training.id, this.modules).subscribe(
         (data) => {

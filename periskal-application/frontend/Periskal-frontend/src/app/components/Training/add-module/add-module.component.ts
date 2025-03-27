@@ -38,12 +38,9 @@ export class AddModuleComponent implements OnInit {
         descriptionModule: this.moduleForm.get('descriptionModule')?.value
       };
 
-      console.log('Sending Module Data:', JSON.stringify(moduleData));
-
       this.trainingService.addModuleToTraining(this.trainingId, moduleData)
         .subscribe({
           next: (response) => {
-            console.log('Module added successfully', response);
             this.router.navigate(['edit', this.trainingId]);
           },
           error: (error) => {
