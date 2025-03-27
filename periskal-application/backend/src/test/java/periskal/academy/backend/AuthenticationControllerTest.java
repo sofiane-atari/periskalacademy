@@ -3,13 +3,11 @@ package periskal.academy.backend;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.Mockito.when;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +45,7 @@ class AuthenticationControllerTest {
         String mockToken = "mockJwtToken";
 
         when(authenticationService.authenticate("testUser", "testPass")).thenReturn(mockResponse);
-        when(jwtUtil.generateToken(mockResponse)).thenReturn(mockToken);
+        when(JwtUtil.generateToken(mockResponse)).thenReturn(mockToken);
         
         // Act
         ResponseEntity<AuthenticateResponse> result = authenticationController.authenticate(loginRequest);

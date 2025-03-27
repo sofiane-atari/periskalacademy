@@ -18,7 +18,6 @@ import periskal.academy.backend.jpa.TrainingRepository;
 import periskal.academy.backend.service.TrainingService;
 
 import java.util.Optional;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 

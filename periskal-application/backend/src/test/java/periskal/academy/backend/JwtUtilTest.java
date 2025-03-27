@@ -11,17 +11,15 @@ import periskal.academy.backend.util.JwtUtil;
 
 public class JwtUtilTest {
 
-    private JwtUtil jwtUtil;
     private String token;
     private AuthenticateResponse authResponse;
 
     @BeforeEach
     public void setUp() {
-        jwtUtil = new JwtUtil();
         authResponse = new AuthenticateResponse();
         authResponse.setUsername("testUser");
         authResponse.setRole("USER");
-        token = jwtUtil.generateToken(authResponse);
+        token = JwtUtil.generateToken(authResponse);
     }
 
     @Test
@@ -31,18 +29,18 @@ public class JwtUtilTest {
 
     @Test
     public void testExtractUsername() {
-        String extractedUsername = jwtUtil.extractUsername(token);
+        String extractedUsername = JwtUtil.extractUsername(token);
         assertEquals(authResponse.getUsername(), extractedUsername);
     }
 
     @Test
     public void testIsTokenExpired() {
-        assertFalse(jwtUtil.isTokenExpired(token));
+        assertFalse(JwtUtil.isTokenExpired(token));
     }
 
     @Test
     public void testValidateToken() {
-        assertTrue(jwtUtil.validateToken(token, authResponse.getUsername()));
+        assertTrue(JwtUtil.validateToken(token, authResponse.getUsername()));
     }
 
     

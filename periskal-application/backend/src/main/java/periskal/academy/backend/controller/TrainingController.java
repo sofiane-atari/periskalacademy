@@ -1,16 +1,11 @@
 package periskal.academy.backend.controller;
 
-import java.net.http.HttpResponse;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +18,6 @@ import periskal.academy.backend.dto.TrainingDTO;
 import periskal.academy.backend.jpa.Module;
 import periskal.academy.backend.jpa.Training;
 import periskal.academy.backend.service.TrainingService;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -97,9 +91,9 @@ public class TrainingController {
 
     @PutMapping("{id}/modules")
     public ResponseEntity<Training> updateModules(@PathVariable Long id, @RequestBody List<Module> modules) {
-        // TODO: process PUT request
+
         Training updatedTraining = trainingService.updateModules(id, modules);
-        if (updatedTraining.getModules() == modules) {
+        if (updatedTraining.getModules().equals(modules)) {
             return ResponseEntity.ok(updatedTraining);
         } else {
             return ResponseEntity.badRequest().build();

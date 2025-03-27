@@ -1,15 +1,10 @@
 package periskal.academy.backend;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.List;
-
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.context.annotation.ComponentScan;
-
 import periskal.academy.backend.jpa.Chapter;
 import periskal.academy.backend.jpa.Module;
 import periskal.academy.backend.jpa.Training;

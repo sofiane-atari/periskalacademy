@@ -7,7 +7,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import periskal.academy.backend.controller.TrainingController;
@@ -93,7 +92,7 @@ class TrainingControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.name_en").value("Test Training"));
+                .andExpect(jsonPath("$.setName_en").value("Test Training"));
 
         // 3. Verify
         verify(trainingService, times(1)).getTrainingWithProducts(1L);

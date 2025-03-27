@@ -4,7 +4,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Method;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
@@ -103,8 +102,8 @@ class JwtAuthenticationFilterTest {
         String username = "testuser";
         
         when(request.getHeader("Authorization")).thenReturn("Bearer " + token);
-        when(jwtUtil.extractUsername(token)).thenReturn(username);
-        when(jwtUtil.validateToken(eq(token), eq(username))).thenReturn(false);
+        when(JwtUtil.extractUsername(token)).thenReturn(username);
+        when(JwtUtil.validateToken(eq(token), eq(username))).thenReturn(false);
         
         doFilterInternalMethod.invoke(filter, request, response, filterChain);
         
@@ -117,7 +116,7 @@ class JwtAuthenticationFilterTest {
         String token = "expired.jwt.token";
         
         when(request.getHeader("Authorization")).thenReturn("Bearer " + token);
-        when(jwtUtil.extractUsername(token)).thenThrow(
+        when(JwtUtil.extractUsername(token)).thenThrow(
             new ExpiredJwtException(null, null, "JWT token has expired")
         );
         
@@ -138,7 +137,7 @@ class JwtAuthenticationFilterTest {
         String token = "malformed.jwt.token";
         
         when(request.getHeader("Authorization")).thenReturn("Bearer " + token);
-        when(jwtUtil.extractUsername(token)).thenThrow(
+        when(JwtUtil.extractUsername(token)).thenThrow(
             new MalformedJwtException("Invalid JWT token")
         );
         
@@ -159,7 +158,7 @@ class JwtAuthenticationFilterTest {
         String token = "invalid_signature.jwt.token";
         
         when(request.getHeader("Authorization")).thenReturn("Bearer " + token);
-        when(jwtUtil.extractUsername(token)).thenThrow(
+        when(JwtUtil.extractUsername(token)).thenThrow(
             new SignatureException("Invalid JWT signature")
         );
         
