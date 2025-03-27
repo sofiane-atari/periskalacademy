@@ -10,8 +10,8 @@ export class RoleAuthorizationService {
   
   hasPermission(requiredPermissions: string[]): boolean {
     const userRole = this.jwtDecoderService.getUserRole();
-    // If user has Admin or Support role, they can do everything
-    if (userRole === 'ADMIN' || userRole === 'Support') {
+    // If user has Admin role, they can do everything atm
+    if (userRole === 'ADMIN') {
       return true;
     }
     
@@ -20,10 +20,10 @@ export class RoleAuthorizationService {
   }
   
   canEditContent(): boolean {
-    return this.hasPermission(['ADMIN', 'Support']);
+    return this.hasPermission(['ADMIN']);
   }
   
   canAddContent(): boolean {
-    return this.hasPermission(['ADMIN', 'Support']);
+    return this.hasPermission(['ADMIN']);
   }
 }
