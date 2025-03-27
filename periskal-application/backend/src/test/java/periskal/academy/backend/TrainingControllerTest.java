@@ -1,7 +1,7 @@
 package periskal.academy.backend;
 
 import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -64,12 +64,10 @@ class TrainingControllerTest {
         ResponseEntity<List<TrainingDTO>> response = trainingController.getAllTrainings();
 
         // Assert
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertFalse(response.getBody().isEmpty());
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotEmpty();
     }
 
-    // Test for getProductsForTraining
     @Test
     void givenValidTrainingId_whenGetProductsForTraining_thenReturnsTraining() {
         // Arrange
@@ -79,12 +77,11 @@ class TrainingControllerTest {
         ResponseEntity<Training> response = trainingController.getProductsForTraining(1L);
 
         // Assert
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals(1L, response.getBody().getId());
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().getId()).isEqualTo(1L);
     }
 
-    // Test for getModuleWithChapters
     @Test
     void givenValidTrainingId_whenGetModuleWithChapters_thenReturnsModules() {
         // Arrange
@@ -95,12 +92,10 @@ class TrainingControllerTest {
         ResponseEntity<List<Module>> response = trainingController.getModuleWithChapters(1L);
 
         // Assert
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals(1, response.getBody().size());
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull().hasSize(1);
     }
 
-    // Test for postTrainingWithModules
     @Test
     void givenNewTraining_whenPostTrainingWithModules_thenReturnsCreatedTraining() {
         // Arrange
@@ -110,12 +105,11 @@ class TrainingControllerTest {
         ResponseEntity<Training> response = trainingController.postTrainingWithModules(training);
 
         // Assert
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals(1L, response.getBody().getId());
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().getId()).isEqualTo(1L);
     }
 
-    // Test for updateTraining
     @Test
     void givenValidTrainingId_whenUpdateTraining_thenReturnsUpdatedTraining() {
         // Arrange
@@ -129,12 +123,11 @@ class TrainingControllerTest {
         ResponseEntity<Training> response = trainingController.updateTraining(1L, updatedTraining);
 
         // Assert
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals("Updated Training", response.getBody().getName_en());
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().getName_en()).isEqualTo("Updated Training");
     }
 
-    // Test for deleteTraining
     @Test
     void givenValidTrainingId_whenDeleteTraining_thenReturnsSuccessMessage() {
         // Arrange
@@ -144,12 +137,11 @@ class TrainingControllerTest {
         ResponseEntity<Map<String, String>> response = trainingController.deleteTraining(1L);
 
         // Assert
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertTrue(response.getBody().containsKey("message"));
-        assertEquals("Training deleted successfully", response.getBody().get("message"));
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).containsKey("message");
+        assertThat(response.getBody().get("message")).isEqualTo("Training deleted successfully");
     }
 
-    // Test for deleteModule
     @Test
     void givenValidTrainingIdAndModuleId_whenDeleteModule_thenReturnsUpdatedTraining() {
         // Arrange
@@ -159,12 +151,11 @@ class TrainingControllerTest {
         ResponseEntity<Training> response = trainingController.deleteModule(1L, 1L);
 
         // Assert
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals(1L, response.getBody().getId());
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().getId()).isEqualTo(1L);
     }
 
-    // Test for updateModules
     @Test
     void givenValidModules_whenUpdateModules_thenReturnsUpdatedTraining() {
         // Arrange
@@ -176,12 +167,11 @@ class TrainingControllerTest {
         ResponseEntity<Training> response = trainingController.updateModules(1L, modules);
 
         // Assert
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals(modules, response.getBody().getModules());
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().getModules()).isEqualTo(modules);
     }
 
-    // Test for addModuleToTraining
     @Test
     void givenValidTrainingIdAndModule_whenAddModuleToTraining_thenReturnsCreatedModule() {
         // Arrange
@@ -191,8 +181,8 @@ class TrainingControllerTest {
         ResponseEntity<Module> response = trainingController.addModuleToTraining(1L, moduleDTO);
 
         // Assert
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals("Test Module", response.getBody().getNameModule());
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().getNameModule()).isEqualTo("Test Module");
     }
 }

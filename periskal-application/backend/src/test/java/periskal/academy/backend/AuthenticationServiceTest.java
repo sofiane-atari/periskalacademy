@@ -1,6 +1,6 @@
 package periskal.academy.backend;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.*;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.*;
@@ -32,8 +32,6 @@ public class AuthenticationServiceTest {
     void setUp() throws Exception {
         authenticationService = new AuthenticationService();
 
-        // Use reflection to access the protected RestTemplate instance from parent
-        // class
         Field restTemplateField = AuthenticationService.class.getSuperclass().getDeclaredField("restTemplate");
         restTemplateField.setAccessible(true);
         restTemplate = (RestTemplate) restTemplateField.get(authenticationService);
@@ -72,7 +70,6 @@ public class AuthenticationServiceTest {
                   </soap12:Body>
                 </soap12:Envelope>""";
 
-        // Mock the EncryptionUtil.encode method
         try (MockedStatic<EncryptionUtil> mockedStatic = Mockito.mockStatic(EncryptionUtil.class)) {
             mockedStatic.when(() -> EncryptionUtil.encode(anyString(), anyString()))
                     .thenReturn("encoded_token");
@@ -84,15 +81,15 @@ public class AuthenticationServiceTest {
 
             AuthenticateResponse response = authenticationService.authenticate("user", "pass");
 
-            assertNotNull(response);
-            assertEquals("12345", response.getId());
-            assertEquals("testUser", response.getUsername());
-            assertEquals("John", response.getFirstname());
-            assertEquals("Doe", response.getLastname());
-            assertEquals("TestShip", response.getShipname());
-            assertEquals("Admin", response.getRole());
-            assertEquals("Success", response.getLoginResult());
-            assertIterableEquals(List.of("ProductA", "ProductB"), response.getProducts());
+            assertThat(response).isNotNull();
+            assertThat(response.getId()).isEqualTo("12345");
+            assertThat(response.getUsername()).isEqualTo("testUser");
+            assertThat(response.getFirstname()).isEqualTo("John");
+            assertThat(response.getLastname()).isEqualTo("Doe");
+            assertThat(response.getShipname()).isEqualTo("TestShip");
+            assertThat(response.getRole()).isEqualTo("Admin");
+            assertThat(response.getLoginResult()).isEqualTo("Success");
+            assertThat(response.getProducts()).containsExactly("ProductA", "ProductB");
 
             mockServer.verify();
         }
@@ -109,7 +106,7 @@ public class AuthenticationServiceTest {
 
             AuthenticateResponse response = authenticationService.authenticate("user", "pass");
 
-            assertNull(response);
+            assertThat(response).isNull();
             mockServer.verify();
         }
     }
@@ -127,9 +124,9 @@ public class AuthenticationServiceTest {
 
             AuthenticateResponse response = authenticationService.authenticate("user", "pass");
 
-            assertNotNull(response);
-            assertNull(response.getId());
-            assertNull(response.getUsername());
+            assertThat(response).isNotNull();
+            assertThat(response.getId()).isNull();
+            assertThat(response.getUsername()).isNull();
             mockServer.verify();
         }
     }
@@ -145,7 +142,7 @@ public class AuthenticationServiceTest {
 
             AuthenticateResponse response = authenticationService.authenticate("user", "invalid");
 
-            assertNull(response);
+            assertThat(response).isNull();
             mockServer.verify();
         }
     }
@@ -158,7 +155,7 @@ public class AuthenticationServiceTest {
 
             AuthenticateResponse response = authenticationService.authenticate("user", "pass");
 
-            assertNull(response);
+            assertThat(response).isNull();
         }
     }
 }
