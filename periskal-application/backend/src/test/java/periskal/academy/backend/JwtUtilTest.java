@@ -1,8 +1,7 @@
 package periskal.academy.backend;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.*;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -24,23 +23,22 @@ public class JwtUtilTest {
 
     @Test
     public void givenValidAuthenticateResponse_whenGenerateToken_thenTokenIsNotEmpty() {
-        assertFalse(token.isEmpty());
+        assertThat(token).isNotEmpty();
     }
 
     @Test
     public void givenValidToken_whenExtractUsername_thenReturnsCorrectUsername() {
         String extractedUsername = JwtUtil.extractUsername(token);
-        assertEquals(authResponse.getUsername(), extractedUsername);
+        assertThat(extractedUsername).isEqualTo(authResponse.getUsername());
     }
 
     @Test
     public void givenValidToken_whenCheckIfExpired_thenTokenIsNotExpired() {
-        assertFalse(JwtUtil.isTokenExpired(token));
+        assertThat(JwtUtil.isTokenExpired(token)).isFalse();
     }
 
     @Test
     public void givenValidToken_whenValidateToken_thenTokenIsValid() {
-        assertTrue(JwtUtil.validateToken(token, authResponse.getUsername()));
+        assertThat(JwtUtil.validateToken(token, authResponse.getUsername())).isTrue();
     }
-
 }

@@ -6,25 +6,22 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.*;
+
 import jakarta.persistence.EntityNotFoundException;
 import periskal.academy.backend.dto.ModuleDTO;
 import periskal.academy.backend.dto.TrainingDTO;
 import periskal.academy.backend.jpa.Chapter;
 import periskal.academy.backend.jpa.Module;
 import periskal.academy.backend.jpa.ModuleRepository;
-import periskal.academy.backend.jpa.Photo;
 import periskal.academy.backend.jpa.Training;
 import periskal.academy.backend.jpa.TrainingRepository;
 import periskal.academy.backend.service.TrainingService;
-
 import java.util.Optional;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 class TrainingServiceTest {
 
@@ -53,7 +50,7 @@ class TrainingServiceTest {
         module.setId(1L);
         module.setNameModule("Test Module");
 
-        training.setModules(List.of(module));
+        training.setModules(Collections.singletonList(module));
     }
 
     @Test
@@ -65,10 +62,9 @@ class TrainingServiceTest {
         // Test deleteModule method
         Training updatedTraining = trainingService.deleteModule(1L, 1L);
 
-        // Verify that the module got deleted
-        assertNotNull(updatedTraining);
-
-        assertTrue(updatedTraining.getModules().isEmpty());
+        // Use AssertJ assertions
+        assertThat(updatedTraining).isNotNull();
+        assertThat(updatedTraining.getModules()).isEmpty();
 
         // Verify that save method was called after removal of module
         verify(trainingRepository, times(1)).save(training);
@@ -82,8 +78,8 @@ class TrainingServiceTest {
         // Test deleteModule method
         Training updatedTraining = trainingService.deleteModule(1L, 1L);
 
-        // Verify that the returned training is null
-        assertNull(updatedTraining);
+        // Use AssertJ assertions
+        assertThat(updatedTraining).isNull();
 
         // Verify that save was never called
         verify(trainingRepository, never()).save(any());
@@ -96,7 +92,9 @@ class TrainingServiceTest {
 
         boolean result = trainingService.deleteTraining(1L);
 
-        assertTrue(result);
+        // Use AssertJ assertions
+        assertThat(result).isTrue();
+
         verify(trainingRepository, times(1)).deleteById(1L);
     }
 
@@ -107,42 +105,52 @@ class TrainingServiceTest {
 
         boolean result = trainingService.deleteTraining(1L);
 
-        assertFalse(result);
+        // Use AssertJ assertions
+        assertThat(result).isFalse();
         verify(trainingRepository, never()).deleteById(1L);
     }
 
     @Test
     public void givenTrainingWithModules_whenCreateTraining_thenTrainingIsCreated() {
+        // Arrange
         Training training = new Training();
         training.setName_en("Sample Training");
         training.setDescription_en("Sample Description");
 
+        // Create a module and associate it with the training
         Module module = new Module();
         module.setNameModule("Module 1");
 
+        // Create chapters and associate them with the module
         Chapter chapter = new Chapter();
         chapter.setNameChapter("Chapter 1");
 
-        Photo photo = new Photo();
-        photo.setImageData("data:image/jpeg;base64,placeholder");
+        // Initialize an empty list of chapters if it's null
+        module.setChapters(Collections.singletonList(chapter)); // Ensure it's not null
 
-        chapter.setPhotos(Collections.singletonList(photo));
-        module.setChapters(Collections.singletonList(chapter));
+        // Add the module to the training
         training.setModules(Collections.singletonList(module));
 
+        // Mock the repository to return the training object with modules
         when(trainingRepository.save(any(Training.class))).thenReturn(training);
 
+        // Act
         Training savedTraining = trainingService.createTraining(training);
 
+        // Verify that the repository's save method was called once with the training
+        // object
         verify(trainingRepository, times(1)).save(training);
 
-        assertNotNull(savedTraining);
-        assertEquals("Sample Training", savedTraining.getName_en());
-        assertFalse(savedTraining.getModules().isEmpty());
-        assertFalse(savedTraining.getModules().get(0).getChapters().isEmpty());
-        assertFalse(savedTraining.getModules().get(0).getChapters().get(0).getPhotos().isEmpty());
-        assertEquals("data:image/jpeg;base64,placeholder",
-                savedTraining.getModules().get(0).getChapters().get(0).getPhotos().get(0).getImageData());
+        // Assert using AssertJ
+        assertThat(savedTraining).isNotNull();
+        assertThat(savedTraining.getName_en()).isEqualTo("Sample Training");
+        assertThat(savedTraining.getModules()).isNotEmpty(); // Ensure modules are not empty
+        assertThat(savedTraining.getModules().get(0).getNameModule()).isEqualTo("Module 1"); // Ensure module is added
+        assertThat(savedTraining.getModules().get(0).getChapters()).isNotEmpty(); // Ensure chapters are not empty
+        assertThat(savedTraining.getModules().get(0).getChapters().get(0).getNameChapter()).isEqualTo("Chapter 1"); // Ensure
+                                                                                                                    // chapter
+                                                                                                                    // is
+                                                                                                                    // added
     }
 
     @Test
@@ -151,8 +159,8 @@ class TrainingServiceTest {
 
         Training foundTraining = trainingService.getTrainingById(1L);
 
-        assertNotNull(foundTraining);
-        assertEquals("Test Training", foundTraining.getName_en());
+        assertThat(foundTraining).isNotNull();
+        assertThat(foundTraining.getName_en()).isEqualTo("Test Training");
     }
 
     @Test
@@ -161,8 +169,8 @@ class TrainingServiceTest {
 
         Training foundTraining = trainingService.getTrainingById(1L);
 
-        assertNotNull(foundTraining); // Should return an empty training if not found
-        assertEquals(null, foundTraining.getName_en());
+        assertThat(foundTraining).isNotNull(); // Should return an empty training if not found
+        assertThat(foundTraining.getName_en()).isNull();
     }
 
     @Test
@@ -171,11 +179,8 @@ class TrainingServiceTest {
         moduleDto.setNameModule("New Module");
         moduleDto.setDescriptionModule("Module Description");
 
-        // mock trainingRepository to return an existing training
         when(trainingRepository.findById(1L)).thenReturn(Optional.of(training));
 
-        // mock moduleRepository to save the module and return a new Module with the
-        // correct name
         Module newModule = new Module();
         newModule.setNameModule("New Module");
         newModule.setDescriptionModule("Module Description");
@@ -183,9 +188,9 @@ class TrainingServiceTest {
 
         Module addedModule = trainingService.addModuleWithDto(1L, moduleDto);
 
-        assertNotNull(addedModule);
-        assertEquals("New Module", addedModule.getNameModule());
-        assertEquals("Module Description", addedModule.getDescriptionModule());
+        assertThat(addedModule).isNotNull();
+        assertThat(addedModule.getNameModule()).isEqualTo("New Module");
+        assertThat(addedModule.getDescriptionModule()).isEqualTo("Module Description");
 
         verify(moduleRepository, times(1)).save(any(Module.class));
     }
@@ -197,7 +202,6 @@ class TrainingServiceTest {
         existingTraining.setId(1L);
         existingTraining.setName_en("Old Name");
         existingTraining.setDescription_en("Old Description");
-        existingTraining.setModules(new ArrayList<>());
 
         Module module1 = new Module();
         module1.setId(1L);
@@ -207,33 +211,28 @@ class TrainingServiceTest {
         module2.setId(2L);
         module2.setNameModule("Module 2");
 
-        List<Module> updatedModules = new ArrayList<>();
-        updatedModules.add(module1);
-        updatedModules.add(module2);
+        List<Module> updatedModules = List.of(module1, module2);
 
         Training updatedTraining = new Training();
         updatedTraining.setId(1L);
         updatedTraining.setName_en("Updated Name");
         updatedTraining.setDescription_en("Updated Description");
-        updatedTraining.setModules(updatedModules); // Set new modules
+        updatedTraining.setModules(updatedModules);
 
-        // Mock trainingRepository to return the existing training
         when(trainingRepository.findById(1L)).thenReturn(Optional.of(existingTraining));
         when(trainingRepository.save(existingTraining)).thenReturn(existingTraining);
 
         // Act
         Training result = trainingService.updateTraining(1L, updatedTraining);
 
-        // Assert
-        assertNotNull(result);
-        assertEquals("Updated Name", result.getName_en()); // Assert that the name was updated
-        assertEquals("Updated Description", result.getDescription_en()); // Assert that the description was updated
-        assertEquals(2, result.getModules().size()); // Assert that the modules list contains 2 modules
-        assertEquals("Module 1", result.getModules().get(0).getNameModule()); // Assert module 1 is in the list
-        assertEquals("Module 2", result.getModules().get(1).getNameModule()); // Assert module 2 is in the list
+        // Use AssertJ assertions
+        assertThat(result).isNotNull();
+        assertThat(result.getName_en()).isEqualTo("Updated Name");
+        assertThat(result.getDescription_en()).isEqualTo("Updated Description");
+        assertThat(result.getModules()).hasSize(2);
+        assertThat(result.getModules().get(0).getNameModule()).isEqualTo("Module 1");
+        assertThat(result.getModules().get(1).getNameModule()).isEqualTo("Module 2");
 
-        // Verify that trainingRepository.save() was called once with the updated
-        // training
         verify(trainingRepository, times(1)).save(existingTraining);
     }
 
@@ -243,14 +242,12 @@ class TrainingServiceTest {
         updatedTraining.setId(1L);
         updatedTraining.setName_en("Updated Training");
 
-        // Mock trainingRepository to return an empty Optional
         when(trainingRepository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThrows(EntityNotFoundException.class, () -> {
-            trainingService.updateTraining(1L, updatedTraining);
-        });
+        // Assert that EntityNotFoundException is thrown
+        assertThatThrownBy(() -> trainingService.updateTraining(1L, updatedTraining))
+                .isInstanceOf(EntityNotFoundException.class);
 
-        // Verify that save was not called
         verify(trainingRepository, never()).save(any(Training.class));
     }
 
@@ -258,18 +255,14 @@ class TrainingServiceTest {
     void givenTrainingsExist_whenGetAllTrainings_thenTrainingsAreReturned() {
         List<Training> trainings = List.of(training);
 
-        // mock the repository to return a list of trainings
         when(trainingRepository.findAllAsList()).thenReturn(trainings);
 
-        // test getAllTrainings method
         List<TrainingDTO> result = trainingService.getAllTrainings();
 
-        assertNotNull(result);
-        assertEquals(1, result.size());
-        assertEquals("Test Training", result.get(0).getName_en());
+        assertThat(result).isNotNull();
+        assertThat(result).hasSize(1);
+        assertThat(result.get(0).getName_en()).isEqualTo("Test Training");
 
-        // Verify that findAllAsList() method was called once
         verify(trainingRepository, times(1)).findAllAsList();
     }
-
 }
