@@ -115,8 +115,8 @@ class TrainingServiceTest {
     @Test
     public void testCreateTraining() {
         Training training = new Training();
-        training.setName("Sample Training");
-        training.setDescription("Sample Description");
+        training.setName_en("Sample Training");
+        training.setDescription_en("Sample Description");
 
         Module module = new Module();
         module.setNameModule("Module 1");
@@ -138,7 +138,7 @@ class TrainingServiceTest {
         verify(trainingRepository, times(1)).save(training);
 
         assertNotNull(savedTraining);
-        assertEquals("Sample Training", savedTraining.getName());
+        assertEquals("Sample Training", savedTraining.getName_en());
         assertFalse(savedTraining.getModules().isEmpty());
         assertFalse(savedTraining.getModules().get(0).getChapters().isEmpty());
         assertFalse(savedTraining.getModules().get(0).getChapters().get(0).getPhotos().isEmpty());

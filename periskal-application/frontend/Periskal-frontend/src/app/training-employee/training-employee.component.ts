@@ -15,6 +15,7 @@ import { RoleAuthorizationService } from '../services/RoleAuthorization/role-aut
 
 export class TrainingEmployeeComponent implements OnInit {
   public trainingsData: training[] = [];
+  public lang: String | null = "";
 
   constructor(
     private router: Router,
@@ -25,6 +26,7 @@ export class TrainingEmployeeComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.lang = localStorage.getItem('lang');
     const role = this.jwtDecoderService.getUserRole();
     const products: string[] = this.jwtDecoderService.getProducts() || [];
 
@@ -34,7 +36,7 @@ export class TrainingEmployeeComponent implements OnInit {
           if (products && products.length > 0) {
             this.trainingsData = data.filter(training => {
               return products.some(product =>
-                training.name.toLowerCase().includes(product.toLowerCase())
+                training.name_en.toLowerCase().includes(product.toLowerCase())
               );
             });
           } else {
@@ -53,6 +55,40 @@ export class TrainingEmployeeComponent implements OnInit {
 
   goToTrainingDetails(trainingId: number) {
     this.router.navigate(['/training', trainingId]);
+  }
+
+  getTrainingName(index: number) {
+    if (this.lang == "en") {
+      return this.trainingsData[index].name_en
+    }
+    if (this.lang == "nl") {
+      return this.trainingsData[index].name_nl
+    }
+    if (this.lang == "de") {
+      return this.trainingsData[index].name_de
+    }
+    if (this.lang == "fr") {
+      return this.trainingsData[index].name_fr
+    } else {
+      return "Unknown language"
+    }
+  }
+
+  getTrainingDescription(index: number) {
+    if (this.lang == "en") {
+      return this.trainingsData[index].description_en
+    }
+    if (this.lang == "nl") {
+      return this.trainingsData[index].description_nl
+    }
+    if (this.lang == "de") {
+      return this.trainingsData[index].description_de
+    }
+    if (this.lang == "fr") {
+      return this.trainingsData[index].description_fr
+    } else {
+      return "Unknown language"
+    }
   }
 
   goToAddPage() {
