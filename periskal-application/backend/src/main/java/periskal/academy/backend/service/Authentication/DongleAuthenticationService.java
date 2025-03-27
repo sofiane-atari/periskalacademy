@@ -1,8 +1,11 @@
 package periskal.academy.backend.service.Authentication;
 
 import org.springframework.stereotype.Service;
+
+import lombok.extern.slf4j.Slf4j;
 import periskal.academy.backend.model.AuthenticateResponse;
 
+@Slf4j
 @Service
 public class DongleAuthenticationService extends BaseAuthenticationService {
 
@@ -28,4 +31,3 @@ public class DongleAuthenticationService extends BaseAuthenticationService {
         return super.authenticate(token);
     }
 }
-

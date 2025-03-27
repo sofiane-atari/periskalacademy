@@ -17,12 +17,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.extern.slf4j.Slf4j;
 import periskal.academy.backend.dto.ModuleDTO;
 import periskal.academy.backend.dto.TrainingDTO;
 import periskal.academy.backend.jpa.Module;
 import periskal.academy.backend.jpa.Training;
 import periskal.academy.backend.service.TrainingService;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/trainings")
 public class TrainingController {
@@ -71,7 +73,7 @@ public ResponseEntity<List<TrainingDTO>> getFilteredTrainings(
             Training savedTraining = trainingService.updateTraining(id, updatedTraining);
             return ResponseEntity.ok(savedTraining);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Error updating training with ID: {}", id, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

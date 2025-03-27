@@ -1,9 +1,12 @@
 package periskal.academy.backend.service.Authentication;
 
 import org.springframework.stereotype.Service;
+
+import lombok.extern.slf4j.Slf4j;
 import periskal.academy.backend.model.AuthenticateResponse;
 import periskal.academy.backend.util.EncryptionUtil;
 
+@Slf4j
 @Service
 public class AuthenticationService extends BaseAuthenticationService {
 
@@ -26,17 +29,11 @@ public class AuthenticationService extends BaseAuthenticationService {
      */
     public AuthenticateResponse authenticate(String username, String password) {
         try {
-            // Pre-process the token using your encryption utility.
             String token = EncryptionUtil.encode(username, password);
             return super.authenticate(token);
         } catch (Exception e) {
-            // Handle the exception appropriately
-            e.printStackTrace();
+            log.error("Authentication failed for user: {}", username, e);
             return null;
         }
     }
 }
-
-
-
-
