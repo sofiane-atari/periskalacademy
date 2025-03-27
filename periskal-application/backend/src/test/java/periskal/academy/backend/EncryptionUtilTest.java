@@ -1,7 +1,7 @@
 package periskal.academy.backend;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.assertj.core.api.Assertions.*;
+
 import org.junit.jupiter.api.Test;
 
 import periskal.academy.backend.util.EncryptionUtil;
@@ -14,11 +14,10 @@ public class EncryptionUtilTest {
         String password = "Demo1979!";
         String expectedToken = "cCt0azhyNkdyRlFrQmc4cTFubGh2Zz09";
 
-        try {
+        // Using AssertJ for assertions
+        assertThatCode(() -> {
             String actualToken = EncryptionUtil.encode(username, password);
-            assertEquals(expectedToken, actualToken, "The encoded token does not match the expected value.");
-        } catch (Exception e) {
-            fail("Exception should not have been thrown: " + e.getMessage());
-        }
+            assertThat(actualToken).isEqualTo(expectedToken);
+        }).doesNotThrowAnyException();
     }
 }

@@ -1,7 +1,7 @@
 package periskal.academy.backend;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -75,7 +75,7 @@ class JwtAuthenticationFilterTest {
         doFilterInternalMethod.invoke(filter, request, response, filterChain);
 
         verify(filterChain).doFilter(request, response);
-        assertNull(SecurityContextHolder.getContext().getAuthentication());
+        assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();
     }
 
     @Test
@@ -85,7 +85,7 @@ class JwtAuthenticationFilterTest {
         doFilterInternalMethod.invoke(filter, request, response, filterChain);
 
         verify(filterChain).doFilter(request, response);
-        assertNull(SecurityContextHolder.getContext().getAuthentication());
+        assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();
     }
 
     @Test
@@ -101,7 +101,7 @@ class JwtAuthenticationFilterTest {
             doFilterInternalMethod.invoke(filter, request, response, filterChain);
 
             verify(filterChain).doFilter(request, response);
-            assertNull(SecurityContextHolder.getContext().getAuthentication());
+            assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();
         }
     }
 
@@ -121,8 +121,8 @@ class JwtAuthenticationFilterTest {
             printWriter.flush();
 
             String responseBody = stringWriter.toString();
-            assertTrue(responseBody.contains("\"error\":\"token_expired\""));
-            assertTrue(responseBody.contains("\"message\":\"JWT token has expired\""));
+            assertThat(responseBody).contains("\"error\":\"token_expired\"");
+            assertThat(responseBody).contains("\"message\":\"JWT token has expired\"");
             verify(filterChain, never()).doFilter(any(), any());
         }
     }
@@ -143,8 +143,8 @@ class JwtAuthenticationFilterTest {
             printWriter.flush();
 
             String responseBody = stringWriter.toString();
-            assertTrue(responseBody.contains("\"error\":\"invalid_token\""));
-            assertTrue(responseBody.contains("\"message\":\"Invalid JWT token\""));
+            assertThat(responseBody).contains("\"error\":\"invalid_token\"");
+            assertThat(responseBody).contains("\"message\":\"Invalid JWT token\"");
             verify(filterChain, never()).doFilter(any(), any());
         }
     }
@@ -165,10 +165,9 @@ class JwtAuthenticationFilterTest {
             printWriter.flush();
 
             String responseBody = stringWriter.toString();
-            assertTrue(responseBody.contains("\"error\":\"invalid_signature\""));
-            assertTrue(responseBody.contains("\"message\":\"Invalid JWT signature\""));
+            assertThat(responseBody).contains("\"error\":\"invalid_signature\"");
+            assertThat(responseBody).contains("\"message\":\"Invalid JWT signature\"");
             verify(filterChain, never()).doFilter(any(), any());
         }
     }
-
 }
