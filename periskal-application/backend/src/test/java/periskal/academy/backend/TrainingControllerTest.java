@@ -7,7 +7,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import periskal.academy.backend.controller.TrainingController;
@@ -75,7 +74,7 @@ class TrainingControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1L)) // Array van objecten
-                .andExpect(jsonPath("$[0].name").value("Test Training"));
+                .andExpect(jsonPath("$[0].name_en").value("Test Training"));
     }
 
     // GET /api/trainings/{trainingId}
@@ -93,7 +92,7 @@ class TrainingControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.name").value("Test Training"));
+                .andExpect(jsonPath("$.setName_en").value("Test Training"));
 
         // 3. Verify
         verify(trainingService, times(1)).getTrainingWithProducts(1L);
@@ -124,7 +123,7 @@ class TrainingControllerTest {
                 .content("{\"name\":\"New Training\"}"))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.name").value("Test Training"));
+                .andExpect(jsonPath("$.name_en").value("Test Training"));
 
         verify(trainingService, times(1)).createTraining(any(Training.class));
     }
@@ -140,7 +139,7 @@ class TrainingControllerTest {
                 .content("{\"name\":\"Updated Training\"}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.name").value("Test Training"));
+                .andExpect(jsonPath("$.name_en").value("Test Training"));
 
         verify(trainingService, times(1)).updateTraining(eq(1L), any(Training.class));
     }
