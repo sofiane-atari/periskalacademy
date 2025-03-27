@@ -3,9 +3,9 @@ import { FormArray, FormBuilder, FormGroup, FormsModule, Validators, ReactiveFor
 import { module } from '../training-employee/training-employee.component';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { TrainingService } from '../training.service';
+import { TrainingService } from '../../../services/Training/training.service';
 import { TranslatePipe } from '@ngx-translate/core';
-import { PhotoUploadComponent } from "../photo-upload/photo-upload.component";
+import { PhotoUploadComponent } from '../../photo-upload/photo-upload.component';
 
 @Component({
   selector: 'app-add-training',

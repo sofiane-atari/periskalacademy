@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, forwardRef } from '@angular/core';
-import { PhotoUploadService } from '../photo-upload.service';
+import { PhotoUploadService } from '../../services/Photoupload/photo-upload.service';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
