@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from '../../services/Authentication/authentication.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-dongle-login',
+  imports: [TranslatePipe],
   templateUrl: './dongle-login.component.html',
   styleUrls: ['./dongle-login.component.css']
 })

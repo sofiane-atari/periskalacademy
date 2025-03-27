@@ -1,26 +1,51 @@
 {
-  "EMPLOYEE_DASHBOARD": "Medewerker Dashboard",
-  "TEST_COMPONENT": "Test Component",
   "HOME": "Homepagina",
+  "EMPLOYEE_DASHBOARD": "Medewerker Dashboard",
   "SKIPPERS": "Schippers",
-  "MODULES": "Modules",
-  "TAKE_COURSE": "Cursus volgen",
+
+
   "NEW_TRAINING_CREATE": "Nieuwe training aanmaken",
-  "TRAINING_INFORMATION": "Training informatie",
+  "CREATE_TRAINING": "Maak training aan",
   "TRAINING_NAME": "Naam van de training",
   "DESCRIPTION": "Beschrijving",
+  "TRAINING_INFORMATION": "Training informatie",
+  "UPDATE_TRAINING": "Training bewerken",
+  "TRAINING_NOT_FOUND": "Training niet gevonden",
+
+
+  "MODULES": "Modules",
+  "MODULE": "Module",
   "MODULE_INFORMATION": "Modules informatie",
   "MODULE_TITLE": "Module Titel",
   "MODULE_DESCRIPTION": "Module Beschrijving",
   "ADD_NEW_MODULE": "Nieuwe module toevoegen",
-  "CREATE_TRAINING": "Maak training aan",
-  "EDIT": "Bewerken",
-  "UPDATE_TRAINING": "Training bewerken",
   "DELETE_MODULE": "Module verwijderen",
+  "DELETE_TRAINING": "Training verwijderen",
+
+
+  "EDIT": "Bewerken",
   "SAVE_CHANGES": "Wijzigingen opslaan",
-  "TRAINING_NOT_FOUND": "Training niet gevonden",
   "LOADING": "Laden...",
-  "MODULE": "Module",
-  "NAME": "Naam",
-  "DELETE_TRAINING": "Training verwijderen"
+  "TAKE_COURSE": "Cursus volgen",
+  "SUCCESFULL_LOGIN": "Succesvol ingelogd!",
+  "REDIRECTING": "Doorverwijzen...",
+  "REDIRECTING_TO_DASHBOARD": "Doorverwijzen naar dashboard...",
+  "DELETE": "Verwijderen",
+
+  "USER_PROFILE": "Gebruikersprofiel",
+  "INFORMATION": "Informatie",
+  "PRODUCTS": "Producten",
+  "SETTINGS": "Instellingen",
+  "ID": "ID:",
+  "USERNAME": "Gebruikersnaam",
+  "FIRST_NAME": "Voornaam",
+  "LAST_NAME": "Achternaam",
+  "SHIP_NAME": "Schip Naam",
+  "ROLE": "Rol",
+  "NO_PRODUCTS_AVAILABLE": "Geen producten beschikbaar",
+  "LOGOUT": "Uitloggen",
+
+
+  "TEST_COMPONENT": "Test Component",
+  "NAME": "Naam"
 }

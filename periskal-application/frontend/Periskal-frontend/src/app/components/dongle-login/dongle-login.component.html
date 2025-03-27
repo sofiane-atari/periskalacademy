@@ -4,16 +4,16 @@
           {
             {{errorMessage}}
           }@else {
-            Successfully Logged In!
+            {{"SUCCESFULL_LOGIN" | translate}}
           }
         </div>
         <div class="redirect-message">
             <div class="loading-circle"></div>
             @if (errorMessage)
             {
-              Redirecting...
+              {{"REDIRECTING" | translate}}
             }@else {
-              Redirecting to Dashboard...
+              {{"REDIRECTING_TO_DASHBOARD" | translate}}
             }
         </div>
     </div>
