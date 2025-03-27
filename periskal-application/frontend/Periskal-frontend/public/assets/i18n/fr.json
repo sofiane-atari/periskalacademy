@@ -11,6 +11,7 @@
   "TRAINING_INFORMATION": "Informations sur la formation",
   "UPDATE_TRAINING": "Mettre à jour la formation",
   "TRAINING_NOT_FOUND": "Formation non trouvée",
+  "DELETE_TRAINING": "Supprimer la formation",
 
 
   "MODULES": "Modules",
@@ -20,7 +21,8 @@
   "MODULE_DESCRIPTION": "Description du module",
   "ADD_NEW_MODULE": "Ajouter un nouveau module",
   "DELETE_MODULE": "Supprimer le module",
-  "DELETE_TRAINING": "Supprimer la formation",
+  "EDIT_MODULES": "Modifier les modules",
+  "MODULE_NAME": "Nom du module",
 
 
   "EDIT": "Modifier",
@@ -31,6 +33,11 @@
   "REDIRECTING": "Redirection en cours...",
   "REDIRECTING_TO_DASHBOARD": "Redirection vers le tableau de bord...",
   "DELETE": "Supprimer",
+  "LOGOUT": "Déconnexion",
+  "SAVE": "Enregistrer",
+  "RESET": "Réinitialiser",
+
+
 
   "USER_PROFILE": "Profil Utilisateur",
   "INFORMATION": "Informations",
@@ -43,7 +50,18 @@
   "SHIP_NAME": "Nom du Navire",
   "ROLE": "Rôle",
   "NO_PRODUCTS_AVAILABLE": "Aucun produit disponible",
-  "LOGOUT": "Déconnexion",
+  
+
+
+  "CHAPTERS_MODULE": "Module des chapitres",
+  "CHAPTERS": "Chapitres",
+  "CONTENT": "Contenu",
+  "CHAPTER": "Chapitre",
+  "CHAPTER_TITLE": "Titre du chapitre",
+  "CHAPTER_DESCRIPTION": "Description du chapitre",
+  "CHAPTER_TEXT": "Texte du chapitre",
+  "DELETE_CHAPTER": "Supprimer le chapitre",
+  "ADD_NEW_CHAPTER": "Ajouter un nouveau chapitre",
 
 
   "TEST_COMPONENT": "Composant de test",

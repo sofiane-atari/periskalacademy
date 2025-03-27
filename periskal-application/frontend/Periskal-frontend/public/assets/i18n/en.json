@@ -11,6 +11,7 @@
   "TRAINING_INFORMATION": "Training Information",
   "UPDATE_TRAINING": "Update Training",
   "TRAINING_NOT_FOUND": "Training not found",
+  "DELETE_TRAINING": "Delete Training",
 
 
   "MODULES": "Modules",
@@ -20,7 +21,9 @@
   "MODULE_DESCRIPTION": "Module Description",
   "ADD_NEW_MODULE": "Add New Module",
   "DELETE_MODULE": "Delete Module",
-  "DELETE_TRAINING": "Delete Training",
+  "EDIT_MODULES": "Edit modules",
+  "MODULE_NAME": "Module name",
+
 
 
   "EDIT": "Edit",
@@ -31,6 +34,10 @@
   "REDIRECTING": "Redirecting...",
   "REDIRECTING_TO_DASHBOARD": "Redirecting to dashboard...",
   "DELETE": "Delete",
+  "LOGOUT": "Logout",
+  "SAVE": "Save",
+  "RESET": "Reset",
+
 
 
   "USER_PROFILE": "User Profile",
@@ -44,7 +51,20 @@
   "SHIP_NAME": "Ship Name",
   "ROLE": "Role",
   "NO_PRODUCTS_AVAILABLE": "No products available",
-  "LOGOUT": "Logout",
+  
+
+
+  
+  "CHAPTERS_MODULE": "Chapters module",
+  "CHAPTERS": "Chapters",
+  "CONTENT": "Content",
+  "CHAPTER": "Chapter",
+  "CHAPTER_TITLE": "Chapter title",
+  "CHAPTER_DESCRIPTION": "Chapter description",
+  "CHAPTER_TEXT": "Chapter text",
+  "DELETE_CHAPTER": "Delete chapter",
+  "ADD_NEW_CHAPTER": "Add new chapter",
+  
 
 
   "TEST_COMPONENT": "Test Component",

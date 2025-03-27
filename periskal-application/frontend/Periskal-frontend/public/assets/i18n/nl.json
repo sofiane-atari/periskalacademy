@@ -11,6 +11,7 @@
   "TRAINING_INFORMATION": "Training informatie",
   "UPDATE_TRAINING": "Training bewerken",
   "TRAINING_NOT_FOUND": "Training niet gevonden",
+  "DELETE_TRAINING": "Training verwijderen",
 
 
   "MODULES": "Modules",
@@ -20,7 +21,8 @@
   "MODULE_DESCRIPTION": "Module Beschrijving",
   "ADD_NEW_MODULE": "Nieuwe module toevoegen",
   "DELETE_MODULE": "Module verwijderen",
-  "DELETE_TRAINING": "Training verwijderen",
+  "EDIT_MODULES": "Modules bewerken",
+  "MODULE_NAME": "Module naam",
 
 
   "EDIT": "Bewerken",
@@ -31,6 +33,11 @@
   "REDIRECTING": "Doorverwijzen...",
   "REDIRECTING_TO_DASHBOARD": "Doorverwijzen naar dashboard...",
   "DELETE": "Verwijderen",
+  "LOGOUT": "Uitloggen",
+  "SAVE": "Opslaan",
+  "RESET": "Resetten",
+
+
 
   "USER_PROFILE": "Gebruikersprofiel",
   "INFORMATION": "Informatie",
@@ -43,7 +50,20 @@
   "SHIP_NAME": "Schip Naam",
   "ROLE": "Rol",
   "NO_PRODUCTS_AVAILABLE": "Geen producten beschikbaar",
-  "LOGOUT": "Uitloggen",
+
+
+
+
+  "CHAPTERS_MODULE": "Hoofdstukken module",
+  "CHAPTERS": "Hoofdstukken",
+  "CONTENT": "Inhoud",
+  "CHAPTER": "Hoofdstuk",
+  "CHAPTER_TITLE": "Hoofdstuk titel",
+  "CHAPTER_DESCRIPTION": "Hoofdstuk beschrijving",
+  "CHAPTER_TEXT": "Hoofdstuk tekst",
+  "DELETE_CHAPTER": "Hoofdstuk verwijderen",
+  "ADD_NEW_CHAPTER": "Nieuw hoofdstuk toevoegen",
+  
 
 
   "TEST_COMPONENT": "Test Component",

@@ -3,11 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TrainingService } from '../../../services/Training/training.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-add-module',
   templateUrl: './add-module.component.html',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, TranslatePipe],
   styleUrls: ['./add-module.component.css']
 })
 export class AddModuleComponent implements OnInit {

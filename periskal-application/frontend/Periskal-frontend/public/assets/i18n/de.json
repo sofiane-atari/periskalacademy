@@ -11,6 +11,7 @@
   "TRAINING_INFORMATION": "Trainingsinformationen",
   "UPDATE_TRAINING": "Training aktualisieren",
   "TRAINING_NOT_FOUND": "Training nicht gefunden",
+  "DELETE_TRAINING": "Training löschen",
 
 
   "MODULES": "Module",
@@ -20,7 +21,8 @@
   "MODULE_DESCRIPTION": "Modulbeschreibung",
   "ADD_NEW_MODULE": "Neues Modul hinzufügen",
   "DELETE_MODULE": "Modul löschen",
-  "DELETE_TRAINING": "Training löschen",
+  "EDIT_MODULES": "Module bearbeiten",
+  "MODULE_NAME": "Modulname",
 
 
   "EDIT": "Bearbeiten",
@@ -31,6 +33,11 @@
   "REDIRECTING": "Weiterleitung...",
   "REDIRECTING_TO_DASHBOARD": "Weiterleitung zum dashboard...",
   "DELETE": "Löschen",
+  "LOGOUT": "Abmelden",
+  "SAVE": "Speichern",
+  "RESET": "Zurücksetzen",
+
+
 
   "USER_PROFILE": "Benutzerprofil",
   "INFORMATION": "Informationen",
@@ -43,7 +50,18 @@
   "SHIP_NAME": "Schiffsname",
   "ROLE": "Rolle",
   "NO_PRODUCTS_AVAILABLE": "Keine Produkte verfügbar",
-  "LOGOUT": "Abmelden",
+
+
+  "CHAPTERS_MODULE": "Kapitel-Modul",
+  "CHAPTERS": "Kapitel",
+  "CONTENT": "Inhalt",
+  "CHAPTER": "Kapitel",
+  "CHAPTER_TITLE": "Kapiteltitel",
+  "CHAPTER_DESCRIPTION": "Kapitelbeschreibung",
+  "CHAPTER_TEXT": "Kapiteltext",
+  "DELETE_CHAPTER": "Kapitel löschen",
+  "ADD_NEW_CHAPTER": "Neues Kapitel hinzufügen",
+
 
 
   "TEST_COMPONENT": "Test-Komponente",
