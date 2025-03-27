@@ -18,19 +18,19 @@ export class TrainingService {
   }
 
   postTraining(trainingData: any): Observable<any> {
-    return this.client.post("http://localhost:8080/api/trainings/create", trainingData);
+    return this.client.post("http://localhost:8080/api/trainings", trainingData);
   }
 
   updateTraining(trainingId: number, trainingData: any): Observable<any> {
-    return this.client.put(`http://localhost:8080/api/trainings/edit/${trainingId}`, trainingData);
+    return this.client.put(`http://localhost:8080/api/trainings/${trainingId}`, trainingData);
   }
 
   deleteTraining(trainingId: number): Observable<any> {
-    return this.client.delete(`http://localhost:8080/api/trainings/delete/${trainingId}`)
+    return this.client.delete(`http://localhost:8080/api/trainings/${trainingId}`)
   }
 
   deleteModule(trainingId: number, moduleId: number): Observable<any> {
-    return this.client.delete(`http://localhost:8080/api/trainings/delete/${trainingId}/modules/${moduleId}`)
+    return this.client.delete(`http://localhost:8080/api/trainings/${trainingId}/modules/${moduleId}`)
   }
   updateModules(trainingId: number, modules: any): Observable<any> {
     return this.client.put(`http://localhost:8080/api/trainings/${trainingId}/modules`, modules)
