@@ -1,14 +1,11 @@
 package periskal.academy.backend;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.mockStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,11 +48,11 @@ class AuthenticationControllerTest {
             ResponseEntity<AuthenticateResponse> result = authenticationController.authenticate(loginRequest);
 
             // Assert
-            assertNotNull(result);
-            assertEquals(HttpStatus.OK, result.getStatusCode());
-            assertNotNull(result.getBody());
-            assertEquals(mockToken, result.getBody().getToken());
-            assertEquals("SuccesByToken", result.getBody().getLoginResult());
+            assertThat(result).isNotNull();
+            assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+            assertThat(result.getBody()).isNotNull();
+            assertThat(result.getBody().getToken()).isEqualTo(mockToken);
+            assertThat(result.getBody().getLoginResult()).isEqualTo("SuccesByToken");
         }
     }
 
@@ -75,10 +72,10 @@ class AuthenticationControllerTest {
         ResponseEntity<AuthenticateResponse> result = authenticationController.authenticate(loginRequest);
 
         // Assert
-        assertNotNull(result);
-        assertEquals(HttpStatus.UNAUTHORIZED, result.getStatusCode());
-        assertNotNull(result.getBody());
-        assertEquals("Failed", result.getBody().getLoginResult());
+        assertThat(result).isNotNull();
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+        assertThat(result.getBody()).isNotNull();
+        assertThat(result.getBody().getLoginResult()).isEqualTo("Failed");
     }
 
     @Test
@@ -94,8 +91,8 @@ class AuthenticationControllerTest {
         ResponseEntity<AuthenticateResponse> result = authenticationController.authenticate(loginRequest);
 
         // Assert
-        assertNotNull(result);
-        assertEquals(HttpStatus.UNAUTHORIZED, result.getStatusCode());
-        assertNull(result.getBody());
+        assertThat(result).isNotNull();
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+        assertThat(result.getBody()).isNull();
     }
 }
