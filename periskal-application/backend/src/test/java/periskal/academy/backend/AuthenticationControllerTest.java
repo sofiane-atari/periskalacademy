@@ -45,7 +45,7 @@ class AuthenticationControllerTest {
         String mockToken = "mockJwtToken";
 
         when(authenticationService.authenticate("testUser", "testPass")).thenReturn(mockResponse);
-        when(jwtUtil.generateToken(mockResponse)).thenReturn(mockToken);
+        when(JwtUtil.generateToken(mockResponse)).thenReturn(mockToken);
         
         // Act
         ResponseEntity<AuthenticateResponse> result = authenticationController.authenticate(loginRequest);
