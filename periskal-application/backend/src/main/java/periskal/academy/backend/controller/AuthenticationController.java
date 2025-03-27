@@ -23,8 +23,6 @@ public class AuthenticationController {
 
     private final DongleAuthenticationService dongleAuthenticationService;
     private final AuthenticationService authenticationService;
-    private final JwtUtil jwtUtil;
-
     @Autowired
     public AuthenticationController(
             DongleAuthenticationService dongleAuthenticationService,
@@ -32,7 +30,6 @@ public class AuthenticationController {
             JwtUtil jwtUtil) {
         this.dongleAuthenticationService = dongleAuthenticationService;
         this.authenticationService = authenticationService;
-        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/authenticate")
@@ -44,7 +41,7 @@ public class AuthenticationController {
         // System.out.println("Authentication Response: " + response);
 
         if (response != null && "SuccesByToken".equalsIgnoreCase(response.getLoginResult())) {
-            String token = jwtUtil.generateToken(response);
+            String token = JwtUtil.generateToken(response);
             //System.out.println("Generated JWT Token: " + token);
             response.setToken(token);
             return ResponseEntity.ok(response);
@@ -60,7 +57,7 @@ public class AuthenticationController {
         AuthenticateResponse responseD = dongleAuthenticationService.authenticateDongle(login);
 
         if (responseD != null && "SuccesByToken".equalsIgnoreCase(responseD.getLoginResult())) {
-            String token = jwtUtil.generateToken(responseD);
+            String token = JwtUtil.generateToken(responseD);
             responseD.setToken(token);
             return ResponseEntity.ok(responseD);
         } else {
