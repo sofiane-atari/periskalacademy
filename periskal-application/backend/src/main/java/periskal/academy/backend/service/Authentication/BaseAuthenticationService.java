@@ -1,5 +1,4 @@
 package periskal.academy.backend.service.Authentication;
-
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 import org.w3c.dom.*;
@@ -12,7 +11,10 @@ import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
+
+@Slf4j
 public abstract class BaseAuthenticationService {
 
     protected final static RestTemplate restTemplate = new RestTemplate();
@@ -30,7 +32,7 @@ public abstract class BaseAuthenticationService {
         try {
             soapResponseEntity = restTemplate.postForEntity(authenticateEndpointUrl, requestEntity, String.class);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            log.error("SOAP authentication request failed", ex);
             return null;
         }
         
@@ -79,7 +81,7 @@ public abstract class BaseAuthenticationService {
             authResponse.setProducts(products);
     
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Failed to parse SOAP response", e);
         }
         return authResponse;
     }
