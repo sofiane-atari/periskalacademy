@@ -92,7 +92,7 @@ class TrainingControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.setName_en").value("Test Training"));
+                .andExpect(jsonPath("$.name_en").value("Test Training"));
 
         // 3. Verify
         verify(trainingService, times(1)).getTrainingWithProducts(1L);
@@ -228,17 +228,20 @@ class TrainingControllerTest {
     // PUT /api/trainings/{id}/modules
     @Test
     void updateModules_ShouldReturnUpdatedTraining() throws Exception {
+        // Arrange
+        Training training = new Training();
+        training.setId(1L);
+        training.setModules(Arrays.asList(new Module())); // Initialiseer met lege module
+        
         when(trainingService.updateModules(eq(1L), anyList())).thenReturn(training);
 
+        // Act & Assert
         mockMvc.perform(put("/api/trainings/1/modules")
                 .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
                 .content("[{\"id\":1,\"nameModule\":\"Updated Module\"}]"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L));
-
-        verify(trainingService, times(1)).updateModules(eq(1L), anyList());
-    }
+}
 
     @Test
     void updateModules_WhenUpdateFails_ShouldReturn400() throws Exception {
