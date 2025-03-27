@@ -84,8 +84,19 @@ public class TrainingService {
 
         if (existingTrainingOpt.isPresent()) {
             Training existingTraining = existingTrainingOpt.get();
-            updatedTraining.setModules(existingTraining.getModules());
-            return trainingRepository.save(updatedTraining);
+
+            // Update fields instead of replacing the entire object
+            existingTraining.setName_en(updatedTraining.getName_en());
+            existingTraining.setDescription_en(updatedTraining.getDescription_en());
+
+            // Update modules correctly
+            existingTraining.getModules().clear();
+            for (Module module : updatedTraining.getModules()) {
+                module.setTraining(existingTraining);
+                existingTraining.getModules().add(module);
+            }
+
+            return trainingRepository.save(existingTraining);
         } else {
             throw new EntityNotFoundException("Training not found with id: " + id);
         }
