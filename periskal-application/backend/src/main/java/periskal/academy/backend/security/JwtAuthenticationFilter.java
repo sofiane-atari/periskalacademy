@@ -11,7 +11,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.SignatureException;
-import java.io.IOException;  
+import java.io.IOException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,13 +23,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
-    public JwtAuthenticationFilter(JwtUtil jwtUtil) {
+    public JwtAuthenticationFilter() {
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        
+
         final String authHeader = request.getHeader("Authorization");
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -44,10 +44,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 if (JwtUtil.validateToken(jwt, username)) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        username,
-                        null,
-                        JwtUtil.extractAuthorities(jwt)
-                    );
+                            username,
+                            null,
+                            JwtUtil.extractAuthorities(jwt));
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
@@ -61,19 +60,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "invalid_token", "Invalid JWT token");
         } catch (SignatureException e) {
             log.warn("Invalid JWT signature: {}", e.getMessage());
-            sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "invalid_signature", "Invalid JWT signature");
+            sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "invalid_signature",
+                    "Invalid JWT signature");
         } catch (Exception e) {
             log.error("JWT token validation error: {}", e.getMessage());
             sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "authentication_error", e.getMessage());
         }
     }
-    
-    private void sendErrorResponse(HttpServletResponse response, int status, String error, String message) throws IOException {
+
+    private void sendErrorResponse(HttpServletResponse response, int status, String error, String message)
+            throws IOException {
         response.setStatus(status);
         response.setContentType("application/json");
         response.getWriter().write(String.format("{\"error\":\"%s\",\"message\":\"%s\"}", error, message));
     }
-    
+
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();

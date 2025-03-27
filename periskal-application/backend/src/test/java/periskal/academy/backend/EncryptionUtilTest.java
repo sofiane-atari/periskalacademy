@@ -9,7 +9,7 @@ import periskal.academy.backend.util.EncryptionUtil;
 public class EncryptionUtilTest {
 
     @Test
-    public void testEncode() {
+    public void givenUsernameAndPassword_whenEncode_thenReturnsExpectedToken() {
         String username = "Demo";
         String password = "Demo1979!";
         String expectedToken = "cCt0azhyNkdyRlFrQmc4cTFubGh2Zz09";

@@ -18,6 +18,7 @@ import periskal.academy.backend.jpa.TrainingRepository;
 import periskal.academy.backend.service.TrainingService;
 
 import java.util.Optional;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -56,7 +57,7 @@ class TrainingServiceTest {
     }
 
     @Test
-    void testDeleteModule_Success() {
+    void givenTrainingWithModule_whenDeleteModule_thenModuleIsRemoved() {
         // Mock trainingRepository behavior
         when(trainingRepository.findById(1L)).thenReturn(Optional.of(training));
         when(trainingRepository.save(training)).thenReturn(training);
@@ -74,7 +75,7 @@ class TrainingServiceTest {
     }
 
     @Test
-    void testDeleteModule_NotFound() {
+    void givenNoTraining_whenDeleteModule_thenReturnNull() {
         // Mock behavior when the training is not found
         when(trainingRepository.findById(1L)).thenReturn(Optional.empty());
 
@@ -89,7 +90,7 @@ class TrainingServiceTest {
     }
 
     @Test
-    void testDeleteTraining_Success() {
+    void givenExistingTraining_whenDeleteTraining_thenTrainingIsDeleted() {
         // Mock the behavior for deleting a training
         when(trainingRepository.existsById(1L)).thenReturn(true);
 
@@ -100,7 +101,7 @@ class TrainingServiceTest {
     }
 
     @Test
-    void testDeleteTraining_NotFound() {
+    void givenNonExistingTraining_whenDeleteTraining_thenReturnFalse() {
         // Mock the behavior for when training does not exist
         when(trainingRepository.existsById(1L)).thenReturn(false);
 
@@ -111,7 +112,7 @@ class TrainingServiceTest {
     }
 
     @Test
-    public void testCreateTraining() {
+    public void givenTrainingWithModules_whenCreateTraining_thenTrainingIsCreated() {
         Training training = new Training();
         training.setName_en("Sample Training");
         training.setDescription_en("Sample Description");
@@ -145,7 +146,7 @@ class TrainingServiceTest {
     }
 
     @Test
-    void testGetTrainingById_Found() {
+    void givenExistingTraining_whenGetTrainingById_thenTrainingIsReturned() {
         when(trainingRepository.findById(1L)).thenReturn(Optional.of(training));
 
         Training foundTraining = trainingService.getTrainingById(1L);
@@ -155,7 +156,7 @@ class TrainingServiceTest {
     }
 
     @Test
-    void testGetTrainingById_NotFound() {
+    void givenNonExistingTraining_whenGetTrainingById_thenReturnEmptyTraining() {
         when(trainingRepository.findById(1L)).thenReturn(Optional.empty());
 
         Training foundTraining = trainingService.getTrainingById(1L);
@@ -165,7 +166,7 @@ class TrainingServiceTest {
     }
 
     @Test
-    void testAddModuleWithDto_Success() {
+    void givenModuleDto_whenAddModule_thenModuleIsAdded() {
         ModuleDTO moduleDto = new ModuleDTO();
         moduleDto.setNameModule("New Module");
         moduleDto.setDescriptionModule("Module Description");
@@ -186,31 +187,58 @@ class TrainingServiceTest {
         assertEquals("New Module", addedModule.getNameModule());
         assertEquals("Module Description", addedModule.getDescriptionModule());
 
-        // verify that moduleRepository.save() was called with the correct parameters
         verify(moduleRepository, times(1)).save(any(Module.class));
     }
 
     @Test
-    void testUpdateTraining_Success() {
+    void givenExistingTraining_whenUpdateTraining_thenTrainingIsUpdated() {
+        // Arrange
+        Training existingTraining = new Training();
+        existingTraining.setId(1L);
+        existingTraining.setName_en("Old Name");
+        existingTraining.setDescription_en("Old Description");
+        existingTraining.setModules(new ArrayList<>());
+
+        Module module1 = new Module();
+        module1.setId(1L);
+        module1.setNameModule("Module 1");
+
+        Module module2 = new Module();
+        module2.setId(2L);
+        module2.setNameModule("Module 2");
+
+        List<Module> updatedModules = new ArrayList<>();
+        updatedModules.add(module1);
+        updatedModules.add(module2);
+
         Training updatedTraining = new Training();
         updatedTraining.setId(1L);
-        updatedTraining.setName_en("Updated Training");
+        updatedTraining.setName_en("Updated Name");
+        updatedTraining.setDescription_en("Updated Description");
+        updatedTraining.setModules(updatedModules); // Set new modules
 
-        // Mock trainingRepository to return an existing training
-        when(trainingRepository.findById(1L)).thenReturn(Optional.of(training));
-        when(trainingRepository.save(updatedTraining)).thenReturn(updatedTraining);
+        // Mock trainingRepository to return the existing training
+        when(trainingRepository.findById(1L)).thenReturn(Optional.of(existingTraining));
+        when(trainingRepository.save(existingTraining)).thenReturn(existingTraining);
 
+        // Act
         Training result = trainingService.updateTraining(1L, updatedTraining);
 
+        // Assert
         assertNotNull(result);
-        assertEquals("Updated Training", result.getName_en());
+        assertEquals("Updated Name", result.getName_en()); // Assert that the name was updated
+        assertEquals("Updated Description", result.getDescription_en()); // Assert that the description was updated
+        assertEquals(2, result.getModules().size()); // Assert that the modules list contains 2 modules
+        assertEquals("Module 1", result.getModules().get(0).getNameModule()); // Assert module 1 is in the list
+        assertEquals("Module 2", result.getModules().get(1).getNameModule()); // Assert module 2 is in the list
 
-        // Verify that trainingRepository.save() was called
-        verify(trainingRepository, times(1)).save(updatedTraining);
+        // Verify that trainingRepository.save() was called once with the updated
+        // training
+        verify(trainingRepository, times(1)).save(existingTraining);
     }
 
     @Test
-    void testUpdateTraining_NotFound() {
+    void givenNonExistingTraining_whenUpdateTraining_thenThrowException() {
         Training updatedTraining = new Training();
         updatedTraining.setId(1L);
         updatedTraining.setName_en("Updated Training");
@@ -227,7 +255,7 @@ class TrainingServiceTest {
     }
 
     @Test
-    void testGetAllTrainings() {
+    void givenTrainingsExist_whenGetAllTrainings_thenTrainingsAreReturned() {
         List<Training> trainings = List.of(training);
 
         // mock the repository to return a list of trainings
