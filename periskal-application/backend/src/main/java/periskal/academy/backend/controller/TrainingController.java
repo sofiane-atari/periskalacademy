@@ -50,13 +50,13 @@ public class TrainingController {
         return training.get().getModules();
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<Training> postTrainingWithModules(@RequestBody Training entity) {
         Training savedTraining = trainingService.createTraining(entity);
         return new ResponseEntity<>(savedTraining, HttpStatus.CREATED);
     }
 
-    @PutMapping("edit/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Training> updateTraining(@PathVariable Long id, @RequestBody Training updatedTraining) {
         try {
             Training savedTraining = trainingService.updateTraining(id, updatedTraining);
@@ -67,7 +67,7 @@ public class TrainingController {
         }
     }
 
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, String>> deleteTraining(@PathVariable Long id) {
         boolean deleted = trainingService.deleteTraining(id);
         if (deleted) {
@@ -79,7 +79,7 @@ public class TrainingController {
         }
     }
 
-    @DeleteMapping("delete/{trainingId}/modules/{moduleId}")
+    @DeleteMapping("/{trainingId}/modules/{moduleId}")
     public ResponseEntity<Training> deleteModule(@PathVariable Long trainingId, @PathVariable Long moduleId) {
         Training updatedTraining = trainingService.deleteModule(trainingId, moduleId);
         if (updatedTraining != null) {
