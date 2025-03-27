@@ -49,6 +49,7 @@ export class UpdateTrainingComponent {
       this.trainingService.updateTraining(this.training.id, this.training).subscribe(
         (data) => {
           alert('Training updated successfully!');
+          this.router.navigate(['/trainingEmployee']);
         },
         (error) => {
           this.errorMessage = 'Failed to update training.';
@@ -93,9 +94,6 @@ export class UpdateTrainingComponent {
     this.training?.modules.push(newModule);
   }
 
-  goToModuleEditPage() {
-    this.router.navigate(['edit', this.trainingId, 'modules']);
-  }
   goToModuleAddPage() {
     this.router.navigate(['add', this.trainingId, 'module'])
   }
