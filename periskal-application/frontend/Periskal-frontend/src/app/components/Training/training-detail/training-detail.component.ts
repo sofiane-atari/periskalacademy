@@ -27,15 +27,16 @@ export class TrainingDetailComponent {
     this.trainingId = Number(this.route.snapshot.paramMap.get('id'));
 
     // Call the service method to get the products for the specific training
-    this.trainingSvc.getTrainingById(this.trainingId).subscribe(
-      (data) => {
+    this.trainingSvc.getTrainingById(this.trainingId).subscribe({
+      next: (data) => {
         this.training = data;
-        this.modules = data.modules
+        this.modules = data.modules;
       },
-      (error) => {
+      error: (error) => {
         console.error('Error fetching training products', error);
       }
-    );
+    });
+
   }
 
   goToChaptersPage(moduleId: number) {

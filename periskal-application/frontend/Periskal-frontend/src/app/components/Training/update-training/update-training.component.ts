@@ -34,27 +34,29 @@ export class UpdateTrainingComponent {
 
   //retrieve training data from database with id from the path
   getTrainingDetails(id: number): void {
-    this.trainingService.getTrainingById(id).subscribe(
-      (training) => {
+    this.trainingService.getTrainingById(id).subscribe({
+      next: (training) => {
         this.training = training;
       },
-      (error) => {
+      error: (error) => {
         this.errorMessage = 'Failed to load training details.';
       }
-    );
+    });
   }
+
 
   updateTraining() {
     if (this.training?.id) {
-      this.trainingService.updateTraining(this.training.id, this.training).subscribe(
-        (data) => {
+      this.trainingService.updateTraining(this.training.id, this.training).subscribe({
+        next: (data) => {
           alert('Training updated successfully!');
           this.router.navigate(['/trainingEmployee']);
         },
-        (error) => {
+        error: (error) => {
           this.errorMessage = 'Failed to update training.';
         }
-      )
+      });
+
     }
   }
 

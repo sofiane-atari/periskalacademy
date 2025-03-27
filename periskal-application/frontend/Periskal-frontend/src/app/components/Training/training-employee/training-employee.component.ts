@@ -30,27 +30,26 @@ export class TrainingEmployeeComponent implements OnInit {
     const role = this.jwtDecoderService.getUserRole();
     const products: string[] = this.jwtDecoderService.getProducts() || [];
 
-    this.svc.getTrainingData().subscribe(
-      (data: training[]) => {
+    this.svc.getTrainingData().subscribe({
+      next: (data: training[]) => {
         if (role === "Skipper" || role === "Fleetmanager") {
           if (products && products.length > 0) {
-            this.trainingsData = data.filter(training => {
-              return products.some(product =>
+            this.trainingsData = data.filter(training =>
+              products.some(product =>
                 training.name_en.toLowerCase().includes(product.toLowerCase())
-              );
-            });
+              )
+            );
           } else {
             this.trainingsData = [];
           }
-        }
-        else if (role === "Administrator" || role === "Support") {
+        } else if (role === "Administrator" || role === "Support") {
           this.trainingsData = data;
         }
       },
-      (error) => {
+      error: (error) => {
         console.error('Error fetching trainings', error);
       }
-    );
+    });
   }
 
   goToTrainingDetails(trainingId: number) {
