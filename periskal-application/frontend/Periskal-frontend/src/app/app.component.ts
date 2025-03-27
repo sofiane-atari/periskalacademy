@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { NavigationEnd,
+import {
+  NavigationEnd,
   Router,
   RouterLink,
   RouterLinkActive,
@@ -25,7 +26,7 @@ export class AppComponent implements OnInit {
 
   lang: string = '';
 
-  constructor(private router : Router, private authService: AuthenticationService, private translateService: TranslateService) {
+  constructor(private router: Router, private authService: AuthenticationService, private translateService: TranslateService) {
 
     this.translateService.setDefaultLang('nl');
     this.translateService.use(localStorage.getItem('lang') || 'nl');
@@ -42,7 +43,7 @@ export class AppComponent implements OnInit {
     return this.router.url === '/login' || this.router.url.includes('decode-token');
   }
 
-  ngOnInit(): void {   
+  ngOnInit(): void {
     // Only validate token when not on login-related pages
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
@@ -56,16 +57,23 @@ export class AppComponent implements OnInit {
           }
         });
         this.lang = localStorage.getItem('lang') || 'nl';
-    }}
-    )};
-
-    ChangeLang(Lang: any) {
-      const selectedLanguage = Lang.target.value;
-  
-      localStorage.setItem('lang', selectedLanguage);
-  
-      this.translateService.use(selectedLanguage); 
+      }
     }
+    )
+  };
+
+  ChangeLang(Lang: any) {
+    const selectedLanguage = Lang.target.value;
+
+    localStorage.setItem('lang', selectedLanguage);
+
+    this.translateService.use(selectedLanguage);
+    this.reloadPage();
+  }
+
+  reloadPage(): void {
+    window.location.reload();
+  }
 }
 
 

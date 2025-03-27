@@ -39,8 +39,8 @@ public class BackendApplication implements CommandLineRunner {
 					Arrays.asList(chapter1, chapter2));
 			Module module2 = new Module("Advanced kaartlezen", "Advanced navigeren met kaart");
 
-			Training training = new Training("engels", "description", "nederlands", "beschrijving", "nom",
-					"description", "Name", "Beschreibung", Arrays.asList(module1, module2));
+			Training training = new Training("English", "Description", "Nederlands", "Beschrijving", "Deutsch",
+					"Beschreibung", "Français", "La Description", Arrays.asList(module1, module2));
 
 			module1.setTraining(training);
 			module2.setTraining(training);
