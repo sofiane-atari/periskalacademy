@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { chapter, module, training } from '../training-employee/training-employee.component';
+import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TrainingService } from '../../../services/Training/training.service';
 import { TranslatePipe } from '@ngx-translate/core';
+import { Training } from '../../../models/training.model';
+import { Chapter } from '../../../models/chapter.model';
+import { Module } from '../../../models/module.model';
 
 @Component({
   selector: 'app-training-detail',
@@ -11,19 +13,16 @@ import { TranslatePipe } from '@ngx-translate/core';
   styleUrl: './module-detail.component.css'
 })
 export class ModuleDetailComponent {
-  training: training | undefined;
-  modules: module[] = [];
-  chapters: chapter[] = [];
+  training: Training | undefined;
+  modules: Module[] = [];
+  chapters: Chapter[] = [];
   text: string = "";
-
-  trainingSvc: TrainingService;
 
   trainingId: number = 0;
   moduleId: number = 0;
   activeChapterId: number = 0;
 
-  constructor(private route: ActivatedRoute, private svc: TrainingService, private router: Router) {
-    this.trainingSvc = svc;
+  constructor(private route: ActivatedRoute, private trainingSvc: TrainingService, private router: Router) {
   }
 
 

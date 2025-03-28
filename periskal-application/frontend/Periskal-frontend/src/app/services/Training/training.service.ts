@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { training } from '../../components/Training/training-employee/training-employee.component';
+import { Training } from '../../models/training.model';
 
 @Injectable({
   providedIn: 'root'
@@ -9,12 +9,12 @@ import { training } from '../../components/Training/training-employee/training-e
 export class TrainingService {
   constructor(private client: HttpClient) { }
 
-  getTrainingData(): Observable<training[]> {
-    return this.client.get<training[]>("http://backend.localhost:8080/api/trainings");
+  getTrainingData(): Observable<Training[]> {
+    return this.client.get<Training[]>("http://backend.localhost:8080/api/trainings");
   }
 
-  getTrainingById(trainingId: number): Observable<training> {
-    return this.client.get<training>(`http://backend.localhost:8080/api/trainings/${trainingId}`);
+  getTrainingById(trainingId: number): Observable<Training> {
+    return this.client.get<Training>(`http://backend.localhost:8080/api/trainings/${trainingId}`);
   }
 
   postTraining(trainingData: any): Observable<any> {
@@ -39,15 +39,15 @@ export class TrainingService {
     return this.client.post(`http://localhost:8080/api/trainings/${trainingId}/modules`, module);
   }
 
-  getFilteredTrainingData(role: string, products?: string[]): Observable<training[]> {
+  getFilteredTrainingData(role: string, products?: string[]): Observable<Training[]> {
     let params = new HttpParams().set('role', role);
-    
+
     if (products && products.length > 0) {
       products.forEach(product => {
         params = params.append('products', product);
       });
     }
-    
-    return this.client.get<training[]>("http://backend.localhost:8080/api/trainings/filtered", { params });
+
+    return this.client.get<Training[]>("http://backend.localhost:8080/api/trainings/filtered", { params });
   }
 }

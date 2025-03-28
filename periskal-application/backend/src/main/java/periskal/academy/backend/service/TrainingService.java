@@ -7,8 +7,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -27,13 +25,10 @@ public class TrainingService {
 
     private TrainingRepository trainingRepository;
     private ModuleRepository moduleRepository;
-    private final ObjectMapper objectMapper;
 
-    public TrainingService(TrainingRepository trainingRepository, ModuleRepository moduleRepository,
-            ObjectMapper objectMapper) {
+    public TrainingService(TrainingRepository trainingRepository, ModuleRepository moduleRepository) {
         this.trainingRepository = trainingRepository;
         this.moduleRepository = moduleRepository;
-        this.objectMapper = objectMapper;
     }
 
     private TrainingDTO convertToDto(Training training) {
@@ -63,13 +58,9 @@ public class TrainingService {
         return trainingRepository.findById(id);
     }
 
-    // TODO: Current implementation checks if product name is contained in
-    // training_name_en
-    // Future implementation will check a dedicated products field in the Training
-    // model
     public List<TrainingDTO> getFilteredTrainings(String role, List<String> products) {
         // If Admin/Support, return all trainings
-        if ("Administrator".equals(role)) {
+        if ("Administrator".equals(role) || "Support".equals(role)) {
             return getAllTrainings();
         }
 
@@ -92,8 +83,6 @@ public class TrainingService {
         for (Module module : entity.getModules()) {
             for (Chapter chapter : module.getChapters()) {
                 for (Photo photo : chapter.getPhotos()) {
-                    String base64ImageData = photo.getImageData();
-
                     photo.setChapter(chapter);
                 }
             }

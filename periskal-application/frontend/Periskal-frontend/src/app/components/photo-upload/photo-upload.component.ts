@@ -1,5 +1,4 @@
-import { Component, Input, Output, EventEmitter, forwardRef } from '@angular/core';
-import { PhotoUploadService } from '../../services/Photoupload/photo-upload.service';
+import { Component, forwardRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
 
