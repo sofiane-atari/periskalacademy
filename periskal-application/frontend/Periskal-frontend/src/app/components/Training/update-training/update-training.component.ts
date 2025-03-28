@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { TrainingService } from '../../../services/Training/training.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { training } from '../training-employee/training-employee.component';
 import { FormsModule } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
+import { Training } from '../../../models/training.model';
 
 @Component({
   selector: 'app-update-training',
@@ -12,7 +12,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   styleUrl: './update-training.component.css'
 })
 export class UpdateTrainingComponent {
-  training: training | null = null;
+  training: Training | null = null;
   loading: boolean = true;
   errorMessage: string = '';
   trainingId: number = 0;

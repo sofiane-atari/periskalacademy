@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { module, training } from '../training-employee/training-employee.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TrainingService } from '../../../services/Training/training.service';
 import { TranslatePipe } from '@ngx-translate/core';
+import { Training } from '../../../models/training.model';
+import { Module } from '../../../models/module.model';
 
 @Component({
   selector: 'app-training-detail',
@@ -11,8 +12,8 @@ import { TranslatePipe } from '@ngx-translate/core';
   styleUrl: './training-detail.component.css'
 })
 export class TrainingDetailComponent {
-  training: training | undefined;
-  modules: module[] = [];
+  training: Training | undefined;
+  modules: Module[] = [];
 
   trainingId: number = 0;
 

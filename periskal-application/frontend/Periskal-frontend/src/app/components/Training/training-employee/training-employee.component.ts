@@ -4,6 +4,7 @@ import { TrainingService } from '../../../services/Training/training.service';
 import { TranslatePipe } from '@ngx-translate/core';
 import { JwtDecoderService } from '../../../services/JwtDecode/jwt-decoder.service';
 import { RoleAuthorizationService } from '../../../services/RoleAuthorization/role-authorization.service';
+import { Training } from '../../../models/training.model';
 
 
 @Component({
@@ -14,7 +15,7 @@ import { RoleAuthorizationService } from '../../../services/RoleAuthorization/ro
 })
 
 export class TrainingEmployeeComponent implements OnInit {
-  public trainingsData: training[] = [];
+  public trainingsData: Training[] = [];
   public lang: String | null = "";
 
   constructor(
@@ -32,7 +33,7 @@ export class TrainingEmployeeComponent implements OnInit {
 
     // Use filtered endpoint instead of fetching all trainings and filtering client-side
     this.trainingSvc.getFilteredTrainingData(role, products).subscribe({
-      next: (data: training[]) => {
+      next: (data: Training[]) => {
         this.trainingsData = data;
       },
       error: (error) => {
@@ -87,35 +88,5 @@ export class TrainingEmployeeComponent implements OnInit {
   }
 }
 
-export interface training {
-  id: number
-  product_code: String
-  name_en: String
-  name_nl: String
-  name_fr: String
-  name_de: String
-  description_en: String
-  description_nl: String
-  description_fr: String
-  description_de: String
-  modules: module[]
-}
-export interface module {
-  id: number
-  nameModule: String
-  descriptionModule: String
-  chapters: chapter[]
-}
 
-export interface chapter {
-  id: number
-  nameChapter: String
-  descriptionChapter: String
-  textChapter: String
-  photos: Photo[]
-}
 
-export interface Photo {
-  id: number;
-  imageData: string;
-}
