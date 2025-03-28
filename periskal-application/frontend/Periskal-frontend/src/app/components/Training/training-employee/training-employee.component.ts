@@ -27,11 +27,10 @@ export class TrainingEmployeeComponent implements OnInit {
 
   ngOnInit(): void {
     this.lang = localStorage.getItem('lang');
-    const role = this.jwtDecoderService.getUserRole() || "noRole"; 
+    const role = this.jwtDecoderService.getUserRole() || "noRole";
     const products: string[] = this.jwtDecoderService.getProducts() || [];
 
     // Use filtered endpoint instead of fetching all trainings and filtering client-side
-    // TODO: This implementation will remain the same even after the backend is updated to use direct product associations instead of name matching
     this.svc.getFilteredTrainingData(role, products).subscribe({
       next: (data: training[]) => {
         this.trainingsData = data;
@@ -90,6 +89,7 @@ export class TrainingEmployeeComponent implements OnInit {
 
 export interface training {
   id: number
+  product_code: String
   name_en: String
   name_nl: String
   name_fr: String
