@@ -4,7 +4,13 @@
     <h1>{{'NEW_TRAINING_CREATE' | translate}}</h1>
     <form [formGroup]="trainingForm" (ngSubmit)="postTraining()">
       <h3 class="modules">{{'TRAINING_INFORMATION' | translate}}</h3>
-      
+      <label>{{'PRODUCT_CODE' | translate}}</label>
+      <input
+        formControlName="product_code"
+        class="input"
+        placeholder="Geef de code in waarmee deze training gelinkt is. Bv. ECDIS"
+        required
+      />
       @for (lang of languages; track $index) {
       <div class="field">
         <label>{{'TRAINING_NAME' | translate}}</label>

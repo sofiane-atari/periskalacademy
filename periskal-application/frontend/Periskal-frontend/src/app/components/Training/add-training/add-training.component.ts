@@ -22,6 +22,7 @@ export class AddTrainingComponent {
 
   constructor(private fb: FormBuilder, private client: HttpClient, private router: Router, private trainingsService: TrainingService) {
     this.trainingForm = this.fb.group({
+      product_code: ['', Validators.required],
       name_en: ['', Validators.required],
       name_nl: ['', Validators.required],
       name_fr: ['', Validators.required],
