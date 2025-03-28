@@ -2,8 +2,6 @@
   "HOME": "Homepagina",
   "EMPLOYEE_DASHBOARD": "Medewerker Dashboard",
   "SKIPPERS": "Schippers",
-
-
   "NEW_TRAINING_CREATE": "Nieuwe training aanmaken",
   "CREATE_TRAINING": "Maak training aan",
   "TRAINING_NAME": "Naam van de training",
@@ -12,8 +10,6 @@
   "UPDATE_TRAINING": "Training bewerken",
   "TRAINING_NOT_FOUND": "Training niet gevonden",
   "DELETE_TRAINING": "Training verwijderen",
-
-
   "MODULES": "Modules",
   "MODULE": "Module",
   "MODULE_INFORMATION": "Modules informatie",
@@ -23,8 +19,6 @@
   "DELETE_MODULE": "Module verwijderen",
   "EDIT_MODULES": "Modules bewerken",
   "MODULE_NAME": "Module naam",
-
-
   "EDIT": "Bewerken",
   "SAVE_CHANGES": "Wijzigingen opslaan",
   "LOADING": "Laden...",
@@ -36,9 +30,6 @@
   "LOGOUT": "Uitloggen",
   "SAVE": "Opslaan",
   "RESET": "Resetten",
-
-
-
   "USER_PROFILE": "Gebruikersprofiel",
   "INFORMATION": "Informatie",
   "PRODUCTS": "Producten",
@@ -50,10 +41,6 @@
   "SHIP_NAME": "Schip Naam",
   "ROLE": "Rol",
   "NO_PRODUCTS_AVAILABLE": "Geen producten beschikbaar",
-
-
-
-
   "CHAPTERS_MODULE": "Hoofdstukken module",
   "CHAPTERS": "Hoofdstukken",
   "CONTENT": "Inhoud",
@@ -63,9 +50,7 @@
   "CHAPTER_TEXT": "Hoofdstuk tekst",
   "DELETE_CHAPTER": "Hoofdstuk verwijderen",
   "ADD_NEW_CHAPTER": "Nieuw hoofdstuk toevoegen",
-  
-
-
   "TEST_COMPONENT": "Test Component",
-  "NAME": "Naam"
+  "NAME": "Naam",
+  "PRODUCT_CODE": "Product Code"
 }

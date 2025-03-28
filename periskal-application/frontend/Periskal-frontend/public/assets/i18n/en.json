@@ -2,8 +2,6 @@
   "HOME": "Home",
   "EMPLOYEE_DASHBOARD": "Employee Dashboard",
   "SKIPPERS": "Skippers",
-
-
   "NEW_TRAINING_CREATE": "Create New Training",
   "CREATE_TRAINING": "Create Training",
   "TRAINING_NAME": "Training Name",
@@ -12,8 +10,6 @@
   "UPDATE_TRAINING": "Update Training",
   "TRAINING_NOT_FOUND": "Training not found",
   "DELETE_TRAINING": "Delete Training",
-
-
   "MODULES": "Modules",
   "MODULE": "Module",
   "MODULE_INFORMATION": "Module Information",
@@ -23,9 +19,6 @@
   "DELETE_MODULE": "Delete Module",
   "EDIT_MODULES": "Edit modules",
   "MODULE_NAME": "Module name",
-
-
-
   "EDIT": "Edit",
   "SAVE_CHANGES": "Save Changes",
   "LOADING": "Loading...",
@@ -37,9 +30,6 @@
   "LOGOUT": "Logout",
   "SAVE": "Save",
   "RESET": "Reset",
-
-
-
   "USER_PROFILE": "User Profile",
   "INFORMATION": "Information",
   "PRODUCTS": "Products",
@@ -51,10 +41,6 @@
   "SHIP_NAME": "Ship Name",
   "ROLE": "Role",
   "NO_PRODUCTS_AVAILABLE": "No products available",
-  
-
-
-  
   "CHAPTERS_MODULE": "Chapters module",
   "CHAPTERS": "Chapters",
   "CONTENT": "Content",
@@ -64,9 +50,7 @@
   "CHAPTER_TEXT": "Chapter text",
   "DELETE_CHAPTER": "Delete chapter",
   "ADD_NEW_CHAPTER": "Add new chapter",
-  
-
-
   "TEST_COMPONENT": "Test Component",
-  "NAME": "Name"
+  "NAME": "Name",
+  "PRODUCT_CODE": "Product Code"
 }

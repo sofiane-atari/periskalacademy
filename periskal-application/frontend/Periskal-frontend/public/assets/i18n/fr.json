@@ -2,8 +2,6 @@
   "HOME": "Accueil",
   "EMPLOYEE_DASHBOARD": "Tableau de bord employé",
   "SKIPPERS": "Skippers",
-
-
   "NEW_TRAINING_CREATE": "Créer une nouvelle formation",
   "CREATE_TRAINING": "Créer une formation",
   "TRAINING_NAME": "Nom de la formation",
@@ -12,8 +10,6 @@
   "UPDATE_TRAINING": "Mettre à jour la formation",
   "TRAINING_NOT_FOUND": "Formation non trouvée",
   "DELETE_TRAINING": "Supprimer la formation",
-
-
   "MODULES": "Modules",
   "MODULE": "Module",
   "MODULE_INFORMATION": "Informations sur le module",
@@ -23,8 +19,6 @@
   "DELETE_MODULE": "Supprimer le module",
   "EDIT_MODULES": "Modifier les modules",
   "MODULE_NAME": "Nom du module",
-
-
   "EDIT": "Modifier",
   "SAVE_CHANGES": "Enregistrer les modifications",
   "LOADING": "Chargement...",
@@ -36,9 +30,6 @@
   "LOGOUT": "Déconnexion",
   "SAVE": "Enregistrer",
   "RESET": "Réinitialiser",
-
-
-
   "USER_PROFILE": "Profil Utilisateur",
   "INFORMATION": "Informations",
   "PRODUCTS": "Produits",
@@ -50,9 +41,6 @@
   "SHIP_NAME": "Nom du Navire",
   "ROLE": "Rôle",
   "NO_PRODUCTS_AVAILABLE": "Aucun produit disponible",
-  
-
-
   "CHAPTERS_MODULE": "Module des chapitres",
   "CHAPTERS": "Chapitres",
   "CONTENT": "Contenu",
@@ -62,8 +50,7 @@
   "CHAPTER_TEXT": "Texte du chapitre",
   "DELETE_CHAPTER": "Supprimer le chapitre",
   "ADD_NEW_CHAPTER": "Ajouter un nouveau chapitre",
-
-
   "TEST_COMPONENT": "Composant de test",
-  "NAME": "Nom"
+  "NAME": "Nom",
+  "PRODUCT_CODE": "Code produit"
 }

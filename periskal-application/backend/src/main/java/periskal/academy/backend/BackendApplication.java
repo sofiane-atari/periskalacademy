@@ -34,7 +34,7 @@ public class BackendApplication implements CommandLineRunner {
 					Arrays.asList(chapter1, chapter2));
 			Module module2 = new Module("Advanced kaartlezen", "Advanced navigeren met kaart");
 
-			Training training = new Training("English", "Description", "Nederlands", "Beschrijving", "Deutsch",
+			Training training = new Training("ECDIS", "English", "Description", "Nederlands", "Beschrijving", "Deutsch",
 					"Beschreibung", "Français", "La Description", Arrays.asList(module1, module2));
 
 			module1.setTraining(training);
@@ -44,6 +44,14 @@ public class BackendApplication implements CommandLineRunner {
 			chapter2.setModule(module1);
 
 			trainingRepository.save(training);
+
+			Chapter chapter3 = new Chapter("test3", "descriptiontest3", "texttest3");
+			Module module3 = new Module("test intro", "Intro test", Arrays.asList(chapter3));
+			Training training2 = new Training("test", "test", "test", "test", "test", "test", "test", "test", "test",
+					Arrays.asList(module3));
+			module3.setTraining(training2);
+			chapter3.setModule(module3);
+			trainingRepository.save(training2);
 		}
 	}
 }

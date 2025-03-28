@@ -25,7 +25,6 @@ import periskal.academy.backend.jpa.TrainingRepository;
 @Service
 public class TrainingService {
 
-    
     private TrainingRepository trainingRepository;
     private ModuleRepository moduleRepository;
     private final ObjectMapper objectMapper;
@@ -40,6 +39,7 @@ public class TrainingService {
     private TrainingDTO convertToDto(Training training) {
         TrainingDTO dto = new TrainingDTO();
         dto.setId(training.getId());
+        dto.setProduct_code(training.getProduct_code());
         dto.setName_en(training.getName_en());
         dto.setName_nl(training.getName_nl());
         dto.setName_de(training.getName_de());
@@ -62,33 +62,30 @@ public class TrainingService {
     public Optional<Training> getTrainingWithProducts(Long id) {
         return trainingRepository.findById(id);
     }
-    
 
-    // TODO: Current implementation checks if product name is contained in training_name_en
-    // Future implementation will check a dedicated products field in the Training model
+    // TODO: Current implementation checks if product name is contained in
+    // training_name_en
+    // Future implementation will check a dedicated products field in the Training
+    // model
     public List<TrainingDTO> getFilteredTrainings(String role, List<String> products) {
         // If Admin/Support, return all trainings
-        if ("Administrator".equals(role) || "Support".equals(role)) {
+        if ("Administrator".equals(role)) {
             return getAllTrainings();
         }
-        
+
         // For other roles (Skipper/Fleetmanager), check products
         if (products == null || products.isEmpty()) {
             log.error("Products list cannot be empty for role: {}", role);
-            return new ArrayList<>(); 
+            return new ArrayList<>();
         }
-        
+
         // For Skipper/Fleetmanager with products
         return trainingRepository.findAllAsList()
-            .stream()
-            .filter(training -> 
-                // TODO: This filtering logic will be replaced when trainings have direct product associations
-                products.stream().anyMatch(product -> 
-                    training.getName_en().toLowerCase().contains(product.toLowerCase())
-                )
-            )
-            .map(this::convertToDto)
-            .collect(Collectors.toList());
+                .stream()
+                .filter(training -> products.stream()
+                        .anyMatch(product -> training.getProduct_code().toLowerCase().contains(product.toLowerCase())))
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     public Training createTraining(Training entity) {

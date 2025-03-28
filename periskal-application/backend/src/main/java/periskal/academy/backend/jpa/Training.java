@@ -22,6 +22,8 @@ public class Training {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    private String product_code;
+
     private String name_en;
     private String description_en;
     private String name_nl;
@@ -35,9 +37,10 @@ public class Training {
     @JsonManagedReference
     private List<Module> modules = new ArrayList<>();
 
-    public Training(String name_en, String description_en, String name_nl, String description_nl,
-                    String name_de, String description_de, String name_fr, String description_fr,
-                    List<Module> modules) {
+    public Training(String product_code, String name_en, String description_en, String name_nl, String description_nl,
+            String name_de, String description_de, String name_fr, String description_fr,
+            List<Module> modules) {
+        this.product_code = product_code;
         this.name_en = name_en;
         this.description_en = description_en;
         this.name_nl = name_nl;
