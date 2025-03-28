@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import { ChangeDetectorRef } from '@angular/core';
 import { TrainingService } from '../../../services/Training/training.service';
-import { ActivatedRoute, Router, UrlTree } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { training } from '../training-employee/training-employee.component';
 import { FormsModule } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -14,7 +13,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 })
 export class UpdateTrainingComponent {
   training: training | null = null;
-  loading: boolean = false;
+  loading: boolean = true;
   errorMessage: string = '';
   trainingId: number = 0;
 
@@ -22,7 +21,6 @@ export class UpdateTrainingComponent {
     private trainingService: TrainingService,
     private route: ActivatedRoute,
     private router: Router,
-    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -37,6 +35,7 @@ export class UpdateTrainingComponent {
     this.trainingService.getTrainingById(id).subscribe({
       next: (training) => {
         this.training = training;
+        this.loading = false;
       },
       error: (error) => {
         this.errorMessage = 'Failed to load training details.';

@@ -19,7 +19,7 @@ export class TrainingEmployeeComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private svc: TrainingService,
+    private trainingSvc: TrainingService,
     private jwtDecoderService: JwtDecoderService,
     public roleAuth: RoleAuthorizationService
   ) { }
@@ -31,7 +31,7 @@ export class TrainingEmployeeComponent implements OnInit {
     const products: string[] = this.jwtDecoderService.getProducts() || [];
 
     // Use filtered endpoint instead of fetching all trainings and filtering client-side
-    this.svc.getFilteredTrainingData(role, products).subscribe({
+    this.trainingSvc.getFilteredTrainingData(role, products).subscribe({
       next: (data: training[]) => {
         this.trainingsData = data;
       },

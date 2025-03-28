@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { chapter, module, training } from '../training-employee/training-employee.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TrainingService } from '../../../services/Training/training.service';
@@ -16,14 +16,11 @@ export class ModuleDetailComponent {
   chapters: chapter[] = [];
   text: string = "";
 
-  trainingSvc: TrainingService;
-
   trainingId: number = 0;
   moduleId: number = 0;
   activeChapterId: number = 0;
 
-  constructor(private route: ActivatedRoute, private svc: TrainingService, private router: Router) {
-    this.trainingSvc = svc;
+  constructor(private route: ActivatedRoute, private trainingSvc: TrainingService, private router: Router) {
   }
 
 

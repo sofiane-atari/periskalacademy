@@ -1,7 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
-import { module } from '../training-employee/training-employee.component';
-import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { TrainingService } from '../../../services/Training/training.service';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -20,7 +18,7 @@ export class AddTrainingComponent {
   selectedLanguage: String = "";
   languages = ['en', 'nl', 'fr', 'de'];
 
-  constructor(private fb: FormBuilder, private client: HttpClient, private router: Router, private trainingsService: TrainingService) {
+  constructor(private fb: FormBuilder, private router: Router, private trainingsService: TrainingService) {
     this.trainingForm = this.fb.group({
       product_code: ['', Validators.required],
       name_en: ['', Validators.required],
