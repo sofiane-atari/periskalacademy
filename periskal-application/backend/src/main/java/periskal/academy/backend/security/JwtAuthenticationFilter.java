@@ -58,15 +58,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "invalid_token", "Invalid JWT token");
         } catch (SignatureException e) {
             log.warn("Invalid JWT signature: {}", e.getMessage());
-            sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "invalid_signature",
-                    "Invalid JWT signature");
+            sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "invalid_signature", "Invalid JWT signature");
         } catch (JwtException e) {
             log.error("JWT token validation error: {}", e.getMessage());
             sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "authentication_error", e.getMessage());
         }
     }
 
-    private void sendErrorResponse(HttpServletResponse response, int status, String error, String message)
+    private void sendErrorResponse(HttpServletResponse response, int status, String error, String message) // Should probably use a custom authenticationentrypoint for this instead of sending a response here, but this is easier for now.
             throws IOException {
         response.setStatus(status);
         response.setContentType("application/json");
