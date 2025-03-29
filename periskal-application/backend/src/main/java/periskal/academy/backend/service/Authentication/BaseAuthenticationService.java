@@ -25,6 +25,7 @@ import periskal.academy.backend.model.AuthenticateResponse;
 import periskal.academy.backend.security.Exceptions.AuthenticationExceptions.AuthenticationCommunicationException;
 import periskal.academy.backend.security.Exceptions.AuthenticationExceptions.AuthenticationParsingException;
 import periskal.academy.backend.security.Exceptions.AuthenticationExceptions.AuthenticationServerErrorException;
+import periskal.academy.backend.security.Exceptions.AuthenticationExceptions.AuthenticationInvalidCredentialsException;
 
 
 @Slf4j
@@ -53,7 +54,6 @@ public abstract class BaseAuthenticationService {
         if (!soapResponseEntity.getStatusCode().is2xxSuccessful()) {
             String errorMsg = "SOAP authentication failed: Server returned non-successful status code";
             log.error("{} - Status: {}, Body: {}", errorMsg, soapResponseEntity.getStatusCode(), soapResponseEntity.getBody());
-             // Throw specific custom exception including status and body
             throw new AuthenticationServerErrorException(errorMsg, soapResponseEntity.getStatusCode().value(), soapResponseEntity.getBody()
             );
         }
@@ -104,10 +104,11 @@ public abstract class BaseAuthenticationService {
             }
             authResponse.setProducts(products);
 
-            if (authResponse.getLoginResult() == null || authResponse.getLoginResult().isBlank()) {
-                log.warn("Parsed SOAP response is missing 'LoginResult' field.");
-                throw new AuthenticationParsingException("Mandatory field 'LoginResult' is missing in the SOAP response.", null, responseXml);
+            if (authResponse.getLoginResult() == null || authResponse.getLoginResult().isBlank() || authResponse.getLoginResult() == "Invalid Credentials") {
+                log.debug("Authentication attempt failed: Service returned empty LoginResult, likely invalid credentials.");
+                throw new AuthenticationInvalidCredentialsException("Authentication failed: Invalid username or password.");
             }
+
     
         } 
         catch (ParserConfigurationException | SAXException | IOException e) {

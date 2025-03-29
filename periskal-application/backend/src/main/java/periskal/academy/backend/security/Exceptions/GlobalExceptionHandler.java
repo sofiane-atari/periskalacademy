@@ -4,6 +4,7 @@ package periskal.academy.backend.security.Exceptions;
 import lombok.extern.slf4j.Slf4j;
 import periskal.academy.backend.dto.ErrorResponse;
 import periskal.academy.backend.security.Exceptions.AuthenticationExceptions.AuthenticationCommunicationException;
+import periskal.academy.backend.security.Exceptions.AuthenticationExceptions.AuthenticationInvalidCredentialsException;
 import periskal.academy.backend.security.Exceptions.AuthenticationExceptions.AuthenticationParsingException;
 import periskal.academy.backend.security.Exceptions.AuthenticationExceptions.AuthenticationServerErrorException;
 import periskal.academy.backend.security.Exceptions.AuthenticationExceptions.AuthenticationServiceException;
@@ -19,6 +20,8 @@ import org.springframework.web.context.request.WebRequest;
 public class GlobalExceptionHandler {
 
     
+    //#region Authetnication Exceptions
+
     @ExceptionHandler(AuthenticationCommunicationException.class)
     public ResponseEntity<ErrorResponse> handleCommunicationException(AuthenticationCommunicationException ex, WebRequest request) {
         log.error("Authentication failed: Communication error with external service.", ex);
@@ -55,6 +58,17 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(AuthenticationInvalidCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidCredentials(AuthenticationInvalidCredentialsException ex, WebRequest request) {
+        log.info("Invalid credentials attempt: {}", ex.getMessage()); 
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.UNAUTHORIZED, // 401 Unauthorized 
+                "Authentication failed. Please check your username and password.", 
+                "Invalid credentials provided." 
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+    }
+
     // This is a catch-all for any other unexpected exceptions that might occur during authentication
     @ExceptionHandler(AuthenticationServiceException.class)
     public ResponseEntity<ErrorResponse> handleBaseAuthException(AuthenticationServiceException ex, WebRequest request) {
@@ -66,4 +80,7 @@ public class GlobalExceptionHandler {
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    //#endregion
+
 }
