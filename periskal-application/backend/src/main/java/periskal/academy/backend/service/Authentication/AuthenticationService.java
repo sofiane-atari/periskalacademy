@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
 import periskal.academy.backend.model.AuthenticateResponse;
+import periskal.academy.backend.security.Exceptions.AuthenticationExceptions.AuthenticationServiceException;
 import periskal.academy.backend.util.EncryptionUtil;
 
 @Slf4j
@@ -28,12 +29,17 @@ public class AuthenticationService extends BaseAuthenticationService {
      * Public method for username/password authentication.
      */
     public AuthenticateResponse authenticate(String username, String password) {
+
+        String token;
+
         try {
-            String token = EncryptionUtil.encode(username, password);
-            return super.authenticate(token);
-        } catch (Exception e) {
-            log.error("Authentication failed for user: {}", username, e);
-            return null;
+            token = EncryptionUtil.encode(username, password);
+        } catch (Exception encryptionEx) {
+            log.error("Internal error: Failed to encode credentials for user: {}", username, encryptionEx);
+            throw new AuthenticationServiceException("Internal authentication process error during credential encoding", encryptionEx);
         }
+            
+            return super.authenticate(token);
+
     }
 }

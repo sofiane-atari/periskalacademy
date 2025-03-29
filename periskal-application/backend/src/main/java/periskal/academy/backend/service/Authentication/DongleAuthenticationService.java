@@ -28,6 +28,7 @@ public class DongleAuthenticationService extends BaseAuthenticationService {
      * Public method for dongle authentication.
      */
     public AuthenticateResponse authenticateDongle(String token) {
+        // TODO: SPRINT 3 - dongle validation here before letting it make a doomed soap request, an empty token is definitely invalid so why even bother sending it. 
         return super.authenticate(token);
     }
 }
