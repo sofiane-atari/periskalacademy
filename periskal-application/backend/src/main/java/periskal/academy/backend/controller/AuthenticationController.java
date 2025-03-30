@@ -1,9 +1,7 @@
 package periskal.academy.backend.controller;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import periskal.academy.backend.model.AuthenticateResponse;
 import periskal.academy.backend.model.LoginRequest;
 import periskal.academy.backend.service.Authentication.AuthenticationService;

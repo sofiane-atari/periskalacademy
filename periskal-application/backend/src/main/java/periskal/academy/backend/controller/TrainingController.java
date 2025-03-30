@@ -3,8 +3,6 @@ package periskal.academy.backend.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
+import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import periskal.academy.backend.dto.ModuleDTO;
 import periskal.academy.backend.dto.TrainingDTO;
@@ -43,7 +41,7 @@ public ResponseEntity<List<TrainingDTO>> getAllTrainings() {
 
 @GetMapping("/filtered")
 public ResponseEntity<List<TrainingDTO>> getFilteredTrainings(
-    @RequestParam String role,
+    @RequestParam String role, 
     @RequestParam(required = false) List<String> products) {
     List<TrainingDTO> trainings = trainingService.getFilteredTrainings(role, products);
     return ResponseEntity.ok(trainings);
@@ -51,61 +49,62 @@ public ResponseEntity<List<TrainingDTO>> getFilteredTrainings(
 
     @GetMapping("/{trainingId}")
     public ResponseEntity<Training> getProductsForTraining(@PathVariable Long trainingId) {
-        Optional<Training> training = trainingService.getTrainingWithProducts(trainingId);
-        return training.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+
+        Training  training = trainingService.getTrainingById(trainingId);
+        return ResponseEntity.ok(training);
     }
 
     @GetMapping("/{trainingId}/chapters")
     public ResponseEntity<List<Module>> getModuleWithChapters(@PathVariable Long trainingId) {
-        Optional<Training> training = trainingService.getTrainingWithProducts(trainingId);
-        return training.map(t -> ResponseEntity.ok(t.getModules())).orElseGet(() -> ResponseEntity.notFound().build());
+
+        Training training = trainingService.getTrainingById(trainingId);
+        return ResponseEntity.ok(training.getModules());
     }
 
     @PostMapping
     public ResponseEntity<Training> postTrainingWithModules(@RequestBody Training entity) {
+
         Training savedTraining = trainingService.createTraining(entity);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedTraining);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Training> updateTraining(@PathVariable Long id, @RequestBody Training updatedTraining) {
-        try {
-            Training savedTraining = trainingService.updateTraining(id, updatedTraining);
-            return ResponseEntity.ok(savedTraining);
-        } catch (Exception e) {
-            log.error("Error updating training with ID: {}", id, e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+    public ResponseEntity<Training> updateTraining(@PathVariable Long id , @Valid @RequestBody Training updatedTraining) {
+ 
+        Training savedTraining = trainingService.updateTraining(id, updatedTraining);
+        return ResponseEntity.ok(savedTraining);
+
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, String>> deleteTraining(@PathVariable Long id) {
-        boolean deleted = trainingService.deleteTraining(id);
-        if (deleted) {
-            Map<String, String> response = new HashMap<>();
-            response.put("message", "Training deleted successfully");
-            return ResponseEntity.ok(response);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        
+        trainingService.deleteTraining(id);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Training deleted successfully");
+        return ResponseEntity.ok(response); 
+
     }
 
     @DeleteMapping("/{trainingId}/modules/{moduleId}")
     public ResponseEntity<Training> deleteModule(@PathVariable Long trainingId, @PathVariable Long moduleId) {
+
         Training updatedTraining = trainingService.deleteModule(trainingId, moduleId);
-        return updatedTraining != null ? ResponseEntity.ok(updatedTraining) : ResponseEntity.notFound().build();
+         return ResponseEntity.ok(updatedTraining);
     }
 
     @PutMapping("/{id}/modules")
     public ResponseEntity<Training> updateModules(@PathVariable Long id, @RequestBody List<Module> modules) {
+
         Training updatedTraining = trainingService.updateModules(id, modules);
-        return updatedTraining.getModules().equals(modules) ? ResponseEntity.ok(updatedTraining)
-                : ResponseEntity.badRequest().build();
+        return ResponseEntity.ok(updatedTraining);
     }
 
     @PostMapping("/{trainingId}/modules")
-    public ResponseEntity<Module> addModuleToTraining(@PathVariable Long trainingId, @RequestBody ModuleDTO moduleDto) {
+    public ResponseEntity<Module> addModuleToTraining(@PathVariable Long trainingId,@Valid @RequestBody ModuleDTO moduleDto) {
+ 
         Module addedModule = trainingService.addModuleWithDto(trainingId, moduleDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(addedModule);
+
     }
 }

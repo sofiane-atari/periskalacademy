@@ -5,12 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.*;
-
-import jakarta.persistence.EntityNotFoundException;
 import periskal.academy.backend.dto.ModuleDTO;
 import periskal.academy.backend.dto.TrainingDTO;
 import periskal.academy.backend.jpa.Chapter;
@@ -18,6 +15,7 @@ import periskal.academy.backend.jpa.Module;
 import periskal.academy.backend.jpa.ModuleRepository;
 import periskal.academy.backend.jpa.Training;
 import periskal.academy.backend.jpa.TrainingRepository;
+import periskal.academy.backend.security.Exceptions.General.ResourceNotFoundException;
 import periskal.academy.backend.service.TrainingService;
 import java.util.Optional;
 import java.util.Collections;
@@ -71,15 +69,14 @@ class TrainingServiceTest {
     }
 
     @Test
-    void givenNoTraining_whenDeleteModule_thenReturnNull() {
+    void givenNoTraining_whenDeleteModule_thenThrowResourceNotFoundException() {
         // Mock behavior when the training is not found
         when(trainingRepository.findById(1L)).thenReturn(Optional.empty());
 
-        // Test deleteModule method
-        Training updatedTraining = trainingService.deleteModule(1L, 1L);
+        // Test deleteModule method - should throw ResourceNotFoundException
+        assertThatThrownBy(() -> trainingService.deleteModule(1L, 1L))
+            .isInstanceOf(ResourceNotFoundException.class);
 
-        // Use AssertJ assertions
-        assertThat(updatedTraining).isNull();
 
         // Verify that save was never called
         verify(trainingRepository, never()).save(any());
@@ -89,25 +86,24 @@ class TrainingServiceTest {
     void givenExistingTraining_whenDeleteTraining_thenTrainingIsDeleted() {
         // Mock the behavior for deleting a training
         when(trainingRepository.existsById(1L)).thenReturn(true);
+        doNothing().when(trainingRepository).deleteById(1L);
 
-        boolean result = trainingService.deleteTraining(1L);
-
-        // Use AssertJ assertions
-        assertThat(result).isTrue();
-
+        // Act - Should not throw exception
+        assertThatCode(() -> trainingService.deleteTraining(1L)).doesNotThrowAnyException();
+        
         verify(trainingRepository, times(1)).deleteById(1L);
     }
 
     @Test
-    void givenNonExistingTraining_whenDeleteTraining_thenReturnFalse() {
+    void givenNonExistingTraining_whenDeleteTraining_thenThrowResourceNotFoundException() {
         // Mock the behavior for when training does not exist
         when(trainingRepository.existsById(1L)).thenReturn(false);
 
-        boolean result = trainingService.deleteTraining(1L);
+        // Act and Assert
+        assertThatThrownBy(() -> trainingService.deleteTraining(1L))
+            .isInstanceOf(ResourceNotFoundException.class);
 
-        // Use AssertJ assertions
-        assertThat(result).isFalse();
-        verify(trainingRepository, never()).deleteById(1L);
+        verify(trainingRepository, never()).deleteById(any());
     }
 
     @Test
@@ -147,10 +143,9 @@ class TrainingServiceTest {
         assertThat(savedTraining.getModules()).isNotEmpty(); // Ensure modules are not empty
         assertThat(savedTraining.getModules().get(0).getNameModule()).isEqualTo("Module 1"); // Ensure module is added
         assertThat(savedTraining.getModules().get(0).getChapters()).isNotEmpty(); // Ensure chapters are not empty
-        assertThat(savedTraining.getModules().get(0).getChapters().get(0).getNameChapter()).isEqualTo("Chapter 1"); // Ensure
-                                                                                                                    // chapter
-                                                                                                                    // is
-                                                                                                                    // added
+        assertThat(savedTraining.getModules().get(0).getChapters().get(0).getNameChapter()).isEqualTo("Chapter 1"); // Ensure Chapter is added
+
+
     }
 
     @Test
@@ -164,13 +159,12 @@ class TrainingServiceTest {
     }
 
     @Test
-    void givenNonExistingTraining_whenGetTrainingById_thenReturnEmptyTraining() {
+    void givenNonExistingTraining_whenGetTrainingById_thenThrowResourceNotFoundException() {
         when(trainingRepository.findById(1L)).thenReturn(Optional.empty());
 
-        Training foundTraining = trainingService.getTrainingById(1L);
+        assertThatThrownBy(() -> trainingService.getTrainingById(1L))
+            .isInstanceOf(ResourceNotFoundException.class);
 
-        assertThat(foundTraining).isNotNull(); // Should return an empty training if not found
-        assertThat(foundTraining.getName_en()).isNull();
     }
 
     @Test
@@ -237,16 +231,17 @@ class TrainingServiceTest {
     }
 
     @Test
-    void givenNonExistingTraining_whenUpdateTraining_thenThrowException() {
+    void givenNonExistingTraining_whenUpdateTraining_thenThrowResourceNotFoundException() {
         Training updatedTraining = new Training();
         updatedTraining.setId(1L);
         updatedTraining.setName_en("Updated Training");
 
         when(trainingRepository.findById(1L)).thenReturn(Optional.empty());
 
-        // Assert that EntityNotFoundException is thrown
+        // Assert that ResourceNotFoundException is thrown
         assertThatThrownBy(() -> trainingService.updateTraining(1L, updatedTraining))
-                .isInstanceOf(EntityNotFoundException.class);
+                .isInstanceOf(ResourceNotFoundException.class);
+
 
         verify(trainingRepository, never()).save(any(Training.class));
     }

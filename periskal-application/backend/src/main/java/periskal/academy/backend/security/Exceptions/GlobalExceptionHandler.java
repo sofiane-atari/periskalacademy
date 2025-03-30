@@ -8,12 +8,14 @@ import periskal.academy.backend.security.Exceptions.AuthenticationExceptions.Aut
 import periskal.academy.backend.security.Exceptions.AuthenticationExceptions.AuthenticationParsingException;
 import periskal.academy.backend.security.Exceptions.AuthenticationExceptions.AuthenticationServerErrorException;
 import periskal.academy.backend.security.Exceptions.AuthenticationExceptions.AuthenticationServiceException;
-
+import periskal.academy.backend.security.Exceptions.General.ResourceNotFoundException;
+import periskal.academy.backend.security.Exceptions.General.ValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest; 
+import org.springframework.web.context.request.WebRequest;
+
 
 @ControllerAdvice 
 @Slf4j
@@ -35,16 +37,15 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AuthenticationServerErrorException.class)
     public ResponseEntity<ErrorResponse> handleServerErrorException(AuthenticationServerErrorException ex, WebRequest request) {
+        String detail = "External service failed with status " + ex.getStatusCode();
         log.error("Authentication failed: Server error from external service. Status: {}, Body: {}",
                   ex.getStatusCode(), ex.getResponseBody(), ex);
-
-        HttpStatus status = HttpStatus.BAD_GATEWAY; // 502 Bad Gateway is often suitable when a downstream server fails
         ErrorResponse errorResponse = new ErrorResponse(
-                status,
-                "Authentication service reported an internal error. Please contact support if the problem persists.",
-                "External service failed with status " + ex.getStatusCode() 
+                HttpStatus.BAD_GATEWAY, 
+                "Authentication service reported an internal error.",
+                detail 
         );
-        return new ResponseEntity<>(errorResponse, status);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_GATEWAY);
     }
 
     @ExceptionHandler(AuthenticationParsingException.class)
@@ -82,5 +83,34 @@ public class GlobalExceptionHandler {
     }
 
     //#endregion
+
+
+    //#region General Exceptions
+
+    @ExceptionHandler(ResourceNotFoundException.class) 
+    public ResponseEntity<ErrorResponse> handleEntityNotFoundException(RuntimeException ex, WebRequest request) {
+        log.warn("Resource not found: {}", ex.getMessage()); 
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.NOT_FOUND,
+                "The requested resource was not found.", // General user message
+                ex.getMessage() // Specific exception message as details
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+
+    // Handle custom validation exceptions
+    @ExceptionHandler(ValidationException.class) 
+    public ResponseEntity<ErrorResponse> handleValidationException(ValidationException ex, WebRequest request) {
+        log.warn("Validation failed: {}", ex.getMessage());
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.BAD_REQUEST,
+                ex.getMessage(), 
+                ex.getDetails()   
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+
 
 }
