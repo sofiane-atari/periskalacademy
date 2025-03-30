@@ -1,5 +1,6 @@
 package periskal.academy.backend.service.Authentication;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,13 +20,12 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 import periskal.academy.backend.model.AuthenticateResponse;
 import periskal.academy.backend.security.Exceptions.AuthenticationExceptions.AuthenticationCommunicationException;
+import periskal.academy.backend.security.Exceptions.AuthenticationExceptions.AuthenticationInvalidCredentialsException;
 import periskal.academy.backend.security.Exceptions.AuthenticationExceptions.AuthenticationParsingException;
 import periskal.academy.backend.security.Exceptions.AuthenticationExceptions.AuthenticationServerErrorException;
-import periskal.academy.backend.security.Exceptions.AuthenticationExceptions.AuthenticationInvalidCredentialsException;
 
 
 @Slf4j
@@ -104,7 +104,7 @@ public abstract class BaseAuthenticationService {
             }
             authResponse.setProducts(products);
 
-            if (authResponse.getLoginResult() == null || authResponse.getLoginResult().isBlank() || authResponse.getLoginResult() == "Invalid Credentials") {
+            if (authResponse.getLoginResult() == null || authResponse.getLoginResult().isBlank() || authResponse.getLoginResult().equals("Invalid Credentials")) {
                 log.debug("Authentication attempt failed: Service returned empty LoginResult, likely invalid credentials.");
                 throw new AuthenticationInvalidCredentialsException("Authentication failed: Invalid username or password.");
             }
