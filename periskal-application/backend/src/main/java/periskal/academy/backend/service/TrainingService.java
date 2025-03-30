@@ -1,13 +1,12 @@
 package periskal.academy.backend.service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import periskal.academy.backend.dto.ModuleDTO;
@@ -18,6 +17,8 @@ import periskal.academy.backend.jpa.ModuleRepository;
 import periskal.academy.backend.jpa.Photo;
 import periskal.academy.backend.jpa.Training;
 import periskal.academy.backend.jpa.TrainingRepository;
+import periskal.academy.backend.security.Exceptions.General.ResourceNotFoundException;
+import periskal.academy.backend.security.Exceptions.General.ValidationException;
 
 @Slf4j
 @Service
@@ -54,20 +55,19 @@ public class TrainingService {
                 .collect(Collectors.toList());
     }
 
-    public Optional<Training> getTrainingWithProducts(Long id) {
-        return trainingRepository.findById(id);
+    public Training getTrainingById(Long id) {
+        return trainingRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Training not found with id: " + id));
     }
 
     public List<TrainingDTO> getFilteredTrainings(String role, List<String> products) {
+        
+        if (role == null || role.isBlank()) {
+            throw new ValidationException("Role parameter cannot be null or empty."); 
+        }
+
         // If Admin/Support, return all trainings
         if ("Administrator".equals(role) || "Support".equals(role)) {
             return getAllTrainings();
-        }
-
-        // For other roles (Skipper/Fleetmanager), check products
-        if (products == null || products.isEmpty()) {
-            log.error("Products list cannot be empty for role: {}", role);
-            return new ArrayList<>();
         }
 
         // For Skipper/Fleetmanager with products
@@ -80,96 +80,152 @@ public class TrainingService {
     }
 
     public Training createTraining(Training entity) {
-        for (Module module : entity.getModules()) {
-            for (Chapter chapter : module.getChapters()) {
-                for (Photo photo : chapter.getPhotos()) {
-                    photo.setChapter(chapter);
+
+        if (entity == null) {
+            throw new ValidationException("Training data cannot be null.");
+        }
+        // We could add more validation here, like checking if the training already exists, etc
+        if (entity.getName_en() == null || entity.getName_en().isBlank()) {
+            throw new ValidationException("Training name (English) cannot be empty.");
+        }
+
+        if (entity.getModules() != null) {
+            for (Module module : entity.getModules()) {
+                module.setTraining(entity);
+                if (module.getChapters() != null) {
+                    for (Chapter chapter : module.getChapters()) {
+                        chapter.setModule(module);
+                        if (chapter.getPhotos() != null) {
+                            for (Photo photo : chapter.getPhotos()) {
+                                photo.setChapter(chapter);
+                            }
+                        }
+                    }
                 }
             }
         }
-        return trainingRepository.save(entity);
-    }
 
-    public Training getTrainingById(Long id) {
-        Optional<Training> training = trainingRepository.findById(id);
-        if (training.isPresent()) {
-            return training.get();
-        } else {
-            return new Training();
+       try {
+            return trainingRepository.save(entity);
+        } catch (DataIntegrityViolationException e) {
+            log.error("Failed to create training due to data integrity violation: {}", e.getMessage());
+            throw e; 
+        } catch (DataAccessException e) {
+            log.error("Failed to create training due to database error: {}", e.getMessage(), e);
+            throw new RuntimeException("Failed to save training to the database.", e); 
         }
     }
+
 
     public Training updateTraining(Long id, Training updatedTraining) {
-        Optional<Training> existingTrainingOpt = trainingRepository.findById(id);
 
-        if (existingTrainingOpt.isPresent()) {
-            Training existingTraining = existingTrainingOpt.get();
-
-            // Update fields instead of replacing the entire object
-            existingTraining.setName_en(updatedTraining.getName_en());
-            existingTraining.setDescription_en(updatedTraining.getDescription_en());
-
-            // Update modules correctly
-            existingTraining.getModules().clear();
-            for (Module module : updatedTraining.getModules()) {
-                module.setTraining(existingTraining);
-                existingTraining.getModules().add(module);
-            }
-
-            return trainingRepository.save(existingTraining);
-        } else {
-            throw new EntityNotFoundException("Training not found with id: " + id);
+        if (updatedTraining == null) {
+            throw new ValidationException("Updated training data cannot be null.");
         }
-    }
 
-    public boolean deleteTraining(Long id) {
-        if (trainingRepository.existsById(id)) {
+        Training existingTraining = getTrainingById(id);
+
+        // Update fields instead of replacing the entire object
+        existingTraining.setName_en(updatedTraining.getName_en());
+        existingTraining.setDescription_en(updatedTraining.getDescription_en());
+
+        // Update modules correctly
+        existingTraining.getModules().clear();
+        for (Module module : updatedTraining.getModules()) {
+            module.setTraining(existingTraining);
+            existingTraining.getModules().add(module);
+        }
+
+        try {
+            return trainingRepository.save(existingTraining);
+        } catch (DataIntegrityViolationException e) {
+            log.error("Failed to update training {} due to data integrity violation: {}", id, e.getMessage());
+            throw e;
+        } catch (DataAccessException e) {
+            log.error("Failed to update training {} due to database error: {}", id, e.getMessage(), e);
+            throw new RuntimeException("Failed to update training " + id + " in the database.", e);
+        }
+    } 
+    
+
+    public void deleteTraining(Long id) {
+
+        if (!trainingRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Cannot delete. Training not found with id: " + id);
+        }
+        try {
             trainingRepository.deleteById(id);
-            return true;
-        } else {
-            return false;
+            log.info("Successfully deleted Training with ID: {}", id);
+        } catch (DataIntegrityViolationException e) {
+             log.error("Failed to delete training {} due to data integrity violation (e.g., related data exists): {}", id, e.getMessage());
+             throw new ValidationException("Cannot delete training " + id + ". It might be referenced by other data.", List.of(e.getMessage()));
+        } catch (DataAccessException e) {
+            log.error("Failed to delete training {} due to database error: {}", id, e.getMessage(), e);
+            throw new RuntimeException("Failed to delete training " + id + " from the database.", e);
         }
     }
 
     public Training deleteModule(Long trainingId, Long moduleId) {
-        Optional<Training> trainingOpt = trainingRepository.findById(trainingId);
-        if (trainingOpt.isPresent()) {
-            Training training = trainingOpt.get();
-            ArrayList<Module> modules = new ArrayList<>(training.getModules());
-            boolean removed = modules.removeIf(module -> module.getId().equals(moduleId));
 
-            if (removed) {
-                training.setModules(modules);
-                trainingRepository.save(training);
-                return training;
-            }
-        }
-        return null;
+        Training training = trainingRepository.findById(trainingId).orElseThrow(() -> new ResourceNotFoundException("Training not found with id: " + trainingId));
+
+
+        Module moduleToRemove = training.getModules().stream()
+        .filter(module -> module.getId().equals(moduleId))
+        .findFirst()
+         .orElseThrow(() -> new ResourceNotFoundException("Module not found with id: " + moduleId + " in training: " + trainingId));
+
+         training.getModules().remove(moduleToRemove);
+         moduleToRemove.setTraining(null);
+        
+         try {
+           return trainingRepository.save(training);
+       } catch (DataAccessException e) {
+           log.error("Failed to delete module {} from training {} due to database error: {}", moduleId, trainingId, e.getMessage(), e);
+           throw new RuntimeException("Failed to delete module " + moduleId + " from training " + trainingId + ".", e);
+       }
     }
 
     public Training updateModules(Long trainingId, List<Module> modules) {
-        Optional<Training> trainingOpt = trainingRepository.findById(trainingId);
-        if (trainingOpt.isPresent()) {
-            Training training = trainingOpt.get();
-            if (modules != null) {
-                training.setModules(modules);
-                trainingRepository.save(training);
-                return training;
-            }
+        Training training = trainingRepository.findById(trainingId).orElseThrow(() -> new ResourceNotFoundException("Training not found with id: " + trainingId));
+
+
+        training.getModules().clear();
+        modules.forEach(module -> {
+            module.setTraining(training); 
+            training.getModules().add(module);
+        });
+
+        try {
+            return trainingRepository.save(training);
+        } catch (DataAccessException e) {
+            log.error("Failed to update modules for training {} due to database error: {}", trainingId, e.getMessage(), e);
+            throw new RuntimeException("Failed to update modules for training " + trainingId + ".", e);
         }
-        return null;
+
     }
 
     @Transactional
     public Module addModuleWithDto(Long trainingId, ModuleDTO moduleDto) {
-        Training existingTraining = trainingRepository.findById(trainingId)
-                .orElseThrow(() -> new RuntimeException("Training not found with id: " + trainingId));
+
+        Training existingTraining = getTrainingById(trainingId);
 
         Module newModule = new Module();
         newModule.setNameModule(moduleDto.getNameModule());
         newModule.setDescriptionModule(moduleDto.getDescriptionModule());
         newModule.setTraining(existingTraining);
 
-        return moduleRepository.save(newModule);
+        try {
+            Module savedModule = moduleRepository.save(newModule);
+            log.info("Added new module {} to training {}", savedModule.getId(), trainingId);
+            return savedModule;
+        } catch (DataIntegrityViolationException e) {
+             log.error("Failed to add module to training {} due to data integrity violation: {}", trainingId, e.getMessage());
+             throw e;
+        } catch (DataAccessException e) {
+            log.error("Failed to add module to training {} due to database error: {}", trainingId, e.getMessage(), e);
+            throw new RuntimeException("Failed to add module to training " + trainingId + ".", e);
+        }
+
     }
 }

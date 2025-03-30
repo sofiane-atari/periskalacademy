@@ -1,5 +1,6 @@
 package periskal.academy.backend;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.*;
 
@@ -71,7 +72,7 @@ class TrainingControllerTest {
     @Test
     void givenValidTrainingId_whenGetProductsForTraining_thenReturnsTraining() {
         // Arrange
-        when(trainingService.getTrainingWithProducts(1L)).thenReturn(Optional.of(training));
+        when(trainingService.getTrainingById(1L)).thenReturn(training);
 
         // Act
         ResponseEntity<Training> response = trainingController.getProductsForTraining(1L);
@@ -86,7 +87,7 @@ class TrainingControllerTest {
     void givenValidTrainingId_whenGetModuleWithChapters_thenReturnsModules() {
         // Arrange
         training.setModules(Collections.singletonList(module));
-        when(trainingService.getTrainingWithProducts(1L)).thenReturn(Optional.of(training));
+        when(trainingService.getTrainingById(1L)).thenReturn(training);
 
         // Act
         ResponseEntity<List<Module>> response = trainingController.getModuleWithChapters(1L);
@@ -131,7 +132,7 @@ class TrainingControllerTest {
     @Test
     void givenValidTrainingId_whenDeleteTraining_thenReturnsSuccessMessage() {
         // Arrange
-        when(trainingService.deleteTraining(1L)).thenReturn(true);
+        doNothing().when(trainingService).deleteTraining(1L);
 
         // Act
         ResponseEntity<Map<String, String>> response = trainingController.deleteTraining(1L);
@@ -139,7 +140,8 @@ class TrainingControllerTest {
         // Assert
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).containsKey("message");
-        assertThat(response.getBody().get("message")).isEqualTo("Training deleted successfully");
+        assertThat(response.getBody().get("message")).isEqualTo("Training deleted successfully");     
+        verify(trainingService, times(1)).deleteTraining(1L);
     }
 
     @Test
@@ -154,6 +156,21 @@ class TrainingControllerTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().getId()).isEqualTo(1L);
+    }
+
+    @Test
+    void givenValidRoleAndProducts_whenGetFilteredTrainings_thenReturnsFilteredList() {
+        // Arrange
+        List<String> products = Arrays.asList("product1", "product2");
+        when(trainingService.getFilteredTrainings("Skipper", products)).thenReturn(trainingDTOs);
+
+        // Act
+        ResponseEntity<List<TrainingDTO>> response = trainingController.getFilteredTrainings("Skipper", products);
+
+        // Assert
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotEmpty();
+        assertThat(response.getBody()).isEqualTo(trainingDTOs);
     }
 
     @Test

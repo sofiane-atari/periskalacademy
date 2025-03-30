@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
@@ -38,7 +39,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         try {
             final String jwt = authHeader.substring(7);
-            final String username = JwtUtil.extractUsername(jwt);
+            final String username = JwtUtil.extractUsername(jwt); //TODO remove this it and change Util class as well this just compares it's own username against itself so dumb. See Util class for more info.
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 if (JwtUtil.validateToken(jwt, username)) {
@@ -59,15 +60,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "invalid_token", "Invalid JWT token");
         } catch (SignatureException e) {
             log.warn("Invalid JWT signature: {}", e.getMessage());
-            sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "invalid_signature",
-                    "Invalid JWT signature");
-        } catch (Exception e) {
+            sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "invalid_signature", "Invalid JWT signature");
+        } catch (JwtException e) {
             log.error("JWT token validation error: {}", e.getMessage());
             sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "authentication_error", e.getMessage());
         }
     }
 
-    private void sendErrorResponse(HttpServletResponse response, int status, String error, String message)
+    private void sendErrorResponse(HttpServletResponse response, int status, String error, String message) // Should probably use a custom authenticationentrypoint for this instead of sending a response here, but this is easier for now.
             throws IOException {
         response.setStatus(status);
         response.setContentType("application/json");

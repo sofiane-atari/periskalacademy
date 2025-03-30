@@ -9,7 +9,6 @@ import javax.crypto.SecretKey;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -18,7 +17,7 @@ import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.MacAlgorithm;
 import periskal.academy.backend.model.AuthenticateResponse;
 
-@Component
+
 public final class JwtUtil {
 
     private JwtUtil() {} // Private constructor to prevent instantiation
@@ -49,7 +48,7 @@ public final class JwtUtil {
     }
 
     
-    public static String extractUsername(String token) {
+    public static String extractUsername(String token) { //probably also redundant, but check where it is used in the codebase.
         return extractClaims(token).getSubject();
     }
 
@@ -63,11 +62,12 @@ public final class JwtUtil {
     }
 
     
-    public static boolean isTokenExpired(String token) {
+    public static boolean isTokenExpired(String token) { //redundant
         return extractClaims(token).getExpiration().before(new Date());
     }
 
-    // Validate token and check if username matches, must be a better way of validationn check later.
+    //Validate token and check if username matches, must be a better way of validationn check later. 
+    //TODO: Checked and extractclaims validate/checkExpiry so why do I call those other 2 methods, I'm dumb. Even dumber that I check the username against itself in the filter. Make an issue for this!
     public static boolean validateToken(String token, String username) {
         return (username.equals(extractUsername(token)) && !isTokenExpired(token));
     }

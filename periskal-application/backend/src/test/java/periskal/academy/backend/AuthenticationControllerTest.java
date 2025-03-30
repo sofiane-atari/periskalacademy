@@ -1,37 +1,66 @@
 package periskal.academy.backend;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.when;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import periskal.academy.backend.controller.AuthenticationController;
+import periskal.academy.backend.dto.ErrorResponse;
+import periskal.academy.backend.jpa.TrainingRepository;
 import periskal.academy.backend.model.AuthenticateResponse;
 import periskal.academy.backend.model.LoginRequest;
+import periskal.academy.backend.security.Exceptions.AuthenticationExceptions.AuthenticationCommunicationException;
+import periskal.academy.backend.security.Exceptions.AuthenticationExceptions.AuthenticationInvalidCredentialsException;
 import periskal.academy.backend.service.Authentication.AuthenticationService;
+import periskal.academy.backend.service.Authentication.DongleAuthenticationService;
 import periskal.academy.backend.util.JwtUtil;
 
-@ExtendWith(MockitoExtension.class)
+@WebMvcTest(controllers = AuthenticationController.class,excludeAutoConfiguration = {SecurityAutoConfiguration.class})
 class AuthenticationControllerTest {
 
-    @Mock
+    @Autowired
+    private MockMvc mockMvc;
+    
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @MockitoBean
     private AuthenticationService authenticationService;
 
-    @InjectMocks
-    private AuthenticationController authenticationController;
+    @MockitoBean 
+    private DongleAuthenticationService dongleAuthenticationService; //TODO: add Dongletest
+
+    @MockitoBean // DON'T DELETE THIS LINE, IT'S NEEDED FOR THE TEST TO WORK
+    private TrainingRepository trainingRepository; //this has to be here to make the test work, idk why it needs to load this but it does
+
+    private LoginRequest loginRequest;
+
+    @BeforeEach
+    void setUp() {
+        loginRequest = new LoginRequest();
+        loginRequest.setUsername("testUser");
+        loginRequest.setPassword("testPass");
+    }
+
 
     @Test
     void givenValidCredentials_whenAuthenticate_thenReturnsTokenAndOkStatus() throws Exception {
+        
         // Arrange
-        LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setUsername("testUser");
-        loginRequest.setPassword("testPass");
-
         AuthenticateResponse mockResponse = new AuthenticateResponse();
         mockResponse.setUsername("testUser");
         mockResponse.setRole("USER");
@@ -45,54 +74,84 @@ class AuthenticationControllerTest {
             jwtUtilMocked.when(() -> JwtUtil.generateToken(mockResponse)).thenReturn(mockToken);
 
             // Act
-            ResponseEntity<AuthenticateResponse> result = authenticationController.authenticate(loginRequest);
+            MvcResult mvcResult = mockMvc.perform(post("/api/auth/authenticate").contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(loginRequest))).andReturn();
 
             // Assert
-            assertThat(result).isNotNull();
-            assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
-            assertThat(result.getBody()).isNotNull();
-            assertThat(result.getBody().getToken()).isEqualTo(mockToken);
-            assertThat(result.getBody().getLoginResult()).isEqualTo("SuccesByToken");
+            MockHttpServletResponse response = mvcResult.getResponse();
+            assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+            assertThat(response.getContentType()).isEqualTo(MediaType.APPLICATION_JSON_VALUE);
+
+            AuthenticateResponse actualResponse = objectMapper.readValue(response.getContentAsString(),AuthenticateResponse.class);
+
+            assertThat(actualResponse).isNotNull();
+            assertThat(actualResponse.getUsername()).isEqualTo("testUser");
+            assertThat(actualResponse.getToken()).isEqualTo(mockToken);
+            assertThat(actualResponse.getLoginResult()).isEqualTo("SuccesByToken");
+
         }
     }
 
     @Test
     void givenInvalidCredentials_whenAuthenticate_thenReturnsUnauthorized() throws Exception {
+        
         // Arrange
-        LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setUsername("wrongUser");
-        loginRequest.setPassword("wrongPass");
+        String username = "wrongUser";
+        String password = "wrongPass";
+        loginRequest.setUsername(username);
+        loginRequest.setPassword(password);
 
-        AuthenticateResponse mockResponse = new AuthenticateResponse();
-        mockResponse.setLoginResult("Failed");
+        String exceptionMessage = "Authentication failed: Invalid username or password.";
 
-        when(authenticationService.authenticate("wrongUser", "wrongPass")).thenReturn(mockResponse);
+        when(authenticationService.authenticate(username, password)).thenThrow(new AuthenticationInvalidCredentialsException(exceptionMessage));
 
         // Act
-        ResponseEntity<AuthenticateResponse> result = authenticationController.authenticate(loginRequest);
+        MvcResult mvcResult = mockMvc.perform(post("/api/auth/authenticate").contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(loginRequest))).andReturn();
 
         // Assert
-        assertThat(result).isNotNull();
-        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
-        assertThat(result.getBody()).isNotNull();
-        assertThat(result.getBody().getLoginResult()).isEqualTo("Failed");
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+
+        ErrorResponse errorResponse = objectMapper.readValue(response.getContentAsString(),ErrorResponse.class);
+
+        assertThat(errorResponse).isNotNull();
+        assertThat(errorResponse.getStatus()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+        assertThat(errorResponse.getError()).isEqualTo(HttpStatus.UNAUTHORIZED.getReasonPhrase());
+        assertThat(errorResponse.getMessage()).isEqualTo("Authentication failed. Please check your username and password.");
+        assertThat(errorResponse.getDetails()).isEqualTo("Invalid credentials provided.");
+        assertThat(errorResponse.getValidationErrors()).isNull();
+        assertThat(errorResponse.getTimestamp()).isNotNull();
+
+
     }
 
     @Test
-    void givenNullResponse_whenAuthenticate_thenReturnsUnauthorized() throws Exception {
+    void givenCommunicationError_whenAuthenticate_thenReturnsServiceUnavailable() throws Exception { 
+        
         // Arrange
-        LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setUsername("testUser");
-        loginRequest.setPassword("testPass");
+         String username = "testUser";
+         String password = "testPass";
+         String exceptionMessage = "SOAP authentication request failed: Communication error";
 
-        when(authenticationService.authenticate("testUser", "testPass")).thenReturn(null);
+         
+        when(authenticationService.authenticate(username, password)).thenThrow(new AuthenticationCommunicationException(exceptionMessage, new RuntimeException("Network timeout"))); 
 
         // Act
-        ResponseEntity<AuthenticateResponse> result = authenticationController.authenticate(loginRequest);
+        MvcResult mvcResult = mockMvc.perform(post("/api/auth/authenticate").contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(loginRequest))).andReturn();
 
         // Assert
-        assertThat(result).isNotNull();
-        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
-        assertThat(result.getBody()).isNull();
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.SERVICE_UNAVAILABLE.value());
+
+        ErrorResponse  errorResponse = objectMapper.readValue(response.getContentAsString(),ErrorResponse .class);
+
+        assertThat(errorResponse).isNotNull();
+        assertThat(errorResponse.getStatus()).isEqualTo(HttpStatus.SERVICE_UNAVAILABLE.value());
+        assertThat(errorResponse.getError()).isEqualTo(HttpStatus.SERVICE_UNAVAILABLE.getReasonPhrase());
+        assertThat(errorResponse.getMessage()).isEqualTo("Authentication service is currently unavailable. Please try again later.");
+        assertThat(errorResponse.getDetails()).isEqualTo(exceptionMessage); // Details contain original message
+        assertThat(errorResponse.getValidationErrors()).isNull();
+        assertThat(errorResponse.getTimestamp()).isNotNull();
     }
+
+
 }
