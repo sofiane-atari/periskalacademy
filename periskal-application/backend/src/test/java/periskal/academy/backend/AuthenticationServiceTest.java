@@ -1,8 +1,11 @@
 package periskal.academy.backend;
 
 import java.lang.reflect.Field;
+import java.net.SocketTimeoutException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -15,12 +18,15 @@ import org.springframework.test.web.client.MockRestServiceServer;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.header;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
-import static org.springframework.test.web.client.response.MockRestResponseCreators.withBadRequest;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
-
 import periskal.academy.backend.model.AuthenticateResponse;
+import periskal.academy.backend.security.Exceptions.AuthenticationExceptions.AuthenticationCommunicationException;
+import periskal.academy.backend.security.Exceptions.AuthenticationExceptions.AuthenticationInvalidCredentialsException;
+import periskal.academy.backend.security.Exceptions.AuthenticationExceptions.AuthenticationParsingException;
+import periskal.academy.backend.security.Exceptions.AuthenticationExceptions.AuthenticationServiceException;
 import periskal.academy.backend.service.Authentication.AuthenticationService;
 import periskal.academy.backend.util.EncryptionUtil;
 
@@ -29,6 +35,7 @@ public class AuthenticationServiceTest {
     private AuthenticationService authenticationService;
     private MockRestServiceServer mockServer;
     private RestTemplate restTemplate;
+    private String authenticateEndpointUrl;
 
     @BeforeEach
     void setUp() throws Exception {
@@ -38,14 +45,11 @@ public class AuthenticationServiceTest {
         restTemplateField.setAccessible(true);
         restTemplate = (RestTemplate) restTemplateField.get(authenticationService);
 
-        mockServer = MockRestServiceServer.createServer(restTemplate);
-    }
-
-    private String getAuthenticateEndpointUrl() throws Exception {
-        Field endpointUrlField = AuthenticationService.class.getSuperclass()
-                .getDeclaredField("authenticateEndpointUrl");
+        Field endpointUrlField = AuthenticationService.class.getSuperclass().getDeclaredField("AUTHENTICATE_ENDPOINT_URL");
         endpointUrlField.setAccessible(true);
-        return (String) endpointUrlField.get(authenticationService);
+        authenticateEndpointUrl = (String) endpointUrlField.get(null); 
+
+        mockServer = MockRestServiceServer.createServer(restTemplate);
     }
 
     @Test
@@ -76,13 +80,15 @@ public class AuthenticationServiceTest {
             mockedStatic.when(() -> EncryptionUtil.encode(anyString(), anyString()))
                     .thenReturn("encoded_token");
 
-            mockServer.expect(requestTo(getAuthenticateEndpointUrl()))
+            mockServer.expect(requestTo(authenticateEndpointUrl))
                     .andExpect(method(HttpMethod.POST))
                     .andExpect(header("Content-Type", "application/soap+xml;charset=utf-8"))
                     .andRespond(withSuccess(sampleResponseXml, MediaType.TEXT_XML));
 
+            //act
             AuthenticateResponse response = authenticationService.authenticate("user", "pass");
 
+            //assert
             assertThat(response).isNotNull();
             assertThat(response.getId()).isEqualTo("12345");
             assertThat(response.getUsername()).isEqualTo("testUser");
@@ -98,66 +104,113 @@ public class AuthenticationServiceTest {
     }
 
     @Test
-    void givenHttpError_whenAuthenticate_thenReturnsNull() throws Exception {
+    void givenInvalidCredentialsSoapResponse_whenAuthenticate_thenThrowsAuthenticationInvalidCredentialsException() throws Exception {
+        String invalidCredsXml = """
+                <?xml version="1.0" encoding="utf-8"?>
+                <soap12:Envelope xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
+                  <soap12:Body>
+                    <AuthenticateResponse>
+                      <AuthenticateResult>
+                        <ID></ID>
+                        <Username></Username>
+                        <LoginResult></LoginResult>
+                      </AuthenticateResult>
+                    </AuthenticateResponse>
+                  </soap12:Body>
+                </soap12:Envelope>""";
+
         try (MockedStatic<EncryptionUtil> mockedStatic = Mockito.mockStatic(EncryptionUtil.class)) {
             mockedStatic.when(() -> EncryptionUtil.encode(anyString(), anyString()))
                     .thenReturn("encoded_token");
 
-            mockServer.expect(requestTo(getAuthenticateEndpointUrl()))
+            mockServer.expect(requestTo(authenticateEndpointUrl))
+                    .andRespond(withSuccess(invalidCredsXml, MediaType.APPLICATION_XML));
+
+            // Act & Assert
+            assertThrows(
+                    AuthenticationInvalidCredentialsException.class,
+                    () -> authenticationService.authenticate("user", "wrongpass")
+            );
+
+            mockServer.verify();
+        }
+    }
+
+
+    @Test
+    void givenHttpError_whenAuthenticate_thenThrowsAuthenticationServerErrorException() throws Exception {
+        try (MockedStatic<EncryptionUtil> mockedStatic = Mockito.mockStatic(EncryptionUtil.class)) {
+            mockedStatic.when(() -> EncryptionUtil.encode(anyString(), anyString()))
+                    .thenReturn("encoded_token");
+
+            mockServer.expect(requestTo(authenticateEndpointUrl))
                     .andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR));
 
-            AuthenticateResponse response = authenticationService.authenticate("user", "pass");
-
-            assertThat(response).isNull();
+                    AuthenticationCommunicationException  exception = assertThrows(
+                        AuthenticationCommunicationException .class,
+                    () -> authenticationService.authenticate("user", "pass")
+            );
+     
             mockServer.verify();
+
         }
     }
 
+
     @Test
-    void givenInvalidXmlResponse_whenAuthenticate_thenReturnsPartiallyParsedResponse() throws Exception {
-        String invalidXml = "<InvalidXml></InvalidXml>";
+    void givenMalformedXmlResponse_whenAuthenticate_thenThrowsAuthenticationParsingException() throws Exception {
+        String malformedXml = "<MalformedXml><Oops></MalformedXml>"; // Missing closing tag
 
         try (MockedStatic<EncryptionUtil> mockedStatic = Mockito.mockStatic(EncryptionUtil.class)) {
             mockedStatic.when(() -> EncryptionUtil.encode(anyString(), anyString()))
                     .thenReturn("encoded_token");
 
-            mockServer.expect(requestTo(getAuthenticateEndpointUrl()))
-                    .andRespond(withSuccess(invalidXml, MediaType.TEXT_XML));
+            mockServer.expect(requestTo(authenticateEndpointUrl))
+                    .andRespond(withSuccess(malformedXml, MediaType.APPLICATION_XML));
 
-            AuthenticateResponse response = authenticationService.authenticate("user", "pass");
+            // Act & Assert
+            AuthenticationParsingException exception = assertThrows(
+                    AuthenticationParsingException.class,
+                    () -> authenticationService.authenticate("user", "pass")
+            );
 
-            assertThat(response).isNotNull();
-            assertThat(response.getId()).isNull();
-            assertThat(response.getUsername()).isNull();
             mockServer.verify();
         }
     }
 
     @Test
-    void givenRestTemplateThrowsException_whenAuthenticate_thenReturnsNull() throws Exception {
+    void givenRestTemplateThrowsRestClientException_whenAuthenticate_thenThrowsAuthenticationCommunicationException() throws Exception {
         try (MockedStatic<EncryptionUtil> mockedStatic = Mockito.mockStatic(EncryptionUtil.class)) {
             mockedStatic.when(() -> EncryptionUtil.encode(anyString(), anyString()))
                     .thenReturn("encoded_token");
 
-            mockServer.expect(requestTo(getAuthenticateEndpointUrl()))
-                    .andRespond(withBadRequest());
+            mockServer.expect(requestTo(authenticateEndpointUrl))
+                    .andRespond((request) -> { throw new ResourceAccessException("I/O error", new SocketTimeoutException("Timeout!")); });
 
-            AuthenticateResponse response = authenticationService.authenticate("user", "invalid");
+            // Act & assert
+            AuthenticationCommunicationException exception = assertThrows(
+                    AuthenticationCommunicationException.class,
+                    () -> authenticationService.authenticate("user", "pass")
+            );
 
-            assertThat(response).isNull();
             mockServer.verify();
         }
     }
 
     @Test
-    void givenEncryptionUtilThrowsException_whenAuthenticate_thenReturnsNull() throws Exception {
+    void givenEncryptionUtilThrowsException_whenAuthenticate_thenThrowsAuthenticationServiceException() throws Exception {
+        RuntimeException encryptionException = new RuntimeException("Encryption failed");
+
         try (MockedStatic<EncryptionUtil> mockedStatic = Mockito.mockStatic(EncryptionUtil.class)) {
             mockedStatic.when(() -> EncryptionUtil.encode(anyString(), anyString()))
-                    .thenThrow(new RuntimeException("Encryption failed"));
+                    .thenThrow(encryptionException); // Mock EncryptionUtil to throw
 
-            AuthenticateResponse response = authenticationService.authenticate("user", "pass");
+            // Act & Assert
+            AuthenticationServiceException exception = assertThrows(
+                AuthenticationServiceException.class,
+                    () -> authenticationService.authenticate("user", "pass")
+            );
 
-            assertThat(response).isNull();
         }
     }
 }
