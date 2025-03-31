@@ -1,4 +1,4 @@
-package periskal.academy.backend.service.Certificate;
+package periskal.academy.backend.util;
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -16,10 +16,13 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
-import org.springframework.stereotype.Service;
 
-@Service
-public class CertificateGeneratorService {
+
+public final class CertificateGeneratorUtil {
+
+    private CertificateGeneratorUtil() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    }
 
     // --- Page Dimensions ---
     private static final float PAGE_WIDTH = PDRectangle.A4.getWidth(); // 595.27...
@@ -101,7 +104,7 @@ public class CertificateGeneratorService {
     private static final float DECO_CIRCLE_RADIUS = 45; // Adjust
 
 
-    public byte[] generateCertificatePdf(
+    public static byte[] generateCertificatePdf(
             String productName,
             String productdetails,
             String shipName,
@@ -124,7 +127,7 @@ public class CertificateGeneratorService {
 
             // --- Load Logo Image ---
             PDImageXObject pdLogoImage = null;
-            try (InputStream logoStream = getClass().getResourceAsStream(LOGO_IMAGE_PATH)) {
+            try (InputStream logoStream = CertificateGeneratorUtil.class.getResourceAsStream(LOGO_IMAGE_PATH)) {
                 if (logoStream != null) {
                     pdLogoImage = PDImageXObject.createFromByteArray(document, logoStream.readAllBytes(), "logo");
                 } else {
@@ -174,7 +177,7 @@ public class CertificateGeneratorService {
 
     // --- Helper Drawing Methods ---
 
-    private void drawDecorativeBar(PDPageContentStream contentStream) throws IOException {
+    private static void drawDecorativeBar(PDPageContentStream contentStream) throws IOException {
         // Yellow background
         contentStream.setNonStrokingColor(COLOR_DECO_YELLOW);
         contentStream.addRect(DECO_BAR_X, 0, DECO_BAR_WIDTH, PAGE_HEIGHT);
@@ -202,7 +205,7 @@ public class CertificateGeneratorService {
 
     }
 
-     private void drawDecorativeCircle(PDPageContentStream contentStream) throws IOException {
+    private static void drawDecorativeCircle(PDPageContentStream contentStream) throws IOException {
         // Draw a proper circle using Bezier curves
         contentStream.setNonStrokingColor(COLOR_CIRCLE_GRAY);
         
@@ -250,8 +253,7 @@ public class CertificateGeneratorService {
         contentStream.fill();
     }
 
-
-    private void drawLogo(PDPageContentStream cs, PDImageXObject logoImg, PDFont fontBold, PDFont fontRegular) throws IOException {
+    private static void drawLogo(PDPageContentStream cs, PDImageXObject logoImg, PDFont fontBold, PDFont fontRegular) throws IOException {
         // Draw Image
         if (logoImg != null) {
             cs.drawImage(logoImg, LOGO_IMG_X, LOGO_IMG_Y, LOGO_IMG_WIDTH, LOGO_IMG_HEIGHT);
@@ -274,7 +276,7 @@ public class CertificateGeneratorService {
         cs.endText();
     }
 
-    private void drawTitle(PDPageContentStream cs, PDFont font) throws IOException {
+    private static void drawTitle(PDPageContentStream cs, PDFont font) throws IOException {
         float fontSize1 = 24;
         float fontSize2 = 24;
         String title1 = "CERTIFICATE";
@@ -298,7 +300,7 @@ public class CertificateGeneratorService {
         cs.endText();
     }
 
-    private void drawProductInfo(PDPageContentStream cs, PDFont fontBold, PDFont fontRegular, String productName) throws IOException {
+    private static void drawProductInfo(PDPageContentStream cs, PDFont fontBold, PDFont fontRegular, String productName) throws IOException {
         float fontSizeLabel = 14;
     float fontSizeValue = 14; // Keep consistent with label or adjust if needed
     float labelIndent = 0; // Indentation for "PRODUCT : "
@@ -400,7 +402,7 @@ public class CertificateGeneratorService {
     cs.endText();
 }
 
-     private void drawBodyText(PDPageContentStream cs, PDFont font, String signerName, String shipName,String productDetails, String trainingDate) throws IOException {
+    private static void drawBodyText(PDPageContentStream cs, PDFont font, String signerName, String shipName,String productDetails, String trainingDate) throws IOException {
         float fontSize = 10.5f; // Adjust size
         cs.setFont(font, fontSize);
         cs.setNonStrokingColor(COLOR_BODY_TEXT);
@@ -429,7 +431,7 @@ public class CertificateGeneratorService {
         cs.endText();
     }
 
-    private void drawCrewNames(PDPageContentStream cs, PDFont font, List<String> crewNames) throws IOException {
+    private static void drawCrewNames(PDPageContentStream cs, PDFont font, List<String> crewNames) throws IOException {
         float fontSize = 14f; // Adjust size for names
         cs.setFont(font, fontSize);
         cs.setNonStrokingColor(COLOR_BODY_TEXT); // Same color as body or different?
@@ -445,7 +447,7 @@ public class CertificateGeneratorService {
         }
     }
 
-     private void drawSignatory(PDPageContentStream cs, PDFont font, String signerName, String signerTitle) throws IOException {
+    private static void drawSignatory(PDPageContentStream cs, PDFont font, String signerName, String signerTitle) throws IOException {
         float fontSize = 10f; // Adjust size
         cs.setFont(font, fontSize);
         cs.setNonStrokingColor(Color.BLACK);
@@ -458,7 +460,7 @@ public class CertificateGeneratorService {
         cs.endText();
     }
 
-    private void drawFooter(PDPageContentStream cs, PDFont font, String companyName, String companyAddress, String companyPhone) throws IOException {
+    private static void drawFooter(PDPageContentStream cs, PDFont font, String companyName, String companyAddress, String companyPhone) throws IOException {
         float fontSize = 9f; // Smaller for footer
         cs.setFont(font, fontSize);
         cs.setNonStrokingColor(Color.BLACK);
@@ -476,8 +478,8 @@ public class CertificateGeneratorService {
 
 
     // --- Font Loading Helper ---
-    private PDFont loadFont(PDDocument document, String fontPath, PDFont fallbackFont) {
-        try (InputStream fontStream = getClass().getResourceAsStream(fontPath)) {
+    private static PDFont loadFont(PDDocument document, String fontPath, PDFont fallbackFont) {
+        try (InputStream fontStream = CertificateGeneratorUtil.class.getResourceAsStream(fontPath)) {
             if (fontStream != null) {
                 // Embed the font subset
                 return PDType0Font.load(document, fontStream, true);
@@ -493,7 +495,6 @@ public class CertificateGeneratorService {
 
     // --- Example Usage ---
      public static void main(String[] args) {
-        CertificateGeneratorService generator = new CertificateGeneratorService();
 
         // --- Test Data ---
         String productName = "DEMO PRODUCT";
@@ -511,7 +512,7 @@ public class CertificateGeneratorService {
         try {
             System.out.println("Generating certificate (V2)...");
             // Ensure logo image and font files exist at the expected classpath locations!
-            byte[] pdfData = generator.generateCertificatePdf(
+            byte[] pdfData = CertificateGeneratorUtil.generateCertificatePdf(
                     productName, productdetails,shipName, trainingDate, crewNames, signerName, signerTitle,
                     companyName, companyAddress, companyPhone
             );
