@@ -26,14 +26,6 @@ public class CertificateController {
     public ResponseEntity<byte[]> createCertificate() throws IOException {
 
         byte[] pdfBytes = certificateService.createCertificate();
-        
-        try {
-            java.nio.file.Path debugPath = java.nio.file.Paths.get("./debug_certificate_server.pdf");
-            java.nio.file.Files.write(debugPath, pdfBytes);
-            log.info("Successfully saved debug certificate to: {}", debugPath.toAbsolutePath());
-        } catch (Exception e) {
-            log.error("Failed to save debug certificate on server", e);
-        }
         return ResponseEntity.ok()
                 .header("Content-Disposition", "attachment; filename=certificate.pdf")
                 .contentType(MediaType.APPLICATION_PDF)
