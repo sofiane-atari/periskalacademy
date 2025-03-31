@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class CertificateService {
 
   private baseUrl = 'http://localhost:8080/api';
-  private apiUrl = `${this.baseUrl}}/certificate/generate`;
+  private apiUrl = `${this.baseUrl}/certificate/generate`;
 
   constructor(private http: HttpClient) { }
 
