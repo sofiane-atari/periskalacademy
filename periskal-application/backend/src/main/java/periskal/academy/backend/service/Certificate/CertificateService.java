@@ -13,7 +13,7 @@ import periskal.academy.backend.util.CertificateGeneratorUtil;
 public class CertificateService {
 
     public byte[] createCertificate() throws IOException {
-        // Dummy Data
+        // Dummy Data, later to be replaced with actual data from the database or JWT token
         String productName = "DEMO PRODUCT";
         String productDetails = "DEMO PRODUCT DETAILS";
         String shipName = "DEMO SHIPNAME";
