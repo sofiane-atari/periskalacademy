@@ -136,3 +136,24 @@ h2 {
   padding: 2rem;
   font-style: italic;
 }
+
+.download-container {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.download-button {
+  padding: 0.75rem 1.5rem;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.download-button:hover {
+  background-color: #c82333;
+}

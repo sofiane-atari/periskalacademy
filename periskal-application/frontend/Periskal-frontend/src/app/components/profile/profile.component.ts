@@ -5,6 +5,9 @@ import { JwtDecoderService } from '../../services/JwtDecode/jwt-decoder.service'
 import { AuthenticationService } from '../../services/Authentication/authentication.service';
 import { AuthenticateResponse } from '../../models/authenticate-response.model';
 import { TranslatePipe } from '@ngx-translate/core';
+import { finalize } from 'rxjs';
+import { CertificateService } from '../../services/Certificates/certificate.service';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-profile',
@@ -16,11 +19,13 @@ import { TranslatePipe } from '@ngx-translate/core';
 export class ProfileComponent implements OnInit {
   userProfile: Partial<AuthenticateResponse> = {};
   activeTab: 'info' | 'products' | 'settings' = 'info';
+  isDownloading = false;
 
   constructor(
     private jwtDecoderService: JwtDecoderService,
     private authService: AuthenticationService,
-    private router: Router
+    private router: Router,
+    private certificateService: CertificateService
   ) {}
 
   ngOnInit() {
@@ -53,5 +58,17 @@ export class ProfileComponent implements OnInit {
   logout() { 
     this.authService.logout();
     this.router.navigate(['/login']); // there is probably a better way to do this but this works for now
+  }
+
+  downloadCertificate() {
+    if (this.isDownloading) {
+      return;
+    }
+    this.isDownloading = true;
+
+    this.certificateService.downloadCertificate().pipe(finalize(() => this.isDownloading = false)).subscribe({
+      next: (blob: Blob) => {saveAs(blob, 'Certificate.pdf');},
+      error: (error) => {console.error('Download failed:', error);}
+    });
   }
 }
