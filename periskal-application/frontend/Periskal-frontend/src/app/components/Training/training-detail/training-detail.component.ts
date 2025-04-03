@@ -14,6 +14,7 @@ import { Module } from '../../../models/module.model';
 export class TrainingDetailComponent {
   training: Training | undefined;
   modules: Module[] = [];
+  public lang: String | null = "";
 
   trainingId: number = 0;
 
@@ -21,6 +22,7 @@ export class TrainingDetailComponent {
   }
 
   ngOnInit(): void {
+    this.lang = localStorage.getItem('lang');
     // Get the training ID from the URL
     this.trainingId = Number(this.route.snapshot.paramMap.get('id'));
 
@@ -39,5 +41,41 @@ export class TrainingDetailComponent {
 
   goToChaptersPage(moduleId: number) {
     this.router.navigate(['/training', this.trainingId, 'module', moduleId])
+  }
+
+  getModuleTitle() {
+    if (this.lang == "en") {
+      return this.training?.name_en;
+    }
+    if (this.lang == "nl") {
+      return this.training?.name_nl;
+    }
+    if (this.lang == "fr") {
+      return this.training?.name_fr;
+    }
+    if (this.lang == "de") {
+      return this.training?.name_de;
+    }
+    else {
+      return "Unknown language"
+    }
+  }
+
+  getModuleDescription() {
+    if (this.lang == "en") {
+      return this.training?.description_en;
+    }
+    if (this.lang == "nl") {
+      return this.training?.description_nl;
+    }
+    if (this.lang == "fr") {
+      return this.training?.description_fr;
+    }
+    if (this.lang == "de") {
+      return this.training?.description_de;
+    }
+    else {
+      return "Unknown language"
+    }
   }
 }
