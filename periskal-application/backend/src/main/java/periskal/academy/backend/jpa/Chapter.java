@@ -46,7 +46,19 @@ public class Chapter {
 
     @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<Photo> photos = new ArrayList<>();
+    private List<Photo> photos_en = new ArrayList<>();
+
+    @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Photo> photos_nl = new ArrayList<>();
+
+    @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Photo> photos_fr = new ArrayList<>();
+
+    @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Photo> photos_de = new ArrayList<>();
 
     public Chapter(String nameChapter, String descriptionChapter, String textChapter) {
         this.nameChapter_en = nameChapter;
@@ -55,12 +67,12 @@ public class Chapter {
     }
 
     public void addPhoto(Photo photo) {
-        photos.add(photo);
+        photos_en.add(photo);
         photo.setChapter(this);
     }
 
     public void removePhoto(Photo photo) {
-        photos.remove(photo);
+        photos_en.remove(photo);
         photo.setChapter(null);
     }
 }

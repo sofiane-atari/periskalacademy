@@ -61,10 +61,22 @@ export class AddTrainingComponent {
 
   createChapter(): FormGroup {
     return this.fb.group({
-      nameChapter: ['', Validators.required],
-      descriptionChapter: ['', Validators.required],
-      textChapter: ['', Validators.required],
-      photos: [[]]
+      nameChapter_en: ['', Validators.required],
+      descriptionChapter_en: ['', Validators.required],
+      textChapter_en: ['', Validators.required],
+      photos_en: [[]],
+      nameChapter_nl: ['', Validators.required],
+      descriptionChapter_nl: ['', Validators.required],
+      textChapter_nl: ['', Validators.required],
+      photos_nl: [[]],
+      nameChapter_fr: ['', Validators.required],
+      descriptionChapter_fr: ['', Validators.required],
+      textChapter_fr: ['', Validators.required],
+      photos_fr: [[]],
+      nameChapter_de: ['', Validators.required],
+      descriptionChapter_de: ['', Validators.required],
+      textChapter_de: ['', Validators.required],
+      photos_de: [[]]
     });
   }
 

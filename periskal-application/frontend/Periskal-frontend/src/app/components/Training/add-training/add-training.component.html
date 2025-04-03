@@ -78,22 +78,23 @@
                   </div>
                   
                   <div [hidden]="isChapterCollapsed(moduleIndex, chapterIndex)" class="chapter-content">
+                    @for (lang of languages; track $index) {
                     <div>
                       <label>{{"CHAPTER_TITLE" | translate}}</label>
                       <input
-                        formControlName="nameChapter"
-                        placeholder="Geef de titel van hoofdstuk {{ chapterIndex + 1 }}"
+                        formControlName="nameChapter_{{lang}}"
+                        placeholder="Geef de titel van hoofdstuk {{ chapterIndex + 1 }} in {{lang}}"
                         required
                       />
                     </div>
                     <div>
                       <label>{{"CHAPTER_DESCRIPTION" | translate}}</label>
                       <textarea
-                        formControlName="descriptionChapter"
-                        id="descriptionChapter{{ moduleIndex }}_{{ chapterIndex }}"
+                        formControlName="descriptionChapter_{{lang}}"
+                        id="descriptionChapter_{{lang}}{{ moduleIndex }}_{{ chapterIndex }}"
                         class="form-control"
-                        placeholder="Geef de beschrijving van hoofdstuk {{ chapterIndex + 1 }}"
-                        name="descriptionChapter{{ moduleIndex }}_{{ chapterIndex }}"
+                        placeholder="Geef de beschrijving van hoofdstuk {{ chapterIndex + 1 }} in {{lang}}"
+                        name="descriptionChapter_{{lang}}{{ moduleIndex }}_{{ chapterIndex }}"
                         required
                       >
                       </textarea>
@@ -101,16 +102,17 @@
                     <div>
                       <label>{{"CHAPTER_TEXT" | translate}}</label>
                       <textarea
-                        formControlName="textChapter"
-                        id="textChapter{{ moduleIndex }}_{{ chapterIndex }}"
+                        formControlName="textChapter_{{lang}}"
+                        id="textChapter_{{lang}}{{ moduleIndex }}_{{ chapterIndex }}"
                         class="form-control"
-                        placeholder="Geef de tekst van hoofdstuk {{ chapterIndex + 1 }}"
-                        name="textChapter{{ moduleIndex }}_{{ chapterIndex }}"
+                        placeholder="Geef de tekst van hoofdstuk {{ chapterIndex + 1 }} in {{lang}}"
+                        name="textChapter_{{lang}}{{ moduleIndex }}_{{ chapterIndex }}"
                         required
                       >
                       </textarea>
-                      <app-photo-upload formControlName="photos"></app-photo-upload>
+                      <app-photo-upload formControlName="photos_{{lang}}"></app-photo-upload>
                     </div>
+                  }
                     @if(chapterIndex!=0) {
                     <button class="delete" type="button" (click)="removeChapter(moduleIndex, chapterIndex)">
                       {{"DELETE_CHAPTER" | translate}}
