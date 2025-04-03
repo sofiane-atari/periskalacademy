@@ -56,13 +56,14 @@ public class TrainingService {
     }
 
     public Training getTrainingById(Long id) {
-        return trainingRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Training not found with id: " + id));
+        return trainingRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Training not found with id: " + id));
     }
 
     public List<TrainingDTO> getFilteredTrainings(String role, List<String> products) {
-        
+
         if (role == null || role.isBlank()) {
-            throw new ValidationException("Role parameter cannot be null or empty."); 
+            throw new ValidationException("Role parameter cannot be null or empty.");
         }
 
         // If Admin/Support, return all trainings
@@ -84,7 +85,8 @@ public class TrainingService {
         if (entity == null) {
             throw new ValidationException("Training data cannot be null.");
         }
-        // We could add more validation here, like checking if the training already exists, etc
+        // We could add more validation here, like checking if the training already
+        // exists, etc
         if (entity.getName_en() == null || entity.getName_en().isBlank()) {
             throw new ValidationException("Training name (English) cannot be empty.");
         }
@@ -105,17 +107,16 @@ public class TrainingService {
             }
         }
 
-       try {
+        try {
             return trainingRepository.save(entity);
         } catch (DataIntegrityViolationException e) {
             log.error("Failed to create training due to data integrity violation: {}", e.getMessage());
-            throw e; 
+            throw e;
         } catch (DataAccessException e) {
             log.error("Failed to create training due to database error: {}", e.getMessage(), e);
-            throw new RuntimeException("Failed to save training to the database.", e); 
+            throw new RuntimeException("Failed to save training to the database.", e);
         }
     }
-
 
     public Training updateTraining(Long id, Training updatedTraining) {
 
@@ -145,8 +146,7 @@ public class TrainingService {
             log.error("Failed to update training {} due to database error: {}", id, e.getMessage(), e);
             throw new RuntimeException("Failed to update training " + id + " in the database.", e);
         }
-    } 
-    
+    }
 
     public void deleteTraining(Long id) {
 
@@ -157,8 +157,10 @@ public class TrainingService {
             trainingRepository.deleteById(id);
             log.info("Successfully deleted Training with ID: {}", id);
         } catch (DataIntegrityViolationException e) {
-             log.error("Failed to delete training {} due to data integrity violation (e.g., related data exists): {}", id, e.getMessage());
-             throw new ValidationException("Cannot delete training " + id + ". It might be referenced by other data.", List.of(e.getMessage()));
+            log.error("Failed to delete training {} due to data integrity violation (e.g., related data exists): {}",
+                    id, e.getMessage());
+            throw new ValidationException("Cannot delete training " + id + ". It might be referenced by other data.",
+                    List.of(e.getMessage()));
         } catch (DataAccessException e) {
             log.error("Failed to delete training {} due to database error: {}", id, e.getMessage(), e);
             throw new RuntimeException("Failed to delete training " + id + " from the database.", e);
@@ -167,39 +169,42 @@ public class TrainingService {
 
     public Training deleteModule(Long trainingId, Long moduleId) {
 
-        Training training = trainingRepository.findById(trainingId).orElseThrow(() -> new ResourceNotFoundException("Training not found with id: " + trainingId));
-
+        Training training = trainingRepository.findById(trainingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Training not found with id: " + trainingId));
 
         Module moduleToRemove = training.getModules().stream()
-        .filter(module -> module.getId().equals(moduleId))
-        .findFirst()
-         .orElseThrow(() -> new ResourceNotFoundException("Module not found with id: " + moduleId + " in training: " + trainingId));
+                .filter(module -> module.getId().equals(moduleId))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Module not found with id: " + moduleId + " in training: " + trainingId));
 
-         training.getModules().remove(moduleToRemove);
-         moduleToRemove.setTraining(null);
-        
-         try {
-           return trainingRepository.save(training);
-       } catch (DataAccessException e) {
-           log.error("Failed to delete module {} from training {} due to database error: {}", moduleId, trainingId, e.getMessage(), e);
-           throw new RuntimeException("Failed to delete module " + moduleId + " from training " + trainingId + ".", e);
-       }
+        training.getModules().remove(moduleToRemove);
+        moduleToRemove.setTraining(null);
+
+        try {
+            return trainingRepository.save(training);
+        } catch (DataAccessException e) {
+            log.error("Failed to delete module {} from training {} due to database error: {}", moduleId, trainingId,
+                    e.getMessage(), e);
+            throw new RuntimeException("Failed to delete module " + moduleId + " from training " + trainingId + ".", e);
+        }
     }
 
     public Training updateModules(Long trainingId, List<Module> modules) {
-        Training training = trainingRepository.findById(trainingId).orElseThrow(() -> new ResourceNotFoundException("Training not found with id: " + trainingId));
-
+        Training training = trainingRepository.findById(trainingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Training not found with id: " + trainingId));
 
         training.getModules().clear();
         modules.forEach(module -> {
-            module.setTraining(training); 
+            module.setTraining(training);
             training.getModules().add(module);
         });
 
         try {
             return trainingRepository.save(training);
         } catch (DataAccessException e) {
-            log.error("Failed to update modules for training {} due to database error: {}", trainingId, e.getMessage(), e);
+            log.error("Failed to update modules for training {} due to database error: {}", trainingId, e.getMessage(),
+                    e);
             throw new RuntimeException("Failed to update modules for training " + trainingId + ".", e);
         }
 
@@ -211,8 +216,8 @@ public class TrainingService {
         Training existingTraining = getTrainingById(trainingId);
 
         Module newModule = new Module();
-        newModule.setNameModule(moduleDto.getNameModule());
-        newModule.setDescriptionModule(moduleDto.getDescriptionModule());
+        newModule.setNameModule_en(moduleDto.getNameModule());
+        newModule.setDescriptionModule_en(moduleDto.getDescriptionModule());
         newModule.setTraining(existingTraining);
 
         try {
@@ -220,8 +225,9 @@ public class TrainingService {
             log.info("Added new module {} to training {}", savedModule.getId(), trainingId);
             return savedModule;
         } catch (DataIntegrityViolationException e) {
-             log.error("Failed to add module to training {} due to data integrity violation: {}", trainingId, e.getMessage());
-             throw e;
+            log.error("Failed to add module to training {} due to data integrity violation: {}", trainingId,
+                    e.getMessage());
+            throw e;
         } catch (DataAccessException e) {
             log.error("Failed to add module to training {} due to database error: {}", trainingId, e.getMessage(), e);
             throw new RuntimeException("Failed to add module to training " + trainingId + ".", e);

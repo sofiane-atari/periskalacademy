@@ -25,9 +25,15 @@ public class Module {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String nameModule;
+    private String nameModule_en;
+    private String nameModule_nl;
+    private String nameModule_fr;
+    private String nameModule_de;
 
-    private String descriptionModule;
+    private String descriptionModule_en;
+    private String descriptionModule_nl;
+    private String descriptionModule_fr;
+    private String descriptionModule_de;
 
     @ManyToOne
     @JoinColumn(name = "training_id", nullable = false)
@@ -39,13 +45,13 @@ public class Module {
     private List<Chapter> chapters = new ArrayList<>();;
 
     public Module(String name, String description) {
-        this.nameModule = name;
-        this.descriptionModule = description;
+        this.nameModule_en = name;
+        this.descriptionModule_en = description;
     }
 
     public Module(String nameModule, String descriptionModule, List<Chapter> chapters) {
-        this.nameModule = nameModule;
-        this.descriptionModule = descriptionModule;
+        this.nameModule_en = nameModule;
+        this.descriptionModule_en = descriptionModule;
         this.chapters = chapters;
     }
 }

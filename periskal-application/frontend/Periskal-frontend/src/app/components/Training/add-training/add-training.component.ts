@@ -47,8 +47,14 @@ export class AddTrainingComponent {
 
   createModule(): FormGroup {
     return this.fb.group({
-      nameModule: ['', Validators.required],
-      descriptionModule: ['', Validators.required],
+      nameModule_en: ['', Validators.required],
+      descriptionModule_en: ['', Validators.required],
+      nameModule_nl: ['', Validators.required],
+      descriptionModule_nl: ['', Validators.required],
+      nameModule_fr: ['', Validators.required],
+      descriptionModule_fr: ['', Validators.required],
+      nameModule_de: ['', Validators.required],
+      descriptionModule_de: ['', Validators.required],
       chapters: this.fb.array([this.createChapter()])
     });
   }

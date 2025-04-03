@@ -44,29 +44,29 @@
             <span class="toggle-icon">{{ isModuleCollapsed(moduleIndex) ? '►' : '▼' }}</span>
             <h4>{{"MODULE" | translate}} {{ moduleIndex + 1 }}: {{ getModuleTitle(moduleIndex) }}</h4>
           </div>
-          
           <div [hidden]="isModuleCollapsed(moduleIndex)" class="module-content">
+            @for (lang of languages; track $index) {
             <div>
               <label>{{"MODULE_TITLE" | translate}}</label>
               <input
-                formControlName="nameModule"
-                placeholder="Geef de titel van module {{ moduleIndex + 1 }}"
+                formControlName="nameModule_{{lang}}"
+                placeholder="Geef de titel van module {{ moduleIndex + 1 }} in {{lang}}"
                 required
               />
             </div>
             <div>
               <label>{{"MODULE_DESCRIPTION" | translate}}</label>
               <textarea
-                formControlName="descriptionModule"
-                id="descriptionModule{{ moduleIndex }}"
+                formControlName="descriptionModule_{{lang}}"
+                id="descriptionModule_{{lang}}{{ moduleIndex }}"
                 class="form-control"
-                placeholder="Geef de beschrijving van module {{ moduleIndex + 1 }}"
-                name="descriptionModule{{ moduleIndex }}"
+                placeholder="Geef de beschrijving van module {{ moduleIndex + 1 }} in {{lang}}"
+                name="descriptionModule_{{lang}}{{ moduleIndex }}"
                 required
               >
               </textarea>
             </div>
-            
+          }
             <div>
               <h4>{{"CHAPTERS_MODULE" | translate}} {{ moduleIndex + 1 }}</h4>
               <div formArrayName="chapters">
