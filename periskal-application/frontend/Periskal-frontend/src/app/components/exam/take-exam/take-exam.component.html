@@ -1,0 +1,29 @@
+<!-- take-exam.component.html -->
+<div class="exam-container">
+    @if (loading) {
+      <p>Loading exam...</p>
+    }
+    @else if (error) {
+      <p class="error">{{error}}</p>
+    }
+    @else if (exam) {
+      <h1>{{exam.examTitle}}</h1>
+      <p>{{exam.examDescription}}</p>
+  
+      <div class="questions">
+        @if (exam.questions && exam.questions.length > 0) {
+          <h3>Questions:</h3>
+          <ol>
+            @for (question of exam.questions; track $index) {
+              <li>
+                <p>{{question.text}}</p>
+                <!-- Add answer input fields here -->
+              </li>
+            }
+          </ol>
+        } @else {
+          <p>No questions found for this exam</p>
+        }
+      </div>
+    }
+  </div>

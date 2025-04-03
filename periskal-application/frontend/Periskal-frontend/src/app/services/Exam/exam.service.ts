@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError, Observable, of, throwError } from 'rxjs';
+import { catchError, Observable, of, tap, throwError } from 'rxjs';
 import { Exam } from '../../models/exam.model';
 
 @Injectable({
@@ -17,10 +17,9 @@ export class ExamService {
 
   getExamById(id: number): Observable<Exam> {
     return this.client.get<Exam>(`${this.baseUrl}/${id}`).pipe(
+      tap(exam => console.log('Received exam:', exam)), // Debug log
       catchError(error => {
-        if (error.status === 404) {
-          return throwError(() => new Error('Exam not found'));
-        }
+        console.error('Error loading exam:', error);
         return throwError(() => error);
       })
     );
