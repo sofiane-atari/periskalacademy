@@ -49,7 +49,7 @@
             <div>
               <label>{{"MODULE_TITLE" | translate}}</label>
               <input
-                formControlName="nameModule_en"
+                formControlName="nameModule_{{lang}}"
                 placeholder="Geef de titel van module {{ moduleIndex + 1 }} in {{lang}}"
                 required
               />
@@ -57,11 +57,11 @@
             <div>
               <label>{{"MODULE_DESCRIPTION" | translate}}</label>
               <textarea
-                formControlName="descriptionModule_en"
-                id="descriptionModule_en{{ moduleIndex }}"
+                formControlName="descriptionModule_{{lang}}"
+                id="descriptionModule_{{lang}}{{ moduleIndex }}"
                 class="form-control"
                 placeholder="Geef de beschrijving van module {{ moduleIndex + 1 }} in {{lang}}"
-                name="descriptionModule_en{{ moduleIndex }}"
+                name="descriptionModule_{{lang}}{{ moduleIndex }}"
                 required
               >
               </textarea>
