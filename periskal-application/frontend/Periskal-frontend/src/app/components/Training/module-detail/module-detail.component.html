@@ -1,28 +1,38 @@
 <div class="container">
     <div class="navigation">
       <h4>{{"CHAPTERS" | translate}}</h4>
-      <ul class="chapter-list">
-        @for (chapter of chapters; track $index) {
-          <li class="chapter-item" 
-              [class.active]="$index === activeChapterId"
-              (click)="setActiveChapter($index)">
-            {{ chapter.id }} {{ chapter.nameChapter }}
-          </li>
-        }
-      </ul>
+        <div>
+          <ul class="chapter-list">
+            @if (chapters && chapters.length > 0) {
+              @for (chapter of chapters; track chapter.id) {
+                <li> 
+                  @switch(lang) {
+                    @case ('en') { {{ chapter.nameChapter_en || 'Unnamed chapter' }} }
+                    @case ('nl') { {{ chapter.nameChapter_nl || 'Naamloos hoofdstuk' }} }
+                    @case ('fr') { {{ chapter.nameChapter_fr || 'Chapitre sans nom' }} }
+                    @case ('de') { {{ chapter.nameChapter_de || 'Unbenanntes Kapitel' }} }
+                    @default { {{ chapter.nameChapter_en || 'Unknown language' }} }
+                  }
+                </li>
+              }
+            } @else {
+              <li>No chapters found (Array length: {{ chapters?.length || 0 }})</li>
+            }
+          </ul>
+        </div>
     </div>
     
     <div class="content">
       <div class="chapter-card">
         <div class="chapter-header">
-          <h3>{{"CHAPTER" | translate}} {{activeChapterId+1}}: {{ chapters[activeChapterId].nameChapter }}</h3>
+          <h3>{{"CHAPTER" | translate}} {{activeChapterId+1}}: {{ getActiveChapterName() }}</h3>
         </div>
         <div class="chapter-body">
           <h5 class="section-title">{{"DESCRIPTION" | translate}}</h5>
-          <p class="section-text">{{ chapters[activeChapterId].descriptionChapter }}</p>
+          <p class="section-text">{{ getActiveChapterDescription() }}</p>
           
           <h5 class="section-title">{{"CONTENT" | translate}}</h5>
-          <p class="section-text" [innerHTML]="formatText(chapters[activeChapterId].textChapter.toString())"></p>
+          <!-- <p class="section-text" [innerHTML]="formatText(chapters[activeChapterId].textChapter_en.toString())"></p> -->
         </div>
         <div class="photos">
         @for (photo of chapters[activeChapterId].photos; track $index) {

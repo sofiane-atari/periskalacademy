@@ -1,28 +1,68 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TrainingService } from '../../../services/Training/training.service';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Training } from '../../../models/training.model';
 import { Chapter } from '../../../models/chapter.model';
 import { Module } from '../../../models/module.model';
+import { CommonModule } from '@angular/common';
+import { CheckboxRequiredValidator } from '@angular/forms';
 
 @Component({
   selector: 'app-training-detail',
-  imports: [TranslatePipe],
+  imports: [TranslatePipe, CommonModule],
   templateUrl: './module-detail.component.html',
   styleUrl: './module-detail.component.css'
 })
 export class ModuleDetailComponent {
+
+  // chapters: Chapter[] = [
+  //   {
+  //     id: 1,
+  //     nameChapter_en: 'Introduction to Angular',
+  //     nameChapter_nl: 'Introductie tot Angular',
+  //     nameChapter_fr: 'Introduction à Angular',
+  //     nameChapter_de: 'Einführung in Angular',
+  //     descriptionChapter_en: 'Learn the basics',
+  //     descriptionChapter_de: 'duits',
+  //     descriptionChapter_fr: 'frans',
+  //     descriptionChapter_nl: "nederlands",
+  //     textChapter_de: 'duits',
+  //     textChapter_fr: 'frans',
+  //     textChapter_nl: 'nederlands',
+  //     textChapter_en: 'Angular is a platform...',
+  //     photos: []
+  //   },
+  //   {
+  //     id: 2,
+  //     nameChapter_en: 'Components',
+  //     nameChapter_nl: 'Componenten',
+  //     nameChapter_fr: 'Composants',
+  //     nameChapter_de: 'Komponenten',
+  //     descriptionChapter_de: 'duits',
+  //     descriptionChapter_fr: 'frans',
+  //     descriptionChapter_nl: "nederlands",
+  //     textChapter_de: 'duits',
+  //     textChapter_fr: 'frans',
+  //     textChapter_nl: 'nederlands',
+  //     descriptionChapter_en: 'Building blocks of Angular',
+  //     textChapter_en: 'Components are the main building blocks...',
+  //     photos: []
+  //   }
+  // ];
+
   training: Training | undefined;
   modules: Module[] = [];
-  chapters: Chapter[] = [];
   text: string = "";
+  chapters: Chapter[] = [];
+  public lang: String | null = "";
+  updatedChapters: Chapter[] = [];
 
   trainingId: number = 0;
   moduleId: number = 0;
   activeChapterId: number = 0;
 
-  constructor(private route: ActivatedRoute, private trainingSvc: TrainingService, private router: Router) {
+  constructor(private route: ActivatedRoute, private trainingSvc: TrainingService, private router: Router, private cdr: ChangeDetectorRef) {
   }
 
 
@@ -31,26 +71,47 @@ export class ModuleDetailComponent {
   }
 
   ngOnInit(): void {
+
+    this.lang = localStorage.getItem('lang');
     // Get the training ID from the URL
     this.trainingId = Number(this.route.snapshot.paramMap.get('id'));
     this.moduleId = Number(this.route.snapshot.paramMap.get('moduleid'))
 
-    // Call the service method to get the products for the specific training
+    this.loadTrainingData();
+  }
+
+  getChapterArray(chapters: any): any[] {
+    // Convert object-like structure to array
+    if (Array.isArray(chapters)) return chapters;
+    if (chapters instanceof Object) return Object.values(chapters);
+    return [];
+  }
+
+  ngAfterViewChecked() {
+    console.log('Chapters:', this.chapters);
+  }
+
+  private loadTrainingData(): void {
     this.trainingSvc.getTrainingById(this.trainingId).subscribe({
       next: (data) => {
+        console.log(data);
         this.training = data;
-        this.modules = data.modules;
-        this.chapters = this.modules[this.moduleId - 1]?.chapters ?? [];
+        console.log(this.training);
+        this.modules = this.training.modules || []; // Ensure modules is never undefined
+        console.log(this.modules);
 
-        if (this.chapters.length > 0) {
-          this.text = this.chapters[this.activeChapterId]?.textChapter?.toString() ?? "";
-        }
+        // Safely find the module and its chapter
+        this.chapters = this.modules[this.moduleId - 1].chapters;
+        console.log(this.chapters[0].nameChapter_en)
+        console.log(this.chapters[1].nameChapter_en)
+        console.log('Loaded chapters:', this.chapters);
+        this.chapters.forEach((e) => this.updatedChapters.push(e));
       },
       error: (error) => {
-        console.error('Error fetching training products', error);
+        console.error('Error loading training data', error);
+        this.cdr.detectChanges();
       }
     });
-
   }
 
   goToChaptersPage(moduleId: number) {
@@ -59,5 +120,53 @@ export class ModuleDetailComponent {
 
   setActiveChapter(chapterId: number) {
     this.activeChapterId = chapterId;
+  }
+
+  getChapterName(chapterId: number) {
+    if (this.lang == "en") {
+      return this.chapters[chapterId].nameChapter_en;
+    }
+    if (this.lang == "nl") {
+      return this.chapters[chapterId].nameChapter_nl;
+    }
+    if (this.lang == "fr") {
+      return this.chapters[chapterId].nameChapter_fr;
+    }
+    if (this.lang == "de") {
+      return this.chapters[chapterId].nameChapter_de;
+    }
+    return "Unknown language"
+  }
+
+  getActiveChapterName() {
+    if (this.lang == "en") {
+      return this.chapters[this.activeChapterId].nameChapter_en;
+    }
+    if (this.lang == "nl") {
+      return this.chapters[this.activeChapterId].nameChapter_nl;
+    }
+    if (this.lang == "fr") {
+      return this.chapters[this.activeChapterId].nameChapter_fr;
+    }
+    if (this.lang == "de") {
+      return this.chapters[this.activeChapterId].nameChapter_de;
+    }
+    return "Unknown language"
+  }
+
+  getActiveChapterDescription() {
+    if (this.lang == "en") {
+      return this.chapters[this.activeChapterId].descriptionChapter_en;
+    }
+    if (this.lang == "nl") {
+      return this.chapters[this.activeChapterId].descriptionChapter_nl;
+    }
+    if (this.lang == "fr") {
+      return this.chapters[this.activeChapterId].descriptionChapter_fr;
+    }
+    if (this.lang == "de") {
+      return this.chapters[this.activeChapterId].descriptionChapter_de;
+    }
+    return "Unknown language"
   }
 }
