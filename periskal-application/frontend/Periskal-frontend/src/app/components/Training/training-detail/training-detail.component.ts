@@ -43,36 +43,36 @@ export class TrainingDetailComponent {
     this.router.navigate(['/training', this.trainingId, 'module', moduleId])
   }
 
-  getModuleTitle() {
+  getModuleTitle(moduleId: number) {
     if (this.lang == "en") {
-      return this.training?.name_en;
+      return this.training?.modules[moduleId].nameModule_en;
     }
     if (this.lang == "nl") {
-      return this.training?.name_nl;
+      return this.training?.modules[moduleId].nameModule_nl;
     }
     if (this.lang == "fr") {
-      return this.training?.name_fr;
+      return this.training?.modules[moduleId].nameModule_fr;
     }
     if (this.lang == "de") {
-      return this.training?.name_de;
+      return this.training?.modules[moduleId].nameModule_de;
     }
     else {
       return "Unknown language"
     }
   }
 
-  getModuleDescription() {
+  getModuleDescription(moduleId: number) {
     if (this.lang == "en") {
-      return this.training?.description_en;
+      return this.training?.modules[moduleId].descriptionModule_en;
     }
     if (this.lang == "nl") {
-      return this.training?.description_nl;
+      return this.training?.modules[moduleId].descriptionModule_nl;
     }
     if (this.lang == "fr") {
-      return this.training?.description_fr;
+      return this.training?.modules[moduleId].descriptionModule_fr;
     }
     if (this.lang == "de") {
-      return this.training?.description_de;
+      return this.training?.modules[moduleId].descriptionModule_de;
     }
     else {
       return "Unknown language"

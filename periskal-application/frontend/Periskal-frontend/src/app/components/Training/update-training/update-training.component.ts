@@ -88,8 +88,14 @@ export class UpdateTrainingComponent {
 
     const newModule = {
       id: highestId + 1,
-      nameModule: '',
-      descriptionModule: '',
+      nameModule_en: '',
+      descriptionModule_en: '',
+      nameModule_nl: '',
+      descriptionModule_nl: '',
+      nameModule_fr: '',
+      descriptionModule_fr: '',
+      nameModule_de: '',
+      descriptionModule_de: '',
       chapters: []
     };
     this.training?.modules.push(newModule);

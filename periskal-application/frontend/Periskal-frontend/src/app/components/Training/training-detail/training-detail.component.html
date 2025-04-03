@@ -2,8 +2,8 @@
   <h2>{{ training?.name_en }} {{'MODULES' | translate }}</h2>
   @for (module of modules; track $index) {
   <div class="product">
-    <h3>{{ getModuleTitle() }}</h3>
-    <p>{{ getModuleDescription() }}</p>
+    <h3>{{ getModuleTitle($index) }}</h3>
+    <p>{{ getModuleDescription($index) }}</p>
     <button (click)="goToChaptersPage($index+1)">{{'TAKE_COURSE' | translate }}</button>
   </div>
   }
