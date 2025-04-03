@@ -1,0 +1,37 @@
+<div class="container">
+    <h2>Add Exam</h2>
+    <form [formGroup]="examForm" (ngSubmit)="submitExam()">
+      <label for="training">Select Training:</label>
+      <select id="training" formControlName="trainingId">
+        <option value="" disabled selected class="placeholder-option">Please select a training</option>
+        @for (training of trainingsData; track $index) {
+            <option [value]="training.id">{{ training.name_nl}}</option>
+        }
+     
+      </select>
+      <div>
+        @if(examForm.get('trainingId')?.invalid && examForm.get('trainingId')?.touched){
+        <p class="error">Please select a training.</p>   
+      }
+      </div>
+  
+      <label for="title">Exam Title:</label>
+      <input id="title" formControlName="examTitle" type="text">
+      <div>
+        @if(examForm.get('examTitle')?.invalid && examForm.get('examTitle')?.touched){
+        <p class="error">Title is required.</p>
+        }
+      </div>
+  
+      <label for="description">Exam Description:</label>
+      <textarea id="description" formControlName="examDescription"></textarea>
+      <div>
+        @if(examForm.get('examDescription')?.invalid && examForm.get('examDescription')?.touched){
+            <p class="error">Description is required.</p>
+        }
+      </div>
+  
+      <button type="submit" [disabled]="examForm.invalid">Add Exam</button>
+    </form>
+  </div>
+  

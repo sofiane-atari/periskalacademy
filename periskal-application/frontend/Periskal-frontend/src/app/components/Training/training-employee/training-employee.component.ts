@@ -17,6 +17,8 @@ import { Training } from '../../../models/training.model';
 export class TrainingEmployeeComponent implements OnInit {
   public trainingsData: Training[] = [];
   public lang: String | null = "";
+  public openMenus: { [key: number]: boolean } = {};
+  public menuOpenAdd: boolean = false;
 
   constructor(
     private router: Router,
@@ -79,12 +81,25 @@ export class TrainingEmployeeComponent implements OnInit {
       return "Unknown language"
     }
   }
-
-  goToAddPage() {
-    this.router.navigate(['/add'])
+  toggleMenuEdit(trainingId: number) {
+    this.openMenus[trainingId] = !this.openMenus[trainingId];
   }
-  goToEditPage(trainingId: number) {
+  
+  toggleMenuAdd() {
+    this.menuOpenAdd = !this.menuOpenAdd;
+  }
+
+  goToAddTrainingPage() {
+    this.router.navigate(['/add-training'])
+  }
+  goToEditTrainingPage(trainingId: number) {
     this.router.navigate(['/edit', trainingId])
+  }
+  goToAddExamPage() {
+    this.router.navigate(['/add-exam'])
+  }
+  goToEditExamPage() {
+    this.router.navigate(['/edit'])
   }
 }
 
