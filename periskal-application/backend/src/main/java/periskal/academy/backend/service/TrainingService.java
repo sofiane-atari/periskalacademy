@@ -97,8 +97,8 @@ public class TrainingService {
                 if (module.getChapters() != null) {
                     for (Chapter chapter : module.getChapters()) {
                         chapter.setModule(module);
-                        if (chapter.getPhotos() != null) {
-                            for (Photo photo : chapter.getPhotos()) {
+                        if (chapter.getPhotos_en() != null) {
+                            for (Photo photo : chapter.getPhotos_en()) {
                                 photo.setChapter(chapter);
                             }
                         }

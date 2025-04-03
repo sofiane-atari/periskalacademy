@@ -121,7 +121,7 @@ class TrainingServiceTest {
 
         // Create chapters and associate them with the module
         Chapter chapter = new Chapter();
-        chapter.setNameChapter("Chapter 1");
+        chapter.setNameChapter_en("Chapter 1");
 
         // Initialize an empty list of chapters if it's null
         module.setChapters(Collections.singletonList(chapter)); // Ensure it's not null
@@ -146,10 +146,10 @@ class TrainingServiceTest {
         assertThat(savedTraining.getModules().get(0).getNameModule_en()).isEqualTo("Module 1"); // Ensure module is
                                                                                                 // added
         assertThat(savedTraining.getModules().get(0).getChapters()).isNotEmpty(); // Ensure chapters are not empty
-        assertThat(savedTraining.getModules().get(0).getChapters().get(0).getNameChapter()).isEqualTo("Chapter 1"); // Ensure
-                                                                                                                    // Chapter
-                                                                                                                    // is
-                                                                                                                    // added
+        assertThat(savedTraining.getModules().get(0).getChapters().get(0).getNameChapter_en()).isEqualTo("Chapter 1"); // Ensure
+                                                                                                                       // Chapter
+                                                                                                                       // is
+                                                                                                                       // added
 
     }
 
