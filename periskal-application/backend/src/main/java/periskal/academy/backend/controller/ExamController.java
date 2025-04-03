@@ -20,10 +20,18 @@ public class ExamController {
         this.examService = examService;
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Exam> getExamById(@PathVariable Long id) {
+        Optional<Exam> exam = examService.findById(id);
+        return exam.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @GetMapping("/training/{trainingId}")
     public ResponseEntity<Exam> getExamByTrainingId(@PathVariable Long trainingId) {
-        Optional<Exam> exam = examService.getExamByTrainingId(trainingId);
-        return exam.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        Optional<Exam> exam = examService.findByTrainingId(trainingId);
+        return exam.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/training/{trainingId}/create")
@@ -56,4 +64,5 @@ public class ExamController {
             return ResponseEntity.notFound().build();
         }
     }
+
 }

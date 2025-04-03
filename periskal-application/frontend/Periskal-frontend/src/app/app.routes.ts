@@ -11,6 +11,7 @@ import { authGuard } from './guards/auth.guard';
 import { AddModuleComponent } from './components/Training/add-module/add-module.component';
 import { SkippersComponent } from './components/skippers/skippers.component';
 import { AddExamComponent } from './components/exam/add-exam/add-exam.component';
+import { ExamComponent } from './components/exam/exam/exam.component';
 
 export const routes: Routes = [
 
@@ -31,6 +32,7 @@ export const routes: Routes = [
             { path: 'trainingEmployee', component: TrainingEmployeeComponent },
             { path: 'add-training', component: AddTrainingComponent },
             { path: 'add-exam', component: AddExamComponent },
+            { path: 'take-exam/:id', component: ExamComponent },
             { path: 'training/:id', component: TrainingDetailComponent },
             { path: 'edit/:id', component: UpdateTrainingComponent },
             { path: 'add/:id/module', component: AddModuleComponent },

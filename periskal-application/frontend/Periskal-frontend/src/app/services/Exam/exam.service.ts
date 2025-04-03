@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { catchError, Observable, of, throwError } from 'rxjs';
 import { Exam } from '../../models/exam.model';
 
 @Injectable({
@@ -16,7 +16,14 @@ export class ExamService {
   }
 
   getExamById(id: number): Observable<Exam> {
-    return this.client.get<Exam>(`${this.baseUrl}/${id}`);
+    return this.client.get<Exam>(`${this.baseUrl}/${id}`).pipe(
+      catchError(error => {
+        if (error.status === 404) {
+          return throwError(() => new Error('Exam not found'));
+        }
+        return throwError(() => error);
+      })
+    );
   }
   
   postExam(examData: any): Observable<any> {
@@ -31,4 +38,15 @@ export class ExamService {
   deleteExam(id: number): Observable<any> {
     return this.client.delete(`${this.baseUrl}/delete/${id}`);
   }
+  getExamByTrainingId(trainingId: number): Observable<Exam | null> {
+    return this.client.get<Exam>(`${this.baseUrl}/training/${trainingId}`).pipe(
+      catchError(error => {
+        if (error.status === 404) {
+          return of(null);
+        }
+        return throwError(() => error);
+      })
+    );
+  }
 }
+

@@ -14,9 +14,9 @@ import { Exam } from '../../../models/exam.model';
 })
 export class AddExamComponent implements OnInit {
     examForm: FormGroup;
-    
+    trainingsWithExams: number[] = [];
     public trainingsData: Training[] = [];
-  
+    isLoading = true;
 
   constructor(
     private fb: FormBuilder,
@@ -32,15 +32,35 @@ export class AddExamComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.trainigService.getTrainingData().subscribe(
-      (data: Training[]) => {
-        console.log("Trainings loaded: ", data); 
-        this.trainingsData = data; 
+    this.loadTrainings();
+  }
+  loadTrainings(): void {
+    this.trainigService.getTrainingData().subscribe({
+      next: (data: Training[]) => {
+        this.trainingsData = data;
+        this.checkExistingExams();
       },
-      (error) => {
+      error: (error) => {
         console.error('Error fetching trainings', error);
       }
-    );
+    });
+  }
+  checkExistingExams(): void {
+    const checks = this.trainingsData.map(training => {
+      return this.examService.getExamByTrainingId(training.id).toPromise()
+        .then(exam => {
+          if (exam) {
+            this.trainingsWithExams.push(training.id);
+          }
+        });
+    });
+
+    Promise.all(checks).finally(() => {
+      this.isLoading = false;
+    });
+  }
+  hasExam(trainingId: number): boolean {
+    return this.trainingsWithExams.includes(trainingId);
   }
 
   submitExam(): void {

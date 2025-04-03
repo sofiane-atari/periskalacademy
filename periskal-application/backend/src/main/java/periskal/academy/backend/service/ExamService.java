@@ -14,6 +14,14 @@ public class ExamService {
     private final ExamRepository examRepository;
     private final TrainingRepository trainingRepository;
 
+    public Optional<Exam> findById(Long id) {
+        return examRepository.findById(id);
+    }
+
+    public Optional<Exam> findByTrainingId(Long trainingId) {
+        return examRepository.findByTrainingId(trainingId);
+    }
+
     public ExamService(ExamRepository examRepository, TrainingRepository trainingRepository) {
         this.examRepository = examRepository;
         this.trainingRepository = trainingRepository;
