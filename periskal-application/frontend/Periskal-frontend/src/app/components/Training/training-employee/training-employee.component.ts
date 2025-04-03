@@ -5,6 +5,9 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { JwtDecoderService } from '../../../services/JwtDecode/jwt-decoder.service';
 import { RoleAuthorizationService } from '../../../services/RoleAuthorization/role-authorization.service';
 import { Training } from '../../../models/training.model';
+import { Exam } from '../../../models/exam.model';
+import { ExamService } from '../../../services/Exam/exam.service';
+import { catchError, of } from 'rxjs';
 
 
 @Component({
@@ -16,10 +19,16 @@ import { Training } from '../../../models/training.model';
 
 export class TrainingEmployeeComponent implements OnInit {
   public trainingsData: Training[] = [];
-  public lang: String | null = "";
+  public lang: string | null = "";
+  public openMenus: { [key: number]: boolean } = {};
+  public menuOpenAdd: boolean = false;
+  public examsMap: Map<number, Exam> = new Map();
+  public isLoadingExams = false;
+  public loadingError: string | null = null;
 
   constructor(
     private router: Router,
+    private examService: ExamService,
     private trainingSvc: TrainingService,
     private jwtDecoderService: JwtDecoderService,
     public roleAuth: RoleAuthorizationService
@@ -28,20 +37,54 @@ export class TrainingEmployeeComponent implements OnInit {
 
   ngOnInit(): void {
     this.lang = localStorage.getItem('lang');
+    this.loadTrainings();
+  }
+  loadTrainings(): void {
     const role = this.jwtDecoderService.getUserRole() || "noRole";
     const products: string[] = this.jwtDecoderService.getProducts() || [];
 
-    // Use filtered endpoint instead of fetching all trainings and filtering client-side
     this.trainingSvc.getFilteredTrainingData(role, products).subscribe({
       next: (data: Training[]) => {
         this.trainingsData = data;
+        this.loadExamsForTrainings();
       },
       error: (error) => {
         console.error('Error fetching trainings', error);
       }
     });
   }
+  loadExamsForTrainings(): void {
+    this.isLoadingExams = true;
+    
+    this.trainingsData.forEach(training => {
+      this.examService.getExamByTrainingId(training.id).subscribe({
+        next: (exam) => {
+          if (exam) {
+            this.examsMap.set(training.id, exam);
+          }
+        },
+        error: (error) => {
+          if (error.status !== 404) { // Only log non-404 errors
+            console.error(`Error loading exam for training ${training.id}`, error);
+          }
+        },
+        complete: () => {
+          this.isLoadingExams = false;
+        }
+      });
+    });
+  }
 
+  hasExam(trainingId: number): boolean {
+    return this.examsMap.has(trainingId);
+  }
+
+  goToExam(trainingId: number): void {
+    const exam = this.examsMap.get(trainingId);
+    if (exam) {
+      this.router.navigate(['/take-exam', exam.id]);
+    }
+  }
   goToTrainingDetails(trainingId: number) {
     this.router.navigate(['/training', trainingId]);
   }
@@ -79,12 +122,28 @@ export class TrainingEmployeeComponent implements OnInit {
       return "Unknown language"
     }
   }
-
-  goToAddPage() {
-    this.router.navigate(['/add'])
+  toggleMenuEdit(trainingId: number) {
+    this.openMenus[trainingId] = !this.openMenus[trainingId];
   }
-  goToEditPage(trainingId: number) {
+  
+  toggleMenuAdd() {
+    this.menuOpenAdd = !this.menuOpenAdd;
+  }
+
+  goToAddTrainingPage() {
+    this.router.navigate(['/add-training'])
+  }
+  goToEditTrainingPage(trainingId: number) {
     this.router.navigate(['/edit', trainingId])
+  }
+  goToAddExamPage() {
+    this.router.navigate(['/add-exam'])
+  }
+  goToEditExamPage(trainingId: number) {
+    const exam = this.examsMap.get(trainingId);
+    if (exam) {
+      this.router.navigate(['/edit-exam', exam.id]);
+    }
   }
 }
 
