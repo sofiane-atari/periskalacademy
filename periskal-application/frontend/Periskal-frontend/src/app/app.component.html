@@ -40,9 +40,14 @@
             <li class="nav-item">
               <a class="nav-link text-dark" href="#">{{'HOME' | translate }}</a>
             </li>
+            @if (roleAuth.hasPermission(['Fleetmanager'])) {
             <li class="nav-item">
-              <a class="nav-link text-dark" href="#">{{'SKIPPERS' | translate}}</a>
-            </li>
+              <a class="nav-link text-dark" 
+                routerLink="/skippers"             
+                routerLinkActive="active"             
+                ariaCurrentWhenActive="page" 
+                href="#">{{'SKIPPERS' | translate}}</a>
+            </li>}
           </ul>
           <!-- Taal dropdown -->
           <ul class="navbar-nav ms-auto">
