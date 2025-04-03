@@ -41,10 +41,16 @@ public class SkipperService {
 
     protected String buildSoapRequest(String fleetmanager) 
     {
-
-
-
-        return "debug";
+        return "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+               "<soap12:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
+               "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
+               "xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\">\n" + 
+               "  <soap12:Body>\n" + 
+               "    <GetSkippers xmlns=\"http://tempuri.org/\">\n" +
+               "      <fleetmanager>" + fleetmanager + "</fleetmanager>\n" +
+               "    </GetSkippers>\n" +
+               "  </soap12:Body>\n" +
+               "</soap12:Envelope>";
     }
 
     protected List<SkippersDTO> parseGetSkippersResponse(String responseXml) 
