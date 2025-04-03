@@ -1,0 +1,45 @@
+<div class="upload-container">
+    <p>Video Upload</p>
+    
+    <div class="drop-zone"
+         (drop)="onDrop($event)"
+         (dragover)="onDragOver($event)"
+         (dragleave)="onDragLeave($event)"
+         [class.drag-over]="isDragOver">
+         
+      <input type="file" #fileInput (change)="onFileSelected($event)" accept="video/*" hidden>
+      
+      @if (!selectedFile) {
+        <div class="upload-prompt">
+          <button type="button" (click)="fileInput.click()">Bestanden kiezen</button>
+        </div>
+      }
+      
+      @if (selectedFile) {
+        <div class="video-preview">
+          <video controls #videoPreview></video>
+          <div class="file-info">
+            <p>{{ selectedFile.name }}</p>
+            <p>{{ formatFileSize(selectedFile.size) }}</p>
+          </div>
+          <div class="actions">
+            <button type="button" (click)="saveToLocal()">Opslaan</button>
+            <button type="button" (click)="clearFile()">Annuleren</button>
+          </div>
+        </div>
+      }
+    </div>
+    
+    @if (savedVideos.length > 0) {
+      <div class="saved-videos">
+        <h3>Opgeslagen video's</h3>
+        @for (video of savedVideos; track $index) {
+          <div class="video-item">
+            <video controls [src]="video.url"></video>
+            <p>{{ video.name }} ({{ formatFileSize(video.size) }})</p>
+            <button (click)="removeVideo($index)">Verwijder</button>
+          </div>
+        }
+      </div>
+    }
+  </div>
