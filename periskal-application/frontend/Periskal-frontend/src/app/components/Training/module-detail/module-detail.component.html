@@ -1,11 +1,12 @@
 <div class="container">
     <div class="navigation">
       <h4>{{"CHAPTERS" | translate}}</h4>
-        <div>
           <ul class="chapter-list">
             @if (chapters && chapters.length > 0) {
               @for (chapter of chapters; track chapter.id) {
-                <li> 
+                <li class="chapter-item" 
+                [class.active]="$index === activeChapterId"
+                (click)="setActiveChapter($index)">
                   @switch(lang) {
                     @case ('en') { {{ chapter.nameChapter_en || 'Unnamed chapter' }} }
                     @case ('nl') { {{ chapter.nameChapter_nl || 'Naamloos hoofdstuk' }} }
@@ -19,7 +20,6 @@
               <li>No chapters found (Array length: {{ chapters?.length || 0 }})</li>
             }
           </ul>
-        </div>
     </div>
     
     <div class="content">
@@ -64,7 +64,8 @@
         }
       </div>
         <div class="photos">
-        @for (photo of chapters[activeChapterId].photos; track $index) {
+          <!-- TODO: implement photos per language -->
+        @for (photo of chapters[activeChapterId].photos_en; track $index) {
           <div class="photo">
             <img [src]="photo.imageData" alt="Chapter Image">
           </div>

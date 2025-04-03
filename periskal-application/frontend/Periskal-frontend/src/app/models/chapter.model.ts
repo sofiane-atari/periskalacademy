@@ -14,5 +14,6 @@ export interface Chapter {
     nameChapter_de: String
     descriptionChapter_de: String
     textChapter_de: string
-    photos: Photo[]
+    photos_en: Photo[]
+    //todo: implement Photos_nl, Photos_fr and Photos_de
 }
