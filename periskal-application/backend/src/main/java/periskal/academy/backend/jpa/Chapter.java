@@ -37,7 +37,14 @@ public class Chapter {
     private String descriptionChapter_de;
 
     @Lob
-    private String textChapter;
+    private String textChapter_en;
+
+    @Lob
+    private String textChapter_nl;
+    @Lob
+    private String textChapter_fr;
+    @Lob
+    private String textChapter_de;
 
     @ManyToOne
     @JoinColumn(name = "module_id", nullable = false)
@@ -63,7 +70,7 @@ public class Chapter {
     public Chapter(String nameChapter, String descriptionChapter, String textChapter) {
         this.nameChapter_en = nameChapter;
         this.descriptionChapter_en = descriptionChapter;
-        this.textChapter = textChapter;
+        this.textChapter_en = textChapter;
     }
 
     public void addPhoto(Photo photo) {

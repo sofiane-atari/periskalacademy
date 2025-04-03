@@ -66,8 +66,9 @@ export class ModuleDetailComponent {
   }
 
 
-  formatText(text: string): string {
-    return text.replace(/\n/g, '<br>');
+  formatText(content: string): string {
+    if (!content) return 'No content available';
+    return content.replace(/\n/g, '<br>');
   }
 
   ngOnInit(): void {

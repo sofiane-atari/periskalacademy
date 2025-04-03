@@ -32,8 +32,37 @@
           <p class="section-text">{{ getActiveChapterDescription() }}</p>
           
           <h5 class="section-title">{{"CONTENT" | translate}}</h5>
-          <!-- <p class="section-text" [innerHTML]="formatText(chapters[activeChapterId].textChapter_en.toString())"></p> -->
-        </div>
+          @switch (lang) {
+            @case('en') {
+          <p class="section-text" 
+          [innerHTML]="chapters && chapters.length > activeChapterId && activeChapterId >= 0 ? 
+                      formatText(chapters[activeChapterId].textChapter_en || '') : 
+                      'Loading content...'">
+          </p>
+        }
+        @case ('nl') {
+          <p class="section-text" 
+          [innerHTML]="chapters && chapters.length > activeChapterId && activeChapterId >= 0 ? 
+                      formatText(chapters[activeChapterId].textChapter_nl || '') : 
+                      'Loading content...'">
+          </p>
+        }
+        @case ('fr') {
+          <p class="section-text" 
+          [innerHTML]="chapters && chapters.length > activeChapterId && activeChapterId >= 0 ? 
+                      formatText(chapters[activeChapterId].textChapter_fr || '') : 
+                      'Loading content...'">
+          </p>
+        }
+        @case ('de') {
+          <p class="section-text" 
+          [innerHTML]="chapters && chapters.length > activeChapterId && activeChapterId >= 0 ? 
+                      formatText(chapters[activeChapterId].textChapter_de || '') : 
+                      'Loading content...'">
+          </p>
+        }
+        }
+      </div>
         <div class="photos">
         @for (photo of chapters[activeChapterId].photos; track $index) {
           <div class="photo">
