@@ -27,9 +27,14 @@ public class Chapter {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String nameChapter;
-
-    private String descriptionChapter;
+    private String nameChapter_en;
+    private String descriptionChapter_en;
+    private String nameChapter_nl;
+    private String descriptionChapter_nl;
+    private String nameChapter_fr;
+    private String descriptionChapter_fr;
+    private String nameChapter_de;
+    private String descriptionChapter_de;
 
     @Lob
     private String textChapter;
@@ -43,14 +48,12 @@ public class Chapter {
     @JsonManagedReference
     private List<Photo> photos = new ArrayList<>();
 
-    
     public Chapter(String nameChapter, String descriptionChapter, String textChapter) {
-        this.nameChapter = nameChapter;
-        this.descriptionChapter = descriptionChapter;
+        this.nameChapter_en = nameChapter;
+        this.descriptionChapter_en = descriptionChapter;
         this.textChapter = textChapter;
     }
 
-    
     public void addPhoto(Photo photo) {
         photos.add(photo);
         photo.setChapter(this);
