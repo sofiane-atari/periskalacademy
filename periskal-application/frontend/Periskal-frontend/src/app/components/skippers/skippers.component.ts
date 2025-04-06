@@ -45,12 +45,12 @@ export class SkippersComponent implements OnInit {
   allAttributesArray: string[] = [];
 
   ngOnInit() {
-    this.fetchCrewData();
+    //this.fetchCrewData(); call to service layer
   }
 
   async fetchCrewData() {
     try {
-      // Replace with your API endpoint
+      // Replace with api endpoint calling in service layer
       // const response = await fetch('your-api-endpoint');
       // const data = await response.json();
       // this.crewMembers = data;
@@ -77,7 +77,7 @@ export class SkippersComponent implements OnInit {
         }
       ];
 
-      // Extract all unique attributes
+      // Extract all unique attributes from crew members.
       this.crewMembers.forEach(crew => {
         Object.keys(crew.attributes).forEach(attr => {
           this.allAttributes.add(attr);
