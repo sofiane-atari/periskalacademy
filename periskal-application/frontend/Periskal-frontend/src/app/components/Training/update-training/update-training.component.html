@@ -13,10 +13,43 @@
       <label for="name">{{'TRAINING_NAME' | translate}}</label>
       <input
         type="text"
-        id="name"
+        id="name_en"
         class="form-control"
         [(ngModel)]="training.name_en"
-        name="name"
+        name="name_en"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label for="name">{{'TRAINING_NAME' | translate}}</label>
+      <input
+        type="text"
+        id="name_nl"
+        class="form-control"
+        [(ngModel)]="training.name_nl"
+        name="name_nl"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label for="name">{{'TRAINING_NAME' | translate}}</label>
+      <input
+        type="text"
+        id="name_fr"
+        class="form-control"
+        [(ngModel)]="training.name_fr"
+        name="name_fr"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label for="name">{{'TRAINING_NAME' | translate}}</label>
+      <input
+        type="text"
+        id="name_de"
+        class="form-control"
+        [(ngModel)]="training.name_de"
+        name="name_de"
         required
       />
     </div>
@@ -24,10 +57,40 @@
     <div class="form-group">
       <label for="description">{{'DESCRIPTION' | translate}}</label>
       <textarea
-        id="description"
+        id="description_en"
         class="form-control"
         [(ngModel)]="training.description_en"
-        name="description"
+        name="description_en"
+        required
+      ></textarea>
+    </div>
+    <div class="form-group">
+      <label for="description">{{'DESCRIPTION' | translate}}</label>
+      <textarea
+        id="description_nl"
+        class="form-control"
+        [(ngModel)]="training.description_nl"
+        name="description_nl"
+        required
+      ></textarea>
+    </div>
+    <div class="form-group">
+      <label for="description">{{'DESCRIPTION' | translate}}</label>
+      <textarea
+        id="description_fr"
+        class="form-control"
+        [(ngModel)]="training.description_fr"
+        name="description_fr"
+        required
+      ></textarea>
+    </div>
+    <div class="form-group">
+      <label for="description">{{'DESCRIPTION' | translate}}</label>
+      <textarea
+        id="description_de"
+        class="form-control"
+        [(ngModel)]="training.description_de"
+        name="description_de"
         required
       ></textarea>
     </div>
@@ -38,10 +101,43 @@
         <label for="nameModule{{ $index }}">{{'MODULE' | translate}} {{ $index + 1 }} {{'NAME' | translate}}</label>
         <input
           type="text"
-          id="nameModule{{ $index }}"
+          id="nameModule{{ $index }}_en"
           class="form-control"
           [(ngModel)]="module.nameModule_en"
-          name="nameModule{{ $index }}"
+          name="nameModule{{ $index }}_en"
+          required
+        />
+      </div>
+      <div>
+        <label for="nameModule{{ $index }}">{{'MODULE' | translate}} {{ $index + 1 }} {{'NAME' | translate}}</label>
+        <input
+          type="text"
+          id="nameModule{{ $index }}_nl"
+          class="form-control"
+          [(ngModel)]="module.nameModule_nl"
+          name="nameModule{{ $index }}_nl"
+          required
+        />
+      </div>
+      <div>
+        <label for="nameModule{{ $index }}">{{'MODULE' | translate}} {{ $index + 1 }} {{'NAME' | translate}}</label>
+        <input
+          type="text"
+          id="nameModule{{ $index }}_fr"
+          class="form-control"
+          [(ngModel)]="module.nameModule_fr"
+          name="nameModule{{ $index }}_fr"
+          required
+        />
+      </div>
+      <div>
+        <label for="nameModule{{ $index }}">{{'MODULE' | translate}} {{ $index + 1 }} {{'NAME' | translate}}</label>
+        <input
+          type="text"
+          id="nameModule{{ $index }}_de"
+          class="form-control"
+          [(ngModel)]="module.nameModule_de"
+          name="nameModule{{ $index }}_de"
           required
         />
       </div>
@@ -50,10 +146,49 @@
           >{{'MODULE' | translate}} {{ $index + 1 }} {{'DESCRIPTION' | translate}}</label
         >
         <textarea
-          id="descriptionModule{{ $index }}"
+          id="descriptionModule{{ $index }}_en"
           class="form-control"
           [(ngModel)]="module.descriptionModule_en"
-          name="descriptionModule{{ $index }}"
+          name="descriptionModule{{ $index }}_en"
+          required
+        >
+        </textarea>
+      </div>
+      <div>
+        <label for="nameDescription{{ $index }}"
+          >{{'MODULE' | translate}} {{ $index + 1 }} {{'DESCRIPTION' | translate}}</label
+        >
+        <textarea
+          id="descriptionModule{{ $index }}_nl"
+          class="form-control"
+          [(ngModel)]="module.descriptionModule_nl"
+          name="descriptionModule{{ $index }}_nl"
+          required
+        >
+        </textarea>
+      </div>
+      <div>
+        <label for="nameDescription{{ $index }}"
+          >{{'MODULE' | translate}} {{ $index + 1 }} {{'DESCRIPTION' | translate}}</label
+        >
+        <textarea
+          id="descriptionModule{{ $index }}_fr"
+          class="form-control"
+          [(ngModel)]="module.descriptionModule_fr"
+          name="descriptionModule{{ $index }}_fr"
+          required
+        >
+        </textarea>
+      </div>
+      <div>
+        <label for="nameDescription{{ $index }}"
+          >{{'MODULE' | translate}} {{ $index + 1 }} {{'DESCRIPTION' | translate}}</label
+        >
+        <textarea
+          id="descriptionModule{{ $index }}_de"
+          class="form-control"
+          [(ngModel)]="module.descriptionModule_de"
+          name="descriptionModule{{ $index }}_de"
           required
         >
         </textarea>
@@ -69,8 +204,12 @@
       </button>
     </div>
   </form>
+  <div>
+    <button class="btn btn-primary" (click)="goToModuleAddPage()">{{"ADD_NEW_MODULE" | translate}}</button>
+  </div>
+  <div>
   <button (click)="confirmDelete()" class="delete">{{"DELETE_TRAINING" | translate}}</button>
-  <button (click)="goToModuleAddPage()">{{"ADD_NEW_MODULE" | translate}}</button>
+</div>
   } @if (!training) {
   <div>{{'TRAINING_NOT_FOUND' | translate}}</div>
   }
