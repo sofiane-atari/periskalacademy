@@ -44,29 +44,29 @@
             <span class="toggle-icon">{{ isModuleCollapsed(moduleIndex) ? '►' : '▼' }}</span>
             <h4>{{"MODULE" | translate}} {{ moduleIndex + 1 }}: {{ getModuleTitle(moduleIndex) }}</h4>
           </div>
-          
           <div [hidden]="isModuleCollapsed(moduleIndex)" class="module-content">
+            @for (lang of languages; track $index) {
             <div>
               <label>{{"MODULE_TITLE" | translate}}</label>
               <input
-                formControlName="nameModule"
-                placeholder="Geef de titel van module {{ moduleIndex + 1 }}"
+                formControlName="nameModule_{{lang}}"
+                placeholder="Geef de titel van module {{ moduleIndex + 1 }} in {{lang}}"
                 required
               />
             </div>
             <div>
               <label>{{"MODULE_DESCRIPTION" | translate}}</label>
               <textarea
-                formControlName="descriptionModule"
-                id="descriptionModule{{ moduleIndex }}"
+                formControlName="descriptionModule_{{lang}}"
+                id="descriptionModule_{{lang}}{{ moduleIndex }}"
                 class="form-control"
-                placeholder="Geef de beschrijving van module {{ moduleIndex + 1 }}"
-                name="descriptionModule{{ moduleIndex }}"
+                placeholder="Geef de beschrijving van module {{ moduleIndex + 1 }} in {{lang}}"
+                name="descriptionModule_{{lang}}{{ moduleIndex }}"
                 required
               >
               </textarea>
             </div>
-            
+          }
             <div>
               <h4>{{"CHAPTERS_MODULE" | translate}} {{ moduleIndex + 1 }}</h4>
               <div formArrayName="chapters">
@@ -78,22 +78,23 @@
                   </div>
                   
                   <div [hidden]="isChapterCollapsed(moduleIndex, chapterIndex)" class="chapter-content">
+                    @for (lang of languages; track $index) {
                     <div>
                       <label>{{"CHAPTER_TITLE" | translate}}</label>
                       <input
-                        formControlName="nameChapter"
-                        placeholder="Geef de titel van hoofdstuk {{ chapterIndex + 1 }}"
+                        formControlName="nameChapter_{{lang}}"
+                        placeholder="Geef de titel van hoofdstuk {{ chapterIndex + 1 }} in {{lang}}"
                         required
                       />
                     </div>
                     <div>
                       <label>{{"CHAPTER_DESCRIPTION" | translate}}</label>
                       <textarea
-                        formControlName="descriptionChapter"
-                        id="descriptionChapter{{ moduleIndex }}_{{ chapterIndex }}"
+                        formControlName="descriptionChapter_{{lang}}"
+                        id="descriptionChapter_{{lang}}{{ moduleIndex }}_{{ chapterIndex }}"
                         class="form-control"
-                        placeholder="Geef de beschrijving van hoofdstuk {{ chapterIndex + 1 }}"
-                        name="descriptionChapter{{ moduleIndex }}_{{ chapterIndex }}"
+                        placeholder="Geef de beschrijving van hoofdstuk {{ chapterIndex + 1 }} in {{lang}}"
+                        name="descriptionChapter_{{lang}}{{ moduleIndex }}_{{ chapterIndex }}"
                         required
                       >
                       </textarea>
@@ -101,17 +102,19 @@
                     <div>
                       <label>{{"CHAPTER_TEXT" | translate}}</label>
                       <textarea
-                        formControlName="textChapter"
-                        id="textChapter{{ moduleIndex }}_{{ chapterIndex }}"
+                        formControlName="textChapter_{{lang}}"
+                        id="textChapter_{{lang}}{{ moduleIndex }}_{{ chapterIndex }}"
                         class="form-control"
-                        placeholder="Geef de tekst van hoofdstuk {{ chapterIndex + 1 }}"
-                        name="textChapter{{ moduleIndex }}_{{ chapterIndex }}"
+                        placeholder="Geef de tekst van hoofdstuk {{ chapterIndex + 1 }} in {{lang}}"
+                        name="textChapter_{{lang}}{{ moduleIndex }}_{{ chapterIndex }}"
                         required
                       >
                       </textarea>
-                      <app-photo-upload formControlName="photos"></app-photo-upload>
+<<<<<<< periskal-application/frontend/Periskal-frontend/src/app/components/Training/add-training/add-training.component.html
+                      <app-photo-upload formControlName="photos_{{lang}}"></app-photo-upload>
                       <app-video-upload></app-video-upload>
                     </div>
+                  }
                     @if(chapterIndex!=0) {
                     <button class="delete" type="button" (click)="removeChapter(moduleIndex, chapterIndex)">
                       {{"DELETE_CHAPTER" | translate}}

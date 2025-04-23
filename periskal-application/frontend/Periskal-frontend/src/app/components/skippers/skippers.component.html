@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ship Crew Management</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Ship Crew Management</h1>
+        
+        <!-- Crew List -->
+        <div class="crew-list">
+            <h2>Crew Members</h2>
+            <table id="crewTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Ship Name</th>
+                        <!-- Dynamic headers will be added here -->
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="crewTableBody">
+                    <!-- Crew members will be added here via API -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Store crew members and their attributes
+        let crewMembers = [];
+        let allAttributes = new Set(); // Track all unique attributes
+        
+        // DOM Elements
+        const crewTable = document.getElementById('crewTable');
+        const crewTableBody = document.getElementById('crewTableBody');
+        
+        // Example function to fetch crew data from API (replace with your actual API call)
+        async function fetchCrewData() {
+            try {
+                // Replace with your API endpoint
+                // const response = await fetch('your-api-endpoint');
+                // const data = await response.json();
+                // crewMembers = data;
+                
+                // For now, using sample data
+                crewMembers = [
+                    {
+                        name: "John Smith",
+                        shipName: "HMS Victory",
+                        attributes: {
+                            rank: "Captain",
+                            experience: "15 years",
+                            specialty: "Navigation"
+                        }
+                    },
+                    {
+                        name: "Jane Doe",
+                        shipName: "SS Adventure",
+                        attributes: {
+                            rank: "First Mate",
+                            experience: "8 years",
+                            specialty: "Engineering"
+                        }
+                    }
+                ];
+                
+                // Extract all unique attributes
+                crewMembers.forEach(crew => {
+                    Object.keys(crew.attributes).forEach(attr => {
+                        allAttributes.add(attr);
+                    });
+                });
+                
+                // Update the table
+                updateTable();
+            } catch (error) {
+                console.error("Error fetching crew data:", error);
+            }
+        }
+        
+        // Update the table with all crew members
+        function updateTable() {
+            // First, update the table headers
+            const headerRow = crewTable.querySelector('thead tr');
+            
+            // Clear existing dynamic headers (keep Name, Ship Name, and Actions)
+            while (headerRow.children.length > 3) {
+                headerRow.removeChild(headerRow.children[2]);
+            }
+            
+            // Add headers for all attributes
+            allAttributes.forEach(attr => {
+                const th = document.createElement('th');
+                th.textContent = attr;
+                headerRow.insertBefore(th, headerRow.lastElementChild);
+            });
+            
+            // Now update the table body
+            crewTableBody.innerHTML = '';
+            
+            crewMembers.forEach((crew, index) => {
+                const row = document.createElement('tr');
+                
+                // Add name and ship name
+                const nameCell = document.createElement('td');
+                nameCell.textContent = crew.name;
+                row.appendChild(nameCell);
+                
+                const shipCell = document.createElement('td');
+                shipCell.textContent = crew.shipName;
+                row.appendChild(shipCell);
+                
+                // Add cells for all attributes
+                allAttributes.forEach(attr => {
+                    const cell = document.createElement('td');
+                    cell.textContent = crew.attributes[attr] || '-';
+                    row.appendChild(cell);
+                });
+                
+                // Add action buttons
+                const actionsCell = document.createElement('td');
+                actionsCell.className = 'actions-cell';
+                
+                const viewBtn = document.createElement('button');
+                viewBtn.className = 'view-btn';
+                viewBtn.textContent = 'View';
+                viewBtn.addEventListener('click', () => viewCrewMember(index));
+                
+                actionsCell.appendChild(viewBtn);
+                row.appendChild(actionsCell);
+                
+                crewTableBody.appendChild(row);
+            });
+        }
+        
+        // View a crew member details
+        function viewCrewMember(index) {
+            const crew = crewMembers[index];
+            alert(`Viewing details for: ${crew.name} (${crew.shipName})`);
+            // Replace with your preferred way to show details - modal, new page, etc.
+        }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchCrewData();
+        });
+    </script>
+</body>
+</html>

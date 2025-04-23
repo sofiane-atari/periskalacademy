@@ -15,7 +15,7 @@ public class ModuleDTO {
 
     public ModuleDTO(Module module) {
         this.id = module.getId();
-        this.nameModule = module.getNameModule();
-        this.descriptionModule = module.getDescriptionModule();
+        this.nameModule = module.getNameModule_en();
+        this.descriptionModule = module.getDescriptionModule_en();
     }
 }

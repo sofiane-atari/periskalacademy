@@ -46,41 +46,43 @@ class TrainingServiceTest {
 
         module = new Module();
         module.setId(1L);
-        module.setNameModule("Test Module");
+        module.setNameModule_en("Test Module");
 
         training.setModules(Collections.singletonList(module));
     }
 
-  /*   @Test
-    void givenTrainingWithModule_whenDeleteModule_thenModuleIsRemoved() {
-        // Mock trainingRepository behavior
-        when(trainingRepository.findById(1L)).thenReturn(Optional.of(training));
-        when(trainingRepository.save(training)).thenReturn(training);
-
-        // Test deleteModule method
-        Training updatedTraining = trainingService.deleteModule(1L, 1L);
-
-        // Use AssertJ assertions
-        assertThat(updatedTraining).isNotNull();
-        assertThat(updatedTraining.getModules()).isEmpty();
-
-        // Verify that save method was called after removal of module
-        verify(trainingRepository, times(1)).save(training);
-    }
-
-    @Test
-    void givenNoTraining_whenDeleteModule_thenThrowResourceNotFoundException() {
-        // Mock behavior when the training is not found
-        when(trainingRepository.findById(1L)).thenReturn(Optional.empty());
-
-        // Test deleteModule method - should throw ResourceNotFoundException
-        assertThatThrownBy(() -> trainingService.deleteModule(1L, 1L))
-            .isInstanceOf(ResourceNotFoundException.class);
-
-
-        // Verify that save was never called
-        verify(trainingRepository, never()).save(any());
-    }*/
+    /*
+     * @Test
+     * void givenTrainingWithModule_whenDeleteModule_thenModuleIsRemoved() {
+     * // Mock trainingRepository behavior
+     * when(trainingRepository.findById(1L)).thenReturn(Optional.of(training));
+     * when(trainingRepository.save(training)).thenReturn(training);
+     * 
+     * // Test deleteModule method
+     * Training updatedTraining = trainingService.deleteModule(1L, 1L);
+     * 
+     * // Use AssertJ assertions
+     * assertThat(updatedTraining).isNotNull();
+     * assertThat(updatedTraining.getModules()).isEmpty();
+     * 
+     * // Verify that save method was called after removal of module
+     * verify(trainingRepository, times(1)).save(training);
+     * }
+     * 
+     * @Test
+     * void givenNoTraining_whenDeleteModule_thenThrowResourceNotFoundException() {
+     * // Mock behavior when the training is not found
+     * when(trainingRepository.findById(1L)).thenReturn(Optional.empty());
+     * 
+     * // Test deleteModule method - should throw ResourceNotFoundException
+     * assertThatThrownBy(() -> trainingService.deleteModule(1L, 1L))
+     * .isInstanceOf(ResourceNotFoundException.class);
+     * 
+     * 
+     * // Verify that save was never called
+     * verify(trainingRepository, never()).save(any());
+     * }
+     */
 
     @Test
     void givenExistingTraining_whenDeleteTraining_thenTrainingIsDeleted() {
@@ -90,7 +92,7 @@ class TrainingServiceTest {
 
         // Act - Should not throw exception
         assertThatCode(() -> trainingService.deleteTraining(1L)).doesNotThrowAnyException();
-        
+
         verify(trainingRepository, times(1)).deleteById(1L);
     }
 
@@ -101,7 +103,7 @@ class TrainingServiceTest {
 
         // Act and Assert
         assertThatThrownBy(() -> trainingService.deleteTraining(1L))
-            .isInstanceOf(ResourceNotFoundException.class);
+                .isInstanceOf(ResourceNotFoundException.class);
 
         verify(trainingRepository, never()).deleteById(any());
     }
@@ -115,11 +117,11 @@ class TrainingServiceTest {
 
         // Create a module and associate it with the training
         Module module = new Module();
-        module.setNameModule("Module 1");
+        module.setNameModule_en("Module 1");
 
         // Create chapters and associate them with the module
         Chapter chapter = new Chapter();
-        chapter.setNameChapter("Chapter 1");
+        chapter.setNameChapter_en("Chapter 1");
 
         // Initialize an empty list of chapters if it's null
         module.setChapters(Collections.singletonList(chapter)); // Ensure it's not null
@@ -141,10 +143,13 @@ class TrainingServiceTest {
         assertThat(savedTraining).isNotNull();
         assertThat(savedTraining.getName_en()).isEqualTo("Sample Training");
         assertThat(savedTraining.getModules()).isNotEmpty(); // Ensure modules are not empty
-        assertThat(savedTraining.getModules().get(0).getNameModule()).isEqualTo("Module 1"); // Ensure module is added
+        assertThat(savedTraining.getModules().get(0).getNameModule_en()).isEqualTo("Module 1"); // Ensure module is
+                                                                                                // added
         assertThat(savedTraining.getModules().get(0).getChapters()).isNotEmpty(); // Ensure chapters are not empty
-        assertThat(savedTraining.getModules().get(0).getChapters().get(0).getNameChapter()).isEqualTo("Chapter 1"); // Ensure Chapter is added
-
+        assertThat(savedTraining.getModules().get(0).getChapters().get(0).getNameChapter_en()).isEqualTo("Chapter 1"); // Ensure
+                                                                                                                       // Chapter
+                                                                                                                       // is
+                                                                                                                       // added
 
     }
 
@@ -163,7 +168,7 @@ class TrainingServiceTest {
         when(trainingRepository.findById(1L)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> trainingService.getTrainingById(1L))
-            .isInstanceOf(ResourceNotFoundException.class);
+                .isInstanceOf(ResourceNotFoundException.class);
 
     }
 
@@ -176,15 +181,15 @@ class TrainingServiceTest {
         when(trainingRepository.findById(1L)).thenReturn(Optional.of(training));
 
         Module newModule = new Module();
-        newModule.setNameModule("New Module");
-        newModule.setDescriptionModule("Module Description");
+        newModule.setNameModule_en("New Module");
+        newModule.setDescriptionModule_en("Module Description");
         when(moduleRepository.save(any(Module.class))).thenReturn(newModule);
 
         Module addedModule = trainingService.addModuleWithDto(1L, moduleDto);
 
         assertThat(addedModule).isNotNull();
-        assertThat(addedModule.getNameModule()).isEqualTo("New Module");
-        assertThat(addedModule.getDescriptionModule()).isEqualTo("Module Description");
+        assertThat(addedModule.getNameModule_en()).isEqualTo("New Module");
+        assertThat(addedModule.getDescriptionModule_en()).isEqualTo("Module Description");
 
         verify(moduleRepository, times(1)).save(any(Module.class));
     }
@@ -199,11 +204,11 @@ class TrainingServiceTest {
 
         Module module1 = new Module();
         module1.setId(1L);
-        module1.setNameModule("Module 1");
+        module1.setNameModule_en("Module 1");
 
         Module module2 = new Module();
         module2.setId(2L);
-        module2.setNameModule("Module 2");
+        module2.setNameModule_en("Module 2");
 
         List<Module> updatedModules = List.of(module1, module2);
 
@@ -224,8 +229,8 @@ class TrainingServiceTest {
         assertThat(result.getName_en()).isEqualTo("Updated Name");
         assertThat(result.getDescription_en()).isEqualTo("Updated Description");
         assertThat(result.getModules()).hasSize(2);
-        assertThat(result.getModules().get(0).getNameModule()).isEqualTo("Module 1");
-        assertThat(result.getModules().get(1).getNameModule()).isEqualTo("Module 2");
+        assertThat(result.getModules().get(0).getNameModule_en()).isEqualTo("Module 1");
+        assertThat(result.getModules().get(1).getNameModule_en()).isEqualTo("Module 2");
 
         verify(trainingRepository, times(1)).save(existingTraining);
     }
@@ -241,7 +246,6 @@ class TrainingServiceTest {
         // Assert that ResourceNotFoundException is thrown
         assertThatThrownBy(() -> trainingService.updateTraining(1L, updatedTraining))
                 .isInstanceOf(ResourceNotFoundException.class);
-
 
         verify(trainingRepository, never()).save(any(Training.class));
     }

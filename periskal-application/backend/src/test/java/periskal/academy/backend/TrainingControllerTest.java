@@ -44,7 +44,7 @@ class TrainingControllerTest {
 
         module = new Module();
         module.setId(1L);
-        module.setNameModule("Test Module");
+        module.setNameModule_en("Test Module");
 
         trainingDTOs = new ArrayList<>();
         TrainingDTO trainingDTO = new TrainingDTO();
@@ -140,7 +140,7 @@ class TrainingControllerTest {
         // Assert
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).containsKey("message");
-        assertThat(response.getBody().get("message")).isEqualTo("Training deleted successfully");     
+        assertThat(response.getBody().get("message")).isEqualTo("Training deleted successfully");
         verify(trainingService, times(1)).deleteTraining(1L);
     }
 
@@ -200,6 +200,6 @@ class TrainingControllerTest {
         // Assert
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().getNameModule()).isEqualTo("Test Module");
+        assertThat(response.getBody().getNameModule_en()).isEqualTo("Test Module");
     }
 }

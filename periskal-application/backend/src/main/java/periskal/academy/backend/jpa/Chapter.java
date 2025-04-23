@@ -28,12 +28,24 @@ public class Chapter {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String nameChapter;
-
-    private String descriptionChapter;
+    private String nameChapter_en;
+    private String descriptionChapter_en;
+    private String nameChapter_nl;
+    private String descriptionChapter_nl;
+    private String nameChapter_fr;
+    private String descriptionChapter_fr;
+    private String nameChapter_de;
+    private String descriptionChapter_de;
 
     @Lob
-    private String textChapter;
+    private String textChapter_en;
+
+    @Lob
+    private String textChapter_nl;
+    @Lob
+    private String textChapter_fr;
+    @Lob
+    private String textChapter_de;
 
     @ManyToOne
     @JoinColumn(name = "module_id", nullable = false)
@@ -42,7 +54,19 @@ public class Chapter {
 
     @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<Photo> photos = new ArrayList<>();
+    private List<Photo> photos_en = new ArrayList<>();
+
+    @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Photo> photos_nl = new ArrayList<>();
+
+    @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Photo> photos_fr = new ArrayList<>();
+
+    @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Photo> photos_de = new ArrayList<>();
 
     @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
@@ -50,19 +74,18 @@ public class Chapter {
 
     
     public Chapter(String nameChapter, String descriptionChapter, String textChapter) {
-        this.nameChapter = nameChapter;
-        this.descriptionChapter = descriptionChapter;
-        this.textChapter = textChapter;
+        this.nameChapter_en = nameChapter;
+        this.descriptionChapter_en = descriptionChapter;
+        this.textChapter_en = textChapter;
     }
 
-    
     public void addPhoto(Photo photo) {
-        photos.add(photo);
+        photos_en.add(photo);
         photo.setChapter(this);
     }
 
     public void removePhoto(Photo photo) {
-        photos.remove(photo);
+        photos_en.remove(photo);
         photo.setChapter(null);
     }
 }

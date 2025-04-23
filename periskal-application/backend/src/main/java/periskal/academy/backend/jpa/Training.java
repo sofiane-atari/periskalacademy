@@ -3,12 +3,16 @@ package periskal.academy.backend.jpa;
 import java.util.ArrayList;
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import io.micrometer.common.lang.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -36,6 +40,9 @@ public class Training {
     @OneToMany(mappedBy = "training", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Module> modules = new ArrayList<>();
+
+    @OneToOne(mappedBy = "training", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private @Nullable Exam exam;
 
     public Training(String product_code, String name_en, String description_en, String name_nl, String description_nl,
             String name_de, String description_de, String name_fr, String description_fr,

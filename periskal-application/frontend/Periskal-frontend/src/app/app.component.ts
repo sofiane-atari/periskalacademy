@@ -8,7 +8,7 @@ import {
   RouterOutlet,
 } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-
+import { RoleAuthorizationService } from './services/RoleAuthorization/role-authorization.service';
 import { filter, Observable } from 'rxjs';
 import { AuthenticationService } from './services/Authentication/authentication.service';
 
@@ -26,7 +26,7 @@ export class AppComponent implements OnInit {
 
   lang: string = '';
 
-  constructor(private router: Router, private authService: AuthenticationService, private translateService: TranslateService) {
+  constructor(private router: Router, private authService: AuthenticationService, private translateService: TranslateService,public roleAuth: RoleAuthorizationService) {
 
     this.translateService.setDefaultLang('nl');
     this.translateService.use(localStorage.getItem('lang') || 'nl');
