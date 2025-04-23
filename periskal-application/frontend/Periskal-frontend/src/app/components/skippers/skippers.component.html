@@ -1,32 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ship Crew Management</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="container">
-        <h1>Ship Crew Management</h1>
-        
-        <!-- Crew List -->
-        <div class="crew-list">
-            <h2>Crew Members</h2>
-            <table id="crewTable">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Ship Name</th>
-                        <!-- Dynamic headers will be added here -->
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="crewTableBody">
-                    <!-- Crew members will be added here via API -->
-                </tbody>
-            </table>
+<div class="skippers-container">
+    <h1>Skippers</h1>
+    <div class="skippers-list">
+  
+      @for (skipper of skippers; track skipper.id; let i = $index) {
+        <div 
+            class="skipper-item" 
+            [class.active]="selectedSkipperIndex === i"
+            (click)="toggleSkipperDetails(i)">
+          <div class="skipper-basic-info">
+            <h3>{{ skipper.username }}</h3>
+            <p class="shipname">{{ skipper.shipname }}</p>
+            <div class="products">
+              @for (product of skipper.products; track product) {
+                <span class="product-badge">
+                  {{ product }}
+                </span>
+              }
+            </div>
+          </div>
+          
+          @if (selectedSkipperIndex === i) {
+            <div class="skipper-details">
+              <div class="detail-row">
+                <span class="detail-label">ID:</span>
+                <span class="detail-value">{{ skipper.id }}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Name:</span>
+                <span class="detail-value">{{ skipper.firstname }} {{ skipper.lastname }}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Role:</span>
+                <span class="detail-value">{{ skipper.role }}</span>
+              </div>
+            </div>
+          } 
         </div>
-    </div>     
-</body>
-</html>
+      } @empty {
+        <p>No skippers available.</p>
+      }
+    </div>
+  </div>

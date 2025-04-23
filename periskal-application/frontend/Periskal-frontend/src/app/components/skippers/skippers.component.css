@@ -1,16 +1,10 @@
-/* Global Styles */
+/* Skippers Component Styles */
 * {
     box-sizing: border-box;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-body {
-    background-color: #f0f8ff;
-    margin: 0;
-    padding: 20px;
-}
-
-.container {
+.skippers-container {
     max-width: 1200px;
     margin: 0 auto;
     background-color: white;
@@ -25,87 +19,129 @@ h1 {
     margin-bottom: 30px;
 }
 
-h2 {
-    color: #3498db;
-    margin-bottom: 20px;
-}
-
-/* List Styles */
-.crew-list {
-    margin-top: 30px;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-th, td {
-    padding: 12px 15px;
-    border-bottom: 1px solid #ddd;
-    text-align: left;
-}
-
-th {
-    background-color: #34495e;
-    color: white;
-}
-
-tr:hover {
-    background-color: #f5f5f5;
-}
-
-.actions-cell {
+.skippers-list {
     display: flex;
-    gap: 5px;
+    flex-direction: column;
+    gap: 16px;
 }
 
-.view-btn {
+.skipper-item {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.skipper-item:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.skipper-item.active {
+    border-color: #3498db;
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
+}
+
+.skipper-basic-info {
+    padding: 16px;
+    background-color: #f8f9fa;
+}
+
+.skipper-basic-info h3 {
+    margin: 0 0 8px 0;
+    color: #2c3e50;
+}
+
+.username {
+    margin: 0 0 12px 0;
+    color: #7f8c8d;
+    font-size: 14px;
+}
+
+.products {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.product-badge {
     background-color: #3498db;
     color: white;
-    border: none;
+    padding: 4px 8px;
     border-radius: 4px;
-    padding: 5px 10px;
-    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
 }
 
-.view-btn:hover {
-    background-color: #2980b9;
+.skipper-details {
+    padding: 16px;
+    background-color: #ffffff;
+    border-top: 1px solid #e0e0e0;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.detail-row {
+    margin-bottom: 8px;
+    display: flex;
+}
+
+.detail-label {
+    font-weight: 600;
+    min-width: 80px;
+    color: #34495e;
+}
+
+.detail-value {
+    color: #2c3e50;
 }
 
 /* Responsive Styles */
 @media (max-width: 768px) {
-    th, td {
-        padding: 8px;
+    .skippers-container {
+        padding: 16px;
     }
     
-    .actions-cell {
+    .skipper-basic-info,
+    .skipper-details {
+        padding: 12px;
+    }
+    
+    .detail-row {
         flex-direction: column;
+        margin-bottom: 12px;
     }
     
-    table {
-        font-size: 14px;
+    .detail-label {
+        margin-bottom: 4px;
     }
 }
 
 @media (max-width: 480px) {
-    .container {
-        padding: 10px;
+    .skippers-container {
+        padding: 12px;
     }
     
     h1 {
         font-size: 24px;
+        margin-bottom: 20px;
     }
     
-    h2 {
-        font-size: 20px;
+    .skipper-basic-info h3 {
+        font-size: 18px;
     }
     
-    table {
-        font-size: 12px;
+    .products {
+        margin-top: 8px;
     }
     
-    th, td {
-        padding: 6px;
+    .product-badge {
+        font-size: 11px;
+        padding: 3px 6px;
     }
 }
