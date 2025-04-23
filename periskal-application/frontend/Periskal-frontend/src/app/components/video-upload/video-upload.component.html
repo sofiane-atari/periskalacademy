@@ -32,7 +32,7 @@
     
     @if (savedVideos.length > 0) {
       <div class="saved-videos">
-        <h3>Opgeslagen video's</h3>
+        <p>Opgeslagen video's</p>
         @for (video of savedVideos; track $index) {
           <div class="video-item">
             <video controls [src]="video.url"></video>
