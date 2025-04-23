@@ -142,7 +142,7 @@ export class TrainingEmployeeComponent implements OnInit {
   goToEditExamPage(trainingId: number) {
     const exam = this.examsMap.get(trainingId);
     if (exam) {
-      this.router.navigate(['/edit-exam', exam.id]);
+      this.router.navigate(['/update-exam', exam.id]);
     }
   }
 }

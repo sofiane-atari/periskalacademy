@@ -8,17 +8,17 @@
       <div>
         <div class="training-buttons">
           <button (click)="goToTrainingDetails(training.id)">{{'MODULES' | translate}}</button>
-          @if (hasExam(training.id) && roleAuth.hasPermission(['Skipper'])) {
+          @if (hasExam(training.id) && !roleAuth.canEditContent()) { 
             <button class="take-exam" (click)="goToExam(training.id)">
               {{'TAKE_EXAM' | translate}}
             </button>
           }@else if (roleAuth.canEditContent()) {
             <button (click)="toggleMenuEdit(training.id)">{{'EDIT' | translate}}</button>
             <div class="dropdown-menu-edit" [class.show]="openMenus[training.id]">
-              <button class="edit-exam" (click)="goToEditTrainingPage(training.id)">
+              <button class="edit-training" (click)="goToEditTrainingPage(training.id)">
                 {{'EDIT_TRAINING' | translate}}
               </button>
-              <button class="edit-exam" (click)="goToEditExamPage(1)">
+              <button class="edit-exam" (click)="goToEditExamPage(training.id)">
                 {{'EDIT_EXAM' | translate}}
               </button>
             </div>
