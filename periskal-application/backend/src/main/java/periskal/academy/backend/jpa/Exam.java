@@ -1,6 +1,11 @@
 package periskal.academy.backend.jpa;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
 
@@ -13,10 +18,23 @@ public class Exam {
     private String examTitle;
     private String examDescription;
 
+    @OneToMany(mappedBy = "exam", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Question> questions = new ArrayList<>();
+
     @OneToOne
     @JoinColumn(name = "training_id", unique = true, nullable = true)
-    @JsonIgnore
+    // @JsonIgnore
+    @JsonBackReference
     private Training training;
+
+    public List<Question> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
+    }
 
     public Exam() {
     }

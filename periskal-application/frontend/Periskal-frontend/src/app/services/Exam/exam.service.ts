@@ -17,10 +17,11 @@ export class ExamService {
 
   getExamById(id: number): Observable<Exam> {
     return this.client.get<Exam>(`${this.baseUrl}/${id}`).pipe(
-      tap(exam => console.log('Received exam:', exam)), // Debug log
-      catchError(error => {
-        console.error('Error loading exam:', error);
-        return throwError(() => error);
+      tap(exam => {
+        if (!exam.questions) {
+          console.warn('No questions found in exam response');
+          exam.questions = []; // Initialize empty array if null
+        }
       })
     );
   }
@@ -46,6 +47,15 @@ export class ExamService {
         return throwError(() => error);
       })
     );
+  }
+  createExam(examData: any): Observable<Exam> {
+    const payload = {
+      examTitle: examData.examTitle,
+      examDescription: examData.examDescription,
+      trainingId: examData.trainingId,
+      questions: examData.questions.map((q: any) => ({ text: q.text }))
+    };
+    return this.client.post<Exam>(this.baseUrl, payload);
   }
 }
 

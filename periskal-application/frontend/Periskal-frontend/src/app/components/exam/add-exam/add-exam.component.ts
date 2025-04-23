@@ -33,12 +33,12 @@ export class AddExamComponent implements OnInit {
   }
 
   initForm(): void {
-    this.examForm = this.fb.group({
-      trainingId: ['', Validators.required],
-      examTitle: ['', Validators.required],
-      examDescription: ['', Validators.required],
-      questions: this.fb.array([]) // FormArray voor vragen
-    });
+    // this.examForm = this.fb.group({
+    //   trainingId: ['', Validators.required],
+    //   examTitle: ['', Validators.required],
+    //   examDescription: ['', Validators.required],
+    //   questions: this.fb.array([]) // FormArray voor vragen
+    // });
   }
   get questions(): FormArray {
     return this.examForm.get('questions') as FormArray;
@@ -94,24 +94,31 @@ export class AddExamComponent implements OnInit {
 
   submitExam(): void {
     if (this.examForm.valid) {
-      const trainingId = Number(this.examForm.value.trainingId);
-  
-      const examData: Exam = {
-        trainingId: trainingId,
+      // Create clean payload object
+      const examData = {
         examTitle: this.examForm.value.examTitle,
         examDescription: this.examForm.value.examDescription,
-        questions: []
+        trainingId: Number(this.examForm.value.trainingId),
+        questions: this.questions.controls.map(q => ({ 
+          text: q.value.text 
+        }))
       };
   
-      this.examService.postExam(examData).subscribe(
-        (response) => {
-          console.log('Exam added successfully!', response);
-          this.router.navigate(['/trainingEmployee']); 
+      console.log('Submitting:', JSON.stringify(examData)); // Debug log
+  
+      this.examService.createExam(examData).subscribe({
+        next: (response) => {
+          this.router.navigate(['/exams']);
         },
-        (error) => {
-          console.error('Error adding exam', error);
+        error: (error) => {
+          console.error('Full error:', error);
+          if (error.error instanceof ErrorEvent) {
+            console.error('Client-side error:', error.error.message);
+          } else {
+            console.error(`Backend error ${error.status}:`, error.error);
+          }
         }
-      );
+      });
     }
   }
 }
