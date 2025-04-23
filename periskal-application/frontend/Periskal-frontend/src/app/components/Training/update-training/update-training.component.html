@@ -204,8 +204,12 @@
       </button>
     </div>
   </form>
+  <div>
+    <button class="btn btn-primary" (click)="goToModuleAddPage()">{{"ADD_NEW_MODULE" | translate}}</button>
+  </div>
+  <div>
   <button (click)="confirmDelete()" class="delete">{{"DELETE_TRAINING" | translate}}</button>
-  <button (click)="goToModuleAddPage()">{{"ADD_NEW_MODULE" | translate}}</button>
+</div>
   } @if (!training) {
   <div>{{'TRAINING_NOT_FOUND' | translate}}</div>
   }
