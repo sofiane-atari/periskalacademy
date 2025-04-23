@@ -3,7 +3,9 @@ package periskal.academy.backend.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import periskal.academy.backend.jpa.Exam;
+import periskal.academy.backend.dto.ExamRequest;
 import periskal.academy.backend.service.ExamService;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +14,7 @@ import java.util.Optional;
 @RestController
 @CrossOrigin(origins = "http://frontend.localhost:4200", allowCredentials = "true")
 @RequestMapping("/api/exams")
+@Slf4j
 public class ExamController {
 
     private final ExamService examService;
@@ -63,6 +66,22 @@ public class ExamController {
             response.put("message", "Exam not found");
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/with-questions/{id}")
+    public ResponseEntity<Exam> getExamWithQuestions(@PathVariable Long id) {
+        Optional<Exam> examOpt = examService.getExamWithQuestions(id);
+        if (examOpt.isPresent()) {
+            return ResponseEntity.ok(examOpt.get());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping
+    public ResponseEntity<Exam> createExamWithQuestions(@RequestBody ExamRequest examRequest) {
+        log.info("Received exam request: {}", examRequest);
+        Exam savedExam = examService.createExam(examRequest);
+        return ResponseEntity.ok(savedExam);
     }
 
 }

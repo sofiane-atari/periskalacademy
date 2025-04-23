@@ -15,33 +15,62 @@ import { Exam } from '../../../models/exam.model';
 export class AddExamComponent implements OnInit {
     examForm: FormGroup;
     trainingsWithExams: number[] = [];
-    public trainingsData: Training[] = [];
+    trainingsData: any[] = [];
     isLoading = true;
 
   constructor(
     private fb: FormBuilder,
     private examService: ExamService,
     private router: Router,
-    private trainigService: TrainingService
+    private trainingService: TrainingService
   ) {
     this.examForm = this.fb.group({
-      trainingId: ['', Validators.required], // Dropdown selection
+      trainingId: ['', Validators.required],
       examTitle: ['', Validators.required],
-      examDescription: ['', Validators.required]
+      examDescription: ['', Validators.required],
+      questions: this.fb.array([]) // Initialize empty FormArray
     });
   }
 
+  initForm(): void {
+    // this.examForm = this.fb.group({
+    //   trainingId: ['', Validators.required],
+    //   examTitle: ['', Validators.required],
+    //   examDescription: ['', Validators.required],
+    //   questions: this.fb.array([]) // FormArray voor vragen
+    // });
+  }
+  get questions(): FormArray {
+    return this.examForm.get('questions') as FormArray;
+  }
   ngOnInit(): void {
     this.loadTrainings();
   }
+  addQuestion(): void {
+    const questionGroup = this.fb.group({
+      text: ['', Validators.required]
+    });
+    this.questions.push(questionGroup);
+  }
+  
+  // Remove a question from the form
+  removeQuestion(index: number): void {
+    this.questions.removeAt(index);
+  }
+
   loadTrainings(): void {
-    this.trainigService.getTrainingData().subscribe({
-      next: (data: Training[]) => {
+    this.isLoading = true;
+    this.trainingService.getTrainingData().subscribe({
+      next: (data: any[]) => {
+        console.log('Ontvangen trainingsdata:', data); // Debug log
         this.trainingsData = data;
+        console.log('TrainingsData na toewijzing:', this.trainingsData); // Debug log
         this.checkExistingExams();
+        this.isLoading = false;
       },
       error: (error) => {
-        console.error('Error fetching trainings', error);
+        console.error('Fout bij ophalen trainingen', error);
+        this.isLoading = false;
       }
     });
   }
@@ -65,23 +94,31 @@ export class AddExamComponent implements OnInit {
 
   submitExam(): void {
     if (this.examForm.valid) {
-      const trainingId = Number(this.examForm.value.trainingId);
-  
-      const examData: Exam = {
-        trainingId: trainingId,
+      // Create clean payload object
+      const examData = {
         examTitle: this.examForm.value.examTitle,
-        examDescription: this.examForm.value.examDescription
+        examDescription: this.examForm.value.examDescription,
+        trainingId: Number(this.examForm.value.trainingId),
+        questions: this.questions.controls.map(q => ({ 
+          text: q.value.text 
+        }))
       };
   
-      this.examService.postExam(examData).subscribe(
-        (response) => {
-          console.log('Exam added successfully!', response);
-          this.router.navigate(['/trainingEmployee']); 
+      console.log('Submitting:', JSON.stringify(examData)); // Debug log
+  
+      this.examService.createExam(examData).subscribe({
+        next: (response) => {
+          this.router.navigate(['/exams']);
         },
-        (error) => {
-          console.error('Error adding exam', error);
+        error: (error) => {
+          console.error('Full error:', error);
+          if (error.error instanceof ErrorEvent) {
+            console.error('Client-side error:', error.error.message);
+          } else {
+            console.error(`Backend error ${error.status}:`, error.error);
+          }
         }
-      );
+      });
     }
   }
 }

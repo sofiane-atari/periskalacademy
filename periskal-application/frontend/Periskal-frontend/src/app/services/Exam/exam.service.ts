@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError, Observable, of, throwError } from 'rxjs';
+import { catchError, Observable, of, tap, throwError } from 'rxjs';
 import { Exam } from '../../models/exam.model';
 
 @Injectable({
@@ -17,11 +17,11 @@ export class ExamService {
 
   getExamById(id: number): Observable<Exam> {
     return this.client.get<Exam>(`${this.baseUrl}/${id}`).pipe(
-      catchError(error => {
-        if (error.status === 404) {
-          return throwError(() => new Error('Exam not found'));
+      tap(exam => {
+        if (!exam.questions) {
+          console.warn('No questions found in exam response');
+          exam.questions = []; // Initialize empty array if null
         }
-        return throwError(() => error);
       })
     );
   }
@@ -47,6 +47,15 @@ export class ExamService {
         return throwError(() => error);
       })
     );
+  }
+  createExam(examData: any): Observable<Exam> {
+    const payload = {
+      examTitle: examData.examTitle,
+      examDescription: examData.examDescription,
+      trainingId: examData.trainingId,
+      questions: examData.questions.map((q: any) => ({ text: q.text }))
+    };
+    return this.client.post<Exam>(this.baseUrl, payload);
   }
 }
 
