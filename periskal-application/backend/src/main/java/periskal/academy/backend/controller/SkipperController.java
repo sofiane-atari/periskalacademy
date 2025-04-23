@@ -19,6 +19,12 @@ public class SkipperController {
     @GetMapping()
     public ResponseEntity<List<SkippersDTO>> getSkippers() {
 
+        //TODO: Replace with actual data retrieval logic
+        // For now, we will return a static list of skippers for demonstration purposes.
+        // Don't know where to store the data we receive during login, Either store it server side or client side.
+        // Either way this data should only be stored for the duration of the JWT token. 
+        // server side: store in session or cache, redis? 
+        // client side: store in local storage or put it in the JWT token itself but that may make it way too large.
         List<SkippersDTO> skippers = new ArrayList<>();
 
         SkippersDTO skipper1 = new SkippersDTO();
