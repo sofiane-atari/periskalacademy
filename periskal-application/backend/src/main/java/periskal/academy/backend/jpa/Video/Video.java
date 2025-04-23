@@ -1,4 +1,6 @@
-package periskal.academy.backend.jpa;
+package periskal.academy.backend.jpa.Video;
+
+import periskal.academy.backend.jpa.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
