@@ -1,0 +1,39 @@
+<div class="container mt-5">
+    <div class="card shadow-sm">
+      <div class="card-header text-black">
+        <h4 class="mb-0">Examen aanpassen</h4>
+      </div>
+      <div class="card-body">
+        <form (ngSubmit)="onSubmit()">
+          <div class="mb-3">
+            <label for="examTitle" class="form-label">Titel</label>
+            <input
+              type="text"
+              id="examTitle"
+              [(ngModel)]="exam.examTitle"
+              name="examTitle"
+              class="form-control"
+              required
+            />
+          </div>
+  
+          <div class="mb-3">
+            <label for="examDescription" class="form-label">Beschrijving</label>
+            <textarea
+              id="examDescription"
+              class="form-control"
+              [(ngModel)]="exam.examDescription"
+              name="examDescription"
+              rows="4"
+              required
+            ></textarea>
+          </div>
+  
+          <button type="submit" class="btn w-100">
+            Opslaan
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+  

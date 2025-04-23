@@ -12,6 +12,7 @@ import { AddModuleComponent } from './components/Training/add-module/add-module.
 import { SkippersComponent } from './components/skippers/skippers.component';
 import { AddExamComponent } from './components/exam/add-exam/add-exam.component';
 import { TakeExamComponent } from './components/exam/take-exam/take-exam.component';
+import { UpdateExamComponent } from './components/exam/update-exam/update-exam.component';
 
 export const routes: Routes = [
 
@@ -32,6 +33,7 @@ export const routes: Routes = [
             { path: 'trainingEmployee', component: TrainingEmployeeComponent },
             { path: 'add-training', component: AddTrainingComponent },
             { path: 'add-exam', component: AddExamComponent },
+            { path: 'update-exam/:id', component: UpdateExamComponent},
             { path: 'take-exam/:id', component: TakeExamComponent },
             { path: 'training/:id', component: TrainingDetailComponent },
             { path: 'edit/:id', component: UpdateTrainingComponent },
