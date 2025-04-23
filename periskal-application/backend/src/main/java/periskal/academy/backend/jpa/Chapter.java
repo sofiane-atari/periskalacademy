@@ -17,6 +17,7 @@ import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import periskal.academy.backend.jpa.Video.Video;
 
 @Entity
 @Getter
@@ -67,6 +68,11 @@ public class Chapter {
     @JsonManagedReference
     private List<Photo> photos_de = new ArrayList<>();
 
+    @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Video> videos = new ArrayList<>();
+
+    
     public Chapter(String nameChapter, String descriptionChapter, String textChapter) {
         this.nameChapter_en = nameChapter;
         this.descriptionChapter_en = descriptionChapter;

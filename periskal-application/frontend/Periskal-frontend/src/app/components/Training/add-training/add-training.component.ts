@@ -4,10 +4,10 @@ import { Router } from '@angular/router';
 import { TrainingService } from '../../../services/Training/training.service';
 import { TranslatePipe } from '@ngx-translate/core';
 import { PhotoUploadComponent } from '../../photo-upload/photo-upload.component';
-
+import { VideoUploadComponent } from '../../video-upload/video-upload.component';
 @Component({
   selector: 'app-add-training',
-  imports: [FormsModule, ReactiveFormsModule, TranslatePipe, PhotoUploadComponent],
+  imports: [FormsModule, ReactiveFormsModule, TranslatePipe, PhotoUploadComponent, VideoUploadComponent],
   templateUrl: './add-training.component.html',
   styleUrl: './add-training.component.css'
 })
