@@ -1,7 +1,7 @@
 <div class="skippers-container">
-    <h1>Skippers</h1>
-    <div class="skippers-list">
+  <h1>Skippers</h1>
   
+    <div class="skippers-list">
       @for (skipper of skippers; track skipper.id; let i = $index) {
         <div 
             class="skipper-item" 
@@ -37,7 +37,7 @@
           } 
         </div>
       } @empty {
-        <p>No skippers available.</p>
+        <p class="no-data">No skippers available.</p>
       }
     </div>
-  </div>
+</div>
