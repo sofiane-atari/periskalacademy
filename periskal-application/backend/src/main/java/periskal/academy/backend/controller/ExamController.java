@@ -37,18 +37,6 @@ public class ExamController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/training/{trainingId}/create")
-    public ResponseEntity<?> createExamForTraining(@PathVariable Long trainingId, @RequestBody Exam exam) {
-        try {
-            Exam savedExam = examService.createExamForTraining(trainingId, exam);
-            return ResponseEntity.ok(savedExam);
-        } catch (RuntimeException e) {
-            Map<String, String> response = new HashMap<>();
-            response.put("error", e.getMessage());
-            return ResponseEntity.badRequest().body(response);
-        }
-    }
-
     @PutMapping("/edit/{id}")
     public ResponseEntity<Exam> updateExam(@PathVariable Long id, @RequestBody Exam updatedExam) {
         Exam exam = examService.updateExam(id, updatedExam);
@@ -57,29 +45,16 @@ public class ExamController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Map<String, String>> deleteExam(@PathVariable Long id) {
-        boolean deleted = examService.deleteExam(id);
+        
+        examService.deleteExam(id);
         Map<String, String> response = new HashMap<>();
-        if (deleted) {
-            response.put("message", "Exam deleted successfully");
-            return ResponseEntity.ok(response);
-        } else {
-            response.put("message", "Exam not found");
-            return ResponseEntity.notFound().build();
-        }
+        response.put("message", "Training deleted successfully");
+        return ResponseEntity.ok(response); 
     }
 
-    @GetMapping("/with-questions/{id}")
-    public ResponseEntity<Exam> getExamWithQuestions(@PathVariable Long id) {
-        Optional<Exam> examOpt = examService.getExamWithQuestions(id);
-        if (examOpt.isPresent()) {
-            return ResponseEntity.ok(examOpt.get());
-        }
-        return ResponseEntity.notFound().build();
-    }
 
     @PostMapping
     public ResponseEntity<Exam> createExamWithQuestions(@RequestBody ExamRequest examRequest) {
-        log.info("Received exam request: {}", examRequest);
         Exam savedExam = examService.createExam(examRequest);
         return ResponseEntity.ok(savedExam);
     }
