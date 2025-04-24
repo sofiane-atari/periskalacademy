@@ -38,7 +38,6 @@ export class UpdateExamComponent implements OnInit {
   }
 
   onSubmit(): void {
-    console.log(this.examId ,this.exam);
     this.examService.updateExam(this.examId, this.exam).subscribe({
       next: () => {
         alert('Examen succesvol aangepast!');
@@ -50,11 +49,9 @@ export class UpdateExamComponent implements OnInit {
 
   addQuestion(): void {
     this.exam.questions.push({ id: 0, text: '' });
-    console.log(this.exam.questions);
   }
 
   removeQuestion(index: number): void {
     this.exam.questions.splice(index, 1);
-    console.log(this.exam.questions);
   }
 }
