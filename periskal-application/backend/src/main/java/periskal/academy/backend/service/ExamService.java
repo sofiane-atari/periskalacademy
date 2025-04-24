@@ -69,15 +69,27 @@ public class ExamService {
     }
 
     public Exam updateExam(Long id, Exam updatedExam) {
-        Optional<Exam> examOpt = examRepository.findById(id);
-        if (examOpt.isPresent()) {
-            Exam exam = examOpt.get();
-            exam.setExamTitle(updatedExam.getExamTitle());
-            exam.setExamDescription(updatedExam.getExamDescription());
-            return examRepository.save(exam);
+    Optional<Exam> examOpt = examRepository.findById(id);
+    if (examOpt.isPresent()) {
+        Exam exam = examOpt.get();
+        
+        exam.setExamTitle(updatedExam.getExamTitle());
+        exam.setExamDescription(updatedExam.getExamDescription());
+
+        // Oude vragen verwijderen
+        exam.getQuestions().clear();
+
+        for (Question question : updatedExam.getQuestions()) {
+            question.setId(null);
+            question.setExam(exam); 
+            exam.getQuestions().add(question);
         }
-        return null;
+        
+        return examRepository.save(exam);
     }
+    return null;
+}
+
 
     @Transactional
     public Exam saveExam(Exam exam) {

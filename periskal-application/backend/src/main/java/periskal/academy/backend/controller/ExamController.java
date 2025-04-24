@@ -43,6 +43,7 @@ public class ExamController {
         return exam != null ? ResponseEntity.ok(exam) : ResponseEntity.notFound().build();
     }
 
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Map<String, String>> deleteExam(@PathVariable Long id) {
         

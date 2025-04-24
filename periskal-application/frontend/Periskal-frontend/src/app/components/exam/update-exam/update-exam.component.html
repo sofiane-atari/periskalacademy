@@ -28,6 +28,28 @@
               required
             ></textarea>
           </div>
+
+          <h4 class="mt-4">Examenvragen</h4>
+
+          @for(question of exam.questions; track $index){
+          <div class="mb-2">
+            <div class="input-group">
+              <input type="text"
+                     class="form-control"
+                     [(ngModel)]="question.text"
+                     [name]="'question_' + $index"
+                     placeholder="Vraagtekst"
+                     required>
+              <button type="button" class="btn btn-danger" (click)="removeQuestion($index)">
+                Verwijder
+              </button>
+            </div>
+          </div>
+        }
+      
+          <button type="button" class="btn btn-secondary mt-2" (click)="addQuestion()">
+            Voeg vraag toe
+          </button>
   
           <button type="submit" class="btn w-100">
             Opslaan
