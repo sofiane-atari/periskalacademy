@@ -55,6 +55,7 @@ public class ExamController {
         return exam != null ? ResponseEntity.ok(exam) : ResponseEntity.notFound().build();
     }
 
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Map<String, String>> deleteExam(@PathVariable Long id) {
         boolean deleted = examService.deleteExam(id);
@@ -68,14 +69,7 @@ public class ExamController {
         }
     }
 
-    @GetMapping("/with-questions/{id}")
-    public ResponseEntity<Exam> getExamWithQuestions(@PathVariable Long id) {
-        Optional<Exam> examOpt = examService.getExamWithQuestions(id);
-        if (examOpt.isPresent()) {
-            return ResponseEntity.ok(examOpt.get());
-        }
-        return ResponseEntity.notFound().build();
-    }
+
 
     @PostMapping
     public ResponseEntity<Exam> createExamWithQuestions(@RequestBody ExamRequest examRequest) {

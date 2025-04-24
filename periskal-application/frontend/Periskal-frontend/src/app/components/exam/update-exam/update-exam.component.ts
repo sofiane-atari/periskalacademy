@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, QueryList } from '@angular/core';
 import { Exam } from '../../../models/exam.model';
 import { ExamService } from '../../../services/Exam/exam.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -38,7 +38,7 @@ export class UpdateExamComponent implements OnInit {
   }
 
   onSubmit(): void {
-    console.log("Form verstuurd");
+    console.log(this.examId ,this.exam);
     this.examService.updateExam(this.examId, this.exam).subscribe({
       next: () => {
         alert('Examen succesvol aangepast!');
@@ -46,5 +46,15 @@ export class UpdateExamComponent implements OnInit {
       },
       error: (err) => console.error('Examen updaten mislukt', err)
     });
+  }
+
+  addQuestion(): void {
+    this.exam.questions.push({ id: 0, text: '' });
+    console.log(this.exam.questions);
+  }
+
+  removeQuestion(index: number): void {
+    this.exam.questions.splice(index, 1);
+    console.log(this.exam.questions);
   }
 }
