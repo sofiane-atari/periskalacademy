@@ -38,6 +38,7 @@ export class ExamService {
   deleteExam(id: number): Observable<any> {
     return this.client.delete(`${this.baseUrl}/delete/${id}`);
   }
+  
   getExamByTrainingId(trainingId: number): Observable<Exam | null> {
     return this.client.get<Exam>(`${this.baseUrl}/training/${trainingId}`).pipe(
       catchError(error => {

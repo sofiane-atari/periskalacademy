@@ -68,26 +68,6 @@ public class ExamService {
         return examRepository.save(exam);
     }
 
-    public Exam createExamForTraining(Long trainingId, Exam exam) {
-        Optional<Training> trainingOpt = trainingRepository.findById(trainingId);
-        Training training = null;
-        if (trainingOpt.isEmpty()) {
-            throw new RuntimeException("Training not found");
-        }
-
-        if (trainingOpt.isPresent()) {
-            training = trainingOpt.get();
-        }
-        // Check if training already has an exam
-        if (examRepository.existsByTrainingId(trainingId)) {
-            throw new RuntimeException("This training already has an exam.");
-        }
-
-        exam.setTraining(training);
-        return examRepository.save(exam);
-    }
-
-    @Transactional
     public Exam updateExam(Long id, Exam updatedExam) {
     Optional<Exam> examOpt = examRepository.findById(id);
     if (examOpt.isPresent()) {
@@ -131,22 +111,21 @@ public class ExamService {
         return savedExam;
     }
 
-    public Optional<Exam> getExamWithQuestions(Long examId) {
-        Optional<Exam> examOpt = examRepository.findById(examId);
-        if (examOpt.isPresent()) {
-            Exam exam = examOpt.get();
-            List<Question> questions = questionRepository.findByExamId(examId);
-            exam.setQuestions(questions);
-            return Optional.of(exam);
+    public void deleteExam(Long id) {
+        Optional<Exam> examOpt = examRepository.findById(id);
+        if (examOpt.isEmpty()) {
+            throw new RuntimeException("Examen met ID " + id + " bestaat niet.");
         }
-        return Optional.empty();
-    }
 
-    public boolean deleteExam(Long id) {
-        if (examRepository.existsById(id)) {
-            examRepository.deleteById(id);
-            return true;
+        Exam exam = examOpt.get();
+
+        // Unlink from training
+        Training training = exam.getTraining(); // assuming you have getTraining()
+        if (training != null) {
+            training.setExam(null); // or training.setHasExam(false);
+            trainingRepository.save(training);
         }
-        return false;
+
+        examRepository.deleteById(id);
     }
 }

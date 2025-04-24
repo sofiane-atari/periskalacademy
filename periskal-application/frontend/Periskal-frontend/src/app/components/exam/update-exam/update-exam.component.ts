@@ -36,6 +36,28 @@ export class UpdateExamComponent implements OnInit {
       error: (err) => console.error('Examen ophalen mislukt', err)
     });
   }
+  
+  deleteExam(trainingId: number): void {
+    if (!confirm('Weet u zeker dat u dit examen wilt verwijderen?')) return;
+  
+    this.examService.deleteExam(trainingId).subscribe({
+      next: () => {
+        this.router.navigate(['/training-employee'], {
+          onSameUrlNavigation: 'reload' // Force page reload
+        });
+      },
+      error: (error) => {
+        console.error('Delete failed:', error);
+        alert('Verwijderen mislukt: ' + error.message);
+      }
+    });
+    this.loadExam();
+  }
+  confirmDeleteExam(): void {
+    if (!this.exam || this.exam.id == null) return;
+    if (!confirm('Weet u zeker dat u dit examen wilt verwijderen?')) return;
+    this.deleteExam(this.exam?.id);
+  }
 
   onSubmit(): void {
     this.examService.updateExam(this.examId, this.exam).subscribe({

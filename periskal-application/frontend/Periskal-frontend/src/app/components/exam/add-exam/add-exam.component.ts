@@ -53,7 +53,6 @@ export class AddExamComponent implements OnInit {
     this.questions.push(questionGroup);
   }
   
-  // Remove a question from the form
   removeQuestion(index: number): void {
     this.questions.removeAt(index);
   }
