@@ -19,7 +19,7 @@ public class Exam {
     private String examDescription;
 
     @OneToMany(mappedBy = "exam", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference("exam-questions")
     private List<Question> questions = new ArrayList<>();
 
     @OneToOne

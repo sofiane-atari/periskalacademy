@@ -1,6 +1,7 @@
 package periskal.academy.backend.jpa;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,13 +20,30 @@ public class Photo {
     @Column(columnDefinition = "LONGBLOB")
     private String imageData;
 
+    // Optional link to a Chapter
     @ManyToOne
-    @JoinColumn(name = "chapter_id", nullable = false)
-    @JsonBackReference
+    @JoinColumn(name = "chapter_id", nullable = true)
+    @JsonBackReference(value = "chapter-photos")
     private Chapter chapter;
 
-    public Photo(String imageData, Chapter chapter) {
+    // Optional link to a Question
+    @ManyToOne
+    @JoinColumn(name = "question_id", nullable = true)
+    @JsonBackReference(value = "question-photos")
+    private Question question;
+
+    public Photo(String imageData) {
         this.imageData = imageData;
-        this.chapter = chapter;
+    }
+
+    // Convenience setters
+    public void assignToChapter(Chapter c) {
+        this.chapter = c;
+        this.question = null;
+    }
+
+    public void assignToQuestion(Question q) {
+        this.question = q;
+        this.chapter = null;
     }
 }

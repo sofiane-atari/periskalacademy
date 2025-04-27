@@ -1,10 +1,18 @@
 package periskal.academy.backend.jpa;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,32 +21,21 @@ public class Question {
     private String text;
 
     @ManyToOne
-    @JoinColumn(name = "exam_id")
-    @JsonBackReference
+    @JoinColumn(name = "exam_id", nullable = false)
+    @JsonBackReference("exam-questions")
     private Exam exam;
 
-    // Getters and setters
-    public Long getId() {
-        return id;
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JsonManagedReference(value = "question-photos")
+    private List<Photo> photos = new ArrayList<>();
+
+    public void addPhoto(Photo p) {
+        p.assignToQuestion(this);
+        photos.add(p);
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public Exam getExam() {
-        return exam;
-    }
-
-    public void setExam(Exam exam) {
-        this.exam = exam;
+    public void removePhoto(Photo p) {
+        photos.remove(p);
+        p.setQuestion(null);
     }
 }

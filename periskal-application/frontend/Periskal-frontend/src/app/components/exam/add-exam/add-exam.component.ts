@@ -5,10 +5,12 @@ import { Router } from '@angular/router';
 import { Training } from '../../../models/training.model';
 import { ExamService } from '../../../services/Exam/exam.service';
 import { Exam } from '../../../models/exam.model';
+import { PhotoUploadComponent } from '../../photo-upload/photo-upload.component';
 
 @Component({
   selector: 'app-add-exam',
-  imports: [FormsModule, ReactiveFormsModule],
+  standalone: true,
+  imports: [FormsModule, ReactiveFormsModule, PhotoUploadComponent],
   templateUrl: './add-exam.component.html',
   styleUrl: './add-exam.component.css'
 })
@@ -46,13 +48,15 @@ export class AddExamComponent implements OnInit {
   ngOnInit(): void {
     this.loadTrainings();
   }
+
   addQuestion(): void {
     const questionGroup = this.fb.group({
-      text: ['', Validators.required]
+      text:   ['', Validators.required],
+      photos: [[]]
     });
     this.questions.push(questionGroup);
   }
-  
+
   removeQuestion(index: number): void {
     this.questions.removeAt(index);
   }
@@ -99,15 +103,17 @@ export class AddExamComponent implements OnInit {
         examDescription: this.examForm.value.examDescription,
         trainingId: Number(this.examForm.value.trainingId),
         questions: this.questions.controls.map(q => ({ 
-          text: q.value.text 
-        }))
+          text: q.value.text,
+          photos: (q.value.photos || [])
+          .map((p: any) => p.imageData)
+      }))
       };
   
-      console.log('Submitting:', JSON.stringify(examData)); // Debug log
+      console.log('Form value before submit', this.questions.value);
   
       this.examService.createExam(examData).subscribe({
         next: (response) => {
-          this.router.navigate(['/exams']);
+          this.router.navigate(['/training-employee']);
         },
         error: (error) => {
           console.error('Full error:', error);
