@@ -65,12 +65,12 @@ public class ExamService {
             q.setExam(exam);
 
             if (qdto.getPhotos() != null) {
-                for (String base64 : qdto.getPhotos()) {
-                    Photo p = new Photo();
-                    p.setImageData(base64);
-                    p.setQuestion(q);
-                    q.getPhotos().add(p);
-                }
+            for (String base64 : qdto.getPhotos()) {
+            Photo p = new Photo();
+            p.setImageData(base64);
+            p.setQuestion(q);
+            q.getPhotos().add(p);
+            }
             }
 
             questions.add(q);
@@ -102,26 +102,6 @@ public class ExamService {
         }
         return null;
     }
-
-    // @Transactional
-    // public Exam saveExam(Exam exam) {
-    // // 1. Save exam first
-    // Exam savedExam = examRepository.save(exam);
-
-    // // 2. Save questions with proper type
-    // if (exam.getQuestions() != null) {
-    // List<Question> savedQuestions = new ArrayList<>();
-
-    // for (periskal.academy.backend.jpa.Question question : exam.getQuestions()) {
-    // question.setExam(savedExam);
-    // savedQuestions.add(questionRepository.save(question));
-    // }
-
-    // savedExam.setQuestions(savedQuestions);
-    // }
-
-    // return savedExam;
-    // }
 
     public void deleteExam(Long id) {
         Optional<Exam> examOpt = examRepository.findById(id);

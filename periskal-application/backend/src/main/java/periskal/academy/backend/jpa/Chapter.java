@@ -53,19 +53,19 @@ public class Chapter {
     private Module module;
 
     @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference(value = "chapter-photos")
+    @JsonManagedReference // (value = "chapter-photos")
     private List<Photo> photos_en = new ArrayList<>();
 
     @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference(value = "chapter-photos-nl")
+    @JsonManagedReference // (value = "chapter-photos-nl")
     private List<Photo> photos_nl = new ArrayList<>();
 
     @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference(value = "chapter-photos-fr")
+    @JsonManagedReference // (value = "chapter-photos-fr")
     private List<Photo> photos_fr = new ArrayList<>();
 
     @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference(value = "chapter-photos-de")
+    @JsonManagedReference // (value = "chapter-photos-de")
     private List<Photo> photos_de = new ArrayList<>();
 
     @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL, orphanRemoval = true)

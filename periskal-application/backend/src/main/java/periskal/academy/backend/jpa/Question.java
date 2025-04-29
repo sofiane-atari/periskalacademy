@@ -30,8 +30,8 @@ public class Question {
     private List<Photo> photos = new ArrayList<>();
 
     public void addPhoto(Photo p) {
-        p.assignToQuestion(this);
         photos.add(p);
+        p.setQuestion(this);
     }
 
     public void removePhoto(Photo p) {

@@ -23,7 +23,7 @@ public class Photo {
     // Optional link to a Chapter
     @ManyToOne
     @JoinColumn(name = "chapter_id", nullable = true)
-    @JsonBackReference(value = "chapter-photos")
+    @JsonBackReference // (value = "chapter-photos")
     private Chapter chapter;
 
     // Optional link to a Question
@@ -34,16 +34,5 @@ public class Photo {
 
     public Photo(String imageData) {
         this.imageData = imageData;
-    }
-
-    // Convenience setters
-    public void assignToChapter(Chapter c) {
-        this.chapter = c;
-        this.question = null;
-    }
-
-    public void assignToQuestion(Question q) {
-        this.question = q;
-        this.chapter = null;
     }
 }
