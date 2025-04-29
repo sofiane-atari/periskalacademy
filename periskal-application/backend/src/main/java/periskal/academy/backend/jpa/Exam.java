@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
@@ -24,7 +23,6 @@ public class Exam {
 
     @OneToOne
     @JoinColumn(name = "training_id", unique = true, nullable = true)
-    // @JsonIgnore
     @JsonBackReference
     private Training training;
 
