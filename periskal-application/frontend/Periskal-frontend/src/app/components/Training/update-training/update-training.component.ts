@@ -6,7 +6,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { Training } from '../../../models/training.model';
 import { ConfirmPromptComponent } from '../../confirm-prompt/confirm-prompt.component';
 import { MatDialog } from '@angular/material/dialog'
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar'
+import { MatSnackBar, MatSnackBarConfig, MatSnackBarModule } from '@angular/material/snack-bar'
 
 @Component({
   selector: 'app-update-training',
@@ -79,14 +79,28 @@ export class UpdateTrainingComponent {
       if (result && this.training?.id) {
         this.trainingService.deleteTraining(this.training?.id).subscribe({
           next: () => {
-            this.snackBar.open('Training has been successfully deleted.', 'Close', {
+            const snackBarConfig: MatSnackBarConfig = {
               duration: 3000,
-              panelClass: ['snackbar-success']
-            });
+              verticalPosition: 'bottom',
+              horizontalPosition: 'left',
+              panelClass: ['snackbar-success'],
+              politeness: 'assertive'
+            };
+
+            this.snackBar.open('Training has been successfully deleted.', 'Close', snackBarConfig);
             this.router.navigate(['/trainingEmployee']);
           },
           error: (err) => {
             console.error('Error deleting training:', err);
+            const errorSnackBarConfig: MatSnackBarConfig = {
+              duration: 5000,
+              verticalPosition: 'bottom',
+              horizontalPosition: 'left',
+              panelClass: ['snackbar-error'],
+              politeness: 'assertive'
+            };
+
+            this.snackBar.open('Error deleting training.', 'Close', errorSnackBarConfig);
           }
         });
       }
