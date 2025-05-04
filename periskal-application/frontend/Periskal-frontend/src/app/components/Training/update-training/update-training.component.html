@@ -193,7 +193,7 @@
         >
         </textarea>
       </div>
-      <button type="button" class="btn btn-danger">
+      <button type="button" class="btn btn-danger" (click)="removeModule($index)">
         {{'DELETE_MODULE' | translate}}
       </button>
     </div>
@@ -208,7 +208,7 @@
     <button class="btn btn-primary" (click)="goToModuleAddPage()">{{"ADD_NEW_MODULE" | translate}}</button>
   </div>
   <div>
-  <button (click)="confirmDelete()" class="delete">{{"DELETE_TRAINING" | translate}}</button>
+  <button (click)="deleteTraining()" class="delete">{{"DELETE_TRAINING" | translate}}</button>
 </div>
   } @if (!training) {
   <div>{{'TRAINING_NOT_FOUND' | translate}}</div>

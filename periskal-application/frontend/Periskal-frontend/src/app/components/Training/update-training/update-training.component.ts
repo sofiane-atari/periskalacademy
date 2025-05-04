@@ -4,10 +4,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Training } from '../../../models/training.model';
+import { ConfirmPromptComponent } from '../../confirm-prompt/confirm-prompt.component';
+import { MatDialog } from '@angular/material/dialog'
+import { MatSnackBar, MatSnackBarConfig, MatSnackBarModule } from '@angular/material/snack-bar'
 
 @Component({
   selector: 'app-update-training',
-  imports: [FormsModule, TranslatePipe],
+  imports: [FormsModule, TranslatePipe, ConfirmPromptComponent, TranslatePipe, MatSnackBarModule],
   templateUrl: './update-training.component.html',
   styleUrl: './update-training.component.css'
 })
@@ -21,6 +24,8 @@ export class UpdateTrainingComponent {
     private trainingService: TrainingService,
     private route: ActivatedRoute,
     private router: Router,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -59,20 +64,45 @@ export class UpdateTrainingComponent {
     }
   }
 
-  confirmDelete() {
-    const confirmDelete = window.confirm('Are you sure you want to delete this training?');
-    if (confirmDelete && this.training?.id) {
-      this.deleteTraining(this.training?.id);
-    }
-  }
+  deleteTraining() {
+    const dialogRef = this.dialog.open(ConfirmPromptComponent, {
+      width: '600px',
+      data: {
+        title: 'Delete Training',
+        message: 'Are you sure you want to delete this training? This action cannot be undone.',
+        confirmText: 'Delete',
+        cancelText: "Cancel"
+      }
+    });
 
-  deleteTraining(id: number) {
-    this.trainingService.deleteTraining(id).subscribe({
-      next: () => {
-        this.router.navigate(['/trainingEmployee']);
-      },
-      error: (err) => {
-        console.error('Error deleting training:', err);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && this.training?.id) {
+        this.trainingService.deleteTraining(this.training?.id).subscribe({
+          next: () => {
+            const snackBarConfig: MatSnackBarConfig = {
+              duration: 3000,
+              verticalPosition: 'bottom',
+              horizontalPosition: 'left',
+              panelClass: ['snackbar-success'],
+              politeness: 'assertive'
+            };
+
+            this.snackBar.open('Training has been successfully deleted.', 'Close', snackBarConfig);
+            this.router.navigate(['/trainingEmployee']);
+          },
+          error: (err) => {
+            console.error('Error deleting training:', err);
+            const errorSnackBarConfig: MatSnackBarConfig = {
+              duration: 5000,
+              verticalPosition: 'bottom',
+              horizontalPosition: 'left',
+              panelClass: ['snackbar-error'],
+              politeness: 'assertive'
+            };
+
+            this.snackBar.open('Error deleting training.', 'Close', errorSnackBarConfig);
+          }
+        });
       }
     });
   }
@@ -103,5 +133,24 @@ export class UpdateTrainingComponent {
 
   goToModuleAddPage() {
     this.router.navigate(['add', this.trainingId, 'module'])
+  }
+
+  removeModule(index: number) {
+    const dialogRef = this.dialog.open(ConfirmPromptComponent, {
+      width: '600px',
+      data: {
+        title: 'Delete Module',
+        message: 'Are you sure you want to delete this module? This action cannot be undone.',
+        confirmText: 'Delete',
+        cancelText: "Cancel"
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.training?.modules.splice(index, 1);
+      }
+    });
+
   }
 }

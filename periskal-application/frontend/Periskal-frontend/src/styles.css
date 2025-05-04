@@ -1,1 +1,49 @@
 /* You can add global styles to this file, and also import other style files */
+/* Success snackbar styles */
+.snackbar-success {
+  background-color: #2e7d32 !important;
+  color: #ffffff !important;
+}
+
+/* Make sure we target the container */
+.mat-mdc-snack-bar-container.snackbar-success .mdc-snackbar__surface {
+  background-color: #2e7d32 !important;
+  border-radius: 6px !important;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Style the message text */
+.mat-mdc-snack-bar-container.snackbar-success .mat-mdc-snack-bar-label {
+  color: #ffffff !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.5px !important;
+}
+
+/* Style the action button */
+.mat-mdc-snack-bar-container.snackbar-success .mat-mdc-button {
+  color: #ffffff !important;
+  font-weight: bold !important;
+}
+
+/* Optional: Error snackbar styles */
+.snackbar-error {
+  background-color: #d32f2f !important;
+  color: #ffffff !important;
+}
+
+.mat-mdc-snack-bar-container.snackbar-error .mdc-snackbar__surface {
+  background-color: #d32f2f !important;
+  border-radius: 6px !important;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2) !important;
+}
+
+.mat-mdc-snack-bar-container.snackbar-error .mat-mdc-snack-bar-label {
+  color: #ffffff !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.5px !important;
+}
+
+.mat-mdc-snack-bar-container.snackbar-error .mat-mdc-button {
+  color: #ffffff !important;
+  font-weight: bold !important;
+}

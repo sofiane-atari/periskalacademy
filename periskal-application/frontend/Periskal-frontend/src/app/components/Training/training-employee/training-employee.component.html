@@ -2,8 +2,8 @@
   @for (training of trainingsData; track $index) {
     <div class="training">
       <div>
-        <h1>{{ training.name_nl }}</h1>
-        <p>{{ training.description_nl }}</p>
+        <h1>{{ getTrainingName($index) }}</h1>
+        <p>{{ getTrainingDescription($index) }}</p>
       </div>
       <div>
         <div class="training-buttons">
