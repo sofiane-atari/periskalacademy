@@ -52,5 +52,20 @@
   "ADD_NEW_CHAPTER": "Add new chapter",
   "TEST_COMPONENT": "Test Component",
   "NAME": "Name",
-  "PRODUCT_CODE": "Product Code"
+  "PRODUCT_CODE": "Product Code",
+  "MODULE_NAME_EN": "Module name (EN)",
+  "DESCRIPTION_EN": "Description (EN)",
+  "MODULE_NAME_NL": "Module name (NL)",
+  "DESCRIPTION_NL": "Description (NL)",
+  "MODULE_NAME_FR": "Module name (FR)",
+  "DESCRIPTION_FR": "Description (FR)",
+  "MODULE_NAME_DE": "Module name (DE)",
+  "DESCRIPTION_DE": "Description (DE)",
+  "LANGUAGE_EN": "English",
+  "LANGUAGE_NL": "Dutch",
+  "LANGUAGE_FR": "French",
+  "LANGUAGE_DE": "German",
+  "NEXT": "Next",
+  "SUBMIT": "Submit",
+  "BACK": "Back"
 }

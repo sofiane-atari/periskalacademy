@@ -52,5 +52,20 @@
   "ADD_NEW_CHAPTER": "Neues Kapitel hinzufügen",
   "TEST_COMPONENT": "Test-Komponente",
   "NAME": "Name",
-  "PRODUCT_CODE": "Produkt-Code"
+  "PRODUCT_CODE": "Produkt-Code",
+  "MODULE_NAME_EN": "Name des Moduls (EN)",
+  "DESCRIPTION_EN": "Beschreibung (EN)",
+  "MODULE_NAME_NL": "Name des Moduls (NL)",
+  "DESCRIPTION_NL": "Beschreibung (NL)",
+  "MODULE_NAME_FR": "Name des Moduls (FR)",
+  "DESCRIPTION_FR": "Beschreibung (FR)",
+  "MODULE_NAME_DE": "Name des Moduls (DE)",
+  "DESCRIPTION_DE": "Beschreibung (DE)",
+  "LANGUAGE_EN": "Englisch",
+  "LANGUAGE_NL": "Niederländisch",
+  "LANGUAGE_FR": "Französisch",
+  "LANGUAGE_DE": "Deutsch",
+  "SUBMIT": "Einreichen",
+  "NEXT": "Weiter",
+  "BACK": "Zurück"
 }
