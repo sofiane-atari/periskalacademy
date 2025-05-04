@@ -9,7 +9,7 @@ import { MatDialog } from '@angular/material/dialog'
 
 @Component({
   selector: 'app-update-training',
-  imports: [FormsModule, TranslatePipe, ConfirmPromptComponent],
+  imports: [FormsModule, TranslatePipe, ConfirmPromptComponent, TranslatePipe],
   templateUrl: './update-training.component.html',
   styleUrl: './update-training.component.css'
 })
@@ -114,8 +114,8 @@ export class UpdateTrainingComponent {
       data: {
         title: 'Delete Module',
         message: 'Are you sure you want to delete this module? This action cannot be undone.',
-        confirmText: 'Yes',
-        cancelText: 'No'
+        confirmText: 'Delete',
+        cancelText: "Cancel"
       }
     });
 
