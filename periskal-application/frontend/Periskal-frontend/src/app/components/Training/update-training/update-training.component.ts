@@ -6,10 +6,11 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { Training } from '../../../models/training.model';
 import { ConfirmPromptComponent } from '../../confirm-prompt/confirm-prompt.component';
 import { MatDialog } from '@angular/material/dialog'
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar'
 
 @Component({
   selector: 'app-update-training',
-  imports: [FormsModule, TranslatePipe, ConfirmPromptComponent, TranslatePipe],
+  imports: [FormsModule, TranslatePipe, ConfirmPromptComponent, TranslatePipe, MatSnackBarModule],
   templateUrl: './update-training.component.html',
   styleUrl: './update-training.component.css'
 })
@@ -23,7 +24,8 @@ export class UpdateTrainingComponent {
     private trainingService: TrainingService,
     private route: ActivatedRoute,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -77,6 +79,10 @@ export class UpdateTrainingComponent {
       if (result && this.training?.id) {
         this.trainingService.deleteTraining(this.training?.id).subscribe({
           next: () => {
+            this.snackBar.open('Training has been successfully deleted.', 'Close', {
+              duration: 3000,
+              panelClass: ['snackbar-success']
+            });
             this.router.navigate(['/trainingEmployee']);
           },
           error: (err) => {
