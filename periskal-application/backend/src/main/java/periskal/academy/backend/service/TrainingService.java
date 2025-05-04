@@ -216,8 +216,14 @@ public class TrainingService {
         Training existingTraining = getTrainingById(trainingId);
 
         Module newModule = new Module();
-        newModule.setNameModule_en(moduleDto.getNameModule());
-        newModule.setDescriptionModule_en(moduleDto.getDescriptionModule());
+        newModule.setNameModule_en(moduleDto.getNameModule_en());
+        newModule.setDescriptionModule_en(moduleDto.getDescriptionModule_en());
+        newModule.setNameModule_nl(moduleDto.getNameModule_nl());
+        newModule.setDescriptionModule_nl(moduleDto.getDescriptionModule_nl());
+        newModule.setNameModule_fr(moduleDto.getNameModule_fr());
+        newModule.setDescriptionModule_fr(moduleDto.getDescriptionModule_fr());
+        newModule.setNameModule_de(moduleDto.getNameModule_de());
+        newModule.setDescriptionModule_de(moduleDto.getDescriptionModule_de());
         newModule.setTraining(existingTraining);
 
         try {

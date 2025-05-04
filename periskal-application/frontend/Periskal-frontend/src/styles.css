@@ -1,31 +1,26 @@
-/* You can add global styles to this file, and also import other style files */
-/* Success snackbar styles */
+/* Snackbar styles - these should work as is */
 .snackbar-success {
   background-color: #2e7d32 !important;
   color: #ffffff !important;
 }
 
-/* Make sure we target the container */
 .mat-mdc-snack-bar-container.snackbar-success .mdc-snackbar__surface {
   background-color: #2e7d32 !important;
   border-radius: 6px !important;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2) !important;
 }
 
-/* Style the message text */
 .mat-mdc-snack-bar-container.snackbar-success .mat-mdc-snack-bar-label {
   color: #ffffff !important;
   font-weight: 500 !important;
   letter-spacing: 0.5px !important;
 }
 
-/* Style the action button */
 .mat-mdc-snack-bar-container.snackbar-success .mat-mdc-button {
   color: #ffffff !important;
   font-weight: bold !important;
 }
 
-/* Optional: Error snackbar styles */
 .snackbar-error {
   background-color: #d32f2f !important;
   color: #ffffff !important;
@@ -46,4 +41,111 @@
 .mat-mdc-snack-bar-container.snackbar-error .mat-mdc-button {
   color: #ffffff !important;
   font-weight: bold !important;
+}
+
+.stepper-container {
+  width: 100%;
+  max-width: 700px;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+.custom-stepper {
+  background-color: transparent;
+}
+
+.custom-stepper .mdc-stepper__header {
+  padding: 12px 16px;
+}
+
+.custom-stepper .mat-step-header .mat-step-icon-state-edit,
+.custom-stepper .mat-step-header .mat-step-icon-selected {
+  background-color: #f0d04b !important;
+  color: #333 !important;
+}
+
+.custom-stepper .mat-step-header .mat-step-icon-state-done {
+  background-color: #a88f34 !important;
+  color: #fff !important;
+}
+
+.custom-stepper .mat-step-header .mat-step-icon {
+  background-color: rgba(240, 208, 75, 0.5) !important;
+  color: #333 !important;
+}
+
+.custom-stepper .mat-step-text-label {
+  color: #555;
+  font-weight: 500;
+}
+
+.custom-stepper .mat-horizontal-content-container {
+  padding: 20px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.mat-mdc-form-field.mat-mdc-form-field-appearance-fill .mat-mdc-text-field-wrapper {
+  background-color: #f9f9f9;
+  border-radius: 4px;
+}
+
+.mat-mdc-form-field.mat-focused .mdc-text-field--focused .mdc-floating-label {
+  color: #f0d04b !important;
+}
+
+.mat-mdc-form-field.mat-focused .mdc-line-ripple::after {
+  border-bottom-color: #f0d04b !important;
+}
+
+.stepper-buttons {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.gold-button {
+  background-color: #f0d04b !important;
+  color: #333 !important;
+}
+
+.gold-button:hover {
+  background-color: #e0c141 !important;
+}
+
+.back-button {
+  color: #777;
+}
+
+.back-button:hover {
+  color: #555;
+}
+
+.custom-stepper .mat-mdc-progress-bar .mdc-linear-progress__bar-inner {
+  border-color: #f0d04b !important;
+}
+
+.custom-stepper .mat-mdc-progress-bar {
+  --mdc-linear-progress-active-indicator-color: #f0d04b;
+  --mdc-linear-progress-track-color: rgba(240, 208, 75, 0.2);
+}
+
+::ng-deep .custom-stepper .mat-step-header .mat-step-icon-selected {
+  background-color: #f0d04b !important;
+  color: #333 !important;
+}
+
+::ng-deep .custom-stepper .mat-step-header .mat-step-icon-state-done {
+  background-color: #a88f34 !important;
+  color: #fff !important;
 }

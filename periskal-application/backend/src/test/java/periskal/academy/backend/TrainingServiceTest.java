@@ -175,8 +175,8 @@ class TrainingServiceTest {
     @Test
     void givenModuleDto_whenAddModule_thenModuleIsAdded() {
         ModuleDTO moduleDto = new ModuleDTO();
-        moduleDto.setNameModule("New Module");
-        moduleDto.setDescriptionModule("Module Description");
+        moduleDto.setNameModule_en("New Module");
+        moduleDto.setDescriptionModule_en("Module Description");
 
         when(trainingRepository.findById(1L)).thenReturn(Optional.of(training));
 
