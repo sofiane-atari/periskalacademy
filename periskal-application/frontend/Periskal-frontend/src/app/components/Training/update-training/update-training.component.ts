@@ -104,4 +104,8 @@ export class UpdateTrainingComponent {
   goToModuleAddPage() {
     this.router.navigate(['add', this.trainingId, 'module'])
   }
+
+  removeModule(index: number) {
+
+  }
 }
