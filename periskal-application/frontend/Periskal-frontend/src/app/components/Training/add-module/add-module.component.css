@@ -1,5 +1,106 @@
-.full-width {
+.stepper-container {
     width: 100%;
-    margin-bottom: 16px;
+    max-width: 700px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
   }
   
+  .custom-stepper {
+    background-color: transparent;
+  }
+  
+  .mat-horizontal-stepper-header {
+    padding: 12px 16px;
+  }
+  
+  .mat-step-icon {
+    background-color: #f0d04b !important;
+    color: #333 !important;
+  }
+  
+  .mat-step-icon.mat-step-icon-state-done {
+    background-color: #a88f34 !important;
+    color: #fff !important;
+  }
+  
+  .mat-step-icon.mat-step-icon-state-edit {
+    background-color: #f0d04b !important;
+    color: #333 !important;
+  }
+  
+  .mat-step-label {
+    color: #555;
+    font-weight: 500;
+  }
+  
+  .mat-horizontal-content-container {
+    padding: 20px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    margin-top: 10px;
+  }
+  
+  .full-width {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  
+  .mat-form-field-appearance-fill .mat-form-field-flex {
+    background-color: #f9f9f9 !important;
+    border-radius: 4px;
+  }
+  
+  .mat-form-field-appearance-fill .mat-form-field-underline::before {
+    border-color: transparent !important;
+  }
+  
+  .mat-form-field-appearance-fill.mat-focused .mat-form-field-underline::before {
+    border-color: #f0d04b !important;
+  }
+  
+  .mat-form-field-label {
+    color: #777;
+  }
+  
+  .mat-form-field.mat-focused .mat-form-field-label {
+    color: #f0d04b;
+  }
+  
+  .stepper-buttons {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+  
+  .gold-button {
+    background-color: #f0d04b !important;
+    color: #333 !important;
+  }
+  
+  .gold-button:hover {
+    background-color: #e0c141 !important;
+  }
+  
+  .back-button {
+    color: #777;
+  }
+  
+  .back-button:hover {
+    color: #555;
+  }
+  
+  .mat-horizontal-stepper-wrapper .mat-progress-bar-primary .mat-progress-bar-fill::after {
+    background-color: #f0d04b !important;
+  }
+  
+  .mat-horizontal-stepper-wrapper .mat-progress-bar-buffer {
+    background-color: rgba(240, 208, 75, 0.2) !important; 
+  }
+  
+  .mat-horizontal-stepper-wrapper .mat-progress-bar {
+    background-color: transparent !important; 
+  }
