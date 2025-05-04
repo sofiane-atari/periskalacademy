@@ -62,20 +62,27 @@ export class UpdateTrainingComponent {
     }
   }
 
-  confirmDelete() {
-    const confirmDelete = window.confirm('Are you sure you want to delete this training?');
-    if (confirmDelete && this.training?.id) {
-      this.deleteTraining(this.training?.id);
-    }
-  }
+  deleteTraining() {
+    const dialogRef = this.dialog.open(ConfirmPromptComponent, {
+      width: '600px',
+      data: {
+        title: 'Delete Training',
+        message: 'Are you sure you want to delete this training? This action cannot be undone.',
+        confirmText: 'Delete',
+        cancelText: "Cancel"
+      }
+    });
 
-  deleteTraining(id: number) {
-    this.trainingService.deleteTraining(id).subscribe({
-      next: () => {
-        this.router.navigate(['/trainingEmployee']);
-      },
-      error: (err) => {
-        console.error('Error deleting training:', err);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && this.training?.id) {
+        this.trainingService.deleteTraining(this.training?.id).subscribe({
+          next: () => {
+            this.router.navigate(['/trainingEmployee']);
+          },
+          error: (err) => {
+            console.error('Error deleting training:', err);
+          }
+        });
       }
     });
   }
