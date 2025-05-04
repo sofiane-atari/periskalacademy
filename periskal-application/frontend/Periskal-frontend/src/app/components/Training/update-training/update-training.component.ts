@@ -4,10 +4,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Training } from '../../../models/training.model';
+import { ConfirmPromptComponent } from '../../confirm-prompt/confirm-prompt.component';
+import { MatDialog } from '@angular/material/dialog'
 
 @Component({
   selector: 'app-update-training',
-  imports: [FormsModule, TranslatePipe],
+  imports: [FormsModule, TranslatePipe, ConfirmPromptComponent],
   templateUrl: './update-training.component.html',
   styleUrl: './update-training.component.css'
 })
@@ -21,6 +23,7 @@ export class UpdateTrainingComponent {
     private trainingService: TrainingService,
     private route: ActivatedRoute,
     private router: Router,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -106,6 +109,21 @@ export class UpdateTrainingComponent {
   }
 
   removeModule(index: number) {
-    this.training?.modules.splice(index, 1);
+    const dialogRef = this.dialog.open(ConfirmPromptComponent, {
+      width: '600px',
+      data: {
+        title: 'Delete Module',
+        message: 'Are you sure you want to delete this module? This action cannot be undone.',
+        confirmText: 'Yes',
+        cancelText: 'No'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.training?.modules.splice(index, 1);
+      }
+    });
+
   }
 }

@@ -1,0 +1,20 @@
+import { Component, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+
+@Component({
+  selector: 'app-confirm-prompt',
+  imports: [MatDialogModule],
+  templateUrl: './confirm-prompt.component.html',
+  styleUrls: ['./confirm-prompt.component.css']
+})
+export class ConfirmPromptComponent {
+  constructor(
+    public dialogRef: MatDialogRef<ConfirmPromptComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: {
+      title: string;
+      message: string;
+      confirmText: string;
+      cancelText: string;
+    }
+  ) { }
+}
