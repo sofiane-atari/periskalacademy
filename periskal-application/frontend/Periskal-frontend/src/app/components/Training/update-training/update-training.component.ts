@@ -106,6 +106,6 @@ export class UpdateTrainingComponent {
   }
 
   removeModule(index: number) {
-
+    this.training?.modules.splice(index, 1);
   }
 }
