@@ -21,8 +21,15 @@ export class AddModuleComponent implements OnInit {
     private trainingService: TrainingService
   ) {
     this.moduleForm = this.fb.group({
-      nameModule: ['', Validators.required],
-      descriptionModule: ['', Validators.required]
+      nameModule_en: ['', Validators.required],
+      descriptionModule_en: ['', Validators.required],
+      nameModule_nl: ['', Validators.required],
+      descriptionModule_nl: ['', Validators.required],
+      nameModule_fr: ['', Validators.required],
+      descriptionModule_fr: ['', Validators.required],
+      nameModule_de: ['', Validators.required],
+      descriptionModule_de: ['', Validators.required],
+
     });
   }
 
@@ -34,8 +41,14 @@ export class AddModuleComponent implements OnInit {
     if (this.moduleForm.valid) {
       const moduleData: ModuleDTO = {
         id: null,
-        nameModule: this.moduleForm.get('nameModule')?.value,
-        descriptionModule: this.moduleForm.get('descriptionModule')?.value
+        nameModule_en: this.moduleForm.get('nameModule_en')?.value,
+        descriptionModule_en: this.moduleForm.get('descriptionModule_en')?.value,
+        nameModule_nl: this.moduleForm.get('nameModule_nl')?.value,
+        descriptionModule_nl: this.moduleForm.get('descriptionModule_nl')?.value,
+        nameModule_fr: this.moduleForm.get('nameModule_fr')?.value,
+        descriptionModule_fr: this.moduleForm.get('descriptionModule_fr')?.value,
+        nameModule_de: this.moduleForm.get('nameModule_de')?.value,
+        descriptionModule_de: this.moduleForm.get('descriptionModule_de')?.value
       };
 
       this.trainingService.addModuleToTraining(this.trainingId, moduleData)
@@ -61,6 +74,12 @@ export class AddModuleComponent implements OnInit {
 }
 export interface ModuleDTO {
   id: number | null;
-  nameModule: string;
-  descriptionModule: string;
+  nameModule_en: string;
+  descriptionModule_en: string;
+  nameModule_nl: string;
+  descriptionModule_nl: string;
+  nameModule_fr: string;
+  descriptionModule_fr: string;
+  nameModule_de: string;
+  descriptionModule_de: string;
 }

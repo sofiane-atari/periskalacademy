@@ -10,12 +10,24 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ModuleDTO {
     private Long id;
-    private String nameModule;
-    private String descriptionModule;
+    private String nameModule_en;
+    private String descriptionModule_en;
+    private String nameModule_nl;
+    private String descriptionModule_nl;
+    private String nameModule_fr;
+    private String descriptionModule_fr;
+    private String nameModule_de;
+    private String descriptionModule_de;
 
     public ModuleDTO(Module module) {
         this.id = module.getId();
-        this.nameModule = module.getNameModule_en();
-        this.descriptionModule = module.getDescriptionModule_en();
+        this.nameModule_en = module.getNameModule_en();
+        this.descriptionModule_en = module.getDescriptionModule_en();
+        this.nameModule_nl = module.getNameModule_nl();
+        this.descriptionModule_nl = module.getDescriptionModule_nl();
+        this.nameModule_fr = module.getNameModule_fr();
+        this.descriptionModule_fr = module.getDescriptionModule_fr();
+        this.nameModule_de = module.getNameModule_de();
+        this.descriptionModule_en = module.getDescriptionModule_de();
     }
 }

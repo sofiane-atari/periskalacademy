@@ -53,7 +53,7 @@ class TrainingControllerTest {
         trainingDTOs.add(trainingDTO);
 
         moduleDTO = new ModuleDTO();
-        moduleDTO.setNameModule("New Module");
+        moduleDTO.setNameModule_en("New Module");
     }
 
     @Test

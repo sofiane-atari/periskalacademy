@@ -32,25 +32,25 @@ public class TrainingController {
     public TrainingController(TrainingService trainingService) {
         this.trainingService = trainingService;
     }
-    
-@GetMapping
-public ResponseEntity<List<TrainingDTO>> getAllTrainings() {
-    List<TrainingDTO> trainings = trainingService.getAllTrainings();
-    return ResponseEntity.ok(trainings);
-}
 
-@GetMapping("/filtered")
-public ResponseEntity<List<TrainingDTO>> getFilteredTrainings(
-    @RequestParam String role, 
-    @RequestParam(required = false) List<String> products) {
-    List<TrainingDTO> trainings = trainingService.getFilteredTrainings(role, products);
-    return ResponseEntity.ok(trainings);
-}
+    @GetMapping
+    public ResponseEntity<List<TrainingDTO>> getAllTrainings() {
+        List<TrainingDTO> trainings = trainingService.getAllTrainings();
+        return ResponseEntity.ok(trainings);
+    }
+
+    @GetMapping("/filtered")
+    public ResponseEntity<List<TrainingDTO>> getFilteredTrainings(
+            @RequestParam String role,
+            @RequestParam(required = false) List<String> products) {
+        List<TrainingDTO> trainings = trainingService.getFilteredTrainings(role, products);
+        return ResponseEntity.ok(trainings);
+    }
 
     @GetMapping("/{trainingId}")
     public ResponseEntity<Training> getProductsForTraining(@PathVariable Long trainingId) {
 
-        Training  training = trainingService.getTrainingById(trainingId);
+        Training training = trainingService.getTrainingById(trainingId);
         return ResponseEntity.ok(training);
     }
 
@@ -69,8 +69,9 @@ public ResponseEntity<List<TrainingDTO>> getFilteredTrainings(
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Training> updateTraining(@PathVariable Long id , @Valid @RequestBody Training updatedTraining) {
- 
+    public ResponseEntity<Training> updateTraining(@PathVariable Long id,
+            @Valid @RequestBody Training updatedTraining) {
+
         Training savedTraining = trainingService.updateTraining(id, updatedTraining);
         return ResponseEntity.ok(savedTraining);
 
@@ -78,11 +79,11 @@ public ResponseEntity<List<TrainingDTO>> getFilteredTrainings(
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, String>> deleteTraining(@PathVariable Long id) {
-        
+
         trainingService.deleteTraining(id);
         Map<String, String> response = new HashMap<>();
         response.put("message", "Training deleted successfully");
-        return ResponseEntity.ok(response); 
+        return ResponseEntity.ok(response);
 
     }
 
@@ -90,7 +91,7 @@ public ResponseEntity<List<TrainingDTO>> getFilteredTrainings(
     public ResponseEntity<Training> deleteModule(@PathVariable Long trainingId, @PathVariable Long moduleId) {
 
         Training updatedTraining = trainingService.deleteModule(trainingId, moduleId);
-         return ResponseEntity.ok(updatedTraining);
+        return ResponseEntity.ok(updatedTraining);
     }
 
     @PutMapping("/{id}/modules")
@@ -101,9 +102,20 @@ public ResponseEntity<List<TrainingDTO>> getFilteredTrainings(
     }
 
     @PostMapping("/{trainingId}/modules")
-    public ResponseEntity<Module> addModuleToTraining(@PathVariable Long trainingId,@Valid @RequestBody ModuleDTO moduleDto) {
- 
+    public ResponseEntity<Module> addModuleToTraining(@PathVariable Long trainingId,
+            @Valid @RequestBody ModuleDTO moduleDto) {
+
         Module addedModule = trainingService.addModuleWithDto(trainingId, moduleDto);
+        System.out.println(moduleDto.getNameModule_en());
+        System.out.println(moduleDto.getNameModule_nl());
+        System.out.println(moduleDto.getNameModule_fr());
+        System.out.println(moduleDto.getNameModule_de());
+        System.out.println(moduleDto.getDescriptionModule_en());
+        System.out.println(moduleDto.getDescriptionModule_nl());
+
+        System.out.println(moduleDto.getDescriptionModule_fr());
+        System.out.println(moduleDto.getDescriptionModule_de());
+
         return ResponseEntity.status(HttpStatus.CREATED).body(addedModule);
 
     }
