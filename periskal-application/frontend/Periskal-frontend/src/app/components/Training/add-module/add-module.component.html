@@ -1,49 +1,76 @@
-<form [formGroup]="moduleForm" (ngSubmit)="postModule()" class="module-form">
-  <h2>{{"ADD_NEW_MODULE" | translate}}</h2>
+<mat-horizontal-stepper linear #stepper>
+  <!-- ENGLISH -->
+  <mat-step [stepControl]="enForm">
+    <form [formGroup]="enForm">
+      <ng-template matStepLabel> {{"LANGUAGE_EN" | translate}}</ng-template>
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>{{"MODULE_NAME_EN" | translate}}</mat-label>
+        <input matInput formControlName="nameModule_en" required />
+      </mat-form-field>
 
-  <!-- Module Name -->
-  <div class="form-group">
-    <label for="nameModule_en">{{"MODULE_NAME" | translate}}:</label>
-    <input id="nameModule_en" formControlName="nameModule_en" placeholder="Voer module naam in" />
-  </div>
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>{{"DESCRIPTION_DE" | translate}}</mat-label>
+        <textarea matInput formControlName="descriptionModule_en" required></textarea>
+      </mat-form-field>
 
-  <div class="form-group">
-    <label for="nameModule_nl">{{"MODULE_NAME" | translate}}:</label>
-    <input id="nameModule_nl" formControlName="nameModule_nl" placeholder="Voer module naam in" />
-  </div>
-  <div class="form-group">
-    <label for="nameModule_fr">{{"MODULE_NAME" | translate}}:</label>
-    <input id="nameModule_fr" formControlName="nameModule_fr" placeholder="Voer module naam in" />
-  </div>
-  <div class="form-group">
-    <label for="nameModule_de">{{"MODULE_NAME" | translate}}:</label>
-    <input id="nameModule_de" formControlName="nameModule_de" placeholder="Voer module naam in" />
-  </div>
+      <button mat-button matStepperNext [disabled]="enForm.invalid">{{"NEXT" | translate}}</button>
+    </form>
+  </mat-step>
 
-  <!-- Module Description -->
-  <div class="form-group">
-    <label for="descriptionModule_en">{{"MODULE_DESCRIPTION" | translate}}:</label>
-    <textarea id="descriptionModule_en" formControlName="descriptionModule_en" placeholder="Voer module beschrijving in"></textarea>
-  </div>
-  <div class="form-group">
-    <label for="descriptionModule_nl">{{"MODULE_DESCRIPTION" | translate}}:</label>
-    <textarea id="descriptionModule_nl" formControlName="descriptionModule_nl" placeholder="Voer module beschrijving in"></textarea>
-  </div>
-  <div class="form-group">
-    <label for="descriptionModule_fr">{{"MODULE_DESCRIPTION" | translate}}:</label>
-    <textarea id="descriptionModule_fr" formControlName="descriptionModule_fr" placeholder="Voer module beschrijving in"></textarea>
-  </div>
-  <div class="form-group">
-    <label for="descriptionModule_de">{{"MODULE_DESCRIPTION" | translate}}:</label>
-    <textarea id="descriptionModule_de" formControlName="descriptionModule_de" placeholder="Voer module beschrijving in"></textarea>
-  </div>
-  
+  <!-- DUTCH -->
+  <mat-step [stepControl]="nlForm">
+    <form [formGroup]="nlForm">
+      <ng-template matStepLabel>{{"LANGUAGE_NL" | translate}}</ng-template>
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>{{"MODULE_NAME_NL" | translate}}</mat-label>
+        <input matInput formControlName="nameModule_nl" required />
+      </mat-form-field>
 
-   <!-- chapters to be implemented-->
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>{{"DESCRIPTION_DE" | translate}}</mat-label>
+        <textarea matInput formControlName="descriptionModule_nl" required></textarea>
+      </mat-form-field>
 
-  <!-- Form Buttons -->
-  <div class="form-buttons">
-    <button type="submit" [disabled]="!moduleForm.valid">{{"SAVE" | translate}}</button>
-    <button type="button" (click)="resetForm()">{{"RESET" | translate}}</button>
-  </div>
-</form>
+      <button mat-button matStepperPrevious>{{"BACK" | translate}}</button>
+      <button mat-button matStepperNext [disabled]="nlForm.invalid">{{"NEXT" | translate}}</button>
+    </form>
+  </mat-step>
+
+  <!-- FRENCH -->
+  <mat-step [stepControl]="frForm">
+    <form [formGroup]="frForm">
+      <ng-template matStepLabel>{{"LANGUAGE_FR" | translate}}</ng-template>
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>{{"MODULE_NAME_FR" | translate}}</mat-label>
+        <input matInput formControlName="nameModule_fr" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>{{"DESCRIPTION_DE" | translate}}</mat-label>
+        <textarea matInput formControlName="descriptionModule_fr" required></textarea>
+      </mat-form-field>
+
+      <button mat-button matStepperPrevious>{{"BACK" | translate}}</button>
+      <button mat-button matStepperNext [disabled]="frForm.invalid">{{"NEXT" | translate}}</button>
+    </form>
+  </mat-step>
+
+  <!-- GERMAN -->
+  <mat-step [stepControl]="deForm">
+    <form [formGroup]="deForm">
+      <ng-template matStepLabel>{{"LANGUAGE_DE" | translate}}</ng-template>
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>{{"MODULE_NAME_DE" | translate}}</mat-label>
+        <input matInput formControlName="nameModule_de" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>{{"DESCRIPTION_DE" | translate}}</mat-label>
+        <textarea matInput formControlName="descriptionModule_de" required></textarea>
+      </mat-form-field>
+
+      <button mat-button matStepperPrevious>{{"BACK" | translate}}</button>
+      <button mat-raised-button color="primary" (click)="postModule()" [disabled]="deForm.invalid">{{"SUBMIT" | translate}}</button>
+    </form>
+  </mat-step>
+</mat-horizontal-stepper>
