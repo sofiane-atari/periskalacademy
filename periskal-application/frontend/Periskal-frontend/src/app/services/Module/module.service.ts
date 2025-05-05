@@ -9,8 +9,8 @@ export class ModuleService {
 
   constructor(private client: HttpClient) { }
 
-  AddChapterToModule(moduleId: number, chapter: any): Observable<any> {
-    return this.client.post(`http://localhost:8080/api/modules/${moduleId}/chapters`, chapter);
+  AddChapterToModule(moduleId: number, chapterDTO: any): Observable<any> {
+    return this.client.post(`http://localhost:8080/api/modules/${moduleId}/chapters`, chapterDTO);
   }
 
 }

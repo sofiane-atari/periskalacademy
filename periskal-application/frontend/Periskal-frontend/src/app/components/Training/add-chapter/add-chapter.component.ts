@@ -35,8 +35,8 @@ export class AddChapterComponent implements OnInit {
   constructor(private fb: FormBuilder, private moduleService: ModuleService, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
-    this.trainingId = Number(this.route.snapshot.paramMap.get('trainingId'));
-    this.moduleId = Number(this.route.snapshot.paramMap.get('moduleIndex'));
+    this.trainingId = Number(this.route.snapshot.paramMap.get('trainingid'));
+    this.moduleId = Number(this.route.snapshot.paramMap.get('moduleid'));
     this.enForm = this.fb.group({
       nameChapter_en: ['', Validators.required],
       descriptionChapter_en: ['', Validators.required],
@@ -64,7 +64,7 @@ export class AddChapterComponent implements OnInit {
 
   postModule(): void {
     if (this.enForm.valid && this.nlForm.valid && this.frForm.valid && this.deForm.valid) {
-      const chapterData: ModuleDTO = {
+      const chapterData: ChapterDTO = {
         ...this.enForm.value,
         ...this.nlForm.value,
         ...this.frForm.value,
@@ -85,4 +85,20 @@ export class AddChapterComponent implements OnInit {
 
     }
   }
+}
+
+export interface ChapterDTO {
+  id: number | null;
+  nameChapter_en: string;
+  descriptionChapter_en: string;
+  textChapter_en: string;
+  nameChapter_nl: string;
+  descriptionChapter_nl: string;
+  textChapter_nl: string;
+  nameChapter_fr: string;
+  descriptionChapter_fr: string;
+  textChapter_fr: string;
+  nameChapter_de: string;
+  descriptionChapter_de: string;
+  textChapter_de: string;
 }

@@ -106,16 +106,6 @@ public class TrainingController {
             @Valid @RequestBody ModuleDTO moduleDto) {
 
         Module addedModule = trainingService.addModuleWithDto(trainingId, moduleDto);
-        System.out.println(moduleDto.getNameModule_en());
-        System.out.println(moduleDto.getNameModule_nl());
-        System.out.println(moduleDto.getNameModule_fr());
-        System.out.println(moduleDto.getNameModule_de());
-        System.out.println(moduleDto.getDescriptionModule_en());
-        System.out.println(moduleDto.getDescriptionModule_nl());
-
-        System.out.println(moduleDto.getDescriptionModule_fr());
-        System.out.println(moduleDto.getDescriptionModule_de());
-
         return ResponseEntity.status(HttpStatus.CREATED).body(addedModule);
 
     }

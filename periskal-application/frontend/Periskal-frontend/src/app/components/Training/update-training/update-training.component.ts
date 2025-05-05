@@ -184,7 +184,8 @@ export class UpdateTrainingComponent {
   }
 
   goToChapterAddPage(moduleIndex: number) {
-    this.router.navigate(['add', this.trainingId, 'module', moduleIndex, 'chapter'])
+    const moduleId = this.training?.modules[moduleIndex].id;
+    this.router.navigate(['add', this.trainingId, 'module', moduleId, 'chapter'])
   }
 
   removeChapter(moduleIndex: number, chapterIndex: number) {
