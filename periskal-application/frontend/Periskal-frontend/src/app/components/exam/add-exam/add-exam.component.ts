@@ -6,10 +6,12 @@ import { Training } from '../../../models/training.model';
 import { ExamService } from '../../../services/Exam/exam.service';
 import { Exam } from '../../../models/exam.model';
 import { TranslatePipe } from '@ngx-translate/core';
+import { PhotoUploadComponent } from '../../photo-upload/photo-upload.component';
 
 @Component({
   selector: 'app-add-exam',
-  imports: [FormsModule, ReactiveFormsModule, TranslatePipe],
+  standalone: true,
+  imports: [FormsModule, ReactiveFormsModule, PhotoUploadComponent],
   templateUrl: './add-exam.component.html',
   styleUrl: './add-exam.component.css'
 })
@@ -34,12 +36,6 @@ export class AddExamComponent implements OnInit {
   }
 
   initForm(): void {
-    // this.examForm = this.fb.group({
-    //   trainingId: ['', Validators.required],
-    //   examTitle: ['', Validators.required],
-    //   examDescription: ['', Validators.required],
-    //   questions: this.fb.array([]) // FormArray voor vragen
-    // });
   }
   get questions(): FormArray {
     return this.examForm.get('questions') as FormArray;
@@ -47,9 +43,11 @@ export class AddExamComponent implements OnInit {
   ngOnInit(): void {
     this.loadTrainings();
   }
+
   addQuestion(): void {
     const questionGroup = this.fb.group({
-      text: ['', Validators.required]
+      text:   ['', Validators.required],
+      photos: [[]]
     });
     this.questions.push(questionGroup);
   }
@@ -94,29 +92,25 @@ export class AddExamComponent implements OnInit {
 
   submitExam(): void {
     if (this.examForm.valid) {
-      // Create clean payload object
       const examData = {
         examTitle: this.examForm.value.examTitle,
         examDescription: this.examForm.value.examDescription,
         trainingId: Number(this.examForm.value.trainingId),
         questions: this.questions.controls.map(q => ({
-          text: q.value.text
+          text: q.value.text,
+          photos: (q.value.photos || []).map((photo: any) => ({
+            imageData: photo.imageData  // This matches your Photo entity constructor
+          }))
         }))
       };
-
-      console.log('Submitting:', JSON.stringify(examData)); // Debug log
-
+  
+      console.log('Submitting exam data:', examData);
       this.examService.createExam(examData).subscribe({
         next: (response) => {
-          this.router.navigate(['/exams']);
+          this.router.navigate(['/training-employee']);
         },
         error: (error) => {
-          console.error('Full error:', error);
-          if (error.error instanceof ErrorEvent) {
-            console.error('Client-side error:', error.error.message);
-          } else {
-            console.error(`Backend error ${error.status}:`, error.error);
-          }
+          console.error('Error:', error);
         }
       });
     }

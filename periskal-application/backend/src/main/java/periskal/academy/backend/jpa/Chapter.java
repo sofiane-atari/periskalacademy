@@ -72,7 +72,6 @@ public class Chapter {
     @JsonManagedReference
     private List<Video> videos = new ArrayList<>();
 
-    
     public Chapter(String nameChapter, String descriptionChapter, String textChapter) {
         this.nameChapter_en = nameChapter;
         this.descriptionChapter_en = descriptionChapter;

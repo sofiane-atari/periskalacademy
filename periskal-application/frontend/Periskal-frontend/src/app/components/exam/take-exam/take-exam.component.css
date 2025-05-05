@@ -55,3 +55,14 @@ button:disabled {
   background-color: #cccccc;
   cursor: not-allowed;
 }
+.question-images {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+.question-photo {
+  max-width: 120px;
+  max-height: 80px;
+  object-fit: contain;
+  border: 1px solid #ccc;
+}

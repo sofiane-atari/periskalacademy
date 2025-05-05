@@ -17,6 +17,15 @@
             @for (question of exam.questions; track $index) {
               <li>
                 <p>{{question.text}}</p>
+                @if (question.photos?.length) {
+                  <div class="question-images">
+                    @for (photo of question.photos; track $index) {
+                      <div class="photo">
+                        <img [src]="photo.imageData" alt="Chapter Image">
+                      </div>
+                    }
+                  </div>
+                }
                 <!-- Add answer input fields here -->
               </li>
             }

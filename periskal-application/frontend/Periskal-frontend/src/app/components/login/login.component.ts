@@ -17,6 +17,8 @@ export class LoginComponent {
   password: string = '';
   isLoading: boolean = false;
   errorMessage: string | null = null;
+  showPassword = false;
+
 
   constructor(
     private router: Router,
@@ -32,6 +34,19 @@ export class LoginComponent {
     }
   }
 
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+    const passwordField = document.getElementById('password') as HTMLInputElement;
+    const toggleButton = document.querySelector('.toggle-password');
+    
+    if (passwordField) {
+      passwordField.type = this.showPassword ? 'text' : 'password';
+    }
+    
+    if (toggleButton) {
+      toggleButton.classList.toggle('show-password', this.showPassword);
+    }
+  }
 
   onLogin() {
     this.isLoading = true;
@@ -67,4 +82,5 @@ export class LoginComponent {
     });
 
   }
+  
 }
