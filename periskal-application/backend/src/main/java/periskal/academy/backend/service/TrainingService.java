@@ -224,6 +224,7 @@ public class TrainingService {
         newModule.setDescriptionModule_fr(moduleDto.getDescriptionModule_fr());
         newModule.setNameModule_de(moduleDto.getNameModule_de());
         newModule.setDescriptionModule_de(moduleDto.getDescriptionModule_de());
+        newModule.setChapters(moduleDto.getChapters());
         newModule.setTraining(existingTraining);
 
         try {

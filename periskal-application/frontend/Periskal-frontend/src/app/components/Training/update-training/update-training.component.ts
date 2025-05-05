@@ -40,6 +40,16 @@ export class UpdateTrainingComponent {
     this.trainingService.getTrainingById(id).subscribe({
       next: (training) => {
         this.training = training;
+
+        // Ensure all modules have a chapters array
+        if (this.training?.modules) {
+          this.training.modules.forEach(module => {
+            if (!module.chapters) {
+              module.chapters = [];
+            }
+          });
+        }
+
         this.loading = false;
       },
       error: (error) => {
@@ -48,19 +58,34 @@ export class UpdateTrainingComponent {
     });
   }
 
-
   updateTraining() {
     if (this.training?.id) {
       this.trainingService.updateTraining(this.training.id, this.training).subscribe({
         next: (data) => {
-          alert('Training updated successfully!');
+          const snackBarConfig: MatSnackBarConfig = {
+            duration: 3000,
+            verticalPosition: 'bottom',
+            horizontalPosition: 'left',
+            panelClass: ['snackbar-success'],
+            politeness: 'assertive'
+          };
+
+          this.snackBar.open('Training updated successfully!', 'Close', snackBarConfig);
           this.router.navigate(['/trainingEmployee']);
         },
         error: (error) => {
           this.errorMessage = 'Failed to update training.';
+          const errorSnackBarConfig: MatSnackBarConfig = {
+            duration: 5000,
+            verticalPosition: 'bottom',
+            horizontalPosition: 'left',
+            panelClass: ['snackbar-error'],
+            politeness: 'assertive'
+          };
+
+          this.snackBar.open('Error updating training.', 'Close', errorSnackBarConfig);
         }
       });
-
     }
   }
 
@@ -114,7 +139,10 @@ export class UpdateTrainingComponent {
       this.training.modules = [];
     }
 
-    const highestId = Math.max(...this.training.modules.map(module => module.id));
+    // Calculate the highest module ID or use 0 if no modules exist
+    const highestId = this.training.modules.length > 0
+      ? Math.max(...this.training.modules.map(module => module.id || 0))
+      : 0;
 
     const newModule = {
       id: highestId + 1,
@@ -151,6 +179,13 @@ export class UpdateTrainingComponent {
         this.training?.modules.splice(index, 1);
       }
     });
+  }
 
+  addChapter(moduleIndex: number) {
+    //todo: implement
+  }
+
+  removeChapter(moduleIndex: number, chapterIndex: number) {
+    //implement
   }
 }

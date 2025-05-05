@@ -1,6 +1,10 @@
 package periskal.academy.backend.dto;
 
+import periskal.academy.backend.jpa.Chapter;
 import periskal.academy.backend.jpa.Module;
+
+import java.util.List;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,6 +22,7 @@ public class ModuleDTO {
     private String descriptionModule_fr;
     private String nameModule_de;
     private String descriptionModule_de;
+    private List<Chapter> chapters;
 
     public ModuleDTO(Module module) {
         this.id = module.getId();
@@ -29,5 +34,6 @@ public class ModuleDTO {
         this.descriptionModule_fr = module.getDescriptionModule_fr();
         this.nameModule_de = module.getNameModule_de();
         this.descriptionModule_en = module.getDescriptionModule_de();
+        this.chapters = module.getChapters();
     }
 }
