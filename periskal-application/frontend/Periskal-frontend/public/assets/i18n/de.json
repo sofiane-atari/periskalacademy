@@ -85,5 +85,7 @@
   "QUESTIONS": "Fragen",
   "REMOVE_BUTTON": "Entfernen",
   "ADD_QUESTION_BUTTON": "Neue Frage hinzufügen",
-  "SAVE_EXAM_BUTTON": "Retten"
+  "SAVE_EXAM_BUTTON": "Retten",
+  "LOADING_EXAMS": "Prüfungen laden...",
+  "NO_QUESTIONS_FOUND": "Keine Fragen gefunden."
 }

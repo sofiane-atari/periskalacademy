@@ -85,5 +85,7 @@
   "QUESTIONS": "Vragen",
   "REMOVE_BUTTON": "Verwijder",
   "ADD_QUESTION_BUTTON": "Voeg een nieuwe vraag toe",
-  "SAVE_EXAM_BUTTON": "Sla op"
+  "SAVE_EXAM_BUTTON": "Sla op",
+  "LOADING_EXAMS": "Examen laden...",
+  "NO_QUESTIONS_FOUND": "Geen vragen gevonden."
 }

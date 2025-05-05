@@ -1,7 +1,7 @@
 <!-- take-exam.component.html -->
 <div class="exam-container">
     @if (loading) {
-      <p>Loading exam...</p>
+      <p>{{'LOADING_EXAMS' |translate}}</p>
     }
     @else if (error) {
       <p class="error">{{error}}</p>
@@ -12,7 +12,7 @@
   
       <div class="questions">
         @if (exam.questions && exam.questions.length > 0) {
-          <h3>Questions:</h3>
+          <h3>{{'QUESTIONS' |translate}}</h3>
           <ol>
             @for (question of exam.questions; track $index) {
               <li>
@@ -22,7 +22,7 @@
             }
           </ol>
         } @else {
-          <p>No questions found for this exam</p>
+          <p>{{'NO_QUESTIONS_FOUND' |translate }}</p>
         }
       </div>
     }
