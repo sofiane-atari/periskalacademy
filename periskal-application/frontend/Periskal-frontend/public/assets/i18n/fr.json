@@ -87,5 +87,11 @@
   "ADD_QUESTION_BUTTON": "Ajouter une nouvelle question",
   "SAVE_EXAM_BUTTON": "Sauvegarder",
   "LOADING_EXAMS": "Chargement de l'examen...",
-  "NO_QUESTIONS_FOUND": "Aucune question n'a été trouvée"
+  "NO_QUESTIONS_FOUND": "Aucune question n'a été trouvée",
+  "SAVE_BUTTON": "Enregistrer",
+  "UPDATE_EXAM": "Modifier l'examen",
+  "EXAM_QUESTIONS": "Questions d'examen",
+  "ADD_QUESTION_BUTTON": "Ajouter une nouvelle question",
+  "DELETE_BUTTON": "Supprimer",
+  "TAKE_EXAM": "Passer un examen"
 }
