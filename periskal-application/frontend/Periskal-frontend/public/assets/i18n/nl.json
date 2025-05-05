@@ -72,5 +72,18 @@
   "EDIT_TRAINING": "Training bewerken",
   "EDIT_EXAM": "Examen bewerken",
   "ADD_TRAINING": "Nieuwe training toevoegen",
-  "ADD_EXAM": "Nieuw examen toeveogen"
+  "ADD_EXAM": "Nieuw examen toeveogen",
+  "LOADING_TRAININGS": "Trainingen laden...",
+  "SELECT_TRAINING": "Selecteer Training:",
+  "PLACEHOLDER_OPTION_TRAINING": "Selecteer een training.",
+  "EXAM_EXISTS": "(Heeft al een examen)",
+  "SELECTION_TRAINING_ERROR": "Je moet een training selecteren.",
+  "EXAM_TITLE": "Examen titel:",
+  "EXAM_TITLE_REQUIRED": "Titel is vereist.",
+  "EXAM_DESCRIPTION": "Examen Beschrijving:",
+  "EXAM_DESCRIPTION_REQUIRED": "Beschrijving is vereist.",
+  "QUESTIONS": "Vragen",
+  "REMOVE_BUTTON": "Verwijder",
+  "ADD_QUESTION_BUTTON": "Voeg een nieuwe vraag toe",
+  "SAVE_EXAM_BUTTON": "Sla op"
 }
