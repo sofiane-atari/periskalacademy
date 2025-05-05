@@ -39,12 +39,16 @@ public class ModuleService {
         Chapter newChapter = new Chapter();
         newChapter.setNameChapter_en(chapterDTO.getNameChapter_en());
         newChapter.setDescriptionChapter_en(chapterDTO.getDescriptionChapter_en());
+        newChapter.setTextChapter_en(chapterDTO.getTextChapter_en());
         newChapter.setNameChapter_nl(chapterDTO.getNameChapter_nl());
         newChapter.setDescriptionChapter_nl(chapterDTO.getDescriptionChapter_nl());
+        newChapter.setTextChapter_nl(chapterDTO.getTextChapter_nl());
         newChapter.setNameChapter_fr(chapterDTO.getNameChapter_fr());
         newChapter.setDescriptionChapter_fr(chapterDTO.getDescriptionChapter_fr());
+        newChapter.setTextChapter_fr(chapterDTO.getTextChapter_fr());
         newChapter.setNameChapter_de(chapterDTO.getNameChapter_de());
         newChapter.setDescriptionChapter_de(chapterDTO.getDescriptionChapter_de());
+        newChapter.setTextChapter_de(chapterDTO.getTextChapter_de());
         newChapter.setPhotos_en(chapterDTO.getPhotos());
         newChapter.setModule(existingModule);
 
