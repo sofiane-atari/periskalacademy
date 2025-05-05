@@ -39,7 +39,7 @@ export const routes: Routes = [
             { path: 'training/:id', component: TrainingDetailComponent },
             { path: 'edit/:id', component: UpdateTrainingComponent },
             { path: 'add/:id/module', component: AddModuleComponent },
-            { path: 'add/:id/chapter', component: AddChapterComponent },
+            { path: 'add/:trainingid/module/:moduleid/chapter', component: AddChapterComponent },
             { path: 'training/:id/module/:moduleid', component: ModuleDetailComponent },
             { path: 'profile', component: ProfileComponent },
             { path: 'skippers', component: SkippersComponent }
