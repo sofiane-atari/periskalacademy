@@ -57,12 +57,12 @@ public class ModuleService {
             log.info("Added new chapter {} to module {}", savedChapter.getId(), moduleId);
             return savedChapter;
         } catch (DataIntegrityViolationException e) {
-            log.error("Failed to add module to training {} due to data integrity violation: {}", moduleId,
+            log.error("Failed to add chapter to module {} due to data integrity violation: {}", moduleId,
                     e.getMessage());
             throw e;
         } catch (DataAccessException e) {
-            log.error("Failed to add module to training {} due to database error: {}", moduleId, e.getMessage(), e);
-            throw new RuntimeException("Failed to add module to training " + moduleId + ".", e);
+            log.error("Failed to add chapter to module {} due to database error: {}", moduleId, e.getMessage(), e);
+            throw new RuntimeException("Failed to add chapter to module " + moduleId + ".", e);
         }
     }
 
