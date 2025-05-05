@@ -19,9 +19,11 @@
                 <p>{{question.text}}</p>
                 @if (question.photos?.length) {
                   <div class="question-images">
-                    @for (img of question.photos; track $index) {
-                      <img [src]="'data:image/jpeg;base64,' + img.imageData" alt="Question image">
-                  }
+                    @for (photo of question.photos; track $index) {
+                      <div class="photo">
+                        <img [src]="photo.imageData" alt="Chapter Image">
+                      </div>
+                    }
                   </div>
                 }
                 <!-- Add answer input fields here -->

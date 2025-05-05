@@ -54,7 +54,12 @@ export class ExamService {
       examTitle: examData.examTitle,
       examDescription: examData.examDescription,
       trainingId: examData.trainingId,
-      questions: examData.questions.map((q: any) => ({ text: q.text }))
+      questions: examData.questions.map((q: any) => ({
+        text: q.text,
+        photos: (q.photos || []).map((photo: any) => ({
+          imageData: photo.imageData
+        }))
+      }))
     };
     return this.client.post<Exam>(this.baseUrl, payload);
   }

@@ -35,12 +35,6 @@ export class AddExamComponent implements OnInit {
   }
 
   initForm(): void {
-    // this.examForm = this.fb.group({
-    //   trainingId: ['', Validators.required],
-    //   examTitle: ['', Validators.required],
-    //   examDescription: ['', Validators.required],
-    //   questions: this.fb.array([]) // FormArray voor vragen
-    // });
   }
   get questions(): FormArray {
     return this.examForm.get('questions') as FormArray;
@@ -97,31 +91,25 @@ export class AddExamComponent implements OnInit {
 
   submitExam(): void {
     if (this.examForm.valid) {
-      // Create clean payload object
       const examData = {
         examTitle: this.examForm.value.examTitle,
         examDescription: this.examForm.value.examDescription,
         trainingId: Number(this.examForm.value.trainingId),
-        questions: this.questions.controls.map(q => ({ 
+        questions: this.questions.controls.map(q => ({
           text: q.value.text,
-          photos: (q.value.photos || [])
-          .map((p: any) => p.imageData)
-      }))
+          photos: (q.value.photos || []).map((photo: any) => ({
+            imageData: photo.imageData  // This matches your Photo entity constructor
+          }))
+        }))
       };
   
-      console.log('Form value before submit', this.questions.value);
-  
+      console.log('Submitting exam data:', examData);
       this.examService.createExam(examData).subscribe({
         next: (response) => {
           this.router.navigate(['/training-employee']);
         },
         error: (error) => {
-          console.error('Full error:', error);
-          if (error.error instanceof ErrorEvent) {
-            console.error('Client-side error:', error.error.message);
-          } else {
-            console.error(`Backend error ${error.status}:`, error.error);
-          }
+          console.error('Error:', error);
         }
       });
     }

@@ -65,12 +65,11 @@ public class ExamService {
             q.setExam(exam);
 
             if (qdto.getPhotos() != null) {
-            for (String base64 : qdto.getPhotos()) {
-            Photo p = new Photo();
-            p.setImageData(base64);
-            p.setQuestion(q);
-            q.getPhotos().add(p);
-            }
+                for (Photo photo : qdto.getPhotos()) {
+                    Photo p = new Photo(photo.getImageData());
+                    p.setQuestion(q);
+                    q.getPhotos().add(p);
+                }
             }
 
             questions.add(q);
