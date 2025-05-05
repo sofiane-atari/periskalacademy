@@ -1,0 +1,125 @@
+<div class="stepper-container">
+    <mat-horizontal-stepper linear #stepper class="custom-stepper">
+      <!-- ENGLISH -->
+      <mat-step [stepControl]="enForm">
+        <form [formGroup]="enForm">
+          <ng-template matStepLabel>{{ "LANGUAGE_EN" | translate }}</ng-template>
+  
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>{{ "CHAPTER_NAME_EN" | translate }}</mat-label>
+            <input matInput formControlName="nameChapter_en" required />
+          </mat-form-field>
+  
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>{{ "DESCRIPTION_EN" | translate }}</mat-label>
+            <textarea matInput formControlName="descriptionChapter_en" required></textarea>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>{{ "TEXT_EN" | translate }}</mat-label>
+            <textarea matInput formControlName="textChapter_en" required></textarea>
+          </mat-form-field>
+  
+          <div class="stepper-buttons">
+            <button mat-raised-button color="accent" class="gold-button" matStepperNext [disabled]="enForm.invalid">
+              {{ "NEXT" | translate }}
+            </button>
+          </div>
+        </form>
+      </mat-step>
+  
+      <!-- DUTCH -->
+      <mat-step [stepControl]="nlForm">
+        <form [formGroup]="nlForm">
+          <ng-template matStepLabel>{{ "LANGUAGE_NL" | translate }}</ng-template>
+  
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>{{ "CHAPTER_NAME_NL" | translate }}</mat-label>
+            <input matInput formControlName="nameChapter_nl" required />
+          </mat-form-field>
+  
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>{{ "DESCRIPTION_NL" | translate }}</mat-label>
+            <textarea matInput formControlName="descriptionChapter_nl" required></textarea>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>{{ "TEXT_NL" | translate }}</mat-label>
+            <textarea matInput formControlName="textChapter_nl" required></textarea>
+          </mat-form-field>
+  
+          <div class="stepper-buttons">
+            <button mat-button matStepperPrevious class="back-button">
+              {{ "BACK" | translate }}
+            </button>
+            <button mat-raised-button color="accent" class="gold-button" matStepperNext [disabled]="nlForm.invalid">
+              {{ "NEXT" | translate }}
+            </button>
+          </div>
+        </form>
+      </mat-step>
+  
+      <!-- FRENCH -->
+      <mat-step [stepControl]="frForm">
+        <form [formGroup]="frForm">
+          <ng-template matStepLabel>{{ "LANGUAGE_FR" | translate }}</ng-template>
+  
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>{{ "CHAPTER_NAME_FR" | translate }}</mat-label>
+            <input matInput formControlName="nameChapter_fr" required />
+          </mat-form-field>
+  
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>{{ "DESCRIPTION_FR" | translate }}</mat-label>
+            <textarea matInput formControlName="descriptionChapter_fr" required></textarea>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>{{ "TEXT_FR" | translate }}</mat-label>
+            <textarea matInput formControlName="textChapter_fr" required></textarea>
+          </mat-form-field>
+  
+          <div class="stepper-buttons">
+            <button mat-button matStepperPrevious class="back-button">
+              {{ "BACK" | translate }}
+            </button>
+            <button mat-raised-button color="accent" class="gold-button" matStepperNext [disabled]="frForm.invalid">
+              {{ "NEXT" | translate }}
+            </button>
+          </div>
+        </form>
+      </mat-step>
+  
+      <!-- GERMAN -->
+      <mat-step [stepControl]="deForm">
+        <form [formGroup]="deForm">
+          <ng-template matStepLabel>{{ "LANGUAGE_DE" | translate }}</ng-template>
+  
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>{{ "CHAPTER_NAME_DE" | translate }}</mat-label>
+            <input matInput formControlName="nameChapter_de" required />
+          </mat-form-field>
+  
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>{{ "DESCRIPTION_DE" | translate }}</mat-label>
+            <textarea matInput formControlName="descriptionChapter_de" required></textarea>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>{{ "TEXT_DE" | translate }}</mat-label>
+            <textarea matInput formControlName="textChapter_de" required></textarea>
+          </mat-form-field>
+  
+          <div class="stepper-buttons">
+            <button mat-button matStepperPrevious class="back-button">
+              {{ "BACK" | translate }}
+            </button>
+            <button mat-raised-button class="gold-button" (click)="postModule()" [disabled]="deForm.invalid">
+              {{ "SUBMIT" | translate }}
+            </button>
+          </div>
+        </form>
+      </mat-step>
+    </mat-horizontal-stepper>
+  </div>
+  

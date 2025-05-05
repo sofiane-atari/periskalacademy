@@ -13,6 +13,7 @@ import { SkippersComponent } from './components/skippers/skippers.component';
 import { AddExamComponent } from './components/exam/add-exam/add-exam.component';
 import { TakeExamComponent } from './components/exam/take-exam/take-exam.component';
 import { UpdateExamComponent } from './components/exam/update-exam/update-exam.component';
+import { AddChapterComponent } from './components/Training/add-chapter/add-chapter.component';
 
 export const routes: Routes = [
 
@@ -33,11 +34,12 @@ export const routes: Routes = [
             { path: 'trainingEmployee', component: TrainingEmployeeComponent },
             { path: 'add-training', component: AddTrainingComponent },
             { path: 'add-exam', component: AddExamComponent },
-            { path: 'update-exam/:id', component: UpdateExamComponent},
+            { path: 'update-exam/:id', component: UpdateExamComponent },
             { path: 'take-exam/:id', component: TakeExamComponent },
             { path: 'training/:id', component: TrainingDetailComponent },
             { path: 'edit/:id', component: UpdateTrainingComponent },
             { path: 'add/:id/module', component: AddModuleComponent },
+            { path: 'add/:trainingid/module/:moduleid/chapter', component: AddChapterComponent },
             { path: 'training/:id/module/:moduleid', component: ModuleDetailComponent },
             { path: 'profile', component: ProfileComponent },
             { path: 'skippers', component: SkippersComponent }
