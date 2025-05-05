@@ -2,12 +2,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ExamService } from '../../../services/Exam/exam.service';
-import { Exam} from '../../../models/exam.model';
+import { Exam } from '../../../models/exam.model';
 import { Question } from '../../../models/question.model';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-take-exam',
   templateUrl: './take-exam.component.html',
+  imports: [TranslatePipe],
   styleUrls: ['./take-exam.component.css']
 })
 export class TakeExamComponent implements OnInit {
@@ -20,7 +22,7 @@ export class TakeExamComponent implements OnInit {
     private route: ActivatedRoute,
     private examService: ExamService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const examId = Number(this.route.snapshot.paramMap.get('id'));
@@ -30,7 +32,7 @@ export class TakeExamComponent implements OnInit {
   loadExam(examId: number): void {
     this.loading = true;
     this.error = null;
-    
+
     this.examService.getExamById(examId).subscribe({
         next: (exam) => {
             console.log('Full exam data:', exam);

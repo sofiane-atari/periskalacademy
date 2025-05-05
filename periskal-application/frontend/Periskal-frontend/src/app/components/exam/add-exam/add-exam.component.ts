@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { Training } from '../../../models/training.model';
 import { ExamService } from '../../../services/Exam/exam.service';
 import { Exam } from '../../../models/exam.model';
+import { TranslatePipe } from '@ngx-translate/core';
 import { PhotoUploadComponent } from '../../photo-upload/photo-upload.component';
 
 @Component({
@@ -15,10 +16,10 @@ import { PhotoUploadComponent } from '../../photo-upload/photo-upload.component'
   styleUrl: './add-exam.component.css'
 })
 export class AddExamComponent implements OnInit {
-    examForm: FormGroup;
-    trainingsWithExams: number[] = [];
-    trainingsData: any[] = [];
-    isLoading = true;
+  examForm: FormGroup;
+  trainingsWithExams: number[] = [];
+  trainingsData: any[] = [];
+  isLoading = true;
 
   constructor(
     private fb: FormBuilder,
