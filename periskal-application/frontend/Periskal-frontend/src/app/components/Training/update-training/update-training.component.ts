@@ -7,6 +7,7 @@ import { Training } from '../../../models/training.model';
 import { ConfirmPromptComponent } from '../../confirm-prompt/confirm-prompt.component';
 import { MatDialog } from '@angular/material/dialog'
 import { MatSnackBar, MatSnackBarConfig, MatSnackBarModule } from '@angular/material/snack-bar'
+import { ModuleService } from '../../../services/Module/module.service';
 
 @Component({
   selector: 'app-update-training',
@@ -22,6 +23,7 @@ export class UpdateTrainingComponent {
 
   constructor(
     private trainingService: TrainingService,
+    private moduleService: ModuleService,
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
@@ -181,8 +183,8 @@ export class UpdateTrainingComponent {
     });
   }
 
-  addChapter(moduleIndex: number) {
-    //todo: implement
+  goToChapterAddPage(moduleIndex: number) {
+    this.router.navigate(['add', moduleIndex, 'chapter'])
   }
 
   removeChapter(moduleIndex: number, chapterIndex: number) {
