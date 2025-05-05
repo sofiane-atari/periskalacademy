@@ -72,5 +72,18 @@
   "EDIT_TRAINING": "Edit training",
   "EDIT_EXAM": "Edit exam",
   "ADD_TRAINING": "Add a new training",
-  "ADD_EXAM": "Add a new exam"
+  "ADD_EXAM": "Add a new exam",
+  "LOADING_TRAININGS": "Loading trainings...",
+  "SELECT_TRAINING": "Select Training:",
+  "PLACEHOLDER_OPTION_TRAINING": "Please select a training",
+  "EXAM_EXISTS": "(Already has exam)",
+  "SELECTION_TRAINING_ERROR": "Please select a training.",
+  "EXAM_TITLE": "Exam Title:",
+  "EXAM_TITLE_REQUIRED": "Title is required.",
+  "EXAM_DESCRIPTION": "Exam Description:",
+  "EXAM_DESCRIPTION_REQUIRED": "Description is required.",
+  "QUESTIONS": "Questions",
+  "REMOVE_BUTTON": "Remove",
+  "ADD_QUESTION_BUTTON": "Add new question",
+  "SAVE_EXAM_BUTTON": "Save exam"
 }

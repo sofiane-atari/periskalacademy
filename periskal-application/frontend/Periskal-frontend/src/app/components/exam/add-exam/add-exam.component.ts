@@ -5,18 +5,19 @@ import { Router } from '@angular/router';
 import { Training } from '../../../models/training.model';
 import { ExamService } from '../../../services/Exam/exam.service';
 import { Exam } from '../../../models/exam.model';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-add-exam',
-  imports: [FormsModule, ReactiveFormsModule],
+  imports: [FormsModule, ReactiveFormsModule, TranslatePipe],
   templateUrl: './add-exam.component.html',
   styleUrl: './add-exam.component.css'
 })
 export class AddExamComponent implements OnInit {
-    examForm: FormGroup;
-    trainingsWithExams: number[] = [];
-    trainingsData: any[] = [];
-    isLoading = true;
+  examForm: FormGroup;
+  trainingsWithExams: number[] = [];
+  trainingsData: any[] = [];
+  isLoading = true;
 
   constructor(
     private fb: FormBuilder,
@@ -52,7 +53,7 @@ export class AddExamComponent implements OnInit {
     });
     this.questions.push(questionGroup);
   }
-  
+
   removeQuestion(index: number): void {
     this.questions.removeAt(index);
   }
@@ -98,13 +99,13 @@ export class AddExamComponent implements OnInit {
         examTitle: this.examForm.value.examTitle,
         examDescription: this.examForm.value.examDescription,
         trainingId: Number(this.examForm.value.trainingId),
-        questions: this.questions.controls.map(q => ({ 
-          text: q.value.text 
+        questions: this.questions.controls.map(q => ({
+          text: q.value.text
         }))
       };
-  
+
       console.log('Submitting:', JSON.stringify(examData)); // Debug log
-  
+
       this.examService.createExam(examData).subscribe({
         next: (response) => {
           this.router.navigate(['/exams']);

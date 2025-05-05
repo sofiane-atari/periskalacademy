@@ -46,15 +46,15 @@
   }
 </div> -->
 <div class="container">
-  <h2>Add Exam</h2>
+  <h2>{{'ADD_EXAM' | translate}}</h2>
   @if (isLoading) {
-    <p>Loading trainings...</p>
+    <p>{{'LOADING_TRAININGS'|translate}}</p>
   } @else {
     <form [formGroup]="examForm" (ngSubmit)="submitExam()">
       <!-- Training dropdown (onveranderd) -->
-      <label for="training">Select Training:</label>
+      <label for="training">{{'SELECT_TRAINING' |translate}}</label>
       <select id="training" formControlName="trainingId">
-        <option value="" disabled selected class="placeholder-option">Please select a training</option>
+        <option value="" disabled selected class="placeholder-option">{{'PLACEHOLDER_OPTION_TRAINING' | translate}}</option>
         @for (training of trainingsData; track $index) {
           <option 
             [value]="training.id" 
@@ -62,45 +62,45 @@
             [class.disabled-option]="hasExam(training.id)">
             {{ training.name_nl }}
             @if (hasExam(training.id)) {
-              <span class="exam-exists">(Already has exam)</span>
+              <span class="exam-exists">{{"EXAM_EXISTS" | translate}}</span>
             }
           </option>
         }
       </select>
       @if(examForm.get('trainingId')?.invalid && examForm.get('trainingId')?.touched){
-        <p class="error">Please select a training.</p>   
+        <p class="error">{{'SELECTION_TRAINING_ERROR' |translate }}</p>   
       }
 
       <!-- Exam title en description (onveranderd) -->
-      <label for="title">Exam Title:</label>
+      <label for="title">{{'EXAM_TITLE' | translate}}</label>
       <input id="title" formControlName="examTitle" type="text">
       @if(examForm.get('examTitle')?.invalid && examForm.get('examTitle')?.touched){
-        <p class="error">Title is required.</p>
+        <p class="error">{{'EXAM_TITLE_REQUIRED' | translate }}</p>
       }
 
-      <label for="description">Exam Description:</label>
+      <label for="description">{{'EXAM_DESCRIPTION' | translate}}</label>
       <textarea id="description" formControlName="examDescription"></textarea>
       @if(examForm.get('examDescription')?.invalid && examForm.get('examDescription')?.touched){
-        <p class="error">Description is required.</p>
+        <p class="error">{{'EXAM_TITLE_REQUIRED' | translate }}</p>
       }
 
       @if (examForm.get('questions')) {
         <div class="questions-section">
-          <h3>Questions</h3>
+          <h3>{{'QUESTIONS' |translate}}</h3>
           <div formArrayName="questions">
             @for (question of questions.controls; track $index; let i = $index) {
               <div [formGroupName]="i" class="question-group">
                 <textarea formControlName="text" placeholder="Question text"></textarea>
-                <button type="button" (click)="removeQuestion(i)">Remove</button>
+                <button type="button" (click)="removeQuestion(i)">{{'REMOVE_BUTTON' |translate}}</button>
               </div>
             }
           </div>
-          <button type="button" (click)="addQuestion()">Add Question</button>
+          <button type="button" (click)="addQuestion()">{{'ADD_QUESTION_BUTTON' |translate}}</button>
         </div>
       }
 
       <button type="submit" [disabled]="examForm.invalid || questions.length === 0">
-        Save Exam
+        {{'SAVE_EXAM_BUTTON' |translate }}
       </button>
     </form>
   }
