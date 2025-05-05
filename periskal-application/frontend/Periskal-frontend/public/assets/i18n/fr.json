@@ -72,5 +72,18 @@
   "EDIT_TRAINING": "Editer la formation",
   "EDIT_EXAM": "Modifier l'examen",
   "ADD_TRAINING": "Ajouter une formation",
-  "ADD_EXAM": "Ajouter un examen"
+  "ADD_EXAM": "Ajouter un examen",
+  "LOADING_TRAININGS": "Chargement des formations...",
+  "SELECT_TRAINING": "Sélectionnez Formation",
+  "PLACEHOLDER_OPTION_TRAINING": "Veuillez sélectionner une formation",
+  "EXAM_EXISTS": "(A déjà passé un examen)",
+  "SELECTION_TRAINING_ERROR": "Veuillez sélectionner une formation.",
+  "EXAM_TITLE": "Titre de l'examen",
+  "EXAM_TITLE_REQUIRED": "Le titre est requis.",
+  "EXAM_DESCRIPTION": "Description de l'examen",
+  "EXAM_DESCRIPTION_REQUIRED": "La description est obligatoire.",
+  "QUESTIONS": "Questions",
+  "REMOVE_BUTTON": "Supprimer",
+  "ADD_QUESTION_BUTTON": "Ajouter une nouvelle question",
+  "SAVE_EXAM_BUTTON": "Sauvegarder"
 }
