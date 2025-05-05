@@ -68,5 +68,9 @@
   "NEXT": "Volgende",
   "SUBMIT": "Indienen",
   "BACK": "Terug",
-  "ADD_CHAPTER": "Nieuw hoofdstuk toevoegen"
+  "ADD_CHAPTER": "Nieuw hoofdstuk toevoegen",
+  "EDIT_TRAINING": "Training bewerken",
+  "EDIT_EXAM": "Examen bewerken",
+  "ADD_TRAINING": "Nieuwe training toevoegen",
+  "ADD_EXAM": "Nieuw examen toeveogen"
 }

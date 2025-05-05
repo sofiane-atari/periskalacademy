@@ -68,5 +68,9 @@
   "NEXT": "Next",
   "SUBMIT": "Submit",
   "BACK": "Back",
-  "ADD_CHAPTER": "Add new chapter"
+  "ADD_CHAPTER": "Add new chapter",
+  "EDIT_TRAINING": "Edit training",
+  "EDIT_EXAM": "Edit exam",
+  "ADD_TRAINING": "Add a new training",
+  "ADD_EXAM": "Add a new exam"
 }

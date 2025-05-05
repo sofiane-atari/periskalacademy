@@ -68,5 +68,9 @@
   "NEXT": "Suivant",
   "SUBMIT": "Soumettre",
   "BACK": "Retour",
-  "ADD_CHAPTER": "Ajouter un nouveau chapitre"
+  "ADD_CHAPTER": "Ajouter un nouveau chapitre",
+  "EDIT_TRAINING": "Editer la formation",
+  "EDIT_EXAM": "Modifier l'examen",
+  "ADD_TRAINING": "Ajouter une formation",
+  "ADD_EXAM": "Ajouter un examen"
 }
