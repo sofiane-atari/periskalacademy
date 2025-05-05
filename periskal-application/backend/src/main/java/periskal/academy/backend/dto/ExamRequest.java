@@ -10,9 +10,4 @@ public class ExamRequest {
     private String examDescription;
     private Long trainingId;
     private List<QuestionDTO> questions;
-
-    @Data
-    public static class QuestionDTO {
-        private String text;
-    }
 }

@@ -3,8 +3,10 @@ package periskal.academy.backend.service;
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 import periskal.academy.backend.dto.ExamRequest;
+import periskal.academy.backend.dto.QuestionDTO;
 import periskal.academy.backend.jpa.Exam;
 import periskal.academy.backend.jpa.ExamRepository;
+import periskal.academy.backend.jpa.Photo;
 import periskal.academy.backend.jpa.Question;
 import periskal.academy.backend.jpa.QuestionRepository;
 import periskal.academy.backend.jpa.Training;
@@ -43,72 +45,61 @@ public class ExamService {
         return (List<Exam>) examRepository.findAll();
     }
 
+    @Transactional
     public Exam createExam(ExamRequest examRequest) {
+        // 1) Prepare Exam entity
         Exam exam = new Exam();
         exam.setExamTitle(examRequest.getExamTitle());
         exam.setExamDescription(examRequest.getExamDescription());
 
-        // Set training if needed
+        // 2) Link Training
         Training training = trainingRepository.findById(examRequest.getTrainingId())
-                .orElseThrow(() -> new RuntimeException("Training not found"));
+                .orElseThrow(() -> new RuntimeException("Training not found with id " + examRequest.getTrainingId()));
         exam.setTraining(training);
 
-        // Convert questions
-        List<Question> questions = examRequest.getQuestions().stream()
-                .map(q -> {
-                    Question question = new Question();
-                    question.setText(q.getText());
-                    question.setExam(exam);
-                    return question;
-                })
-                .collect(Collectors.toList());
+        // 3) Build Questions + Photos
+        List<Question> questions = new ArrayList<>();
+        for (QuestionDTO qdto : examRequest.getQuestions()) {
+            Question q = new Question();
+            q.setText(qdto.getText());
+            q.setExam(exam);
 
+            if (qdto.getPhotos() != null) {
+                for (Photo photo : qdto.getPhotos()) {
+                    Photo p = new Photo(photo.getImageData());
+                    p.setQuestion(q);
+                    q.getPhotos().add(p);
+                }
+            }
+
+            questions.add(q);
+        }
         exam.setQuestions(questions);
 
+        // 4) Save the exam (cascades to questions & photos)
         return examRepository.save(exam);
     }
 
     public Exam updateExam(Long id, Exam updatedExam) {
-    Optional<Exam> examOpt = examRepository.findById(id);
-    if (examOpt.isPresent()) {
-        Exam exam = examOpt.get();
-        
-        exam.setExamTitle(updatedExam.getExamTitle());
-        exam.setExamDescription(updatedExam.getExamDescription());
+        Optional<Exam> examOpt = examRepository.findById(id);
+        if (examOpt.isPresent()) {
+            Exam exam = examOpt.get();
 
-        // Oude vragen verwijderen
-        exam.getQuestions().clear();
+            exam.setExamTitle(updatedExam.getExamTitle());
+            exam.setExamDescription(updatedExam.getExamDescription());
 
-        for (Question question : updatedExam.getQuestions()) {
-            question.setId(null);
-            question.setExam(exam); 
-            exam.getQuestions().add(question);
-        }
-        
-        return examRepository.save(exam);
-    }
-    return null;
-}
+            // Oude vragen verwijderen
+            exam.getQuestions().clear();
 
-
-    @Transactional
-    public Exam saveExam(Exam exam) {
-        // 1. Save exam first
-        Exam savedExam = examRepository.save(exam);
-
-        // 2. Save questions with proper type
-        if (exam.getQuestions() != null) {
-            List<Question> savedQuestions = new ArrayList<>();
-
-            for (periskal.academy.backend.jpa.Question question : exam.getQuestions()) {
-                question.setExam(savedExam);
-                savedQuestions.add(questionRepository.save(question));
+            for (Question question : updatedExam.getQuestions()) {
+                question.setId(null);
+                question.setExam(exam);
+                exam.getQuestions().add(question);
             }
 
-            savedExam.setQuestions(savedQuestions);
+            return examRepository.save(exam);
         }
-
-        return savedExam;
+        return null;
     }
 
     public void deleteExam(Long id) {

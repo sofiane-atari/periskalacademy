@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
@@ -19,12 +18,11 @@ public class Exam {
     private String examDescription;
 
     @OneToMany(mappedBy = "exam", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference("exam-questions")
     private List<Question> questions = new ArrayList<>();
 
     @OneToOne
     @JoinColumn(name = "training_id", unique = true, nullable = true)
-    // @JsonIgnore
     @JsonBackReference
     private Training training;
 

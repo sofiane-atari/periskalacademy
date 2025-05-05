@@ -32,18 +32,22 @@ export class TakeExamComponent implements OnInit {
     this.error = null;
     
     this.examService.getExamById(examId).subscribe({
-      next: (exam) => {
-        console.log('Exam with questions:', exam); // Debug
-        this.exam = exam;
-        this.loading = false;
-      },
-      error: (err) => {
-        console.error('Failed to load exam:', err);
-        this.error = 'Failed to load exam questions';
-        this.loading = false;
-      }
+        next: (exam) => {
+            console.log('Full exam data:', exam);
+            console.log('First question photos:', exam.questions[0]?.photos);
+            if (exam.questions[0]?.photos?.length) {
+                console.log('First photo data:', exam.questions[0].photos[0].imageData);
+            }
+            this.exam = exam;
+            this.loading = false;
+        },
+        error: (err) => {
+            console.error('Failed to load exam:', err);
+            this.error = 'Failed to load exam questions';
+            this.loading = false;
+        }
     });
-  }
+}
 
   get currentQuestion(): Question | null {
     if (!this.exam || !this.exam.questions.length) return null;

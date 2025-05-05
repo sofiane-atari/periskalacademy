@@ -88,10 +88,14 @@
         <div class="questions-section">
           <h3>Questions</h3>
           <div formArrayName="questions">
-            @for (question of questions.controls; track $index; let i = $index) {
-              <div [formGroupName]="i" class="question-group">
+            @for (question of questions.controls; track $index) {
+              <div [formGroupName]="$index" class="question-block">
                 <textarea formControlName="text" placeholder="Question text"></textarea>
-                <button type="button" (click)="removeQuestion(i)">Remove</button>
+
+                <label>Images for question {{ $index + 1 }}</label>
+                <app-photo-upload formControlName="photos"></app-photo-upload>
+                
+                <button type="button" (click)="removeQuestion($index)">Remove</button>
               </div>
             }
           </div>
