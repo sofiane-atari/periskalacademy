@@ -72,5 +72,18 @@
   "EDIT_TRAINING": "Bearbeiten der Ausbildung",
   "EDIT_EXAM": "Prüfung bearbeiten",
   "ADD_TRAINING": "Training hinzufügen",
-  "ADD_EXAM": "Prüfung hinzufügen"
+  "ADD_EXAM": "Prüfung hinzufügen",
+  "LOADING_TRAININGS": "Trainings werden geladen...",
+  "SELECT_TRAINING": "Training auswählen:",
+  "PLACEHOLDER_OPTION_TRAINING": "Bitte wählen Sie eine Schulung aus",
+  "EXAM_EXISTS": "(Hat bereits Prüfung)",
+  "SELECTION_TRAINING_ERROR": "Bitte wählen Sie eine Schulung aus.",
+  "EXAM_TITLE": "Titel der Prüfung:",
+  "EXAM_TITLE_REQUIRED": "Titel ist erforderlich.",
+  "EXAM_DESCRIPTION": "Beschreibung der Prüfung:",
+  "EXAM_DESCRIPTION_REQUIRED": "Beschreibung ist erforderlich.",
+  "QUESTIONS": "Fragen",
+  "REMOVE_BUTTON": "Entfernen",
+  "ADD_QUESTION_BUTTON": "Neue Frage hinzufügen",
+  "SAVE_EXAM_BUTTON": "Retten"
 }
