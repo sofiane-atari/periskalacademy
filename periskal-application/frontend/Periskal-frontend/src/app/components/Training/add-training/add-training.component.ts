@@ -31,8 +31,26 @@ export class AddTrainingComponent {
       product_code: ['', Validators.required],
     });
     this.enForm = this.fb.group({
-      name_en: ['', Validators.required],
-      description_en: ['', Validators.required],
+      trainingName: ['', Validators.required],
+      trainingDescription: ['', Validators.required],
+      modules: this.fb.array([]),
+    });
+
+    this.nlForm = this.fb.group({
+      trainingName: ['', Validators.required],
+      trainingDescription: ['', Validators.required],
+      modules: this.fb.array([]),
+    });
+
+    this.frForm = this.fb.group({
+      trainingName: ['', Validators.required],
+      trainingDescription: ['', Validators.required],
+      modules: this.fb.array([]),
+    });
+
+    this.deForm = this.fb.group({
+      trainingName: ['', Validators.required],
+      trainingDescription: ['', Validators.required],
       modules: this.fb.array([]),
     });
 
