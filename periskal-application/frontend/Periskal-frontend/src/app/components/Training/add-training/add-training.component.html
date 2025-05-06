@@ -1,23 +1,44 @@
-<mat-vertical-stepper linear #stepper>
-  <!-- Step 1: General Info -->
-  <mat-step [stepControl]="trainingForm">
-    <form [formGroup]="trainingForm">
-      <ng-template matStepLabel>{{'TRAINING_INFORMATION' | translate}}</ng-template>
-      
-      <label>{{'PRODUCT_CODE' | translate}}</label>
-      <input formControlName="product_code" required />
+<div class="stepper-container">
+  <mat-horizontal-stepper linear #stepper class="custom-stepper">
+    <mat-step [stepControl]="trainingForm">
+      <form [formGroup]="trainingForm">
+        <ng-template matStepLabel>{{ "TRAINING_INFORMATION" | translate }}</ng-template>
 
-      <div>
-        <button mat-button matStepperNext>{{'NEXT' | translate}}</button>
-      </div>
-    </form>
-  </mat-step>
-  <!-- Step 2: English -->
-  <mat-step [stepControl]="trainingForm"></mat-step>
-  <!-- Step 3: Dutch -->
-   <mat-step></mat-step>
-  <!-- Step 4: French -->
-  <mat-step></mat-step>
-  <!-- Step 5: German -->
-  <mat-step></mat-step>
-</mat-vertical-stepper>
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Product code</mat-label>
+          <input matInput formControlName="product_code" required />
+        </mat-form-field>
+
+        <div class="stepper-buttons">
+          <button mat-raised-button color="accent" class="gold-button" matStepperNext [disabled]="trainingForm.invalid">
+            {{ "NEXT" | translate }}
+          </button>
+        </div>
+      </form>
+    </mat-step>
+
+    <mat-step [stepControl]="enForm">
+      <form [formGroup]="enForm">
+        <ng-template matStepLabel>{{ "LANGUAGE_EN" | translate }}</ng-template>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>{{ "MODULE_NAME_EN" | translate }}</mat-label>
+          <input matInput formControlName="name_en" required />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>{{ "DESCRIPTION_EN" | translate }}</mat-label>
+          <textarea matInput formControlName="description_en" required></textarea>
+        </mat-form-field>
+
+        <div class="stepper-buttons">
+          <button mat-raised-button color="accent" class="gold-button" matStepperPrevious>{{ "PREVIOUS" | translate }}</button>
+          <button mat-raised-button color="accent" class="gold-button" (onclick)="postTraining()" matStepperNext [disabled]="enForm.invalid">
+            {{ "SUBMIT" | translate }}
+          </button>
+        </div>
+      </form>
+    </mat-step>
+
+    </mat-horizontal-stepper>
+</div>
