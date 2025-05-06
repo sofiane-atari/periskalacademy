@@ -1,13 +1,25 @@
 package periskal.academy.backend;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.mockito.ArgumentMatchers.any;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.assertj.core.api.Assertions.*;
+
 import periskal.academy.backend.dto.ModuleDTO;
 import periskal.academy.backend.dto.TrainingDTO;
 import periskal.academy.backend.jpa.Chapter;
@@ -17,9 +29,6 @@ import periskal.academy.backend.jpa.Training;
 import periskal.academy.backend.jpa.TrainingRepository;
 import periskal.academy.backend.security.Exceptions.General.ResourceNotFoundException;
 import periskal.academy.backend.service.TrainingService;
-import java.util.Optional;
-import java.util.Collections;
-import java.util.List;
 
 class TrainingServiceTest {
 
@@ -48,41 +57,40 @@ class TrainingServiceTest {
         module.setId(1L);
         module.setNameModule_en("Test Module");
 
-        training.setModules(Collections.singletonList(module));
+        List<Module> modulesList = new ArrayList<>();
+        modulesList.add(module);
+        training.setModules(modulesList);
     }
 
-    /*
-     * @Test
-     * void givenTrainingWithModule_whenDeleteModule_thenModuleIsRemoved() {
-     * // Mock trainingRepository behavior
-     * when(trainingRepository.findById(1L)).thenReturn(Optional.of(training));
-     * when(trainingRepository.save(training)).thenReturn(training);
-     * 
-     * // Test deleteModule method
-     * Training updatedTraining = trainingService.deleteModule(1L, 1L);
-     * 
-     * // Use AssertJ assertions
-     * assertThat(updatedTraining).isNotNull();
-     * assertThat(updatedTraining.getModules()).isEmpty();
-     * 
-     * // Verify that save method was called after removal of module
-     * verify(trainingRepository, times(1)).save(training);
-     * }
-     * 
-     * @Test
-     * void givenNoTraining_whenDeleteModule_thenThrowResourceNotFoundException() {
-     * // Mock behavior when the training is not found
-     * when(trainingRepository.findById(1L)).thenReturn(Optional.empty());
-     * 
-     * // Test deleteModule method - should throw ResourceNotFoundException
-     * assertThatThrownBy(() -> trainingService.deleteModule(1L, 1L))
-     * .isInstanceOf(ResourceNotFoundException.class);
-     * 
-     * 
-     * // Verify that save was never called
-     * verify(trainingRepository, never()).save(any());
-     * }
-     */
+    @Test
+    void givenTrainingWithModule_whenDeleteModule_thenModuleIsRemoved() {
+        // Mock trainingRepository behavior
+        when(trainingRepository.findById(1L)).thenReturn(Optional.of(training));
+        when(trainingRepository.save(training)).thenReturn(training);
+
+        // Test deleteModule method
+        Training updatedTraining = trainingService.deleteModule(1L, 1L);
+
+        // Use AssertJ assertions
+        assertThat(updatedTraining).isNotNull();
+        assertThat(updatedTraining.getModules()).isEmpty();
+
+        // Verify that save method was called after removal of module
+        verify(trainingRepository, times(1)).save(training);
+    }
+
+    @Test
+    void givenNoTraining_whenDeleteModule_thenThrowResourceNotFoundException() {
+        // Mock behavior when the training is not found
+        when(trainingRepository.findById(1L)).thenReturn(Optional.empty());
+
+        // Test deleteModule method - should throw ResourceNotFoundException
+        assertThatThrownBy(() -> trainingService.deleteModule(1L, 1L))
+                .isInstanceOf(ResourceNotFoundException.class);
+
+        // Verify that save was never called
+        verify(trainingRepository, never()).save(any());
+    }
 
     @Test
     void givenExistingTraining_whenDeleteTraining_thenTrainingIsDeleted() {
