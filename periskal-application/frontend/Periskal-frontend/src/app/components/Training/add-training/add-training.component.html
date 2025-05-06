@@ -1,51 +1,52 @@
 <div class="stepper-container">
+  <h2>{{'NEW_TRAINING_CREATE' |translate}}</h2>
   <mat-horizontal-stepper linear #stepper class="custom-stepper">
     <mat-step>
       <form [formGroup]="trainingForm">
       <ng-template matStepLabel>{{ "TRAINING_INFORMATION" | translate }}</ng-template>
       <mat-form-field appearance="fill" class="full-width">
-        <mat-label>Product code</mat-label>
+        <mat-label>{{'PRODUCT_CODE' |translate }}</mat-label>
         <input matInput formControlName="product_code" required />
       </mat-form-field>
       <ng-template matStepLabel>{{ "MODULES" | translate }}</ng-template>
         <mat-tab-group>
           <mat-tab label="{{'LANGUAGE_EN' | translate}}">
             <mat-form-field appearance="fill" class="full-width">
-              <mat-label>Training Name (EN)</mat-label>
+              <mat-label>{{'TRAINING_NAME_EN' |translate}}</mat-label>
               <input matInput formControlName="name_en">
             </mat-form-field>
             <mat-form-field appearance="fill" class="full-width">
-              <mat-label>Training descriptionChapter_fr (EN)</mat-label>
+              <mat-label>{{'TRAINING_DESCRIPTION_EN' | translate}}</mat-label>
               <textarea matInput formControlName="description_en"></textarea>
             </mat-form-field>
           </mat-tab>
           <mat-tab label="{{'LANGUAGE_NL' | translate}}">
             <mat-form-field appearance="fill" class="full-width">
-              <mat-label>Training Name (NL)</mat-label>
+              <mat-label>{{'TRAINING_NAME_NL' |translate}}</mat-label>
               <input matInput formControlName="name_nl">
             </mat-form-field>
             <mat-form-field appearance="fill" class="full-width">
-              <mat-label>Training descriptionChapter_fr (EN)</mat-label>
+              <mat-label>{{'TRAINING_DESCRIPTION_NL' | translate}}</mat-label>
               <textarea matInput formControlName="description_nl"></textarea>
             </mat-form-field>
           </mat-tab>
           <mat-tab label="{{'LANGUAGE_FR' | translate}}">
             <mat-form-field appearance="fill" class="full-width">
-              <mat-label>Training Name (FR)</mat-label>
+              <mat-label>{{'TRAINING_NAME_FR' |translate}}</mat-label>
               <input matInput formControlName="name_fr">
             </mat-form-field>
             <mat-form-field appearance="fill" class="full-width">
-              <mat-label>Training descriptionChapter_fr (EN)</mat-label>
+              <mat-label>{{'TRAINING_DESCRIPTION_FR' | translate}}</mat-label>
               <textarea matInput formControlName="description_fr"></textarea>
             </mat-form-field>
           </mat-tab>
           <mat-tab label="{{'LANGUAGE_DE' | translate}}">
             <mat-form-field appearance="fill" class="full-width">
-              <mat-label>Training Name (DE)</mat-label>
+              <mat-label>{{'TRAINING_NAME_DE' |translate}}</mat-label>
               <input matInput formControlName="name_de">
             </mat-form-field>
             <mat-form-field appearance="fill" class="full-width">
-              <mat-label>Training descriptionChapter_fr (EN)</mat-label>
+              <mat-label>{{'TRAINING_DESCRIPTION_DE' | translate}}</mat-label>
               <textarea matInput formControlName="description_de"></textarea>
             </mat-form-field>
           </mat-tab>
@@ -61,7 +62,7 @@
                     <input matInput formControlName="nameModule_en" required />
                   </mat-form-field>
                   <mat-form-field appearance="fill" class="full-width">
-                    <mat-label>{{ "MODULE_DESCRIPTION_EN" | translate }}</mat-label>
+                    <mat-label>{{ "DESCRIPTION_EN" | translate }}</mat-label>
                     <textarea matInput formControlName="descriptionModule_en" required></textarea>
                   </mat-form-field>
                 </mat-tab>
@@ -71,7 +72,7 @@
                     <input matInput formControlName="nameModule_nl" required />
                   </mat-form-field>
                   <mat-form-field appearance="fill" class="full-width">
-                    <mat-label>{{ "MODULE_DESCRIPTION_NL" | translate }}</mat-label>
+                    <mat-label>{{ "DESCRIPTION_NL" | translate }}</mat-label>
                     <textarea matInput formControlName="descriptionModule_nl" required></textarea>
                   </mat-form-field>
                 </mat-tab>
@@ -81,7 +82,7 @@
                     <input matInput formControlName="nameModule_fr" required />
                   </mat-form-field>
                   <mat-form-field appearance="fill" class="full-width">
-                    <mat-label>{{ "MODULE_DESCRIPTION_FR" | translate }}</mat-label>
+                    <mat-label>{{ "DESCRIPTION_FR" | translate }}</mat-label>
                     <textarea matInput formControlName="descriptionModule_fr" required></textarea>
                   </mat-form-field>
                 </mat-tab>
@@ -91,7 +92,7 @@
                     <input matInput formControlName="nameModule_de" required />
                   </mat-form-field>
                   <mat-form-field appearance="fill" class="full-width">
-                    <mat-label>{{ "MODULE_DESCRIPTION_DE" | translate }}</mat-label>
+                    <mat-label>{{ "DESCRIPTION_DE" | translate }}</mat-label>
                     <textarea matInput formControlName="descriptionModule_de" required></textarea>
                   </mat-form-field>
                 </mat-tab>
