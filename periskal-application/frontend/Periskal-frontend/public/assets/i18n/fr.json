@@ -112,5 +112,7 @@
   "CHAPTER_NAME_DE": "Nom du chapitre (DE)",
   "CHAPTER_DESCRIPTION_DE": "Description du chapitre (DE)",
   "CHAPTER_TEXT_DE": "Texte du chapitre (DE)",
+  "REVIEW_SUBMIT": "Vérifier et soumettre",
+  "TRAINING_SUMMARY": "Résumé de la formation",
   "TAKE_EXAM": "Passer un examen"
 }

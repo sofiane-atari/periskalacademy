@@ -61,7 +61,6 @@
   .stepper-container, .module, .chapter {
     background-color: #f5f5f5; /* or your desired background */
   }
-  
   .mat-form-field {
     margin-bottom: 0 !important;
   }
@@ -98,6 +97,87 @@
     background-color: #ffffff;
     border-radius: 4px;
   }
+
+  /* Algemene opmaak */
+.stepper-container {
+  background: #fffbe6;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Section title */
+.title_summary {
+  color: #2c2c2c;
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  padding: 16px;
+}
+
+button {
+  border: none;
+  outline: none;
+  box-shadow: none;
+}
+
+/* Mat-card styling */
+mat-card {
+  background-color: #fcf8e3;
+  border-left: 6px solid #f0d04b;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+}
+
+/* Mat-tab styling */
+mat-tab-group {
+  margin-top: 1rem;
+}
+
+mat-tab-group::ng-deep .mat-tab-label-active {
+  color: #f0d04b !important;
+}
+
+mat-tab-group::ng-deep .mat-ink-bar {
+  background-color: #f0d04b !important;
+}
+
+/* Accordion */
+.module-summary mat-expansion-panel {
+  background: #fffdf5;
+  border: 1px solid #f0d04b30;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+/* Stepper Buttons */
+.stepper-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+.gold-button {
+  background-color: #f0d04b;
+  color: #2c2c2c;
+  font-weight: bold;
+  border-radius: 8px;
+  padding: 0.6rem 1.4rem;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.gold-button:hover {
+  background-color: #e0c040;
+  transform: translateY(-2px);
+}
+
+.gold-button[disabled] {
+  background-color: #f0d04b80;
+  color: #999;
+  cursor: not-allowed;
+}
+
   
   /* Responsive layout */
   @media (max-width: 768px) {

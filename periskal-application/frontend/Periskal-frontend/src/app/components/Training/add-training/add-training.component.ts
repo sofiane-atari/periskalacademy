@@ -10,11 +10,30 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTabsModule } from '@angular/material/tabs';
 import { JsonPipe } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatListModule } from '@angular/material/list';
 
 @Component({
   selector: 'app-add-training',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, TranslatePipe, PhotoUploadComponent, VideoUploadComponent, MatStepperModule, MatFormFieldModule, MatInputModule, MatTabsModule, JsonPipe],
+  imports: [FormsModule,
+    ReactiveFormsModule,
+    TranslatePipe,
+    PhotoUploadComponent,
+    VideoUploadComponent,
+    MatStepperModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatTabsModule,
+    JsonPipe,
+    MatCardModule,
+    MatExpansionModule,
+    MatIconModule,
+    MatDividerModule,
+    MatListModule],
   templateUrl: './add-training.component.html',
   styleUrl: './add-training.component.css'
 })
