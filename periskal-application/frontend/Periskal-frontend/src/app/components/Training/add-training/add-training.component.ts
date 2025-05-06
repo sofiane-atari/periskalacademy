@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TrainingService } from '../../../services/Training/training.service';
@@ -8,204 +8,126 @@ import { VideoUploadComponent } from '../../video-upload/video-upload.component'
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatTabsModule } from '@angular/material/tabs';
+import { JsonPipe } from '@angular/common';
+
 @Component({
   selector: 'app-add-training',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, TranslatePipe, PhotoUploadComponent, VideoUploadComponent, MatStepperModule, MatFormFieldModule, MatInputModule],
+  imports: [FormsModule, ReactiveFormsModule, TranslatePipe, PhotoUploadComponent, VideoUploadComponent, MatStepperModule, MatFormFieldModule, MatInputModule, MatTabsModule, JsonPipe],
   templateUrl: './add-training.component.html',
   styleUrl: './add-training.component.css'
 })
-export class AddTrainingComponent {
-  trainingForm: FormGroup;
-  enForm!: FormGroup;
-  nlForm!: FormGroup;
-  deForm!: FormGroup;
-  frForm!: FormGroup;
+export class AddTrainingComponent implements OnInit { // Implement OnInit
+  // Removed separate language forms (enForm, nlForm, etc.)
   moduleCollapsedState: { [lang: string]: { [moduleIndex: number]: boolean } } = {};
   chapterCollapsedState: { [lang: string]: { [moduleIndex: number]: { [chapterIndex: number]: boolean } } } = {};
   selectedLanguage: String = "";
+
+  trainingForm!: FormGroup;
   languages = ['en', 'nl', 'fr', 'de'];
 
-  constructor(private fb: FormBuilder, private router: Router, private trainingsService: TrainingService) {
+  constructor(private fb: FormBuilder, private trainingService: TrainingService, private router: Router) { }
+
+  ngOnInit() {
     this.trainingForm = this.fb.group({
       product_code: ['', Validators.required],
-    });
-    this.enForm = this.fb.group({
-      trainingName: ['', Validators.required],
-      trainingDescription: ['', Validators.required],
-      modules: this.fb.array([]),
-    });
-
-    this.nlForm = this.fb.group({
-      trainingName: ['', Validators.required],
-      trainingDescription: ['', Validators.required],
-      modules: this.fb.array([]),
+      name_en: ['', Validators.required],
+      name_nl: ['', Validators.required],
+      name_fr: ['', Validators.required],
+      name_de: ['', Validators.required],
+      description_en: ['', Validators.required],
+      description_nl: ['', Validators.required],
+      description_fr: ['', Validators.required],
+      description_de: ['', Validators.required],
+      modules: this.fb.array([this.createModule()])
     });
 
-    this.frForm = this.fb.group({
-      trainingName: ['', Validators.required],
-      trainingDescription: ['', Validators.required],
-      modules: this.fb.array([]),
-    });
+  }
 
-    this.deForm = this.fb.group({
-      trainingName: ['', Validators.required],
-      trainingDescription: ['', Validators.required],
-      modules: this.fb.array([]),
-    });
-
-    this.languages.forEach(lang => {
-      this.moduleCollapsedState[lang] = {};
-      this.chapterCollapsedState[lang] = {};
+  createModule(): FormGroup {
+    return this.fb.group({
+      nameModule_en: ['', Validators.required],
+      descriptionModule_en: ['', Validators.required],
+      nameModule_nl: ['', Validators.required],
+      descriptionModule_nl: ['', Validators.required],
+      nameModule_fr: ['', Validators.required],
+      descriptionModule_fr: ['', Validators.required],
+      nameModule_de: ['', Validators.required],
+      descriptionModule_de: ['', Validators.required],
+      chapters: this.fb.array([this.createChapter()])
     });
   }
 
-  getModulesControls(lang: string): FormArray {
-    switch (lang) {
-      case 'en':
-        return this.enForm.get('modules') as FormArray;
-      case 'nl':
-        return this.nlForm.get('modules') as FormArray;
-      case 'fr':
-        return this.frForm.get('modules') as FormArray;
-      case 'de':
-        return this.deForm.get('modules') as FormArray;
-      default:
-        return this.fb.array([]);
-    }
+
+  createChapter(): FormGroup {
+    return this.fb.group({
+      nameChapter_en: ['', Validators.required],
+      descriptionChapter_en: ['', Validators.required],
+      textChapter_en: ['', Validators.required],
+      photos_en: [[]],
+      nameChapter_nl: ['', Validators.required],
+      descriptionChapter_nl: ['', Validators.required],
+      textChapter_nl: ['', Validators.required],
+      photos_nl: [[]],
+      nameChapter_fr: ['', Validators.required],
+      descriptionChapter_fr: ['', Validators.required],
+      textChapter_fr: ['', Validators.required],
+      photos_fr: [[]],
+      nameChapter_de: ['', Validators.required],
+      descriptionChapter_de: ['', Validators.required],
+      textChapter_de: ['', Validators.required],
+      photos_de: [[]]
+    });
   }
 
-  getChaptersControls(lang: string, moduleIndex: number): FormArray {
-    const modules = this.getModulesControls(lang);
-    if (modules.at(moduleIndex) && modules.at(moduleIndex).get('chapters')) {
-      return modules.at(moduleIndex).get('chapters') as FormArray;
-    }
-    return this.fb.array([]);
+
+  get modules(): FormArray {
+    return this.trainingForm.get('modules') as FormArray;
   }
 
-  addModule(lang: string) {
-    const modules = this.getModulesControls(lang);
-    modules.push(this.fb.group({
-      nameModule: ['', Validators.required],
-      descriptionModule: ['', Validators.required],
-      chapters: this.fb.array([])
-    }));
-    this.moduleCollapsedState[lang][modules.length - 1] = false; // Initially expanded
+  addModule(): void {
+    this.modules.push(this.createModule());
   }
 
-  // Method to remove a module for a specific language
-  removeModule(lang: string, moduleIndex: number) {
-    const modules = this.getModulesControls(lang);
-    modules.removeAt(moduleIndex);
-    delete this.moduleCollapsedState[lang][moduleIndex];
+  removeModule(moduleIndex: number): void {
+    this.modules.removeAt(moduleIndex);
   }
 
-  // Method to add a new chapter to a specific module in a language
-  addChapter(lang: string, moduleIndex: number) {
-    const chapters = this.getChaptersControls(lang, moduleIndex);
-    chapters.push(this.fb.group({
-      nameChapter: ['', Validators.required],
-      descriptionChapter: ['', Validators.required],
-      textChapter: ['', Validators.required],
-      photos: [''], // You might need a more complex control for file uploads
-      // video: [''] // You might need a more complex control for video uploads
-    }));
-    if (!this.chapterCollapsedState[lang][moduleIndex]) {
-      this.chapterCollapsedState[lang][moduleIndex] = {};
-    }
-    this.chapterCollapsedState[lang][moduleIndex][chapters.length - 1] = false; // Initially expanded
+  getChapters(moduleIndex: number): FormArray {
+    return this.modules.at(moduleIndex).get('chapters') as FormArray;
   }
 
-  // Method to remove a chapter from a specific module in a language
-  removeChapter(lang: string, moduleIndex: number, chapterIndex: number) {
-    const chapters = this.getChaptersControls(lang, moduleIndex);
-    chapters.removeAt(chapterIndex);
-    if (this.chapterCollapsedState[lang][moduleIndex]) {
-      delete this.chapterCollapsedState[lang][moduleIndex][chapterIndex];
-    }
+  addChapter(moduleIndex: number): void {
+    this.getChapters(moduleIndex).push(this.createChapter());
   }
 
-  // Methods to handle module collapse state
-  isModuleCollapsed(lang: string, moduleIndex: number): boolean {
-    return this.moduleCollapsedState[lang]?.[moduleIndex] || false;
-  }
-
-  toggleModule(lang: string, moduleIndex: number) {
-    if (!this.moduleCollapsedState[lang]) {
-      this.moduleCollapsedState[lang] = {};
-    }
-    this.moduleCollapsedState[lang][moduleIndex] = !this.moduleCollapsedState[lang][moduleIndex];
-  }
-
-  // Methods to handle chapter collapse state
-  isChapterCollapsed(lang: string, moduleIndex: number, chapterIndex: number): boolean {
-    return this.chapterCollapsedState[lang]?.[moduleIndex]?.[chapterIndex] || false;
-  }
-
-  toggleChapter(lang: string, moduleIndex: number, chapterIndex: number) {
-    if (!this.chapterCollapsedState[lang]) {
-      this.chapterCollapsedState[lang] = {};
-    }
-    if (!this.chapterCollapsedState[lang][moduleIndex]) {
-      this.chapterCollapsedState[lang][moduleIndex] = {};
-    }
-    this.chapterCollapsedState[lang][moduleIndex][chapterIndex] = !this.chapterCollapsedState[lang][moduleIndex][chapterIndex];
-  }
-
-  // Method to get the module title (you might fetch this dynamically or use a default)
-  getModuleTitle(lang: string, moduleIndex: number): string {
-    const moduleControl = this.getModulesControls(lang).at(moduleIndex) as FormGroup;
-    return moduleControl?.get('nameModule')?.value || 'New Module';
-  }
-
-  // Method to get the chapter title
-  getChapterTitle(lang: string, moduleIndex: number, chapterIndex: number): string {
-    const chapterControl = this.getChaptersControls(lang, moduleIndex).at(chapterIndex) as FormGroup;
-    return chapterControl?.get('nameChapter')?.value || 'New Chapter';
+  removeChapter(moduleIndex: number, chapterIndex: number): void {
+    this.getChapters(moduleIndex).removeAt(chapterIndex);
   }
 
   postTraining(): void {
-    if (this.trainingForm.valid && this.enForm.valid && this.nlForm.valid && this.deForm.valid && this.frForm.valid) {
-      const trainingData = {
-        product_code: this.trainingForm.value.product_code,
-        en: {
-          name: this.enForm.value.trainingName,
-          description: this.enForm.value.trainingDescription,
-          modules: (this.enForm.get('modules') as FormArray).value,
-        },
-        nl: {
-          name: this.nlForm.value.trainingName,
-          description: this.nlForm.value.trainingDescription,
-          modules: (this.nlForm.get('modules') as FormArray).value,
-        },
-        fr: {
-          name: this.frForm.value.trainingName,
-          description: this.frForm.value.trainingDescription,
-          modules: (this.frForm.get('modules') as FormArray).value,
-        },
-        de: {
-          name: this.deForm.value.trainingName,
-          description: this.deForm.value.trainingDescription,
-          modules: (this.deForm.get('modules') as FormArray).value,
-        },
-      };
-
-      const fileInput = this.trainingForm.get('image')?.value;
+    if (this.trainingForm.valid) { // Removed checks for separate language forms
+      const trainingData = this.trainingForm.value;
+      const fileInput = this.trainingForm.get('image')?.value; // Assuming 'image' is a control somewhere
 
       // If there's a file, convert it to base64
       if (fileInput) {
         this.convertToBase64(fileInput).then((base64Image: string) => {
           // Add the base64 image to the trainingData
-          trainingData.en.modules.forEach((module: { chapters: any[]; }) => {
+          trainingData.modules.forEach((module: { chapters: any[]; }) => {
             module.chapters.forEach(chapter => {
-              chapter.photos.forEach((photo: { imageData: string; }) => {
-                photo.imageData = base64Image;
-              });
+              // Assuming 'photos' is an object with language keys
+              if (chapter.photos) {
+                Object.keys(chapter.photos).forEach(lang => {
+                  chapter.photos[lang] = base64Image; // Assign the same image to all languages for simplicity
+                });
+              }
             });
           });
 
           // Now send the updated data with base64 image to the backend
-          this.trainingsService.postTraining(trainingData).subscribe({
+          this.trainingService.postTraining(trainingData).subscribe({
             next: (response) => {
               // this.resetForm();
               this.router.navigate(['/trainingEmployee']);
@@ -217,7 +139,7 @@ export class AddTrainingComponent {
         });
       } else {
         console.log(trainingData);
-        this.trainingsService.postTraining(trainingData).subscribe({
+        this.trainingService.postTraining(trainingData).subscribe({
           next: (response) => {
             // this.resetForm();
             this.router.navigate(['/trainingEmployee']);
@@ -226,8 +148,10 @@ export class AddTrainingComponent {
             console.error('Error posting training', error);
           }
         });
-
       }
+    } else {
+      console.log('Form is invalid');
+      // Optionally, trigger visual validation feedback to the user
     }
   }
 
@@ -242,18 +166,4 @@ export class AddTrainingComponent {
       reader.readAsDataURL(file);
     });
   }
-
-
-  // resetForm(): void {
-  //   this.trainingForm.reset();
-
-  //   while (this.modules.length) {
-  //     this.modules.removeAt(0);
-  //   }
-  //   this.addModule();
-
-  //   // Reset alle collapse states
-  //   this.collapsedModules = {};
-  //   this.collapsedChapters = {};
-  // }
 }
