@@ -11,7 +11,7 @@ import { PhotoUploadComponent } from '../../photo-upload/photo-upload.component'
 @Component({
   selector: 'app-add-exam',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, PhotoUploadComponent],
+  imports: [FormsModule, ReactiveFormsModule, PhotoUploadComponent, TranslatePipe],
   templateUrl: './add-exam.component.html',
   styleUrl: './add-exam.component.css'
 })
@@ -46,7 +46,7 @@ export class AddExamComponent implements OnInit {
 
   addQuestion(): void {
     const questionGroup = this.fb.group({
-      text:   ['', Validators.required],
+      text: ['', Validators.required],
       photos: [[]]
     });
     this.questions.push(questionGroup);
@@ -103,7 +103,7 @@ export class AddExamComponent implements OnInit {
           }))
         }))
       };
-  
+
       console.log('Submitting exam data:', examData);
       this.examService.createExam(examData).subscribe({
         next: (response) => {

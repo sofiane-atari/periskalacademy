@@ -5,9 +5,11 @@ import { TrainingService } from '../../../services/Training/training.service';
 import { TranslatePipe } from '@ngx-translate/core';
 import { PhotoUploadComponent } from '../../photo-upload/photo-upload.component';
 import { VideoUploadComponent } from '../../video-upload/video-upload.component';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatFormFieldModule } from '@angular/material/form-field';
 @Component({
   selector: 'app-add-training',
-  imports: [FormsModule, ReactiveFormsModule, TranslatePipe, PhotoUploadComponent, VideoUploadComponent],
+  imports: [FormsModule, ReactiveFormsModule, TranslatePipe, PhotoUploadComponent, VideoUploadComponent, MatStepperModule, MatFormFieldModule],
   templateUrl: './add-training.component.html',
   styleUrl: './add-training.component.css'
 })

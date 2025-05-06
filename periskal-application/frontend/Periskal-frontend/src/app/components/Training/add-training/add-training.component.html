@@ -1,155 +1,23 @@
-<div class="columns">
-  <div class="column"></div>
-  <div class="column">
-    <h1>{{'NEW_TRAINING_CREATE' | translate}}</h1>
-    <form [formGroup]="trainingForm" (ngSubmit)="postTraining()">
-      <h3 class="modules">{{'TRAINING_INFORMATION' | translate}}</h3>
+<mat-vertical-stepper linear #stepper>
+  <!-- Step 1: General Info -->
+  <mat-step [stepControl]="trainingForm">
+    <form [formGroup]="trainingForm">
+      <ng-template matStepLabel>{{'TRAINING_INFORMATION' | translate}}</ng-template>
+      
       <label>{{'PRODUCT_CODE' | translate}}</label>
-      <input
-        formControlName="product_code"
-        class="input"
-        placeholder="Geef de code in waarmee deze training gelinkt is. Bv. ECDIS"
-        required
-      />
-      @for (lang of languages; track $index) {
-      <div class="field">
-        <label>{{'TRAINING_NAME' | translate}}</label>
-        <input
-          formControlName="name_{{lang}}"
-          class="input"
-          placeholder="Geef de naam van de nieuwe training in {{lang}}"
-          required
-        />
-      </div>
-    }
-    @for (lang of languages; track $index) {
-      <div class="field">
-        <label>{{'DESCRIPTION' | translate}}</label>
-        <textarea
-          formControlName="description_{{lang}}"
-          id="description"
-          class="form-control"
-          placeholder="Geef de beschrijving van de nieuwe training in {{lang}}"
-          name="description"
-          required
-        >
-        </textarea>
-      </div>
-    }
-      <h3 class="modules">{{"MODULE_INFORMATION" | translate}}</h3>
-      <div formArrayName="modules">
-        @for (module of modules.controls; track moduleIndex; let moduleIndex = $index) {
-        <div [formGroupName]="moduleIndex" class="module">
-          <div class="module-header" (click)="toggleModule(moduleIndex)">
-            <span class="toggle-icon">{{ isModuleCollapsed(moduleIndex) ? '►' : '▼' }}</span>
-            <h4>{{"MODULE" | translate}} {{ moduleIndex + 1 }}: {{ getModuleTitle(moduleIndex) }}</h4>
-          </div>
-          <div [hidden]="isModuleCollapsed(moduleIndex)" class="module-content">
-            @for (lang of languages; track $index) {
-            <div>
-              <label>{{"MODULE_TITLE" | translate}}</label>
-              <input
-                formControlName="nameModule_{{lang}}"
-                placeholder="Geef de titel van module {{ moduleIndex + 1 }} in {{lang}}"
-                required
-              />
-            </div>
-            <div>
-              <label>{{"MODULE_DESCRIPTION" | translate}}</label>
-              <textarea
-                formControlName="descriptionModule_{{lang}}"
-                id="descriptionModule_{{lang}}{{ moduleIndex }}"
-                class="form-control"
-                placeholder="Geef de beschrijving van module {{ moduleIndex + 1 }} in {{lang}}"
-                name="descriptionModule_{{lang}}{{ moduleIndex }}"
-                required
-              >
-              </textarea>
-            </div>
-          }
-            <div>
-              <h4>{{"CHAPTERS_MODULE" | translate}} {{ moduleIndex + 1 }}</h4>
-              <div formArrayName="chapters">
-                @for (chapter of getChaptersControls(moduleIndex); track chapterIndex; let chapterIndex = $index) {
-                <div [formGroupName]="chapterIndex" class="chapter">
-                  <div class="chapter-header" (click)="toggleChapter(moduleIndex, chapterIndex)">
-                    <span class="toggle-icon">{{ isChapterCollapsed(moduleIndex, chapterIndex) ? '►' : '▼' }}</span>
-                    <h5>{{"CHAPTER" | translate}} {{ chapterIndex + 1 }}: {{ getChapterTitle(moduleIndex, chapterIndex) }}</h5>
-                  </div>
-                  
-                  <div [hidden]="isChapterCollapsed(moduleIndex, chapterIndex)" class="chapter-content">
-                    @for (lang of languages; track $index) {
-                    <div>
-                      <label>{{"CHAPTER_TITLE" | translate}}</label>
-                      <input
-                        formControlName="nameChapter_{{lang}}"
-                        placeholder="Geef de titel van hoofdstuk {{ chapterIndex + 1 }} in {{lang}}"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label>{{"CHAPTER_DESCRIPTION" | translate}}</label>
-                      <textarea
-                        formControlName="descriptionChapter_{{lang}}"
-                        id="descriptionChapter_{{lang}}{{ moduleIndex }}_{{ chapterIndex }}"
-                        class="form-control"
-                        placeholder="Geef de beschrijving van hoofdstuk {{ chapterIndex + 1 }} in {{lang}}"
-                        name="descriptionChapter_{{lang}}{{ moduleIndex }}_{{ chapterIndex }}"
-                        required
-                      >
-                      </textarea>
-                    </div>
-                    <div>
-                      <label>{{"CHAPTER_TEXT" | translate}}</label>
-                      <textarea
-                        formControlName="textChapter_{{lang}}"
-                        id="textChapter_{{lang}}{{ moduleIndex }}_{{ chapterIndex }}"
-                        class="form-control"
-                        placeholder="Geef de tekst van hoofdstuk {{ chapterIndex + 1 }} in {{lang}}"
-                        name="textChapter_{{lang}}{{ moduleIndex }}_{{ chapterIndex }}"
-                        required
-                      >
-                      </textarea>
-                      <app-photo-upload formControlName="photos_{{lang}}"></app-photo-upload>
-                      <app-video-upload></app-video-upload>
-                    </div>
-                  }
-                    @if(chapterIndex!=0) {
-                    <button class="delete" type="button" (click)="removeChapter(moduleIndex, chapterIndex)">
-                      {{"DELETE_CHAPTER" | translate}}
-                    </button>
-                    }
-                  </div>
-                </div>
-                }
-              </div>
-              <div>
-                <button type="button" (click)="addChapter(moduleIndex)">
-                  {{"ADD_NEW_CHAPTER" | translate}}
-                </button>
-              </div>
-            </div>
-            
-            @if(moduleIndex!=0) {
-            <button class="delete" type="button" (click)="removeModule(moduleIndex)">
-              {{"DELETE_MODULE" | translate}}
-            </button>
-            }
-          </div>
-        </div>
-        }
-      </div>
+      <input formControlName="product_code" required />
+
       <div>
-        <button type="button" (click)="addModule()">
-          {{'ADD_NEW_MODULE' | translate}}
-        </button>
-      </div>
-      <div>
-        <button type="submit" [disabled]="trainingForm.invalid">
-          {{'CREATE_TRAINING' | translate}}
-        </button>
+        <button mat-button matStepperNext>{{'NEXT' | translate}}</button>
       </div>
     </form>
-  </div>
-  <div class="column"></div>
-</div>
+  </mat-step>
+  <!-- Step 2: English -->
+  <mat-step [stepControl]="trainingForm"></mat-step>
+  <!-- Step 3: Dutch -->
+   <mat-step></mat-step>
+  <!-- Step 4: French -->
+  <mat-step></mat-step>
+  <!-- Step 5: German -->
+  <mat-step></mat-step>
+</mat-vertical-stepper>
