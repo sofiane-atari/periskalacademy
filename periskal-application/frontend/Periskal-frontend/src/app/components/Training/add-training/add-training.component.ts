@@ -169,23 +169,23 @@ export class AddTrainingComponent {
       const trainingData = {
         product_code: this.trainingForm.value.product_code,
         en: {
-          name: this.enForm.value.name,
-          description: this.enForm.value.description,
+          name: this.enForm.value.trainingName,
+          description: this.enForm.value.trainingDescription,
           modules: (this.enForm.get('modules') as FormArray).value,
         },
         nl: {
-          name: this.nlForm.value.name,
-          description: this.nlForm.value.description,
+          name: this.nlForm.value.trainingName,
+          description: this.nlForm.value.trainingDescription,
           modules: (this.nlForm.get('modules') as FormArray).value,
         },
         fr: {
-          name: this.frForm.value.name,
-          description: this.frForm.value.description,
+          name: this.frForm.value.trainingName,
+          description: this.frForm.value.trainingDescription,
           modules: (this.frForm.get('modules') as FormArray).value,
         },
         de: {
-          name: this.deForm.value.name,
-          description: this.deForm.value.description,
+          name: this.deForm.value.trainingName,
+          description: this.deForm.value.trainingDescription,
           modules: (this.deForm.get('modules') as FormArray).value,
         },
       };
@@ -216,6 +216,7 @@ export class AddTrainingComponent {
           });
         });
       } else {
+        console.log(trainingData);
         this.trainingsService.postTraining(trainingData).subscribe({
           next: (response) => {
             // this.resetForm();
