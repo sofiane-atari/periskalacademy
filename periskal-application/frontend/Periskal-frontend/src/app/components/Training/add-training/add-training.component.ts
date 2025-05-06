@@ -21,8 +21,8 @@ export class AddTrainingComponent {
   nlForm!: FormGroup;
   deForm!: FormGroup;
   frForm!: FormGroup;
-  collapsedModules: { [key: number]: boolean } = {};
-  collapsedChapters: { [key: string]: boolean } = {};
+  moduleCollapsedState: { [lang: string]: { [moduleIndex: number]: boolean } } = {};
+  chapterCollapsedState: { [lang: string]: { [moduleIndex: number]: { [chapterIndex: number]: boolean } } } = {};
   selectedLanguage: String = "";
   languages = ['en', 'nl', 'fr', 'de'];
 
@@ -33,131 +33,144 @@ export class AddTrainingComponent {
     this.enForm = this.fb.group({
       name_en: ['', Validators.required],
       description_en: ['', Validators.required],
+      modules: this.fb.array([]),
+    });
+
+    this.languages.forEach(lang => {
+      this.moduleCollapsedState[lang] = {};
+      this.chapterCollapsedState[lang] = {};
     });
   }
 
-  // onLanguageChange(event: any) {
-  //   this.selectedLanguage = event.target.value;
-  // }
+  getModulesControls(lang: string): FormArray {
+    switch (lang) {
+      case 'en':
+        return this.enForm.get('modules') as FormArray;
+      case 'nl':
+        return this.nlForm.get('modules') as FormArray;
+      case 'fr':
+        return this.frForm.get('modules') as FormArray;
+      case 'de':
+        return this.deForm.get('modules') as FormArray;
+      default:
+        return this.fb.array([]);
+    }
+  }
 
-  // get modules(): FormArray {
-  //   return this.trainingForm.get('modules') as FormArray;
-  // }
+  getChaptersControls(lang: string, moduleIndex: number): FormArray {
+    const modules = this.getModulesControls(lang);
+    if (modules.at(moduleIndex) && modules.at(moduleIndex).get('chapters')) {
+      return modules.at(moduleIndex).get('chapters') as FormArray;
+    }
+    return this.fb.array([]);
+  }
 
-  // getChaptersControls(moduleIndex: number): any[] {
-  //   return (this.modules.at(moduleIndex).get('chapters') as FormArray).controls;
-  // }
+  addModule(lang: string) {
+    const modules = this.getModulesControls(lang);
+    modules.push(this.fb.group({
+      nameModule: ['', Validators.required],
+      descriptionModule: ['', Validators.required],
+      chapters: this.fb.array([])
+    }));
+    this.moduleCollapsedState[lang][modules.length - 1] = false; // Initially expanded
+  }
 
-  // createModule(): FormGroup {
-  //   return this.fb.group({
-  //     nameModule_en: ['', Validators.required],
-  //     descriptionModule_en: ['', Validators.required],
-  //     nameModule_nl: ['', Validators.required],
-  //     descriptionModule_nl: ['', Validators.required],
-  //     nameModule_fr: ['', Validators.required],
-  //     descriptionModule_fr: ['', Validators.required],
-  //     nameModule_de: ['', Validators.required],
-  //     descriptionModule_de: ['', Validators.required],
-  //     chapters: this.fb.array([this.createChapter()])
-  //   });
-  // }
+  // Method to remove a module for a specific language
+  removeModule(lang: string, moduleIndex: number) {
+    const modules = this.getModulesControls(lang);
+    modules.removeAt(moduleIndex);
+    delete this.moduleCollapsedState[lang][moduleIndex];
+  }
 
-  // createChapter(): FormGroup {
-  //   return this.fb.group({
-  //     nameChapter_en: ['', Validators.required],
-  //     descriptionChapter_en: ['', Validators.required],
-  //     textChapter_en: ['', Validators.required],
-  //     photos_en: [[]],
-  //     nameChapter_nl: ['', Validators.required],
-  //     descriptionChapter_nl: ['', Validators.required],
-  //     textChapter_nl: ['', Validators.required],
-  //     photos_nl: [[]],
-  //     nameChapter_fr: ['', Validators.required],
-  //     descriptionChapter_fr: ['', Validators.required],
-  //     textChapter_fr: ['', Validators.required],
-  //     photos_fr: [[]],
-  //     nameChapter_de: ['', Validators.required],
-  //     descriptionChapter_de: ['', Validators.required],
-  //     textChapter_de: ['', Validators.required],
-  //     photos_de: [[]]
-  //   });
-  // }
+  // Method to add a new chapter to a specific module in a language
+  addChapter(lang: string, moduleIndex: number) {
+    const chapters = this.getChaptersControls(lang, moduleIndex);
+    chapters.push(this.fb.group({
+      nameChapter: ['', Validators.required],
+      descriptionChapter: ['', Validators.required],
+      textChapter: ['', Validators.required],
+      photos: [''], // You might need a more complex control for file uploads
+      // video: [''] // You might need a more complex control for video uploads
+    }));
+    if (!this.chapterCollapsedState[lang][moduleIndex]) {
+      this.chapterCollapsedState[lang][moduleIndex] = {};
+    }
+    this.chapterCollapsedState[lang][moduleIndex][chapters.length - 1] = false; // Initially expanded
+  }
 
-  // addModule(): void {
-  //   const newIndex = this.modules.length;
-  //   this.modules.push(this.createModule());
-  //   //standaard nieuwe module uitgeklapt tonen
-  //   this.collapsedModules[newIndex] = false;
-  // }
+  // Method to remove a chapter from a specific module in a language
+  removeChapter(lang: string, moduleIndex: number, chapterIndex: number) {
+    const chapters = this.getChaptersControls(lang, moduleIndex);
+    chapters.removeAt(chapterIndex);
+    if (this.chapterCollapsedState[lang][moduleIndex]) {
+      delete this.chapterCollapsedState[lang][moduleIndex][chapterIndex];
+    }
+  }
 
-  // removeModule(index: number): void {
-  //   this.modules.removeAt(index);
-  // }
+  // Methods to handle module collapse state
+  isModuleCollapsed(lang: string, moduleIndex: number): boolean {
+    return this.moduleCollapsedState[lang]?.[moduleIndex] || false;
+  }
 
-  // addChapter(moduleIndex: number): void {
-  //   const chapters = this.modules.at(moduleIndex).get('chapters') as FormArray;
-  //   const newChapterIndex = chapters.length;
-  //   chapters.push(this.createChapter());
-  //   //standaard nieuw hoofdstuk uitgeklapt tonen
-  //   this.collapsedChapters[`${moduleIndex}-${newChapterIndex}`] = false;
-  // }
+  toggleModule(lang: string, moduleIndex: number) {
+    if (!this.moduleCollapsedState[lang]) {
+      this.moduleCollapsedState[lang] = {};
+    }
+    this.moduleCollapsedState[lang][moduleIndex] = !this.moduleCollapsedState[lang][moduleIndex];
+  }
 
-  // removeChapter(moduleIndex: number, chapterIndex: number): void {
-  //   const chapters = this.modules.at(moduleIndex).get('chapters') as FormArray;
-  //   chapters.removeAt(chapterIndex);
+  // Methods to handle chapter collapse state
+  isChapterCollapsed(lang: string, moduleIndex: number, chapterIndex: number): boolean {
+    return this.chapterCollapsedState[lang]?.[moduleIndex]?.[chapterIndex] || false;
+  }
 
-  //   //verwijder de collapse state voor dit hoofdstuk
-  //   delete this.collapsedChapters[`${moduleIndex}-${chapterIndex}`];
+  toggleChapter(lang: string, moduleIndex: number, chapterIndex: number) {
+    if (!this.chapterCollapsedState[lang]) {
+      this.chapterCollapsedState[lang] = {};
+    }
+    if (!this.chapterCollapsedState[lang][moduleIndex]) {
+      this.chapterCollapsedState[lang][moduleIndex] = {};
+    }
+    this.chapterCollapsedState[lang][moduleIndex][chapterIndex] = !this.chapterCollapsedState[lang][moduleIndex][chapterIndex];
+  }
 
-  //   //herorganiseer de indices van de overgebleven hoofdstukken
-  //   const newCollapsedChapters: { [key: string]: boolean } = {};
-  //   Object.keys(this.collapsedChapters).forEach(key => {
-  //     const [modIdx, chapIdx] = key.split('-').map(Number);
-  //     if (modIdx === moduleIndex && chapIdx > chapterIndex) {
-  //       newCollapsedChapters[`${modIdx}-${chapIdx - 1}`] = this.collapsedChapters[key];
-  //     } else if (modIdx === moduleIndex && chapIdx < chapterIndex) {
-  //       newCollapsedChapters[key] = this.collapsedChapters[key];
-  //     } else {
-  //       newCollapsedChapters[key] = this.collapsedChapters[key];
-  //     }
-  //   });
-  //   this.collapsedChapters = newCollapsedChapters;
-  // }
+  // Method to get the module title (you might fetch this dynamically or use a default)
+  getModuleTitle(lang: string, moduleIndex: number): string {
+    const moduleControl = this.getModulesControls(lang).at(moduleIndex) as FormGroup;
+    return moduleControl?.get('nameModule')?.value || 'New Module';
+  }
 
-  // toggleModule(index: number): void {
-  //   this.collapsedModules[index] = !this.isModuleCollapsed(index);
-  // }
-
-  // isModuleCollapsed(index: number): boolean {
-  //   return this.collapsedModules[index] === true;
-  // }
-
-  // toggleChapter(moduleIndex: number, chapterIndex: number): void {
-  //   const key = `${moduleIndex}-${chapterIndex}`;
-  //   this.collapsedChapters[key] = !this.isChapterCollapsed(moduleIndex, chapterIndex);
-  // }
-
-  // isChapterCollapsed(moduleIndex: number, chapterIndex: number): boolean {
-  //   const key = `${moduleIndex}-${chapterIndex}`;
-  //   return this.collapsedChapters[key] === true;
-  // }
-
-  // getModuleTitle(index: number): string {
-  //   const moduleControl = this.modules.at(index);
-  //   const title = moduleControl.get('nameModule')?.value;
-  //   return title ? title : 'Nieuwe module';
-  // }
-
-  // getChapterTitle(moduleIndex: number, chapterIndex: number): string {
-  //   const chapters = this.modules.at(moduleIndex).get('chapters') as FormArray;
-  //   const chapterControl = chapters.at(chapterIndex);
-  //   const title = chapterControl.get('nameChapter')?.value;
-  //   return title ? title : 'Nieuw hoofdstuk';
-  // }
+  // Method to get the chapter title
+  getChapterTitle(lang: string, moduleIndex: number, chapterIndex: number): string {
+    const chapterControl = this.getChaptersControls(lang, moduleIndex).at(chapterIndex) as FormGroup;
+    return chapterControl?.get('nameChapter')?.value || 'New Chapter';
+  }
 
   postTraining(): void {
-    if (this.trainingForm.valid) {
-      const trainingData = this.trainingForm.value;
+    if (this.trainingForm.valid && this.enForm.valid && this.nlForm.valid && this.deForm.valid && this.frForm.valid) {
+      const trainingData = {
+        product_code: this.trainingForm.value.product_code,
+        en: {
+          name: this.enForm.value.name,
+          description: this.enForm.value.description,
+          modules: (this.enForm.get('modules') as FormArray).value,
+        },
+        nl: {
+          name: this.nlForm.value.name,
+          description: this.nlForm.value.description,
+          modules: (this.nlForm.get('modules') as FormArray).value,
+        },
+        fr: {
+          name: this.frForm.value.name,
+          description: this.frForm.value.description,
+          modules: (this.frForm.get('modules') as FormArray).value,
+        },
+        de: {
+          name: this.deForm.value.name,
+          description: this.deForm.value.description,
+          modules: (this.deForm.get('modules') as FormArray).value,
+        },
+      };
 
       const fileInput = this.trainingForm.get('image')?.value;
 
@@ -165,7 +178,7 @@ export class AddTrainingComponent {
       if (fileInput) {
         this.convertToBase64(fileInput).then((base64Image: string) => {
           // Add the base64 image to the trainingData
-          trainingData.modules.forEach((module: { chapters: any[]; }) => {
+          trainingData.en.modules.forEach((module: { chapters: any[]; }) => {
             module.chapters.forEach(chapter => {
               chapter.photos.forEach((photo: { imageData: string; }) => {
                 photo.imageData = base64Image;

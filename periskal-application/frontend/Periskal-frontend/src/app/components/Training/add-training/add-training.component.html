@@ -1,5 +1,6 @@
 <div class="stepper-container">
   <mat-horizontal-stepper linear #stepper class="custom-stepper">
+    <!-- Step 1 training info-->
     <mat-step [stepControl]="trainingForm">
       <form [formGroup]="trainingForm">
         <ng-template matStepLabel>{{ "TRAINING_INFORMATION" | translate }}</ng-template>
@@ -16,29 +17,111 @@
         </div>
       </form>
     </mat-step>
-
+    <!-- Step 2 English-->
     <mat-step [stepControl]="enForm">
       <form [formGroup]="enForm">
         <ng-template matStepLabel>{{ "LANGUAGE_EN" | translate }}</ng-template>
 
         <mat-form-field appearance="fill" class="full-width">
-          <mat-label>{{ "MODULE_NAME_EN" | translate }}</mat-label>
+          <mat-label>Training name (EN)</mat-label>
           <input matInput formControlName="name_en" required />
         </mat-form-field>
 
         <mat-form-field appearance="fill" class="full-width">
-          <mat-label>{{ "DESCRIPTION_EN" | translate }}</mat-label>
-          <textarea matInput formControlName="description_en" required></textarea>
+          <mat-label>Training description (EN)</mat-label>
+          <input matInput formControlName="description_en" required />
         </mat-form-field>
+
+        <h3>{{ "MODULE_INFORMATION_EN" | translate }}</h3>
+        <div formArrayName="modules">
+          @for (module of getModulesControls('en').controls; track moduleIndex; let moduleIndex = $index) {
+          <div [formGroupName]="moduleIndex" class="module">
+            <div class="module-header" (click)="toggleModule('en', moduleIndex)">
+              <span class="toggle-icon">{{ isModuleCollapsed('en', moduleIndex) ? '►' : '▼' }}</span>
+              <h4>{{ "MODULE" | translate }} {{ moduleIndex + 1 }}: {{ getModuleTitle('en', moduleIndex) }}</h4>
+            </div>
+            <div [hidden]="isModuleCollapsed('en', moduleIndex)" class="module-content">
+              <div>
+                <label>{{ "MODULE_TITLE" | translate }}</label>
+                <input matInput formControlName="nameModule" placeholder="{{ 'ENTER_MODULE_TITLE_IN' | translate }} en" required />
+              </div>
+              <div>
+                <label>{{ "MODULE_DESCRIPTION" | translate }}</label>
+                <textarea matInput formControlName="descriptionModule" placeholder="{{ 'ENTER_MODULE_DESCRIPTION_IN' | translate }} en" required></textarea>
+              </div>
+
+              <h4>{{ "CHAPTERS_MODULE" | translate }} {{ moduleIndex + 1 }}</h4>
+              <div formArrayName="chapters">
+                @for (chapter of getChaptersControls('en', moduleIndex).controls; track chapterIndex; let chapterIndex = $index) {
+                <div [formGroupName]="chapterIndex" class="chapter">
+                  <div class="chapter-header" (click)="toggleChapter('en', moduleIndex, chapterIndex)">
+                    <span class="toggle-icon">{{ isChapterCollapsed('en', moduleIndex, chapterIndex) ? '►' : '▼' }}</span>
+                    <h5>{{ "CHAPTER" | translate }} {{ chapterIndex + 1 }}: {{ getChapterTitle('en', moduleIndex, chapterIndex) }}</h5>
+                  </div>
+                  <div [hidden]="isChapterCollapsed('en', moduleIndex, chapterIndex)" class="chapter-content">
+                    <div>
+                      <label>{{ "CHAPTER_TITLE" | translate }}</label>
+                      <input matInput formControlName="nameChapter" placeholder="{{ 'ENTER_CHAPTER_TITLE_IN' | translate }} en" required />
+                    </div>
+                    <div>
+                      <label>{{ "CHAPTER_DESCRIPTION" | translate }}</label>
+                      <textarea matInput formControlName="descriptionChapter" placeholder="{{ 'ENTER_CHAPTER_DESCRIPTION_IN' | translate }} en" required></textarea>
+                    </div>
+                    <div>
+                      <label>{{ "CHAPTER_TEXT" | translate }}</label>
+                      <textarea matInput formControlName="textChapter" placeholder="{{ 'ENTER_CHAPTER_TEXT_IN' | translate }} en" required></textarea>
+                      <app-photo-upload formControlName="photos"></app-photo-upload>
+                      <app-video-upload></app-video-upload>
+                    </div>
+                    @if(chapterIndex != 0) {
+                    <button mat-button color="warn" type="button" (click)="removeChapter('en', moduleIndex, chapterIndex)">
+                      {{ "DELETE_CHAPTER" | translate }}
+                    </button>
+                    }
+                  </div>
+                </div>
+                }
+              </div>
+              <div>
+                <button mat-button color="primary" type="button" (click)="addChapter('en', moduleIndex)">
+                  {{ "ADD_NEW_CHAPTER" | translate }}
+                </button>
+              </div>
+
+              @if(moduleIndex != 0) {
+              <button mat-button color="warn" type="button" (click)="removeModule('en', moduleIndex)">
+                {{ "DELETE_MODULE" | translate }}
+              </button>
+              }
+            </div>
+          </div>
+          }
+        </div>
+        <div>
+          <button mat-button color="primary" type="button" (click)="addModule('en')">
+            {{ "ADD_NEW_MODULE" | translate }}
+          </button>
+        </div>
 
         <div class="stepper-buttons">
           <button mat-raised-button color="accent" class="gold-button" matStepperPrevious>{{ "PREVIOUS" | translate }}</button>
-          <button mat-raised-button color="accent" class="gold-button" (onclick)="postTraining()" matStepperNext [disabled]="enForm.invalid">
-            {{ "SUBMIT" | translate }}
+          <button mat-raised-button color="accent" class="gold-button" matStepperNext [disabled]="enForm.invalid">
+            {{ "NEXT" | translate }}
           </button>
         </div>
       </form>
     </mat-step>
-
+    <!-- Step 3 dutch-->
+    <mat-step>
+      <p>Dutch placeholder</p>
+    </mat-step>
+    <!-- Step 4 French-->
+    <mat-step>
+      <p>French placeholder</p>
+    </mat-step>
+    <!-- Step 5 German-->
+    <mat-step>
+      <p>German placeholder</p>
+    </mat-step>
     </mat-horizontal-stepper>
 </div>
