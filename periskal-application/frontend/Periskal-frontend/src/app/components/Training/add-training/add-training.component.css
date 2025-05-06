@@ -167,7 +167,22 @@ mat-tab-group::ng-deep .mat-ink-bar {
   transition: transform 0.2s ease, background-color 0.3s ease;
 }
 
+.gold-small-button {
+  background-color: #f0d04b;
+  color: #2c2c2c;
+  font-weight: bold;
+  border-radius: 8px;
+  padding: 0.6rem 1.4rem;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  size: 75%;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
 .gold-button:hover {
+  background-color: #e0c040;
+  transform: translateY(-2px);
+}
+.gold-small-button:hover {
   background-color: #e0c040;
   transform: translateY(-2px);
 }

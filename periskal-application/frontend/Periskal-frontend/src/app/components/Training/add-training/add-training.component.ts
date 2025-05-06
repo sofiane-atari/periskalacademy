@@ -120,9 +120,9 @@ export class AddTrainingComponent implements OnInit { // Implement OnInit
   addChapter(moduleIndex: number): void {
     this.getChapters(moduleIndex).push(this.createChapter());
   }
-
   removeChapter(moduleIndex: number, chapterIndex: number): void {
-    this.getChapters(moduleIndex).removeAt(chapterIndex);
+    const chapters = (this.trainingForm.get(['modules', moduleIndex, 'chapters']) as FormArray);
+    chapters.removeAt(chapterIndex);
   }
 
   postTraining(): void {
