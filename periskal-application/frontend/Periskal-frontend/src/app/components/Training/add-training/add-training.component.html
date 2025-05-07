@@ -52,7 +52,7 @@
           </mat-tab>
         </mat-tab-group>
         <div formArrayName="modules">
-          <mat-accordion>
+          <mat-accordion multi>
             @for (module of modules.controls; track $index; let moduleIndex = $index) {
             <mat-expansion-panel>
               <mat-expansion-panel-header>
@@ -104,9 +104,13 @@
         
                 <h4>{{ "CHAPTERS" | translate }}</h4>
                 <div formArrayName="chapters">
+                  <mat-accordion>
                   @for (chapter of getChapters(moduleIndex).controls; track $index; let chapterIndex = $index) {
                   <div [formGroupName]="chapterIndex" class="chapter">
-                    <h5>{{ "CHAPTER" | translate }} {{ chapterIndex + 1 }}</h5>
+                    <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                      <h5>{{ "CHAPTER" | translate }} {{ chapterIndex + 1 }}</h5>
+                    </mat-expansion-panel-header>
                     <mat-tab-group>
                       <mat-tab label="{{ 'LANGUAGE_EN' | translate }}">
                         <mat-form-field appearance="fill" class="full-width">
@@ -121,6 +125,8 @@
                           <mat-label>{{ "CHAPTER_TEXT_EN" | translate }}</mat-label>
                           <textarea matInput formControlName="textChapter_en" required></textarea>
                         </mat-form-field>
+                        <app-photo-upload formControlName="photos_en"></app-photo-upload>
+                        <app-video-upload></app-video-upload>  
                       </mat-tab>
                       <mat-tab label="{{ 'LANGUAGE_NL' | translate }}">
                         <mat-form-field appearance="fill" class="full-width">
@@ -135,6 +141,8 @@
                           <mat-label>{{ "CHAPTER_TEXT_NL" | translate }}</mat-label>
                           <textarea matInput formControlName="textChapter_nl" required></textarea>
                         </mat-form-field>
+                        <app-photo-upload formControlName="photos_nl"></app-photo-upload>
+                        <app-video-upload></app-video-upload>  
                       </mat-tab>
                       <mat-tab label="{{ 'LANGUAGE_FR' | translate }}">
                         <mat-form-field appearance="fill" class="full-width">
@@ -149,6 +157,8 @@
                           <mat-label>{{ "CHAPTER_TEXT_FR" | translate }}</mat-label>
                           <textarea matInput formControlName="textChapter_fr" required></textarea>
                         </mat-form-field>
+                        <app-photo-upload formControlName="photos_fr"></app-photo-upload>
+                        <app-video-upload></app-video-upload>  
                       </mat-tab>
                       <mat-tab label="{{ 'LANGUAGE_DE' | translate }}">
                         <mat-form-field appearance="fill" class="full-width">
@@ -163,6 +173,8 @@
                           <mat-label>{{ "CHAPTER_TEXT_DE" | translate }}</mat-label>
                           <textarea matInput formControlName="textChapter_de" required></textarea>
                         </mat-form-field>
+                        <app-photo-upload formControlName="photos_de"></app-photo-upload>
+                        <app-video-upload></app-video-upload>  
                       </mat-tab>
                     </mat-tab-group>
                     @if(getChapters(moduleIndex).controls.length > 1) {
@@ -170,8 +182,10 @@
                       {{ "DELETE_CHAPTER" | translate }}
                     </button>
                     }
+                  </mat-expansion-panel>
                   </div>
                   }
+                </mat-accordion>
                 </div>
                 <button mat-button color="primary" type="button" class="gold-small-button" (click)="addChapter(moduleIndex)">
                   {{ "ADD_NEW_CHAPTER" | translate }}

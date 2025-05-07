@@ -1,5 +1,6 @@
 package periskal.academy.backend.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,6 +16,7 @@ import periskal.academy.backend.jpa.Chapter;
 import periskal.academy.backend.jpa.Module;
 import periskal.academy.backend.jpa.ModuleRepository;
 import periskal.academy.backend.jpa.Photo;
+import periskal.academy.backend.jpa.PhotoRepository;
 import periskal.academy.backend.jpa.Training;
 import periskal.academy.backend.jpa.TrainingRepository;
 import periskal.academy.backend.security.Exceptions.General.ResourceNotFoundException;
@@ -26,10 +28,13 @@ public class TrainingService {
 
     private TrainingRepository trainingRepository;
     private ModuleRepository moduleRepository;
+    private PhotoRepository photoRepository;
 
-    public TrainingService(TrainingRepository trainingRepository, ModuleRepository moduleRepository) {
+    public TrainingService(TrainingRepository trainingRepository, ModuleRepository moduleRepository,
+            PhotoRepository photoRepository) {
         this.trainingRepository = trainingRepository;
         this.moduleRepository = moduleRepository;
+        this.photoRepository = photoRepository;
     }
 
     private TrainingDTO convertToDto(Training training) {
@@ -80,13 +85,11 @@ public class TrainingService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public Training createTraining(Training entity) {
-
         if (entity == null) {
             throw new ValidationException("Training data cannot be null.");
         }
-        // We could add more validation here, like checking if the training already
-        // exists, etc
         if (entity.getName_en() == null || entity.getName_en().isBlank()) {
             throw new ValidationException("Training name (English) cannot be empty.");
         }
@@ -94,12 +97,15 @@ public class TrainingService {
         if (entity.getModules() != null) {
             for (Module module : entity.getModules()) {
                 module.setTraining(entity);
+                System.out.println(module.getId());
                 if (module.getChapters() != null) {
                     for (Chapter chapter : module.getChapters()) {
                         chapter.setModule(module);
+                        System.out.println(chapter.getId());
                         if (chapter.getPhotos_en() != null) {
                             for (Photo photo : chapter.getPhotos_en()) {
                                 photo.setChapter(chapter);
+                                photoRepository.save(photo);
                             }
                         }
                     }
@@ -107,8 +113,27 @@ public class TrainingService {
             }
         }
 
+        System.out.println(entity);
         try {
-            return trainingRepository.save(entity);
+            Training savedTraining = trainingRepository.save(entity);
+            System.out.println(savedTraining);
+            if (savedTraining.getModules() != null) {
+                for (Module module : savedTraining.getModules()) {
+                    System.out.println(module.getId());
+                    if (module.getChapters() != null) {
+                        for (Chapter chapter : module.getChapters()) {
+                            System.out.println(chapter.getId());
+                            if (chapter.getPhotos_en() != null) {
+                                for (Photo photo : chapter.getPhotos_en()) {
+                                    System.out.println(
+                                            photo.getChapter() != null ? photo.getChapter().getId() : null);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return savedTraining;
         } catch (DataIntegrityViolationException e) {
             log.error("Failed to create training due to data integrity violation: {}", e.getMessage());
             throw e;
