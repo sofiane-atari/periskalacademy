@@ -67,6 +67,10 @@
   color: #333 !important;
 }
 
+#mat-tab-group-2-content-0 > div > mat-form-field:nth-child(1) > div.mat-mdc-form-field-subscript-wrapper.mat-mdc-form-field-bottom-align {
+  display: none
+}
+
 .custom-stepper .mat-step-header .mat-step-icon-state-done {
   background-color: #a88f34 !important;
   color: #fff !important;

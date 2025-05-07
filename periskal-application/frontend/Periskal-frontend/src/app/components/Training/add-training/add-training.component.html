@@ -1,155 +1,320 @@
-<div class="columns">
-  <div class="column"></div>
-  <div class="column">
-    <h1>{{'NEW_TRAINING_CREATE' | translate}}</h1>
-    <form [formGroup]="trainingForm" (ngSubmit)="postTraining()">
-      <h3 class="modules">{{'TRAINING_INFORMATION' | translate}}</h3>
-      <label>{{'PRODUCT_CODE' | translate}}</label>
-      <input
-        formControlName="product_code"
-        class="input"
-        placeholder="Geef de code in waarmee deze training gelinkt is. Bv. ECDIS"
-        required
-      />
-      @for (lang of languages; track $index) {
-      <div class="field">
-        <label>{{'TRAINING_NAME' | translate}}</label>
-        <input
-          formControlName="name_{{lang}}"
-          class="input"
-          placeholder="Geef de naam van de nieuwe training in {{lang}}"
-          required
-        />
-      </div>
-    }
-    @for (lang of languages; track $index) {
-      <div class="field">
-        <label>{{'DESCRIPTION' | translate}}</label>
-        <textarea
-          formControlName="description_{{lang}}"
-          id="description"
-          class="form-control"
-          placeholder="Geef de beschrijving van de nieuwe training in {{lang}}"
-          name="description"
-          required
-        >
-        </textarea>
-      </div>
-    }
-      <h3 class="modules">{{"MODULE_INFORMATION" | translate}}</h3>
-      <div formArrayName="modules">
-        @for (module of modules.controls; track moduleIndex; let moduleIndex = $index) {
-        <div [formGroupName]="moduleIndex" class="module">
-          <div class="module-header" (click)="toggleModule(moduleIndex)">
-            <span class="toggle-icon">{{ isModuleCollapsed(moduleIndex) ? '►' : '▼' }}</span>
-            <h4>{{"MODULE" | translate}} {{ moduleIndex + 1 }}: {{ getModuleTitle(moduleIndex) }}</h4>
-          </div>
-          <div [hidden]="isModuleCollapsed(moduleIndex)" class="module-content">
-            @for (lang of languages; track $index) {
-            <div>
-              <label>{{"MODULE_TITLE" | translate}}</label>
-              <input
-                formControlName="nameModule_{{lang}}"
-                placeholder="Geef de titel van module {{ moduleIndex + 1 }} in {{lang}}"
-                required
-              />
-            </div>
-            <div>
-              <label>{{"MODULE_DESCRIPTION" | translate}}</label>
-              <textarea
-                formControlName="descriptionModule_{{lang}}"
-                id="descriptionModule_{{lang}}{{ moduleIndex }}"
-                class="form-control"
-                placeholder="Geef de beschrijving van module {{ moduleIndex + 1 }} in {{lang}}"
-                name="descriptionModule_{{lang}}{{ moduleIndex }}"
-                required
-              >
-              </textarea>
-            </div>
-          }
-            <div>
-              <h4>{{"CHAPTERS_MODULE" | translate}} {{ moduleIndex + 1 }}</h4>
-              <div formArrayName="chapters">
-                @for (chapter of getChaptersControls(moduleIndex); track chapterIndex; let chapterIndex = $index) {
-                <div [formGroupName]="chapterIndex" class="chapter">
-                  <div class="chapter-header" (click)="toggleChapter(moduleIndex, chapterIndex)">
-                    <span class="toggle-icon">{{ isChapterCollapsed(moduleIndex, chapterIndex) ? '►' : '▼' }}</span>
-                    <h5>{{"CHAPTER" | translate}} {{ chapterIndex + 1 }}: {{ getChapterTitle(moduleIndex, chapterIndex) }}</h5>
-                  </div>
-                  
-                  <div [hidden]="isChapterCollapsed(moduleIndex, chapterIndex)" class="chapter-content">
-                    @for (lang of languages; track $index) {
-                    <div>
-                      <label>{{"CHAPTER_TITLE" | translate}}</label>
-                      <input
-                        formControlName="nameChapter_{{lang}}"
-                        placeholder="Geef de titel van hoofdstuk {{ chapterIndex + 1 }} in {{lang}}"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label>{{"CHAPTER_DESCRIPTION" | translate}}</label>
-                      <textarea
-                        formControlName="descriptionChapter_{{lang}}"
-                        id="descriptionChapter_{{lang}}{{ moduleIndex }}_{{ chapterIndex }}"
-                        class="form-control"
-                        placeholder="Geef de beschrijving van hoofdstuk {{ chapterIndex + 1 }} in {{lang}}"
-                        name="descriptionChapter_{{lang}}{{ moduleIndex }}_{{ chapterIndex }}"
-                        required
-                      >
-                      </textarea>
-                    </div>
-                    <div>
-                      <label>{{"CHAPTER_TEXT" | translate}}</label>
-                      <textarea
-                        formControlName="textChapter_{{lang}}"
-                        id="textChapter_{{lang}}{{ moduleIndex }}_{{ chapterIndex }}"
-                        class="form-control"
-                        placeholder="Geef de tekst van hoofdstuk {{ chapterIndex + 1 }} in {{lang}}"
-                        name="textChapter_{{lang}}{{ moduleIndex }}_{{ chapterIndex }}"
-                        required
-                      >
-                      </textarea>
-                      <app-photo-upload formControlName="photos_{{lang}}"></app-photo-upload>
-                      <app-video-upload></app-video-upload>
-                    </div>
-                  }
-                    @if(chapterIndex!=0) {
-                    <button class="delete" type="button" (click)="removeChapter(moduleIndex, chapterIndex)">
-                      {{"DELETE_CHAPTER" | translate}}
+<div class="stepper-container">
+  <h2>{{'NEW_TRAINING_CREATE' |translate}}</h2>
+  <mat-horizontal-stepper linear #stepper class="custom-stepper">
+    <mat-step>
+      <form [formGroup]="trainingForm">
+      <ng-template matStepLabel>{{ "TRAINING_INFORMATION" | translate }}</ng-template>
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>{{'PRODUCT_CODE' |translate }}</mat-label>
+        <input matInput formControlName="product_code" required />
+      </mat-form-field>
+      <ng-template matStepLabel>{{ "MODULES" | translate }}</ng-template>
+        <mat-tab-group>
+          <mat-tab label="{{'LANGUAGE_EN' | translate}}">
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>{{'TRAINING_NAME_EN' |translate}}</mat-label>
+              <input matInput formControlName="name_en">
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>{{'TRAINING_DESCRIPTION_EN' | translate}}</mat-label>
+              <textarea matInput formControlName="description_en"></textarea>
+            </mat-form-field>
+          </mat-tab>
+          <mat-tab label="{{'LANGUAGE_NL' | translate}}">
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>{{'TRAINING_NAME_NL' |translate}}</mat-label>
+              <input matInput formControlName="name_nl">
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>{{'TRAINING_DESCRIPTION_NL' | translate}}</mat-label>
+              <textarea matInput formControlName="description_nl"></textarea>
+            </mat-form-field>
+          </mat-tab>
+          <mat-tab label="{{'LANGUAGE_FR' | translate}}">
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>{{'TRAINING_NAME_FR' |translate}}</mat-label>
+              <input matInput formControlName="name_fr">
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>{{'TRAINING_DESCRIPTION_FR' | translate}}</mat-label>
+              <textarea matInput formControlName="description_fr"></textarea>
+            </mat-form-field>
+          </mat-tab>
+          <mat-tab label="{{'LANGUAGE_DE' | translate}}">
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>{{'TRAINING_NAME_DE' |translate}}</mat-label>
+              <input matInput formControlName="name_de">
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>{{'TRAINING_DESCRIPTION_DE' | translate}}</mat-label>
+              <textarea matInput formControlName="description_de"></textarea>
+            </mat-form-field>
+          </mat-tab>
+        </mat-tab-group>
+        <div formArrayName="modules">
+          <mat-accordion multi>
+            @for (module of modules.controls; track $index; let moduleIndex = $index) {
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <h3>{{ "MODULE" | translate }} {{ moduleIndex + 1 }}</h3>
+              </mat-expansion-panel-header>
+              <div [formGroupName]="moduleIndex" class="module">
+                <mat-tab-group>
+                  <mat-tab label="{{ 'LANGUAGE_EN' | translate }}">
+                    <mat-form-field appearance="fill" class="full-width">
+                      <mat-label>{{ "MODULE_NAME_EN" | translate }}</mat-label>
+                      <input matInput formControlName="nameModule_en" required />
+                    </mat-form-field>
+                    <mat-form-field appearance="fill" class="full-width">
+                      <mat-label>{{ "DESCRIPTION_EN" | translate }}</mat-label>
+                      <textarea matInput formControlName="descriptionModule_en" required></textarea>
+                    </mat-form-field>
+                  </mat-tab>
+                  <mat-tab label="{{ 'LANGUAGE_NL' | translate }}">
+                    <mat-form-field appearance="fill" class="full-width">
+                      <mat-label>{{ "MODULE_NAME_NL" | translate }}</mat-label>
+                      <input matInput formControlName="nameModule_nl" required />
+                    </mat-form-field>
+                    <mat-form-field appearance="fill" class="full-width">
+                      <mat-label>{{ "DESCRIPTION_NL" | translate }}</mat-label>
+                      <textarea matInput formControlName="descriptionModule_nl" required></textarea>
+                    </mat-form-field>
+                  </mat-tab>
+                  <mat-tab label="{{ 'LANGUAGE_FR' | translate }}">
+                    <mat-form-field appearance="fill" class="full-width">
+                      <mat-label>{{ "MODULE_NAME_FR" | translate }}</mat-label>
+                      <input matInput formControlName="nameModule_fr" required />
+                    </mat-form-field>
+                    <mat-form-field appearance="fill" class="full-width">
+                      <mat-label>{{ "DESCRIPTION_FR" | translate }}</mat-label>
+                      <textarea matInput formControlName="descriptionModule_fr" required></textarea>
+                    </mat-form-field>
+                  </mat-tab>
+                  <mat-tab label="{{ 'LANGUAGE_DE' | translate }}">
+                    <mat-form-field appearance="fill" class="full-width">
+                      <mat-label>{{ "MODULE_NAME_DE" | translate }}</mat-label>
+                      <input matInput formControlName="nameModule_de" required />
+                    </mat-form-field>
+                    <mat-form-field appearance="fill" class="full-width">
+                      <mat-label>{{ "DESCRIPTION_DE" | translate }}</mat-label>
+                      <textarea matInput formControlName="descriptionModule_de" required></textarea>
+                    </mat-form-field>
+                  </mat-tab>
+                </mat-tab-group>
+        
+                <h4>{{ "CHAPTERS" | translate }}</h4>
+                <div formArrayName="chapters">
+                  <mat-accordion>
+                  @for (chapter of getChapters(moduleIndex).controls; track $index; let chapterIndex = $index) {
+                  <div [formGroupName]="chapterIndex" class="chapter">
+                    <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                      <h5>{{ "CHAPTER" | translate }} {{ chapterIndex + 1 }}</h5>
+                    </mat-expansion-panel-header>
+                    <mat-tab-group>
+                      <mat-tab label="{{ 'LANGUAGE_EN' | translate }}">
+                        <mat-form-field appearance="fill" class="full-width">
+                          <mat-label>{{ "CHAPTER_NAME_EN" | translate }}</mat-label>
+                          <input matInput formControlName="nameChapter_en" required />
+                        </mat-form-field>
+                        <mat-form-field appearance="fill" class="full-width">
+                          <mat-label>{{ "CHAPTER_DESCRIPTION_EN" | translate }}</mat-label>
+                          <textarea matInput formControlName="descriptionChapter_en" required></textarea>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill" class="full-width">
+                          <mat-label>{{ "CHAPTER_TEXT_EN" | translate }}</mat-label>
+                          <textarea matInput formControlName="textChapter_en" required></textarea>
+                        </mat-form-field>
+                        <app-photo-upload formControlName="photos_en"></app-photo-upload>
+                        <app-video-upload></app-video-upload>  
+                      </mat-tab>
+                      <mat-tab label="{{ 'LANGUAGE_NL' | translate }}">
+                        <mat-form-field appearance="fill" class="full-width">
+                          <mat-label>{{ "CHAPTER_NAME_NL" | translate }}</mat-label>
+                          <input matInput formControlName="nameChapter_nl" required />
+                        </mat-form-field>
+                        <mat-form-field appearance="fill" class="full-width">
+                          <mat-label>{{ "CHAPTER_DESCRIPTION_NL" | translate }}</mat-label>
+                          <textarea matInput formControlName="descriptionChapter_nl" required></textarea>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill" class="full-width">
+                          <mat-label>{{ "CHAPTER_TEXT_NL" | translate }}</mat-label>
+                          <textarea matInput formControlName="textChapter_nl" required></textarea>
+                        </mat-form-field>
+                        <app-photo-upload formControlName="photos_nl"></app-photo-upload>
+                        <app-video-upload></app-video-upload>  
+                      </mat-tab>
+                      <mat-tab label="{{ 'LANGUAGE_FR' | translate }}">
+                        <mat-form-field appearance="fill" class="full-width">
+                          <mat-label>{{ "CHAPTER_NAME_FR" | translate }}</mat-label>
+                          <input matInput formControlName="nameChapter_fr" required />
+                        </mat-form-field>
+                        <mat-form-field appearance="fill" class="full-width">
+                          <mat-label>{{ "CHAPTER_DESCRIPTION_FR" | translate }}</mat-label>
+                          <textarea matInput formControlName="descriptionChapter_fr" required></textarea>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill" class="full-width">
+                          <mat-label>{{ "CHAPTER_TEXT_FR" | translate }}</mat-label>
+                          <textarea matInput formControlName="textChapter_fr" required></textarea>
+                        </mat-form-field>
+                        <app-photo-upload formControlName="photos_fr"></app-photo-upload>
+                        <app-video-upload></app-video-upload>  
+                      </mat-tab>
+                      <mat-tab label="{{ 'LANGUAGE_DE' | translate }}">
+                        <mat-form-field appearance="fill" class="full-width">
+                          <mat-label>{{ "CHAPTER_NAME_DE" | translate }}</mat-label>
+                          <input matInput formControlName="nameChapter_de" required />
+                        </mat-form-field>
+                        <mat-form-field appearance="fill" class="full-width">
+                          <mat-label>{{ "CHAPTER_DESCRIPTION_DE" | translate }}</mat-label>
+                          <textarea matInput formControlName="descriptionChapter_de" required></textarea>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill" class="full-width">
+                          <mat-label>{{ "CHAPTER_TEXT_DE" | translate }}</mat-label>
+                          <textarea matInput formControlName="textChapter_de" required></textarea>
+                        </mat-form-field>
+                        <app-photo-upload formControlName="photos_de"></app-photo-upload>
+                        <app-video-upload></app-video-upload>  
+                      </mat-tab>
+                    </mat-tab-group>
+                    @if(getChapters(moduleIndex).controls.length > 1) {
+                    <button mat-button color="warn" type="button" class="gold-small-button" (click)="removeChapter(moduleIndex, chapterIndex)">
+                      {{ "DELETE_CHAPTER" | translate }}
                     </button>
                     }
+                  </mat-expansion-panel>
                   </div>
+                  }
+                </mat-accordion>
                 </div>
+                <button mat-button color="primary" type="button" class="gold-small-button" (click)="addChapter(moduleIndex)">
+                  {{ "ADD_NEW_CHAPTER" | translate }}
+                </button>
+                @if (modules.controls.length > 1) {
+                <button mat-button color="warn" type="button" class="gold-small-button" (click)="removeModule(moduleIndex)">
+                  {{ "DELETE_MODULE" | translate }}
+                </button>
                 }
               </div>
-              <div>
-                <button type="button" (click)="addChapter(moduleIndex)">
-                  {{"ADD_NEW_CHAPTER" | translate}}
-                </button>
-              </div>
-            </div>
-            
-            @if(moduleIndex!=0) {
-            <button class="delete" type="button" (click)="removeModule(moduleIndex)">
-              {{"DELETE_MODULE" | translate}}
-            </button>
+            </mat-expansion-panel>
             }
-          </div>
+          </mat-accordion>
         </div>
-        }
-      </div>
-      <div>
-        <button type="button" (click)="addModule()">
-          {{'ADD_NEW_MODULE' | translate}}
+        <button mat-button color="primary" type="button" class="gold-small-button" (click)="addModule()">
+          {{ "ADD_NEW_MODULE" | translate }}
+        </button>
+        <div class="stepper-buttons">
+          <button mat-raised-button color="accent" class="gold-button" matStepperPrevious>{{ "BACK" | translate }}</button>
+          <button mat-raised-button color="accent" class="gold-button" matStepperNext>
+            {{ "NEXT" | translate }}
+          </button>
+        </div>
+      </form>
+    </mat-step>
+
+    <mat-step>
+      <ng-template matStepLabel>{{ "REVIEW_SUBMIT" | translate }}</ng-template>
+    
+      <mat-card>
+        <mat-card-title class="title_summary">{{ "TRAINING_SUMMARY" | translate }}</mat-card-title>
+        <mat-card-content>
+          <p><strong>{{ 'PRODUCT_CODE' | translate }}:</strong> {{ trainingForm.value.product_code }}</p>
+    
+          <mat-tab-group>
+            <mat-tab label="{{ 'LANGUAGE_EN' | translate }}">
+              <p><strong>{{ 'TRAINING_NAME_EN' | translate }}:</strong> {{ trainingForm.value.name_en }}</p>
+              <p><strong>{{ 'TRAINING_DESCRIPTION_EN' | translate }}:</strong> {{ trainingForm.value.description_en }}</p>
+            </mat-tab>
+            <mat-tab label="{{ 'LANGUAGE_NL' | translate }}">
+              <p><strong>{{ 'TRAINING_NAME_NL' | translate }}:</strong> {{ trainingForm.value.name_nl }}</p>
+              <p><strong>{{ 'TRAINING_DESCRIPTION_NL' | translate }}:</strong> {{ trainingForm.value.description_nl }}</p>
+            </mat-tab>
+            <mat-tab label="{{ 'LANGUAGE_FR' | translate }}">
+              <p><strong>{{ 'TRAINING_NAME_FR' | translate }}:</strong> {{ trainingForm.value.name_fr }}</p>
+              <p><strong>{{ 'TRAINING_DESCRIPTION_FR' | translate }}:</strong> {{ trainingForm.value.description_fr }}</p>
+            </mat-tab>
+            <mat-tab label="{{ 'LANGUAGE_DE' | translate }}">
+              <p><strong>{{ 'TRAINING_NAME_DE' | translate }}:</strong> {{ trainingForm.value.name_de }}</p>
+              <p><strong>{{ 'TRAINING_DESCRIPTION_DE' | translate }}:</strong> {{ trainingForm.value.description_de }}</p>
+            </mat-tab>
+          </mat-tab-group>
+          <mat-accordion class="module-summary" multi>
+            @for (module of trainingForm.value.modules; track $index) {
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  {{ "MODULE" | translate }} {{ $index + 1 }}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+        
+              <mat-tab-group>
+                <mat-tab label="{{ 'LANGUAGE_EN' | translate }}">
+                  <p><strong>{{ "MODULE_NAME_EN" | translate }}:</strong> {{ module.nameModule_en }}</p>
+                  <p><strong>{{ "DESCRIPTION_EN" | translate }}:</strong> {{ module.descriptionModule_en }}</p>
+                </mat-tab>
+                <mat-tab label="{{ 'LANGUAGE_NL' | translate }}">
+                  <p><strong>{{ "MODULE_NAME_NL" | translate }}:</strong> {{ module.nameModule_nl }}</p>
+                  <p><strong>{{ "DESCRIPTION_NL" | translate }}:</strong> {{ module.descriptionModule_nl }}</p>
+                </mat-tab>
+                <mat-tab label="{{ 'LANGUAGE_FR' | translate }}">
+                  <p><strong>{{ "MODULE_NAME_FR" | translate }}:</strong> {{ module.nameModule_fr }}</p>
+                  <p><strong>{{ "DESCRIPTION_FR" | translate }}:</strong> {{ module.descriptionModule_fr }}</p>
+                </mat-tab>
+                <mat-tab label="{{ 'LANGUAGE_DE' | translate }}">
+                  <p><strong>{{ "MODULE_NAME_DE" | translate }}:</strong> {{ module.nameModule_de }}</p>
+                  <p><strong>{{ "DESCRIPTION_DE" | translate }}:</strong> {{ module.descriptionModule_de }}</p>
+                </mat-tab>
+              </mat-tab-group>
+        
+              <h4>{{ "CHAPTERS" | translate }}</h4>
+              <mat-accordion>
+                @for(chapter of module.chapters; track $index; let j = $index) {
+                <mat-expansion-panel>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      {{ "CHAPTER" | translate }} {{ j + 1 }}
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+        
+                  <mat-tab-group>
+                    <mat-tab label="{{ 'LANGUAGE_EN' | translate }}">
+                      <p><strong>{{ "CHAPTER_NAME_EN" | translate }}:</strong> {{ chapter.nameChapter_en }}</p>
+                      <p><strong>{{ "CHAPTER_DESCRIPTION_EN" | translate }}:</strong> {{ chapter.descriptionChapter_en }}</p>
+                      <p><strong>{{ "CHAPTER_TEXT_EN" | translate }}:</strong> {{ chapter.textChapter_en }}</p>
+                    </mat-tab>
+                    <mat-tab label="{{ 'LANGUAGE_NL' | translate }}">
+                      <p><strong>{{ "CHAPTER_NAME_NL" | translate }}:</strong> {{ chapter.nameChapter_nl }}</p>
+                      <p><strong>{{ "CHAPTER_DESCRIPTION_NL" | translate }}:</strong> {{ chapter.descriptionChapter_nl }}</p>
+                      <p><strong>{{ "CHAPTER_TEXT_NL" | translate }}:</strong> {{ chapter.textChapter_nl }}</p>
+                    </mat-tab>
+                    <mat-tab label="{{ 'LANGUAGE_FR' | translate }}">
+                      <p><strong>{{ "CHAPTER_NAME_FR" | translate }}:</strong> {{ chapter.nameChapter_fr }}</p>
+                      <p><strong>{{ "CHAPTER_DESCRIPTION_FR" | translate }}:</strong> {{ chapter.descriptionChapter_fr }}</p>
+                      <p><strong>{{ "CHAPTER_TEXT_FR" | translate }}:</strong> {{ chapter.textChapter_fr }}</p>
+                    </mat-tab>
+                    <mat-tab label="{{ 'LANGUAGE_DE' | translate }}">
+                      <p><strong>{{ "CHAPTER_NAME_DE" | translate }}:</strong> {{ chapter.nameChapter_de }}</p>
+                      <p><strong>{{ "CHAPTER_DESCRIPTION_DE" | translate }}:</strong> {{ chapter.descriptionChapter_de }}</p>
+                      <p><strong>{{ "CHAPTER_TEXT_DE" | translate }}:</strong> {{ chapter.textChapter_de }}</p>
+                    </mat-tab>
+                  </mat-tab-group>
+                </mat-expansion-panel>
+              }
+              </mat-accordion>
+            </mat-expansion-panel>
+          }
+          </mat-accordion>
+        </mat-card-content>
+      </mat-card>    
+      <div class="stepper-buttons">
+        <button mat-raised-button color="accent" class="gold-button" matStepperPrevious>
+          <mat-icon>arrow_back</mat-icon> {{ "BACK" | translate }}
+        </button>
+        <button mat-raised-button color="primary" class="gold-button" (click)="postTraining()" [disabled]="trainingForm.invalid">
+          {{ "SUBMIT" | translate }}
         </button>
       </div>
-      <div>
-        <button type="submit" [disabled]="trainingForm.invalid">
-          {{'CREATE_TRAINING' | translate}}
-        </button>
-      </div>
-    </form>
-  </div>
-  <div class="column"></div>
+    </mat-step>
+    
+  </mat-horizontal-stepper>
 </div>
