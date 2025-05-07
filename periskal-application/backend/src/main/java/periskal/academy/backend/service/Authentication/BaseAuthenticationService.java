@@ -22,6 +22,7 @@ import org.xml.sax.SAXException;
 
 import lombok.extern.slf4j.Slf4j;
 import periskal.academy.backend.model.AuthenticateResponse;
+import periskal.academy.backend.model.Client;
 import periskal.academy.backend.security.Exceptions.AuthenticationExceptions.AuthenticationCommunicationException;
 import periskal.academy.backend.security.Exceptions.AuthenticationExceptions.AuthenticationInvalidCredentialsException;
 import periskal.academy.backend.security.Exceptions.AuthenticationExceptions.AuthenticationParsingException;
@@ -103,6 +104,22 @@ public abstract class BaseAuthenticationService {
                 }
             }
             authResponse.setProducts(products);
+            
+            // Extract Skippers/Clients
+            NodeList SkippersNodeList = doc.getElementsByTagName("Skippers");
+            List<Client> skippersList = new ArrayList<>();
+            if (SkippersNodeList.getLength() > 0) {
+                NodeList clientNodes = SkippersNodeList.item(0).getChildNodes();
+                for (int i = 0; i < clientNodes.getLength(); i++) { 
+                    Node clientNode = clientNodes.item(i); 
+                    if (clientNode.getNodeName().equals("Client")) { 
+                        Client client = parseClientNode(clientNode); 
+                        skippersList.add(client); 
+                    }
+                }   
+            }
+            authResponse.setClients(skippersList);
+
 
             if (authResponse.getLoginResult() == null || authResponse.getLoginResult().isBlank() || authResponse.getLoginResult().equals("Invalid Credentials")) {
                 log.debug("Authentication attempt failed: Service returned empty LoginResult, likely invalid credentials.");
