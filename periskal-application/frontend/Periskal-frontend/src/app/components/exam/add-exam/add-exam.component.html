@@ -78,6 +78,12 @@
         <p class="error">{{'EXAM_TITLE_REQUIRED' | translate }}</p>
       }
 
+      <label for="totalQuestions">Aantal Vragen</label>
+      <input id="totalQuestions" formControlName="examTotalQuestions" type="number" min="1" placeholder="Vul in hoeveel aantal vragen op het examen zullen komen">
+      @if(examForm.get('examTotalQuestions')?.invalid && examForm.get('examTotalQuestions')?.touched){
+        <p class="error">TotalQuestions required</p>
+      }
+
       <label for="description">{{'EXAM_DESCRIPTION' | translate}}</label>
       <textarea id="description" formControlName="examDescription"></textarea>
       @if(examForm.get('examDescription')?.invalid && examForm.get('examDescription')?.touched){

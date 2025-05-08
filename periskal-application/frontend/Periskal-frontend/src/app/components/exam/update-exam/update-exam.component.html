@@ -29,6 +29,19 @@
             ></textarea>
           </div>
 
+          <div class="mb-3">
+            <label for="totalQuestions" class="form-label">Total questions</label>
+            <input
+              type="number"
+              id="totalQuestions"
+              class="form-control"
+              [(ngModel)]="exam.totalQuestions"
+              name="totalQuestions"
+              min="1"
+              required
+            />
+          </div>
+
           <h4 class="mt-4">{{'EXAM_QUESTIONS' | translate }}</h4>
 
           @for(question of exam.questions; track $index){

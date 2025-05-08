@@ -53,6 +53,7 @@ export class ExamService {
     const payload = {
       examTitle: examData.examTitle,
       examDescription: examData.examDescription,
+      totalQuestions: examData.totalQuestions,
       trainingId: examData.trainingId,
       questions: examData.questions.map((q: any) => ({
         text: q.text,

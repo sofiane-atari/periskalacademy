@@ -5,5 +5,6 @@ export interface Exam {
     trainingId: number;
     examTitle: string;
     examDescription: string;
+    totalQuestions: number;
     questions: Question[];
   }

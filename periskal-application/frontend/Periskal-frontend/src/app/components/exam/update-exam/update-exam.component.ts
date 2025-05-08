@@ -16,6 +16,7 @@ export class UpdateExamComponent implements OnInit {
   exam: Exam = {
     id: 0, examTitle: '', examDescription: '',
     trainingId: 0,
+    totalQuestions: 0,
     questions: []
   };
 

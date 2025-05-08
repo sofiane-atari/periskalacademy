@@ -31,6 +31,7 @@ export class AddExamComponent implements OnInit {
       trainingId: ['', Validators.required],
       examTitle: ['', Validators.required],
       examDescription: ['', Validators.required],
+      examTotalQuestions: ['', Validators.required],
       questions: this.fb.array([]) // Initialize empty FormArray
     });
   }
@@ -95,6 +96,7 @@ export class AddExamComponent implements OnInit {
       const examData = {
         examTitle: this.examForm.value.examTitle,
         examDescription: this.examForm.value.examDescription,
+        examTotalQuestions: Number(this.examForm.value.examTotalQuestions),
         trainingId: Number(this.examForm.value.trainingId),
         questions: this.questions.controls.map(q => ({
           text: q.value.text,
