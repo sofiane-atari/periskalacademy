@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable, of, throwError } from 'rxjs';
+import { Skipper } from '../../models/Skipper.model';
 
 
 @Injectable({
@@ -9,14 +11,16 @@ export class SkipperService {
 
   constructor(private http: HttpClient) { }
 
-  getSkippers() {
+  getSkippers(): Observable<Skipper[]> {
     
     const skippersList = localStorage.getItem('skippers_List');
     if (skippersList) {
-      return JSON.parse(skippersList); // Return the skippers list from local storage as an observable
+
+      const parsedSkippers = JSON.parse(skippersList) as Skipper[];
+      return of(parsedSkippers);
+
     } 
 
-    return ; // Return an empty array if no skippers are found in local storage
-  
+    return throwError(() => new Error('No skippers found in local storage')); 
   }
 }
