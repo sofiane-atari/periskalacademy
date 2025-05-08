@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthenticationService } from '../../services/Authentication/authentication.service';
 import { JwtDecoderService } from '../../services/JwtDecode/jwt-decoder.service';
+import { LoginService } from '../../services/Login/login.service';
 
 @Component({
   selector: 'app-login',
@@ -24,6 +25,7 @@ export class LoginComponent {
     private router: Router,
     private authService: AuthenticationService,
     private jwtDecoder: JwtDecoderService,
+    private loginhandler: LoginService
   ) { }
 
   ngOnInit() {
@@ -49,37 +51,16 @@ export class LoginComponent {
   }
 
   onLogin() {
+    
     this.isLoading = true;
     this.errorMessage = null;
 
-    if (!this.username || !this.password) {
-      alert('Please enter both username and password');
-      this.isLoading = false;
-      return;
-    }
-
-    this.authService.authenticate(this.username, this.password).subscribe({
-      next: (response) => {
-        if (response.token) {
-          console.log('Authentication successful'); // debug
-          this.router.navigate(['/trainingEmployee']); // change to /dashboard when we have a Single Dashboard with Conditional Rendering
-        } else {
-          alert('Authentication failed');
-        }
+    this.loginhandler.LoginUser(this.username,this.password,() => {
         this.isLoading = false;
+        this.router.navigate(['/trainingEmployee']); // change to /dashboard when we have a Single Dashboard with Conditional Rendering
       },
-      error: (error) => {
-        if (error.status === 401) {
-          alert('Invalid username or password');
-        } else if (error.status === 0) {
-          alert('Cannot connect to server. Please check your connection.');
-        } else {
-          alert('An error occurred. Please try again later.');
-        }
-        console.error('Login error:', error);
-        this.isLoading = false;
-      }
-    });
+      
+    );
 
   }
   
