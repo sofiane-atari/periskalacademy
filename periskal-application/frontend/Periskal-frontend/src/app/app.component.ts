@@ -60,6 +60,9 @@ export class AppComponent implements OnInit {
       }
     }
     )
+
+    this.authService.ExpiryTimeChecker();
+
   };
 
   ChangeLang(Lang: any) {
