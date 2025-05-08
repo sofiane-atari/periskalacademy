@@ -151,10 +151,7 @@ export class TrainingEmployeeComponent implements OnInit {
     }
   }
   getCountModules(trainingId: number) {
-    console.log('All trainings:', this.trainingsData);
     const training = this.trainingsData.find(t => t.id === trainingId);
-    console.log('Found training:', training);
-    console.log('Modules:', training?.modules);
     return training?.modules?.length || 0;
   }
 }

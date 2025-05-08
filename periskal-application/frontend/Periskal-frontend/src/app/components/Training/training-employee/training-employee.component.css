@@ -231,7 +231,7 @@
   text-align: right;
 }
 
-.secondary-btn {
+/* .secondary-btn {
   background-color: #4f46e5;
   color: white;
   border: none;
@@ -245,6 +245,42 @@
 
 .secondary-btn:hover {
   background-color: #4338ca;
+} */
+.training-card {
+  /* ... bestaande stijlen ... */
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Zorgt dat de kaart de volledige hoogte gebruikt */
+}
+
+.card-bottom-section {
+  margin-top: auto; /* Duwt de sectie naar de onderkant */
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 0 16px 16px 16px;
+}
+
+.training-actions {
+  margin-left: auto; /* Duwt de knop naar rechts */
+}
+
+.secondary-btn {
+  /* Stijlen voor je secundaire knop */
+  padding: 8px 16px;
+  background: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.secondary-btn:hover {
+  background: #e0e0e0;
+}
+
+.language-tags {
+  display: flex;
+  gap: 8px;
 }
 
 /* Animations */

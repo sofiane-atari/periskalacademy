@@ -54,6 +54,7 @@
 
     <h2>{{ getTrainingName($index) }}</h2>
 
+    @if(roleAuth.canEditContent()){
     <div class="card-actions">
 
       <div class="dropdown-container">
@@ -98,7 +99,7 @@
       </div>
 
     </div>
-
+  }
   </div>
 
      
@@ -117,7 +118,7 @@
 
           </svg>
 
-          {{ getCountModules(training.id) }} {{'TRAININGS' | translate}}
+          {{ getCountModules(training.id) }} {{'MODULES' | translate}}
 
         </span>
 
@@ -137,33 +138,40 @@
 
       </div>
 
+      <div class="training-actions">
+        @if (hasExam(training.id) && !roleAuth.canEditContent()) {
+  
+          <button class="secondary-btn" (click)="$event.stopPropagation(); goToExam(training.id)">
+  
+            {{'TAKE_EXAM' | translate}}
+  
+          </button>
+  
+        }
+  
+      </div>
+
     </div>
+    <!-- <div class="action-buttons">
 
-    }
-
-  </div>
-
-
-
-  <!-- Action Buttons -->
-
-  <div class="action-buttons">
-
-    @for (training of trainingsData; track $index) {
-
-    <div class="training-actions">
-      @if (hasExam(training.id) && !roleAuth.canEditContent()) {
-
-        <button class="secondary-btn" (click)="goToExam(training.id)">
-
-          {{'TAKE_EXAM' | translate}}
-
-        </button>
-
+      @for (training of trainingsData; track $index) {
+  
+      <div class="training-actions">
+        @if (hasExam(training.id) && !roleAuth.canEditContent()) {
+  
+          <button class="secondary-btn" (click)="goToExam(training.id)">
+  
+            {{'TAKE_EXAM' | translate}}
+  
+          </button>
+  
+        }
+  
+      </div>
+  
       }
-
-    </div>
-
+  
+    </div> -->
     }
 
   </div>
