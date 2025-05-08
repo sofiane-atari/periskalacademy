@@ -42,7 +42,6 @@ export class TakeExamComponent implements OnInit {
           console.log('First photo data:', exam.questions[0].photos[0].imageData);
         }
 
-        // 👉 Random vragen selecteren op basis van totalQuestions
         const shuffledQuestions = exam.questions.sort(() => 0.5 - Math.random());
         const selectedQuestions = shuffledQuestions.slice(0, exam.totalQuestions);
         exam.questions = selectedQuestions;
