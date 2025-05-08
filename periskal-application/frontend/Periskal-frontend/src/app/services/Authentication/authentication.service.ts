@@ -5,6 +5,7 @@ import { AuthenticateResponse } from '../../models/authenticate-response.model';
 import { JwtDecoderService } from '../JwtDecode/jwt-decoder.service';
 import { ReloginModalComponent } from '../../components/Modals/relogin-modal/relogin-modal.component';
 import { MatDialog } from '@angular/material/dialog';
+import { LoginExpiryComponent } from '../../components/Modals/login-expiry/login-expiry.component';
 
 
 @Injectable({ providedIn: 'root' })
@@ -107,12 +108,12 @@ export class AuthenticationService {
     else if (role === 'Skipper') {
       if (triggerTime <= 0) {
         
-        alert('Login about to expire, please re-login!'); 
+        this.promptLoginExpiry();
 
       }
       else {
         setTimeout(() => {
-          alert('Login about to expire, please re-login!');; 
+          this.promptLoginExpiry();
         }, triggerTime);
       }
     }
@@ -124,4 +125,7 @@ export class AuthenticationService {
 
   }
 
+  promptLoginExpiry() {
+    this.dialog.open(LoginExpiryComponent)
+  }
 }
