@@ -297,7 +297,7 @@
             @for (photo of chapter.photos_en; track $index; let photoIndex = $index) {
               <img src="{{photo.imageData}}" alt="">
               <button type="button" class="btn btn-danger" (click)="removePhoto($index,chapterIndex,photoIndex)">
-
+                Remove photo
               </button>
             }
           }

@@ -97,11 +97,9 @@ public class TrainingService {
         if (entity.getModules() != null) {
             for (Module module : entity.getModules()) {
                 module.setTraining(entity);
-                System.out.println(module.getId());
                 if (module.getChapters() != null) {
                     for (Chapter chapter : module.getChapters()) {
                         chapter.setModule(module);
-                        System.out.println(chapter.getId());
                         if (chapter.getPhotos_en() != null) {
                             for (Photo photo : chapter.getPhotos_en()) {
                                 photo.setChapter(chapter);
@@ -112,27 +110,8 @@ public class TrainingService {
                 }
             }
         }
-
-        System.out.println(entity);
         try {
             Training savedTraining = trainingRepository.save(entity);
-            System.out.println(savedTraining);
-            if (savedTraining.getModules() != null) {
-                for (Module module : savedTraining.getModules()) {
-                    System.out.println(module.getId());
-                    if (module.getChapters() != null) {
-                        for (Chapter chapter : module.getChapters()) {
-                            System.out.println(chapter.getId());
-                            if (chapter.getPhotos_en() != null) {
-                                for (Photo photo : chapter.getPhotos_en()) {
-                                    System.out.println(
-                                            photo.getChapter() != null ? photo.getChapter().getId() : null);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
             return savedTraining;
         } catch (DataIntegrityViolationException e) {
             log.error("Failed to create training due to data integrity violation: {}", e.getMessage());
@@ -143,23 +122,34 @@ public class TrainingService {
         }
     }
 
+    @Transactional
     public Training updateTraining(Long id, Training updatedTraining) {
-
         if (updatedTraining == null) {
             throw new ValidationException("Updated training data cannot be null.");
         }
 
+        // Fetch existing training (fully initialized)
         Training existingTraining = getTrainingById(id);
 
-        // Update fields instead of replacing the entire object
+        // Update basic fields
         existingTraining.setName_en(updatedTraining.getName_en());
         existingTraining.setDescription_en(updatedTraining.getDescription_en());
 
-        // Update modules correctly
+        // Clear and replace modules (cascade + orphanRemoval will handle deletions)
         existingTraining.getModules().clear();
-        for (Module module : updatedTraining.getModules()) {
-            module.setTraining(existingTraining);
-            existingTraining.getModules().add(module);
+
+        for (Module updatedModule : updatedTraining.getModules()) {
+            updatedModule.setTraining(existingTraining); // Set owning side
+
+            for (Chapter updatedChapter : updatedModule.getChapters()) {
+                updatedChapter.setModule(updatedModule); // Set owning side
+
+                for (Photo updatedPhoto : updatedChapter.getPhotos_en()) {
+                    updatedPhoto.setChapter(updatedChapter); // Set owning side
+                }
+            }
+
+            existingTraining.getModules().add(updatedModule);
         }
 
         try {
@@ -266,4 +256,31 @@ public class TrainingService {
         }
 
     }
+
+    @Transactional
+    public Training removePhoto(Long trainingId, Long moduleId, Long chapterId, Long photoId) {
+        Training existingTraining = getTrainingById(trainingId);
+
+        Module existingModule = existingTraining.getModules().stream()
+                .filter(m -> m.getId().equals(moduleId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Module not found"));
+
+        Chapter existingChapter = existingModule.getChapters().stream()
+                .filter(c -> c.getId().equals(chapterId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Chapter not found"));
+
+        List<Photo> photos = existingChapter.getPhotos_en();
+        Photo photoToRemove = photos.stream()
+                .filter(p -> p.getId().equals(photoId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Photo not found"));
+
+        photos.remove(photoToRemove);
+
+        photoToRemove.setChapter(null);
+        return existingTraining;
+    }
+
 }

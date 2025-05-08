@@ -8,6 +8,7 @@ import { ConfirmPromptComponent } from '../../confirm-prompt/confirm-prompt.comp
 import { MatDialog } from '@angular/material/dialog'
 import { MatSnackBar, MatSnackBarConfig, MatSnackBarModule } from '@angular/material/snack-bar'
 import { ModuleService } from '../../../services/Module/module.service';
+import { Photo } from '../../../models/photo.model';
 
 @Component({
   selector: 'app-update-training',
@@ -20,6 +21,7 @@ export class UpdateTrainingComponent {
   loading: boolean = true;
   errorMessage: string = '';
   trainingId: number = 0;
+  photos: Photo[] | null = null;
 
   constructor(
     private trainingService: TrainingService,
@@ -162,7 +164,35 @@ export class UpdateTrainingComponent {
   }
 
   removePhoto(moduleIndex: number, chapterIndex: number, photoIndex: number) {
-    this.training?.modules[moduleIndex].chapters[chapterIndex].photos_en.splice(photoIndex, 1);
+    const photoId = this.training?.modules[moduleIndex].chapters[chapterIndex].photos_en[photoIndex].id;
+    if (photoId != null)
+      this.trainingService.deletePhoto(photoId).subscribe({
+        next: () => {
+          this.training?.modules[moduleIndex].chapters[chapterIndex].photos_en.splice(photoIndex, 1);
+          this.getTrainingDetails(this.trainingId);
+          const snackBarConfig: MatSnackBarConfig = {
+            duration: 3000,
+            verticalPosition: 'bottom',
+            horizontalPosition: 'left',
+            panelClass: ['snackbar-success'],
+            politeness: 'assertive'
+          };
+          this.getTrainingDetails(this.trainingId);
+
+          this.snackBar.open('Photo has successfully been deleted.', 'Close', snackBarConfig);
+        },
+        error: (err) => {
+          const errorSnackBarConfig: MatSnackBarConfig = {
+            duration: 5000,
+            verticalPosition: 'bottom',
+            horizontalPosition: 'left',
+            panelClass: ['snackbar-error'],
+            politeness: 'assertive'
+          };
+
+          this.snackBar.open('Error deleting photo.', 'Close', errorSnackBarConfig);
+        }
+      });
   }
 
   goToModuleAddPage() {

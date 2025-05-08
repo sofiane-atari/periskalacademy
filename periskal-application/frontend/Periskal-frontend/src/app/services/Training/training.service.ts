@@ -50,4 +50,8 @@ export class TrainingService {
 
     return this.client.get<Training[]>("http://backend.localhost:8080/api/trainings/filtered", { params });
   }
+
+  deletePhoto(photoId: number) {
+    return this.client.delete(`http://localhost:8080/api/photos/${photoId}`);
+  }
 }
