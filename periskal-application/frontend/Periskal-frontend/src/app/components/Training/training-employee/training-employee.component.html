@@ -1,7 +1,7 @@
 <div class="training-container">
 
   <header class="content-header">
-    
+
     <div class="header-left">
       <h1>{{'ASSIGNED_BY_FLEETMANAGER' | translate}}</h1>
       <h1>{{'TRAINING' | translate}}</h1>
@@ -138,10 +138,10 @@
       </div>
 
       <div class="training-actions">
-        @if (hasExam(training.id) && !roleAuth.canEditContent()) {
+        @if (hasExam(training.id) && roleAuth.isSkipper()) {
   
           <button class="secondary-btn" (click)="$event.stopPropagation(); goToExam(training.id)">
-  
+
             {{'TAKE_EXAM' | translate}}
   
           </button>
