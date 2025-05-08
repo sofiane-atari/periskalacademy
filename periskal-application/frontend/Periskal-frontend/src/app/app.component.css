@@ -1,76 +1,23 @@
-/* 
-.custom-navbar {
-  background-color: #ffd700;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  padding: 12px 0;
-}
-
-.navbar-brand {
-  font-weight: 700;
-  font-size: 1.5rem;
-  letter-spacing: 0.5px;
-}
-
-.nav-link {
-  font-weight: 500;
-  margin: 0 8px;
-  padding: 8px 16px !important;
-  border-radius: 4px;
-  transition: all 0.3s ease;
-  color: #000; 
-}
-
-.nav-link:hover,
-.nav-link.active {
-  background-color: rgba(255, 255, 255, 0.3);
-  transform: translateY(-2px);
-  color: #000;
-}
-
-.navbar-toggler {
-  border: none;
-  padding: 8px;
-}
-
-.navbar-toggler:focus {
-  box-shadow: none;
-  outline: none;
-}
-
-.profile-icon {
-  font-size: 1.2rem;
-  color: #000;
-  transition: color 0.3s ease;
-}
-
-.profile-icon:hover {
-  color: #0073e6;
-}
-
-
-.container {
-  padding: 0 20px;
-}
-
-.navbar {
+.main-container {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  background-color: #ffd700;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  min-height: 100vh;
 }
- */
+
 .sidebar {
   width: 240px;
+  flex-shrink: 0;
   height: 100vh;
-  background-color: white;
-  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
   display: flex;
-  flex-direction: column;
-  overflow-y: auto;
+  flex-direction: column; /* Zorgt voor verticale uitlijning */
 }
 
+.content-area {
+  flex-grow: 1;
+  overflow: auto;
+  padding: 1.5rem;
+}
 /* Logo styles */
 .logo-container {
   padding: 1rem;
@@ -127,6 +74,7 @@
 .nav-menu {
   flex: 1;
   padding: 1rem 0;
+  overflow-y: auto; /* Voor scrollen als menu te lang wordt */
 }
 
 .nav-list {
@@ -175,6 +123,7 @@
 
 /* Bottom section styles */
 .sidebar-bottom {
+  margin-top: auto; /* Dit duwt de content naar beneden */
   padding: 1rem;
   border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
@@ -234,9 +183,18 @@
 
 /* Responsive styles */
 @media (max-width: 768px) {
+  .main-container {
+    flex-direction: column;
+  }
+
   .sidebar {
-    width: 64px;
-    overflow: hidden;
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+
+  .content-area {
+    padding: 1rem;
   }
 
   .nav-text,
@@ -251,11 +209,19 @@
 
   .language-selector {
     flex-direction: column;
+    flex-grow: 1;
   }
 
   .lang-select {
     font-size: 0.75rem;
     padding: 0.25rem;
+  }
+  .sidebar-bottom {
+    margin-top: 0; /* Reset voor mobiel */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
   }
 
   .nav-link {

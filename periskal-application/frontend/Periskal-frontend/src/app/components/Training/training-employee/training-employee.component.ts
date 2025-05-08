@@ -123,6 +123,11 @@ export class TrainingEmployeeComponent implements OnInit {
     }
   }
   toggleMenuEdit(trainingId: number) {
+    // Sluit alle andere open dropdowns
+    Object.keys(this.openMenus).forEach(key => {
+      this.openMenus[+key] = false;
+    });
+    // Toggle de huidige
     this.openMenus[trainingId] = !this.openMenus[trainingId];
   }
   
@@ -144,6 +149,13 @@ export class TrainingEmployeeComponent implements OnInit {
     if (exam) {
       this.router.navigate(['/update-exam', exam.id]);
     }
+  }
+  getCountModules(trainingId: number) {
+    console.log('All trainings:', this.trainingsData);
+    const training = this.trainingsData.find(t => t.id === trainingId);
+    console.log('Found training:', training);
+    console.log('Modules:', training?.modules);
+    return training?.modules?.length || 0;
   }
 }
 
