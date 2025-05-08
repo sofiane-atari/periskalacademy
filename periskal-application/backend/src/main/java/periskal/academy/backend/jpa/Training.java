@@ -37,7 +37,7 @@ public class Training {
     private String name_fr;
     private String description_fr;
 
-    @OneToMany(mappedBy = "training", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "training", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<Module> modules = new ArrayList<>();
 

@@ -1,77 +1,90 @@
+<div class="main-container">
 @if(showNavbar) {
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Periskal</title>
-  </head>
-  <body>
-    <nav class="navbar navbar-expand-lg custom-navbar">
-      <div class="container">
-        <p class="navbar-brand text-dark">Periskal</p>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <a
-                class="nav-link text-dark"
-                routerLink="/trainingEmployee"
-                routerLinkActive="active"
-                ariaCurrentWhenActive="page"
-                >{{'EMPLOYEE_DASHBOARD' | translate}}</a
-              >
-            </li>
-            <li class="nav-item">
-              <a
-                class="nav-link text-dark"
-                routerLink="/test"
-                routerLinkActive="active"
-                ariaCurrentWhenActive="page"
-                >{{'TEST_COMPONENT' | translate}}</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-dark" href="#">{{'HOME' | translate }}</a>
-            </li>
-            @if (roleAuth.hasPermission(['Fleetmanager'])) {
-            <li class="nav-item">
-              <a class="nav-link text-dark" 
-                routerLink="/skippers"             
-                routerLinkActive="active"             
-                ariaCurrentWhenActive="page" 
-                href="#">{{'SKIPPERS' | translate}}</a>
-            </li>}
-          </ul>
-          <!-- Taal dropdown -->
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <select class="form-select" (change)="ChangeLang($event)" id="">
-                <option [selected]="lang === 'nl'" value="nl">Nederlands</option>
-                <option [selected]="lang === 'en'" value="en">English</option>
-                <option [selected]="lang === 'fr'" value="fr">Français</option>
-                <option [selected]="lang === 'de'" value="de">Deutsch</option>
-              </select>
-            </li>
-          </ul>
-
-          <!-- Profiel icoontje -->
-          <div class="ms-auto">
-            <a class="nav-link text-dark" routerLink="/profile" routerLinkActive="active" ariaCurrentWhenActive="page">
-              <i class="fas fa-user profile-icon"></i>
-            </a>
+  <div class="sidebar">
+    <!-- Logo -->
+    <div class="logo-container">
+      <img src="https://spw-wt.periskal.com/Web/img/logos/periskalLogo.png" alt="Periskal Group" class="logo">
+    </div>
+    
+    <!-- User Profile -->
+    <div class="user-profile" routerLink="/profile" routerLinkActive="active">
+          <div class="user-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
           </div>
-        </div>
+          <div class="user-info">
+            <p class="user-name">{{ userName }}</p>
+            <p class="user-role">{{ userRole }}</p>
+          </div>
       </div>
+    <!-- Navigation Menu -->
+    <nav class="nav-menu">
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/trainingEmployee" routerLinkActive="active">
+            <span class="nav-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"></path>
+              </svg>
+            </span>
+            <span class="nav-text">{{'MODULES' | translate}}</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          @if(roleAuth.hasPermission(['Fleetmanager'])){
+          <a class="nav-link" routerLink="/skippers" routerLinkActive="active">
+            <span class="nav-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+            </span>
+            <span class="nav-text">{{'SKIPPERS' | translate}}</span>
+          </a>
+        }
+        </li>
+      </ul>
     </nav>
-  </body>
-</html>
-
-}
-<router-outlet></router-outlet>
+    
+    <!-- Bottom Section -->
+    <div class="sidebar-bottom">
+      <!-- Language Selector -->
+      <div class="language-selector">
+        <div class="lang-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            <path d="M2 12h20"></path>
+          </svg>
+        </div>
+        <select class="lang-select" (change)="ChangeLang($event)">
+          <option [selected]="lang === 'nl'" value="nl">Nederlands</option>
+          <option [selected]="lang === 'en'" value="en">English</option>
+          <option [selected]="lang === 'fr'" value="fr">Français</option>
+          <option [selected]="lang === 'de'" value="de">Deutsch</option>
+        </select>
+      </div>
+      
+      <!-- Logout Button -->
+      <button class="logout-button" (click)="logout()">
+        <span class="logout-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+        </span>
+        <span class="logout-text">Logout</span>
+      </button>
+    </div>
+  </div>
+  }
+  <div class="content-area">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+  

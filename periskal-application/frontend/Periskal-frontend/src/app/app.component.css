@@ -1,63 +1,235 @@
-
-.custom-navbar {
-  background-color: #ffd700;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  padding: 12px 0;
+.main-container {
+  display: flex;
+  min-height: 100vh;
 }
 
-.navbar-brand {
-  font-weight: 700;
-  font-size: 1.5rem;
-  letter-spacing: 0.5px;
+.sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column; /* Zorgt voor verticale uitlijning */
+}
+
+.content-area {
+  flex-grow: 1;
+  overflow: auto;
+  padding: 1.5rem;
+}
+/* Logo styles */
+.logo-container {
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.logo {
+  max-width: 100%;
+  height: auto;
+}
+
+/* User profile styles */
+.user-profile {
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.user-icon {
+  width: 36px;
+  height: 36px;
+  background-color: rgba(255, 215, 0, 0.2);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #000;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin: 0;
+  color: #000;
+}
+
+.user-role {
+  font-size: 0.75rem;
+  color: #666;
+  margin: 0;
+}
+
+/* Navigation menu styles */
+.nav-menu {
+  flex: 1;
+  padding: 1rem 0;
+  overflow-y: auto; /* Voor scrollen als menu te lang wordt */
+}
+
+.nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-item {
+  margin-bottom: 0.25rem;
 }
 
 .nav-link {
-  font-weight: 500;
-  margin: 0 8px;
-  padding: 8px 16px !important;
-  border-radius: 4px;
-  transition: all 0.3s ease;
-  color: #000; 
-}
-
-.nav-link:hover,
-.nav-link.active {
-  background-color: rgba(255, 255, 255, 0.3);
-  transform: translateY(-2px);
-  color: #000; /* Zorgt ervoor dat de tekstkleur hetzelfde blijft bij hover en active */
-}
-
-.navbar-toggler {
-  border: none;
-  padding: 8px;
-}
-
-.navbar-toggler:focus {
-  box-shadow: none;
-  outline: none;
-}
-
-.profile-icon {
-  font-size: 1.2rem;
-  color: #000;
-  transition: color 0.3s ease;
-}
-
-.profile-icon:hover {
-  color: #0073e6;
-}
-
-
-.container {
-  padding: 0 20px;
-}
-
-.navbar {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
-  background-color: #ffd700;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  color: #333;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
 }
 
+.nav-link:hover {
+  background-color: rgba(255, 215, 0, 0.1);
+}
+
+.nav-item.active .nav-link,
+.nav-link.active {
+  background-color: rgba(255, 215, 0, 0.2);
+  border-left: 3px solid #ffd700;
+  font-weight: 600;
+}
+
+.nav-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  color: #555;
+}
+
+.nav-text {
+  font-size: 0.9rem;
+}
+
+/* Bottom section styles */
+.sidebar-bottom {
+  margin-top: auto; /* Dit duwt de content naar beneden */
+  padding: 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.language-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.lang-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  color: #555;
+}
+
+.lang-select {
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  background-color: white;
+  font-size: 0.85rem;
+  width: 100%;
+}
+
+.logout-button {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem;
+  background-color: transparent;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.logout-button:hover {
+  background-color: rgba(255, 0, 0, 0.05);
+}
+
+.logout-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  color: #ff5252;
+}
+
+.logout-text {
+  font-size: 0.9rem;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .main-container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+
+  .content-area {
+    padding: 1rem;
+  }
+
+  .nav-text,
+  .user-info,
+  .logout-text {
+    display: none;
+  }
+
+  .user-profile {
+    justify-content: center;
+  }
+
+  .language-selector {
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .lang-select {
+    font-size: 0.75rem;
+    padding: 0.25rem;
+  }
+  .sidebar-bottom {
+    margin-top: 0; /* Reset voor mobiel */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .nav-link {
+    justify-content: center;
+    padding: 0.75rem 0;
+  }
+
+  .logout-button {
+    justify-content: center;
+  }
+}
