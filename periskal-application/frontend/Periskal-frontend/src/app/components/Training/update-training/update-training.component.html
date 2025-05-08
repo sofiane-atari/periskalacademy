@@ -291,6 +291,17 @@
               required
             ></textarea>
           </div>
+          <div>
+            <label for="photoChapter{{$index}}_{{chapterIndex}}_en">{{'PHOTO'|translate}}</label>
+            @if (chapter.photos_en != null) {
+            @for (photo of chapter.photos_en; track $index; let photoIndex = $index) {
+              <img src="{{photo.imageData}}" alt="">
+              <button type="button" class="btn btn-danger" (click)="removePhoto($index,chapterIndex,photoIndex)">
+
+              </button>
+            }
+          }
+          </div>
           
           <!-- Delete chapter button -->
           <button type="button" class="btn btn-danger" (click)="removeChapter($index, chapterIndex)">

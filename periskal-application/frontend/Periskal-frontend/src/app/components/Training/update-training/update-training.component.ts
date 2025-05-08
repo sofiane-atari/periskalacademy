@@ -161,6 +161,10 @@ export class UpdateTrainingComponent {
     this.training?.modules.push(newModule);
   }
 
+  removePhoto(moduleIndex: number, chapterIndex: number, photoIndex: number) {
+    this.training?.modules[moduleIndex].chapters[chapterIndex].photos_en.splice(photoIndex, 1);
+  }
+
   goToModuleAddPage() {
     this.router.navigate(['add', this.trainingId, 'module'])
   }
@@ -189,6 +193,20 @@ export class UpdateTrainingComponent {
   }
 
   removeChapter(moduleIndex: number, chapterIndex: number) {
-    //implement
+    const dialogRef = this.dialog.open(ConfirmPromptComponent, {
+      width: '600px',
+      data: {
+        title: 'Delete Chapter',
+        message: 'Are you sure you want to delete this chapter? This action cannot be undone.',
+        confirmText: 'Delete',
+        cancelText: "Cancel"
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.training?.modules[moduleIndex].chapters.splice(chapterIndex, 1);
+      }
+    });
   }
 }
