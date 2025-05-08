@@ -1,19 +1,21 @@
 <div class="photo-upload-container">
-  <input 
-    type="file" 
-    multiple 
+  <label for="photo-upload">Upload Photos</label>
+  <input
+    type="file"
+    id="photo-upload"
     (change)="onFileSelected($event)"
     accept="image/*"
-    #fileInput
-  >
-  <div class="photo-previews">
-    @for(photo of photos; track $index) {
+    multiple
+  />
+
+  @if (photos.length > 0) {
+  <div class="photo-preview-container">
+    @for (photo of photos; track $index) {
     <div class="photo-preview">
-      <img [src]="photo.imageData" alt="Photo preview">
-      <button type="button" (click)="removePhoto($index)" class="remove-photo">
-        {{"DELETE" | translate}}
-      </button>
+      <img [src]="photo.imageData" alt="Photo Preview" class="photo-preview-image" />
+      <button class="remove-btn" (click)="removePhoto($index)">Remove</button>
     </div>
   }
   </div>
+}
 </div>

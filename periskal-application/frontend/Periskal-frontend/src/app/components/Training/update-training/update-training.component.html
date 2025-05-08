@@ -293,14 +293,31 @@
           </div>
           <div>
             @if (chapter.photos_en != null) {
-            <label for="photoChapter{{$index}}_{{chapterIndex}}_en">photoChapter_{{moduleIndex}}_{{chapterIndex}}</label>
-            @for (photo of chapter.photos_en; track $index; let photoIndex = $index) {
-              <p>{{photoIndex}}</p>
-              <img src="{{photo.imageData}}" alt="">
-              <button type="button" class="btn btn-danger" (click)="removePhoto(moduleIndex,chapterIndex,photoIndex)">
-                Remove photo
+              @for (photo of chapter.photos_en; track $index; let photoIndex = $index) {
+                <div class="photo-item">
+                  <label for="photoChapter{{moduleIndex}}_{{chapterIndex}}_{{photoIndex}}_en">{{'PHOTO' |translate}} {{photoIndex+1}}</label>
+                  <img src="{{photo.imageData}}" alt="">
+                  <button type="button" class="btn btn-danger" (click)="removePhoto(moduleIndex, chapterIndex, photoIndex)">
+                    {{'REMOVE_PHOTO' | translate}}
+                  </button>
+                </div>
+              }
+            }        
+          
+            <div class="form-group">
+              <p><strong>{{'ADD_NEW_PHOTO' | translate}}</strong></p>
+              <app-photo-upload [(ngModel)]="newPhotos[moduleIndex + '_' + chapterIndex]" 
+                              name="photos_{{moduleIndex}}_{{chapterIndex}}"
+                              (change)="onPhotosChange(moduleIndex, chapterIndex)">
+              </app-photo-upload>
+            </div>
+              @if((newPhotos[moduleIndex + '_' + chapterIndex]?.length || 0) > 0) {
+              <button
+                      type="button" 
+                      class="btn btn-primary" 
+                      (click)="savePhotos(moduleIndex, chapterIndex)">
+                {{'ADD_PHOTOS' | translate}}
               </button>
-            }
           }
           </div>
           
@@ -309,7 +326,7 @@
             {{'DELETE_CHAPTER' | translate}}
           </button>
         </div>
-        }
+      }
         
         <!-- Add chapter button -->
         <button type="button" class="btn btn-secondary" (click)="goToChapterAddPage(moduleIndex)">

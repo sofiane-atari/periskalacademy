@@ -9,10 +9,11 @@ import { MatDialog } from '@angular/material/dialog'
 import { MatSnackBar, MatSnackBarConfig, MatSnackBarModule } from '@angular/material/snack-bar'
 import { ModuleService } from '../../../services/Module/module.service';
 import { Photo } from '../../../models/photo.model';
+import { PhotoUploadComponent } from "../../photo-upload/photo-upload.component";
 
 @Component({
   selector: 'app-update-training',
-  imports: [FormsModule, TranslatePipe, ConfirmPromptComponent, TranslatePipe, MatSnackBarModule],
+  imports: [FormsModule, TranslatePipe, ConfirmPromptComponent, TranslatePipe, MatSnackBarModule, PhotoUploadComponent],
   templateUrl: './update-training.component.html',
   styleUrl: './update-training.component.css'
 })
@@ -22,6 +23,7 @@ export class UpdateTrainingComponent {
   errorMessage: string = '';
   trainingId: number = 0;
   photos: Photo[] | null = null;
+  newPhotos: { [key: string]: Photo[] } = {};
 
   constructor(
     private trainingService: TrainingService,
@@ -134,6 +136,30 @@ export class UpdateTrainingComponent {
         });
       }
     });
+  }
+
+  onPhotosChange(moduleIndex: number, chapterIndex: number): void {
+    // This method is triggered when photos are selected
+    console.log('Photos changed for module', moduleIndex, 'chapter', chapterIndex);
+  }
+
+  savePhotos(moduleIndex: number, chapterIndex: number): void {
+    const key = moduleIndex + '_' + chapterIndex;
+    const photos = this.newPhotos[key] || [];
+
+    if (!photos.length) return;
+    if (this.training) {
+      if (!this.training?.modules[moduleIndex].chapters[chapterIndex].photos_en && this.training) {
+        this.training.modules[moduleIndex].chapters[chapterIndex].photos_en = [];
+      }
+
+      this.training.modules[moduleIndex].chapters[chapterIndex].photos_en = [
+        ...this.training?.modules[moduleIndex].chapters[chapterIndex].photos_en,
+        ...photos
+      ];
+    }
+
+    this.newPhotos[key] = [];
   }
 
   addModule() {

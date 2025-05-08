@@ -1,43 +1,44 @@
 .photo-upload-container {
-    border: 2px dashed #ccc;
-    padding: 20px;
-  }
-  
-  .photo-previews {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  
-  .photo-preview {
-    width: 100px; 
-    height: 100px;
-    overflow: hidden;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-  }
-  
-  .photo-preview img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: cover;
-    border-radius: 8px;
-  }
-  
-  .remove-photo {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
-    border: none;
-    cursor: pointer;
-    padding: 5px;
-    font-size: 12px;
-    border-radius: 4px;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+input[type="file"] {
+  margin-bottom: 15px;
+}
+
+.photo-preview-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.photo-preview {
+  position: relative;
+}
+
+.photo-preview-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.remove-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.remove-btn:hover {
+  background-color: rgba(255, 0, 0, 0.7);
+}
