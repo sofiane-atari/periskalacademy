@@ -68,6 +68,12 @@ export class TakeExamComponent implements OnInit {
     }
   }
 
+  goToQuestion(index: number): void {
+    if (this.exam && index >= 0 && index < this.exam.questions.length) {
+      this.currentQuestionIndex = index;
+    }
+  }
+
   submitExam(): void {
     // Implementeer je inzendlogica hier
     console.log('Exam submitted');

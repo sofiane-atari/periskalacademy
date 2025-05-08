@@ -1,38 +1,83 @@
-<!-- take-exam.component.html -->
-<div class="exam-container">
-    @if (loading) {
-      <p>{{'LOADING_EXAMS' |translate}}</p>
-    }
-    @else if (error) {
-      <p class="error">{{error}}</p>
-    }
-    @else if (exam) {
-      <h1>{{exam.examTitle}}</h1>
-      <p>{{exam.examDescription}}</p>
-  
-      <div class="questions">
-        @if (exam.questions && exam.questions.length > 0) {
-          <h3>{{'QUESTIONS' |translate}}</h3>
-          <ol>
-            @for (question of exam.questions; track $index) {
-              <li>
-                <p>{{question.text}}</p>
-                @if (question.photos?.length) {
+<div class="container-fluid py-4">
+  @if (loading) {
+    <div class="loading-state">
+      <p class="mb-0">Loading exam...</p>
+    </div>
+  } @else if (error) {
+    <div class="error-state">
+      <p class="text-danger mb-0">{{ error }}</p>
+    </div>
+  } @else if (exam) {
+    <div class="exam-container">
+      <div class="exam-header p-4 mb-4">
+        <h1 class="h2 mb-2">{{ exam.examTitle }}</h1>
+        <p class="text-muted mb-0">{{ exam.examDescription }}</p>
+      </div>
+
+      <div class="row">
+        <div class="col-md-9">
+          <div class="question-section p-4">
+            <h3 class="h5 mb-4">
+              Question {{ currentQuestionIndex + 1 }} of {{ exam.questions.length }}
+            </h3>
+
+            @if (currentQuestion) {
+              <div class="question-content">
+                <p class="lead mb-4">{{ currentQuestion.text }}</p>
+
+                @if (currentQuestion.photos?.length) {
                   <div class="question-images">
-                    @for (photo of question.photos; track $index) {
-                      <div class="photo">
-                        <img [src]="photo.imageData" alt="Chapter Image">
-                      </div>
+                    @for (photo of currentQuestion.photos; track $index) {
+                      <img [src]="photo.imageData" alt="Question Image" class="img-fluid" />
                     }
                   </div>
                 }
-                <!-- Add answer input fields here -->
-              </li>
+              </div>
+
+              <div class="d-flex justify-content-between align-items-center mt-4 pt-4 border-top">
+                <button
+                  class="nav-button"
+                  (click)="previousQuestion()"
+                  [disabled]="currentQuestionIndex === 0"
+                >
+                  Previous
+                </button>
+
+                @if (currentQuestionIndex === exam.questions.length - 1) {
+                  <button class="nav-button submit-button" (click)="submitExam()">
+                    Submit Exam
+                  </button>
+                } @else {
+                  <button
+                    class="nav-button"
+                    (click)="nextQuestion()"
+                    [disabled]="currentQuestionIndex === exam.questions.length - 1"
+                  >
+                    Next
+                  </button>
+                }
+              </div>
             }
-          </ol>
-        } @else {
-          <p>{{'NO_QUESTIONS_FOUND' |translate }}</p>
-        }
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="question-navigator p-4 sticky-top" style="top: 1rem;">
+            <h4 class="h6 mb-3 text-center">Questions</h4>
+            <div class="d-flex flex-wrap justify-content-center">
+              @for (question of exam.questions; track $index) {
+                <div
+                  class="question-number"
+                  [class.active]="$index === currentQuestionIndex"
+                  (click)="goToQuestion($index)"
+                >
+                  {{ $index + 1 }}
+                </div>
+              }
+            </div>
+          </div>
+        </div>
       </div>
-    }
-  </div>
+    </div>
+  }
+</div>
