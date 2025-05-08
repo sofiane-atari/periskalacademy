@@ -1,0 +1,21 @@
+<h1 mat-dialog-title>Login</h1>
+<p style="margin-top: 0; margin-bottom: 20px; color: #555;">
+    Your login is about to expire. Please log back in to continue.
+  </p>
+<div mat-dialog-content>
+  <form>
+    <mat-form-field appearance="outline" style="width: 100%; margin-bottom: 10px;">
+      <mat-label>Username</mat-label>
+      <input matInput type="text" [(ngModel)]="username" name="username" required>
+    </mat-form-field>
+    
+    <mat-form-field appearance="outline" style="width: 100%;">
+      <mat-label>Password</mat-label>
+      <input matInput type="password" [(ngModel)]="password" name="password" required>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="closeModal()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="login()">Login</button>
+</div>

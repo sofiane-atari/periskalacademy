@@ -1,0 +1,64 @@
+:host {
+    display: block;
+    background-color: white;
+    color: #333;
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+  }
+  
+
+  h1[mat-dialog-title] {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  
+
+  mat-form-field {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+  
+  .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline {
+    border-color: #ffd600;
+  }
+  
+  .mat-form-field-appearance-outline .mat-form-field-outline-thick {
+    border-color: #ffd600;
+  }
+  
+  .mat-form-field.mat-focused .mat-form-field-label {
+    color: #ffd600 !important;
+  }
+  
+  /* Buttons */
+  [mat-dialog-actions] {
+    margin-top: 16px;
+  }
+  
+  button[mat-button],
+  button[mat-raised-button] {
+    border-radius: 30px;
+    padding: 8px 20px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  button[mat-button] {
+    color: #666;
+  }
+  
+  button[mat-raised-button] {
+    background-color: #ffd600;
+    color: #000;
+    box-shadow: none;
+  }
+  
+  button[mat-raised-button]:hover {
+    background-color: #ffea00;
+  }
+  

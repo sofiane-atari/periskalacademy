@@ -3,6 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, tap, of, catchError, map } from 'rxjs';
 import { AuthenticateResponse } from '../../models/authenticate-response.model';
 import { JwtDecoderService } from '../JwtDecode/jwt-decoder.service';
+import { ReloginModalComponent } from '../../components/Modals/relogin-modal/relogin-modal.component';
+import { MatDialog } from '@angular/material/dialog';
+import { LoginExpiryComponent } from '../../components/Modals/login-expiry/login-expiry.component';
 
 
 @Injectable({ providedIn: 'root' })
@@ -13,10 +16,12 @@ export class AuthenticationService {
   private dongleTokenUrl = `${this.baseUrl}/auth/decode-token`; // Dongle authentication endpoint
   private readonly TOKEN_KEY = 'jwt_token';
   private readonly SKIPPERS_LIST_KEY = 'skippers_List';
+  private readonly bufferTime = 15 * 60; // 15 minutes 
 
   constructor(
     private http: HttpClient,
-    private jwtDecoder: JwtDecoderService
+    private jwtDecoder: JwtDecoderService,
+    private dialog: MatDialog  
   ) { }
 
   getAuthToken(): string | null {
@@ -76,4 +81,51 @@ export class AuthenticationService {
     );
   }
 
+  ExpiryTimeChecker() {
+
+    const timeToExpiry = this.jwtDecoder.getTokenTimeToExpiry(); 
+    if (timeToExpiry === null) {
+      this.logout(); // If we can't get the expiry time, we assume the token is invalid
+      return;
+    }
+
+    const role = this.jwtDecoder.getUserRole(); 
+
+    const triggerTime = (timeToExpiry - this.bufferTime) * 1000
+
+    if (role === 'Administrator' || role === 'Fleetmanager' || role === 'Support') {
+      if (triggerTime <= 0) {
+        
+        this.promptReLogin(); 
+
+      }
+      else {
+        setTimeout(() => {
+          this.promptReLogin(); 
+        }, triggerTime);
+      }
+    }
+    else if (role === 'Skipper') {
+      if (triggerTime <= 0) {
+        
+        this.promptLoginExpiry();
+
+      }
+      else {
+        setTimeout(() => {
+          this.promptLoginExpiry();
+        }, triggerTime);
+      }
+    }
+  }
+
+  promptReLogin() {
+    
+    this.dialog.open(ReloginModalComponent);
+
+  }
+
+  promptLoginExpiry() {
+    this.dialog.open(LoginExpiryComponent)
+  }
 }
