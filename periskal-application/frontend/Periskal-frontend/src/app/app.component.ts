@@ -11,6 +11,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { RoleAuthorizationService } from './services/RoleAuthorization/role-authorization.service';
 import { filter, Observable } from 'rxjs';
 import { AuthenticationService } from './services/Authentication/authentication.service';
+import { JwtDecoderService } from '../app/services/JwtDecode/jwt-decoder.service';
 
 
 @Component({
@@ -23,10 +24,18 @@ import { AuthenticationService } from './services/Authentication/authentication.
 export class AppComponent implements OnInit {
   title = 'Periskal-frontend';
   showNavbar = true;
+  mobileMenuOpen = false;
+  userName ?: string;
+  userRole = "";
 
   lang: string = '';
 
-  constructor(private router: Router, private authService: AuthenticationService, private translateService: TranslateService,public roleAuth: RoleAuthorizationService) {
+  constructor(private router: Router
+    , private authService: AuthenticationService
+    , private translateService: TranslateService
+    ,public roleAuth: RoleAuthorizationService
+    ,private jwtDecoderService: JwtDecoderService
+  ) {
 
     this.translateService.setDefaultLang('nl');
     this.translateService.use(localStorage.getItem('lang') || 'nl');
@@ -44,6 +53,8 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
+     this.userName = this.jwtDecoderService.getUsername()!;
+     this.userRole = this.jwtDecoderService.getUserRole()!;
     // Only validate token when not on login-related pages
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
@@ -73,6 +84,13 @@ export class AppComponent implements OnInit {
 
   reloadPage(): void {
     window.location.reload();
+  }
+  toggleMobileMenu(): void {
+    this.mobileMenuOpen = !this.mobileMenuOpen;
+  }
+  logout() { 
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }
 
