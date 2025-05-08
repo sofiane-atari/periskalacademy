@@ -8,6 +8,11 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 @Entity
 public class Exam {
     @Id
@@ -16,6 +21,9 @@ public class Exam {
 
     private String examTitle;
     private String examDescription;
+    
+    @Column(nullable = false)
+    private int totalQuestions;
 
     @OneToMany(mappedBy = "exam", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference("exam-questions")
@@ -26,51 +34,12 @@ public class Exam {
     @JsonBackReference
     private Training training;
 
-    public List<Question> getQuestions() {
-        return questions;
-    }
-
-    public void setQuestions(List<Question> questions) {
-        this.questions = questions;
-    }
-
     public Exam() {
     }
 
-    public Exam(String examTitle, String examDescription) {
+    public Exam(String examTitle, String examDescription, int totalQuestions) {
         this.examTitle = examTitle;
         this.examDescription = examDescription;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getExamTitle() {
-        return examTitle;
-    }
-
-    public void setExamTitle(String examTitle) {
-        this.examTitle = examTitle;
-    }
-
-    public String getExamDescription() {
-        return examDescription;
-    }
-
-    public void setExamDescription(String examDescription) {
-        this.examDescription = examDescription;
-    }
-
-    public Training getTraining() {
-        return training;
-    }
-
-    public void setTraining(Training training) {
-        this.training = training;
-    }
 }

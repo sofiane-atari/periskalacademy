@@ -12,6 +12,7 @@ import periskal.academy.backend.jpa.QuestionRepository;
 import periskal.academy.backend.jpa.Training;
 import periskal.academy.backend.jpa.TrainingRepository;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -51,6 +52,7 @@ public class ExamService {
         Exam exam = new Exam();
         exam.setExamTitle(examRequest.getExamTitle());
         exam.setExamDescription(examRequest.getExamDescription());
+        exam.setTotalQuestions(examRequest.getTotalQuestions());
 
         // 2) Link Training
         Training training = trainingRepository.findById(examRequest.getTrainingId())
@@ -76,7 +78,7 @@ public class ExamService {
         }
         exam.setQuestions(questions);
 
-        // 4) Save the exam (cascades to questions & photos)
+        // 5) Save the exam (cascades to questions & photos)
         return examRepository.save(exam);
     }
 
@@ -87,6 +89,7 @@ public class ExamService {
 
             exam.setExamTitle(updatedExam.getExamTitle());
             exam.setExamDescription(updatedExam.getExamDescription());
+            exam.setTotalQuestions(updatedExam.getTotalQuestions());
 
             // Oude vragen verwijderen
             exam.getQuestions().clear();
