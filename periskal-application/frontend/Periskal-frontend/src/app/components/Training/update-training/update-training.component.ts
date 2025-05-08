@@ -180,8 +180,6 @@ export class UpdateTrainingComponent {
         if (photoId != null)
           this.trainingService.deletePhoto(photoId).subscribe({
             next: () => {
-              this.training?.modules[moduleIndex].chapters[chapterIndex].photos_en.splice(photoIndex, 1);
-              this.getTrainingDetails(this.trainingId);
               const snackBarConfig: MatSnackBarConfig = {
                 duration: 3000,
                 verticalPosition: 'bottom',
