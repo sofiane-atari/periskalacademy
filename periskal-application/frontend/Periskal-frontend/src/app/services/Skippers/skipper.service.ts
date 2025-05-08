@@ -1,29 +1,22 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-export interface Skipper {
-  id: string;
-  username: string;
-  firstname: string;
-  lastname: string;
-  shipname: string;
-  role: string;
-  products: string[];
-}
-
 
 @Injectable({
   providedIn: 'root'
 })
 export class SkipperService {
 
-  private baseUrl = 'http://localhost:8080/api';
-  private apiUrl = `${this.baseUrl}/skippers`;
-
   constructor(private http: HttpClient) { }
 
   getSkippers() {
-    return this.http.get<Skipper[]>(this.apiUrl);
-  }
+    
+    const skippersList = localStorage.getItem('skippers_List');
+    if (skippersList) {
+      return JSON.parse(skippersList); // Return the skippers list from local storage as an observable
+    } 
 
+    return ; // Return an empty array if no skippers are found in local storage
+  
+  }
 }

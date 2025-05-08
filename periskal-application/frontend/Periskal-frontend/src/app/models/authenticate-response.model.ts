@@ -1,3 +1,5 @@
+import { Skipper } from "./Skipper.model";
+
 export interface AuthenticateResponse {
     id: string;
     username: string;
@@ -8,5 +10,6 @@ export interface AuthenticateResponse {
     products: string[];
     loginResult: string;
     token: string;
+    skippers?: Skipper[]; // Optional property, only present for fleetmanager?
   }
     

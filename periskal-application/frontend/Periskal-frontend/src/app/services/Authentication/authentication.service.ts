@@ -12,6 +12,7 @@ export class AuthenticationService {
   private authUrl  = `${this.baseUrl}/auth/authenticate`; // Main authentication endpoint
   private dongleTokenUrl = `${this.baseUrl}/auth/decode-token`; // Dongle authentication endpoint
   private readonly TOKEN_KEY = 'jwt_token';
+  private readonly SKIPPERS_LIST_KEY = 'skippers_List';
 
   constructor(
     private http: HttpClient,
@@ -35,6 +36,9 @@ export class AuthenticationService {
     if (response.token) {
       localStorage.setItem(this.TOKEN_KEY, response.token);
     }
+    if (response.skippers && response.skippers.length > 0) {
+      localStorage.setItem(this.SKIPPERS_LIST_KEY, JSON.stringify(response.skippers));
+    }
   }
 
   authenticate(username: string, password: string): Observable<AuthenticateResponse> {
@@ -51,6 +55,7 @@ export class AuthenticationService {
 
   logout(): void {
     localStorage.removeItem(this.TOKEN_KEY);
+    localStorage.removeItem(this.SKIPPERS_LIST_KEY);
   }
 
   validateToken(): Observable<boolean> {

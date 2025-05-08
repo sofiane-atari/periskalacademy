@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {Skipper, SkipperService } from '../../services/Skippers/skipper.service';
+import {SkipperService } from '../../services/Skippers/skipper.service';
+import { Skipper } from '../../models/Skipper.model';
 
 @Component({
   selector: 'app-skippers',
