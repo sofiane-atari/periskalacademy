@@ -165,34 +165,48 @@ export class UpdateTrainingComponent {
 
   removePhoto(moduleIndex: number, chapterIndex: number, photoIndex: number) {
     const photoId = this.training?.modules[moduleIndex].chapters[chapterIndex].photos_en[photoIndex].id;
-    if (photoId != null)
-      this.trainingService.deletePhoto(photoId).subscribe({
-        next: () => {
-          this.training?.modules[moduleIndex].chapters[chapterIndex].photos_en.splice(photoIndex, 1);
-          this.getTrainingDetails(this.trainingId);
-          const snackBarConfig: MatSnackBarConfig = {
-            duration: 3000,
-            verticalPosition: 'bottom',
-            horizontalPosition: 'left',
-            panelClass: ['snackbar-success'],
-            politeness: 'assertive'
-          };
-          this.getTrainingDetails(this.trainingId);
+    const dialogRef = this.dialog.open(ConfirmPromptComponent, {
+      width: '600px',
+      data: {
+        title: 'Delete Module',
+        message: 'Are you sure you want to delete this module? This action cannot be undone.',
+        confirmText: 'Delete',
+        cancelText: "Cancel"
+      }
+    });
 
-          this.snackBar.open('Photo has successfully been deleted.', 'Close', snackBarConfig);
-        },
-        error: (err) => {
-          const errorSnackBarConfig: MatSnackBarConfig = {
-            duration: 5000,
-            verticalPosition: 'bottom',
-            horizontalPosition: 'left',
-            panelClass: ['snackbar-error'],
-            politeness: 'assertive'
-          };
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        if (photoId != null)
+          this.trainingService.deletePhoto(photoId).subscribe({
+            next: () => {
+              this.training?.modules[moduleIndex].chapters[chapterIndex].photos_en.splice(photoIndex, 1);
+              this.getTrainingDetails(this.trainingId);
+              const snackBarConfig: MatSnackBarConfig = {
+                duration: 3000,
+                verticalPosition: 'bottom',
+                horizontalPosition: 'left',
+                panelClass: ['snackbar-success'],
+                politeness: 'assertive'
+              };
+              this.getTrainingDetails(this.trainingId);
 
-          this.snackBar.open('Error deleting photo.', 'Close', errorSnackBarConfig);
-        }
-      });
+              this.snackBar.open('Photo has successfully been deleted.', 'Close', snackBarConfig);
+            },
+            error: (err) => {
+              const errorSnackBarConfig: MatSnackBarConfig = {
+                duration: 5000,
+                verticalPosition: 'bottom',
+                horizontalPosition: 'left',
+                panelClass: ['snackbar-error'],
+                politeness: 'assertive'
+              };
+
+              this.snackBar.open('Error deleting photo.', 'Close', errorSnackBarConfig);
+            }
+          });
+      }
+    });
   }
 
   goToModuleAddPage() {

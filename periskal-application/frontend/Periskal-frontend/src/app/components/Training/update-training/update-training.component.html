@@ -292,8 +292,8 @@
             ></textarea>
           </div>
           <div>
-            <label for="photoChapter{{$index}}_{{chapterIndex}}_en">{{'PHOTO'|translate}}</label>
             @if (chapter.photos_en != null) {
+            <label for="photoChapter{{$index}}_{{chapterIndex}}_en">{{'PHOTO'|translate}}</label>
             @for (photo of chapter.photos_en; track $index; let photoIndex = $index) {
               <img src="{{photo.imageData}}" alt="">
               <button type="button" class="btn btn-danger" (click)="removePhoto($index,chapterIndex,photoIndex)">
