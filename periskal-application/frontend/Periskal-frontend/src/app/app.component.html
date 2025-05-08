@@ -1,79 +1,8 @@
 @if(showNavbar) {
-  <!-- <html lang="en">
-    <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Periskal</title>
-    </head>
-    <body>
-      <nav class="navbar navbar-expand-lg custom-navbar">
-        <div class="container">
-          <p class="navbar-brand text-dark">Periskal</p>
-          <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav"
-          >
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-              <li class="nav-item">
-                <a
-                  class="nav-link text-dark"
-                  routerLink="/trainingEmployee"
-                  routerLinkActive="active"
-                  ariaCurrentWhenActive="page"
-                  >{{'EMPLOYEE_DASHBOARD' | translate}}</a
-                >
-              </li>
-              <li class="nav-item">
-                <a
-                  class="nav-link text-dark"
-                  routerLink="/test"
-                  routerLinkActive="active"
-                  ariaCurrentWhenActive="page"
-                  >{{'TEST_COMPONENT' | translate}}</a
-                >
-              </li>
-              <li class="nav-item">
-                <a class="nav-link text-dark" href="#">{{'HOME' | translate }}</a>
-              </li>
-              @if (roleAuth.hasPermission(['Fleetmanager'])) {
-              <li class="nav-item">
-                <a class="nav-link text-dark" 
-                  routerLink="/skippers"             
-                  routerLinkActive="active"             
-                  ariaCurrentWhenActive="page" 
-                  href="#">{{'SKIPPERS' | translate}}</a>
-              </li>}
-            </ul>
-            <ul class="navbar-nav ms-auto">
-              <li class="nav-item">
-                <select class="form-select" (change)="ChangeLang($event)" id="">
-                  <option [selected]="lang === 'nl'" value="nl">Nederlands</option>
-                  <option [selected]="lang === 'en'" value="en">English</option>
-                  <option [selected]="lang === 'fr'" value="fr">Français</option>
-                  <option [selected]="lang === 'de'" value="de">Deutsch</option>
-                </select>
-              </li>
-            </ul>
-  
-            <div class="ms-auto">
-              <a class="nav-link text-dark" routerLink="/profile" routerLinkActive="active" ariaCurrentWhenActive="page">
-                <i class="fas fa-user profile-icon"></i>
-              </a>
-            </div>
-          </div>
-        </div>
-      </nav>
-    </body>
-  </html> -->
   <div class="sidebar">
     <!-- Logo -->
     <div class="logo-container">
-      <img src="https://via.placeholder.com/150x50?text=PERISKAL" alt="Periskal Group" class="logo">
+      <img src="https://spw-wt.periskal.com/Web/img/logos/periskalLogo.png" alt="Periskal Group" class="logo">
     </div>
     
     <!-- User Profile -->
@@ -116,7 +45,8 @@
             <span class="nav-text">Modules</span>
           </a>
         </li>
-        <li class="nav-item" *ngIf="roleAuth.hasPermission(['Fleetmanager'])">
+        <li class="nav-item">
+          @if(roleAuth.hasPermission(['Fleetmanager'])){
           <a class="nav-link" routerLink="/skippers" routerLinkActive="active">
             <span class="nav-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -128,6 +58,7 @@
             </span>
             <span class="nav-text">{{'SKIPPERS' | translate}}</span>
           </a>
+        }
         </li>
       </ul>
     </nav>
