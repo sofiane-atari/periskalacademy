@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {Skipper, SkipperService } from '../../services/Skippers/skipper.service';
+import {SkipperService } from '../../services/Skippers/skipper.service';
+import { Skipper } from '../../models/Skipper.model';
 
 @Component({
   selector: 'app-skippers',
   standalone: true,
   imports: [CommonModule],
-  providers: [SkipperService],
+  providers: [],
   templateUrl: './skippers.component.html',
   styleUrls: ['./skippers.component.css']
 })
@@ -23,12 +24,12 @@ export class SkippersComponent implements OnInit {
 
   fetchSkippersData() {
     this.skipperService.getSkippers().subscribe({
-      next: (data) => {
-        this.skippers = data;
+      next: (data: Skipper[]) => {
+      this.skippers = data;
       },
-      error: (err) => {
-        console.error('Error fetching skippers:', err);
-        this.error = 'Failed to load skippers. Please try again later.';   
+      error: (err: unknown) => {
+      console.error('Error fetching skippers:', err);
+      this.error = 'Failed to load skippers. Please try again later.';   
       }
     });
   }

@@ -1,6 +1,8 @@
 package periskal.academy.backend.model;
 import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -32,4 +34,7 @@ public class AuthenticateResponse {
     private String loginResult;
 
     private String token;
+
+    private List<Client> skippers;
+    
 }

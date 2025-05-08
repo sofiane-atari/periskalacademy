@@ -22,6 +22,7 @@ import org.xml.sax.SAXException;
 
 import lombok.extern.slf4j.Slf4j;
 import periskal.academy.backend.model.AuthenticateResponse;
+import periskal.academy.backend.model.Client;
 import periskal.academy.backend.security.Exceptions.AuthenticationExceptions.AuthenticationCommunicationException;
 import periskal.academy.backend.security.Exceptions.AuthenticationExceptions.AuthenticationInvalidCredentialsException;
 import periskal.academy.backend.security.Exceptions.AuthenticationExceptions.AuthenticationParsingException;
@@ -103,6 +104,22 @@ public abstract class BaseAuthenticationService {
                 }
             }
             authResponse.setProducts(products);
+            
+            // Extract Skippers/Clients
+            NodeList SkippersNodeList = doc.getElementsByTagName("Skippers");
+            List<Client> skippersList = new ArrayList<>();
+            if (SkippersNodeList.getLength() > 0) {
+                NodeList clientNodes = SkippersNodeList.item(0).getChildNodes();
+                for (int i = 0; i < clientNodes.getLength(); i++) { 
+                    Node clientNode = clientNodes.item(i); 
+                    if (clientNode.getNodeName().equals("Client")) { 
+                        Client client = parseClientNode(clientNode); 
+                        skippersList.add(client); 
+                    }
+                }   
+            }
+            authResponse.setSkippers(skippersList);
+
 
             if (authResponse.getLoginResult() == null || authResponse.getLoginResult().isBlank() || authResponse.getLoginResult().equals("Invalid Credentials")) {
                 log.debug("Authentication attempt failed: Service returned empty LoginResult, likely invalid credentials.");
@@ -132,4 +149,64 @@ public abstract class BaseAuthenticationService {
         }
         return null;
     }
+
+    //Helper method to parse Client node from XML. , replace this with a library like jaxb
+
+    private Client parseClientNode(Node clientNode) {
+        Client client = new Client();
+        NodeList childNodes = clientNode.getChildNodes();
+    
+        for (int i = 0; i < childNodes.getLength(); i++) {
+            Node node = childNodes.item(i);
+    
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                String nodeName = node.getNodeName();
+                String nodeValue = node.getTextContent();
+    
+                switch (nodeName) {
+                    case "ID":
+                        client.setId(nodeValue);
+                        break;
+                    case "Username":
+                        client.setUsername(nodeValue);
+                        break;
+                    case "Password":
+                        client.setPassword(nodeValue);
+                        break;
+                    case "Firstname":
+                        client.setFirstname(nodeValue);
+                        break;
+                    case "Lastname":
+                        client.setLastname(nodeValue);
+                        break;
+                    case "Shipname":
+                        client.setShipname(nodeValue);
+                        break;
+                    case "Role":
+                        client.setRole(nodeValue);
+                        break;
+                }
+    
+                if (nodeName.equals("Products")) {
+                    List<String> products = new ArrayList<>();
+                    NodeList productNodes = node.getChildNodes();
+    
+                    for (int j = 0; j < productNodes.getLength(); j++) {
+                        Node productNode = productNodes.item(j);
+    
+                        if (productNode.getNodeType() == Node.ELEMENT_NODE) {
+                            products.add(productNode.getTextContent());
+                        }
+                    }
+    
+                    client.setProducts(products);
+                }
+            }
+        }
+    
+        return client;
+    }
+    
+
+
 }
