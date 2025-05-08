@@ -36,7 +36,7 @@ public class AuthenticateResponse {
     @JsonProperty("Token")
     private String token;
 
-    @JsonProperty("Clients")
-    private List<Client> clients;
+    @JsonProperty("Skippers")
+    private List<Client> skippers;
     
 }

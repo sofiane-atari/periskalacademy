@@ -11,13 +11,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Client {
     
-    private String ID;
-    private String Username;
-    private String Password;
-    private String Firstname;
-    private String Lastname;
-    private String Shipname;
-    private String Role;
-    private List<String> Products;
+    private String id;
+    private String username;
+    private String password;
+    private String firstname;
+    private String lastname;
+    private String shipname;
+    private String role;
+    private List<String> products;
 
 }
