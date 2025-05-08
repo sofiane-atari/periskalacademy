@@ -23,7 +23,8 @@ public final class JwtUtil {
     private JwtUtil() {} // Private constructor to prevent instantiation
     private static final String SECRET_KEY = "qX12L3J8RkMbX9n5z2k7nA3j8yPw9DAbF2LtR3m+5Fw="; // Replace with a properly secured key, Generate a random key using a secure random number generator later? Leave to periskal?
     private static final MacAlgorithm ALGORITHM = Jwts.SIG.HS256; 
-    private static final long JWT_TOKEN_VALIDITY = 10 * 60 * 60 * 1000; // 10 hours in milliseconds, change to less for more security later and add refresh tokens? 
+    //private static final long JWT_TOKEN_VALIDITY = 10 * 60 * 60 * 1000; // 10 hours in milliseconds, change to less for more security later and add refresh tokens? 
+    private static final long JWT_TOKEN_VALIDITY = 20 * 60 * 1000; //TODO remove debug
 
     // Generate the SecretKey instance from the base64-encoded secret key
     private static SecretKey getSigningKey() {
