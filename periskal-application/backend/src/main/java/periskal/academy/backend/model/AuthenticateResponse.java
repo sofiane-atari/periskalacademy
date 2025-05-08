@@ -33,10 +33,8 @@ public class AuthenticateResponse {
     @JsonProperty("LoginResult")
     private String loginResult;
 
-    @JsonProperty("Token")
     private String token;
 
-    @JsonProperty("Skippers")
     private List<Client> skippers;
     
 }
