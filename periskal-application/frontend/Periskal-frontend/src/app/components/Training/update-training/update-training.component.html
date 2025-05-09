@@ -98,94 +98,94 @@
     </div>
 
     <!-- Modules and their chapters -->
-    @for (module of training.modules; track $index) {
+    @for (module of training.modules; track $index; let moduleIndex = $index) {
     <div class="module">
-      <h3>{{'MODULE' | translate}} {{ $index + 1 }}</h3>
+      <h3>{{'MODULE' | translate}} {{ moduleIndex + 1 }}</h3>
       
       <!-- Module name fields -->
       <div class="form-group">
-        <label for="nameModule{{ $index }}_en">{{'NAME' | translate}} (EN)</label>
+        <label for="nameModule{{ moduleIndex }}_en">{{'NAME' | translate}} (EN)</label>
         <input
           type="text"
-          id="nameModule{{ $index }}_en"
+          id="nameModule{{ moduleIndex }}_en"
           class="form-control"
           [(ngModel)]="module.nameModule_en"
-          name="nameModule{{ $index }}_en"
+          name="nameModule{{ moduleIndex }}_en"
           required
         />
       </div>
       <div class="form-group">
-        <label for="nameModule{{ $index }}_nl">{{'NAME' | translate}} (NL)</label>
+        <label for="nameModule{{ moduleIndex }}_nl">{{'NAME' | translate}} (NL)</label>
         <input
           type="text"
-          id="nameModule{{ $index }}_nl"
+          id="nameModule{{ moduleIndex }}_nl"
           class="form-control"
           [(ngModel)]="module.nameModule_nl"
-          name="nameModule{{ $index }}_nl"
+          name="nameModule{{ moduleIndex }}_nl"
           required
         />
       </div>
       <div class="form-group">
-        <label for="nameModule{{ $index }}_fr">{{'NAME' | translate}} (FR)</label>
+        <label for="nameModule{{ moduleIndex }}_fr">{{'NAME' | translate}} (FR)</label>
         <input
           type="text"
-          id="nameModule{{ $index }}_fr"
+          id="nameModule{{ moduleIndex }}_fr"
           class="form-control"
           [(ngModel)]="module.nameModule_fr"
-          name="nameModule{{ $index }}_fr"
+          name="nameModule{{ moduleIndex }}_fr"
           required
         />
       </div>
       <div class="form-group">
-        <label for="nameModule{{ $index }}_de">{{'NAME' | translate}} (DE)</label>
+        <label for="nameModule{{ moduleIndex }}_de">{{'NAME' | translate}} (DE)</label>
         <input
           type="text"
-          id="nameModule{{ $index }}_de"
+          id="nameModule{{ moduleIndex }}_de"
           class="form-control"
           [(ngModel)]="module.nameModule_de"
-          name="nameModule{{ $index }}_de"
+          name="nameModule{{ moduleIndex}}_de"
           required
         />
       </div>
       
       <!-- Module description fields -->
       <div class="form-group">
-        <label for="descriptionModule{{ $index }}_en">{{'DESCRIPTION' | translate}} (EN)</label>
+        <label for="descriptionModule{{ moduleIndex }}_en">{{'DESCRIPTION' | translate}} (EN)</label>
         <textarea
-          id="descriptionModule{{ $index }}_en"
+          id="descriptionModule{{ moduleIndex }}_en"
           class="form-control"
           [(ngModel)]="module.descriptionModule_en"
-          name="descriptionModule{{ $index }}_en"
+          name="descriptionModule{{ moduleIndex }}_en"
           required
         ></textarea>
       </div>
       <div class="form-group">
-        <label for="descriptionModule{{ $index }}_nl">{{'DESCRIPTION' | translate}} (NL)</label>
+        <label for="descriptionModule{{ moduleIndex }}_nl">{{'DESCRIPTION' | translate}} (NL)</label>
         <textarea
-          id="descriptionModule{{ $index }}_nl"
+          id="descriptionModule{{ moduleIndex }}_nl"
           class="form-control"
           [(ngModel)]="module.descriptionModule_nl"
-          name="descriptionModule{{ $index }}_nl"
+          name="descriptionModule{{ moduleIndex }}_nl"
           required
         ></textarea>
       </div>
       <div class="form-group">
-        <label for="descriptionModule{{ $index }}_fr">{{'DESCRIPTION' | translate}} (FR)</label>
+        <label for="descriptionModule{{ moduleIndex }}_fr">{{'DESCRIPTION' | translate}} (FR)</label>
         <textarea
-          id="descriptionModule{{ $index }}_fr"
+          id="descriptionModule{{ moduleIndex }}_fr"
           class="form-control"
           [(ngModel)]="module.descriptionModule_fr"
-          name="descriptionModule{{ $index }}_fr"
+          name="descriptionModule{{ moduleIndex }}_fr"
           required
         ></textarea>
       </div>
       <div class="form-group">
-        <label for="descriptionModule{{ $index }}_de">{{'DESCRIPTION' | translate}} (DE)</label>
+        <label for="descriptionModule{{ moduleIndex }}_de">{{'DESCRIPTION' | translate}} (DE)</label>
         <textarea
-          id="descriptionModule{{ $index }}_de"
+          id="descriptionModule{{ moduleIndex }}_de"
           class="form-control"
           [(ngModel)]="module.descriptionModule_de"
-          name="descriptionModule{{ $index }}_de"
+          name="descriptionModule{{ moduleIndex }}_de"
           required
         ></textarea>
       </div>
@@ -206,107 +206,136 @@
           
           <!-- Chapter name fields -->
           <div class="form-group">
-            <label for="nameChapter{{ $index }}_{{ chapterIndex }}_en">{{'NAME' | translate}} (EN)</label>
+            <label for="nameChapter{{ moduleIndex }}_{{ chapterIndex }}_en">{{'NAME' | translate}} (EN)</label>
             <input
               type="text"
-              id="nameChapter{{ $index }}_{{ chapterIndex }}_en"
+              id="nameChapter{{ moduleIndex }}_{{ chapterIndex }}_en"
               class="form-control"
               [(ngModel)]="chapter.nameChapter_en"
-              name="nameChapter{{ $index }}_{{ chapterIndex }}_en"
+              name="nameChapter{{ moduleIndex }}_{{ chapterIndex }}_en"
               required
             />
           </div>
           <div class="form-group">
-            <label for="nameChapter{{ $index }}_{{ chapterIndex }}_nl">{{'NAME' | translate}} (NL)</label>
+            <label for="nameChapter{{ moduleIndex }}_{{ chapterIndex }}_nl">{{'NAME' | translate}} (NL)</label>
             <input
               type="text"
-              id="nameChapter{{ $index }}_{{ chapterIndex }}_nl"
+              id="nameChapter{{ moduleIndex }}_{{ chapterIndex }}_nl"
               class="form-control"
               [(ngModel)]="chapter.nameChapter_nl"
-              name="nameChapter{{ $index }}_{{ chapterIndex }}_nl"
+              name="nameChapter{{ moduleIndex }}_{{ chapterIndex }}_nl"
               required
             />
           </div>
           <div class="form-group">
-            <label for="nameChapter{{ $index }}_{{ chapterIndex }}_fr">{{'NAME' | translate}} (FR)</label>
+            <label for="nameChapter{{ moduleIndex }}_{{ chapterIndex }}_fr">{{'NAME' | translate}} (FR)</label>
             <input
               type="text"
-              id="nameChapter{{ $index }}_{{ chapterIndex }}_fr"
+              id="nameChapter{{ moduleIndex }}_{{ chapterIndex }}_fr"
               class="form-control"
               [(ngModel)]="chapter.nameChapter_fr"
-              name="nameChapter{{ $index }}_{{ chapterIndex }}_fr"
+              name="nameChapter{{ moduleIndex }}_{{ chapterIndex }}_fr"
               required
             />
           </div>
           <div class="form-group">
-            <label for="nameChapter{{ $index }}_{{ chapterIndex }}_de">{{'NAME' | translate}} (DE)</label>
+            <label for="nameChapter{{ moduleIndex }}_{{ chapterIndex }}_de">{{'NAME' | translate}} (DE)</label>
             <input
               type="text"
-              id="nameChapter{{ $index }}_{{ chapterIndex }}_de"
+              id="nameChapter{{ moduleIndex }}_{{ chapterIndex }}_de"
               class="form-control"
               [(ngModel)]="chapter.nameChapter_de"
-              name="nameChapter{{ $index }}_{{ chapterIndex }}_de"
+              name="nameChapter{{ moduleIndex }}_{{ chapterIndex }}_de"
               required
             />
           </div>
           
           <!-- Chapter description fields -->
           <div class="form-group">
-            <label for="descriptionChapter{{ $index }}_{{ chapterIndex }}_en">{{'DESCRIPTION' | translate}} (EN)</label>
+            <label for="descriptionChapter{{ moduleIndex }}_{{ chapterIndex }}_en">{{'DESCRIPTION' | translate}} (EN)</label>
             <textarea
-              id="descriptionChapter{{ $index }}_{{ chapterIndex }}_en"
+              id="descriptionChapter{{ moduleIndex }}_{{ chapterIndex }}_en"
               class="form-control"
               [(ngModel)]="chapter.descriptionChapter_en"
-              name="descriptionChapter{{ $index }}_{{ chapterIndex }}_en"
+              name="descriptionChapter{{ moduleIndex }}_{{ chapterIndex }}_en"
               required
             ></textarea>
           </div>
           <div class="form-group">
-            <label for="descriptionChapter{{ $index }}_{{ chapterIndex }}_nl">{{'DESCRIPTION' | translate}} (NL)</label>
+            <label for="descriptionChapter{{ moduleIndex }}_{{ chapterIndex }}_nl">{{'DESCRIPTION' | translate}} (NL)</label>
             <textarea
-              id="descriptionChapter{{ $index }}_{{ chapterIndex }}_nl"
+              id="descriptionChapter{{ moduleIndex }}_{{ chapterIndex }}_nl"
               class="form-control"
               [(ngModel)]="chapter.descriptionChapter_nl"
-              name="descriptionChapter{{ $index }}_{{ chapterIndex }}_nl"
+              name="descriptionChapter{{ moduleIndex }}_{{ chapterIndex }}_nl"
               required
             ></textarea>
           </div>
           <div class="form-group">
-            <label for="descriptionChapter{{ $index }}_{{ chapterIndex }}_fr">{{'DESCRIPTION' | translate}} (FR)</label>
+            <label for="descriptionChapter{{ moduleIndex }}_{{ chapterIndex }}_fr">{{'DESCRIPTION' | translate}} (FR)</label>
             <textarea
-              id="descriptionChapter{{ $index }}_{{ chapterIndex }}_fr"
+              id="descriptionChapter{{ moduleIndex }}_{{ chapterIndex }}_fr"
               class="form-control"
               [(ngModel)]="chapter.descriptionChapter_fr"
-              name="descriptionChapter{{ $index }}_{{ chapterIndex }}_fr"
+              name="descriptionChapter{{ moduleIndex }}_{{ chapterIndex }}_fr"
               required
             ></textarea>
           </div>
           <div class="form-group">
-            <label for="descriptionChapter{{ $index }}_{{ chapterIndex }}_de">{{'DESCRIPTION' | translate}} (DE)</label>
+            <label for="descriptionChapter{{ moduleIndex }}_{{ chapterIndex }}_de">{{'DESCRIPTION' | translate}} (DE)</label>
             <textarea
-              id="descriptionChapter{{ $index }}_{{ chapterIndex }}_de"
+              id="descriptionChapter{{ moduleIndex }}_{{ chapterIndex }}_de"
               class="form-control"
               [(ngModel)]="chapter.descriptionChapter_de"
-              name="descriptionChapter{{ $index }}_{{ chapterIndex }}_de"
+              name="descriptionChapter{{ moduleIndex }}_{{ chapterIndex }}_de"
               required
             ></textarea>
+          </div>
+          <div>
+            @if (chapter.photos_en != null) {
+              @for (photo of chapter.photos_en; track $index; let photoIndex = $index) {
+                <div class="photo-item">
+                  <label for="photoChapter{{moduleIndex}}_{{chapterIndex}}_{{photoIndex}}_en">{{'PHOTO' |translate}} {{photoIndex+1}}</label>
+                  <img src="{{photo.imageData}}" alt="">
+                  <button type="button" class="btn btn-danger" (click)="removePhoto(moduleIndex, chapterIndex, photoIndex)">
+                    {{'REMOVE_PHOTO' | translate}}
+                  </button>
+                </div>
+              }
+            }        
+          
+            <div class="form-group">
+              <p><strong>{{'ADD_NEW_PHOTO' | translate}}</strong></p>
+              <app-photo-upload [(ngModel)]="newPhotos[moduleIndex + '_' + chapterIndex]" 
+                              name="photos_{{moduleIndex}}_{{chapterIndex}}"
+                              (change)="onPhotosChange(moduleIndex, chapterIndex)">
+              </app-photo-upload>
+            </div>
+              @if((newPhotos[moduleIndex + '_' + chapterIndex]?.length || 0) > 0) {
+              <button
+                      type="button" 
+                      class="btn btn-primary" 
+                      (click)="savePhotos(moduleIndex, chapterIndex)">
+                {{'ADD_PHOTOS' | translate}}
+              </button>
+          }
           </div>
           
           <!-- Delete chapter button -->
-          <button type="button" class="btn btn-danger" (click)="removeChapter($index, chapterIndex)">
+          <button type="button" class="btn btn-danger" (click)="removeChapter(moduleIndex, chapterIndex)">
             {{'DELETE_CHAPTER' | translate}}
           </button>
         </div>
-        }
+      }
         
         <!-- Add chapter button -->
-        <button type="button" class="btn btn-secondary" (click)="goToChapterAddPage($index)">
+        <button type="button" class="btn btn-secondary" (click)="goToChapterAddPage(moduleIndex)">
           {{'ADD_CHAPTER' | translate}}
         </button>
       </div>
       
       <!-- Delete module button -->
-      <button type="button" class="btn btn-danger" (click)="removeModule($index)">
+      <button type="button" class="btn btn-danger" (click)="removeModule(moduleIndex)">
         {{'DELETE_MODULE' | translate}}
       </button>
     </div>

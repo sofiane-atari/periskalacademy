@@ -8,10 +8,12 @@ import { ConfirmPromptComponent } from '../../confirm-prompt/confirm-prompt.comp
 import { MatDialog } from '@angular/material/dialog'
 import { MatSnackBar, MatSnackBarConfig, MatSnackBarModule } from '@angular/material/snack-bar'
 import { ModuleService } from '../../../services/Module/module.service';
+import { Photo } from '../../../models/photo.model';
+import { PhotoUploadComponent } from "../../photo-upload/photo-upload.component";
 
 @Component({
   selector: 'app-update-training',
-  imports: [FormsModule, TranslatePipe, ConfirmPromptComponent, TranslatePipe, MatSnackBarModule],
+  imports: [FormsModule, TranslatePipe, ConfirmPromptComponent, TranslatePipe, MatSnackBarModule, PhotoUploadComponent],
   templateUrl: './update-training.component.html',
   styleUrl: './update-training.component.css'
 })
@@ -20,6 +22,8 @@ export class UpdateTrainingComponent {
   loading: boolean = true;
   errorMessage: string = '';
   trainingId: number = 0;
+  photos: Photo[] | null = null;
+  newPhotos: { [key: string]: Photo[] } = {};
 
   constructor(
     private trainingService: TrainingService,
@@ -62,6 +66,21 @@ export class UpdateTrainingComponent {
 
   updateTraining() {
     if (this.training?.id) {
+      // Remove photos from the payload before sending
+      const trainingToUpdate = structuredClone(this.training) as any;
+
+      trainingToUpdate.modules?.forEach((module: any) => {
+        module.chapters?.forEach((chapter: any) => {
+          delete chapter.photos_en;
+          delete chapter.photos_nl;
+          delete chapter.photos_fr;
+          delete chapter.photos_de;
+        });
+      });
+
+      console.log(trainingToUpdate);
+      console.log(this.training);
+
       this.trainingService.updateTraining(this.training.id, this.training).subscribe({
         next: (data) => {
           const snackBarConfig: MatSnackBarConfig = {
@@ -134,6 +153,32 @@ export class UpdateTrainingComponent {
     });
   }
 
+  onPhotosChange(moduleIndex: number, chapterIndex: number): void {
+    // This method is triggered when photos are selected
+    console.log('Photos changed for module', moduleIndex, 'chapter', chapterIndex);
+  }
+
+  savePhotos(moduleIndex: number, chapterIndex: number): void {
+    const key = moduleIndex + '_' + chapterIndex;
+    const photos = this.newPhotos[key] || [];
+
+    if (!photos.length) return;
+    const chapterId = this.training?.modules[moduleIndex].chapters[chapterIndex].id;
+    if (chapterId != null) {
+      this.trainingService.addPhotos(chapterId, photos).subscribe({
+        next: () => {
+          this.getTrainingDetails(this.trainingId);
+          console.log("updated photos successfully")
+        },
+        error: (err) => {
+          console.log("error by adding photos");
+          console.log(err);
+        }
+      });
+    }
+    this.newPhotos[key] = [];
+  }
+
   addModule() {
     if (!this.training) return;
 
@@ -159,6 +204,50 @@ export class UpdateTrainingComponent {
       chapters: []
     };
     this.training?.modules.push(newModule);
+  }
+
+  removePhoto(moduleIndex: number, chapterIndex: number, photoIndex: number) {
+    const photoId = this.training?.modules[moduleIndex].chapters[chapterIndex].photos_en[photoIndex].id;
+    const dialogRef = this.dialog.open(ConfirmPromptComponent, {
+      width: '600px',
+      data: {
+        title: 'Delete Module',
+        message: 'Are you sure you want to delete this module? This action cannot be undone.',
+        confirmText: 'Delete',
+        cancelText: "Cancel"
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        if (photoId != null)
+          this.trainingService.deletePhoto(photoId).subscribe({
+            next: () => {
+              const snackBarConfig: MatSnackBarConfig = {
+                duration: 3000,
+                verticalPosition: 'bottom',
+                horizontalPosition: 'left',
+                panelClass: ['snackbar-success'],
+                politeness: 'assertive'
+              };
+              this.getTrainingDetails(this.trainingId);
+
+              this.snackBar.open('Photo has successfully been deleted.', 'Close', snackBarConfig);
+            },
+            error: (err) => {
+              const errorSnackBarConfig: MatSnackBarConfig = {
+                duration: 5000,
+                verticalPosition: 'bottom',
+                horizontalPosition: 'left',
+                panelClass: ['snackbar-error'],
+                politeness: 'assertive'
+              };
+
+              this.snackBar.open('Error deleting photo.', 'Close', errorSnackBarConfig);
+            }
+          });
+      }
+    });
   }
 
   goToModuleAddPage() {
@@ -189,6 +278,20 @@ export class UpdateTrainingComponent {
   }
 
   removeChapter(moduleIndex: number, chapterIndex: number) {
-    //implement
+    const dialogRef = this.dialog.open(ConfirmPromptComponent, {
+      width: '600px',
+      data: {
+        title: 'Delete Chapter',
+        message: 'Are you sure you want to delete this chapter? This action cannot be undone.',
+        confirmText: 'Delete',
+        cancelText: "Cancel"
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.training?.modules[moduleIndex].chapters.splice(chapterIndex, 1);
+      }
+    });
   }
 }
