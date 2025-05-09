@@ -163,7 +163,7 @@ class TrainingServiceTest {
 
     @Test
     void givenExistingTraining_whenGetTrainingById_thenTrainingIsReturned() {
-        when(trainingRepository.findById(1L)).thenReturn(Optional.of(training));
+        when(trainingRepository.findByIdWithDetails(1L)).thenReturn(Optional.of(training));
 
         Training foundTraining = trainingService.getTrainingById(1L);
 
@@ -186,7 +186,7 @@ class TrainingServiceTest {
         moduleDto.setNameModule_en("New Module");
         moduleDto.setDescriptionModule_en("Module Description");
 
-        when(trainingRepository.findById(1L)).thenReturn(Optional.of(training));
+        when(trainingRepository.findByIdWithDetails(1L)).thenReturn(Optional.of(training));
 
         Module newModule = new Module();
         newModule.setNameModule_en("New Module");
@@ -226,7 +226,7 @@ class TrainingServiceTest {
         updatedTraining.setDescription_en("Updated Description");
         updatedTraining.setModules(updatedModules);
 
-        when(trainingRepository.findById(1L)).thenReturn(Optional.of(existingTraining));
+        when(trainingRepository.findByIdWithDetails(1L)).thenReturn(Optional.of(existingTraining));
         when(trainingRepository.save(existingTraining)).thenReturn(existingTraining);
 
         // Act

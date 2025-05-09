@@ -8,6 +8,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import periskal.academy.backend.dto.ModuleDTO;
@@ -29,12 +30,14 @@ public class TrainingService {
     private TrainingRepository trainingRepository;
     private ModuleRepository moduleRepository;
     private PhotoRepository photoRepository;
+    private EntityManager entityManager;
 
     public TrainingService(TrainingRepository trainingRepository, ModuleRepository moduleRepository,
-            PhotoRepository photoRepository) {
+            PhotoRepository photoRepository, EntityManager entityManager) {
         this.trainingRepository = trainingRepository;
         this.moduleRepository = moduleRepository;
         this.photoRepository = photoRepository;
+        this.entityManager = entityManager;
     }
 
     private TrainingDTO convertToDto(Training training) {
@@ -60,8 +63,9 @@ public class TrainingService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public Training getTrainingById(Long id) {
-        return trainingRepository.findById(id)
+        return trainingRepository.findByIdWithDetails(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Training not found with id: " + id));
     }
 
@@ -134,6 +138,12 @@ public class TrainingService {
         // Update basic fields
         existingTraining.setName_en(updatedTraining.getName_en());
         existingTraining.setDescription_en(updatedTraining.getDescription_en());
+        existingTraining.setName_nl(updatedTraining.getName_nl());
+        existingTraining.setDescription_nl(updatedTraining.getDescription_nl());
+        existingTraining.setName_fr(updatedTraining.getName_fr());
+        existingTraining.setDescription_fr(updatedTraining.getDescription_fr());
+        existingTraining.setName_de(updatedTraining.getName_de());
+        existingTraining.setDescription_de(updatedTraining.getDescription_de());
 
         // Clear and replace modules (cascade + orphanRemoval will handle deletions)
         existingTraining.getModules().clear();
@@ -143,16 +153,12 @@ public class TrainingService {
 
             for (Chapter updatedChapter : updatedModule.getChapters()) {
                 updatedChapter.setModule(updatedModule); // Set owning side
-
-                for (Photo updatedPhoto : updatedChapter.getPhotos_en()) {
-                    updatedPhoto.setChapter(updatedChapter); // Set owning side
-                }
             }
-
             existingTraining.getModules().add(updatedModule);
         }
 
         try {
+            // Save the updated training
             return trainingRepository.save(existingTraining);
         } catch (DataIntegrityViolationException e) {
             log.error("Failed to update training {} due to data integrity violation: {}", id, e.getMessage());

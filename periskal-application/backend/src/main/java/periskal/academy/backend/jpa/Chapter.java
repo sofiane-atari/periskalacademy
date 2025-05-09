@@ -58,18 +58,6 @@ public class Chapter {
 
     @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<Photo> photos_nl = new ArrayList<>();
-
-    @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<Photo> photos_fr = new ArrayList<>();
-
-    @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<Photo> photos_de = new ArrayList<>();
-
-    @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
     private List<Video> videos = new ArrayList<>();
 
     public Chapter(String nameChapter, String descriptionChapter, String textChapter) {

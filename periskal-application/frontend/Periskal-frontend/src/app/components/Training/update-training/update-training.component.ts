@@ -66,6 +66,21 @@ export class UpdateTrainingComponent {
 
   updateTraining() {
     if (this.training?.id) {
+      // Remove photos from the payload before sending
+      const trainingToUpdate = structuredClone(this.training) as any;
+
+      trainingToUpdate.modules?.forEach((module: any) => {
+        module.chapters?.forEach((chapter: any) => {
+          delete chapter.photos_en;
+          delete chapter.photos_nl;
+          delete chapter.photos_fr;
+          delete chapter.photos_de;
+        });
+      });
+
+      console.log(trainingToUpdate);
+      console.log(this.training);
+
       this.trainingService.updateTraining(this.training.id, this.training).subscribe({
         next: (data) => {
           const snackBarConfig: MatSnackBarConfig = {
@@ -149,17 +164,18 @@ export class UpdateTrainingComponent {
 
     if (!photos.length) return;
     const chapterId = this.training?.modules[moduleIndex].chapters[chapterIndex].id;
-    if (this.training) {
-      if (!this.training?.modules[moduleIndex].chapters[chapterIndex].photos_en && this.training && chapterId) {
-        this.trainingService.addPhotos(chapterId, photos)
-      }
-
-      this.training.modules[moduleIndex].chapters[chapterIndex].photos_en = [
-        ...this.training?.modules[moduleIndex].chapters[chapterIndex].photos_en,
-        ...photos
-      ];
+    if (chapterId != null) {
+      this.trainingService.addPhotos(chapterId, photos).subscribe({
+        next: () => {
+          this.getTrainingDetails(this.trainingId);
+          console.log("updated photos successfully")
+        },
+        error: (err) => {
+          console.log("error by adding photos");
+          console.log(err);
+        }
+      });
     }
-
     this.newPhotos[key] = [];
   }
 
