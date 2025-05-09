@@ -148,9 +148,10 @@ export class UpdateTrainingComponent {
     const photos = this.newPhotos[key] || [];
 
     if (!photos.length) return;
+    const chapterId = this.training?.modules[moduleIndex].chapters[chapterIndex].id;
     if (this.training) {
-      if (!this.training?.modules[moduleIndex].chapters[chapterIndex].photos_en && this.training) {
-        this.training.modules[moduleIndex].chapters[chapterIndex].photos_en = [];
+      if (!this.training?.modules[moduleIndex].chapters[chapterIndex].photos_en && this.training && chapterId) {
+        this.trainingService.addPhotos(chapterId, photos)
       }
 
       this.training.modules[moduleIndex].chapters[chapterIndex].photos_en = [

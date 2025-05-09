@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Training } from '../../models/training.model';
+import { Photo } from '../../models/photo.model';
 
 @Injectable({
   providedIn: 'root'
@@ -53,5 +54,9 @@ export class TrainingService {
 
   deletePhoto(photoId: number) {
     return this.client.delete(`http://localhost:8080/api/photos/${photoId}`);
+  }
+
+  addPhotos(chapterId: number, photos?: Photo[]) {
+    return this.client.post(`http://localhost:8080/api/photos/${chapterId}`, photos)
   }
 }
