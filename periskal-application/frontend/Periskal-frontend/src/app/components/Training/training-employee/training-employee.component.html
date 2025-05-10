@@ -3,7 +3,9 @@
   <header class="content-header">
 
     <div class="header-left">
+      @if(roleAuth.isSkipper()){
       <h1>{{'ASSIGNED_BY_FLEETMANAGER' | translate}}</h1>
+      }
       <h1>{{'TRAINING' | translate}}</h1>
     </div>
 
@@ -151,26 +153,6 @@
       </div>
 
     </div>
-    <!-- <div class="action-buttons">
-
-      @for (training of trainingsData; track $index) {
-  
-      <div class="training-actions">
-        @if (hasExam(training.id) && !roleAuth.canEditContent()) {
-  
-          <button class="secondary-btn" (click)="goToExam(training.id)">
-  
-            {{'TAKE_EXAM' | translate}}
-  
-          </button>
-  
-        }
-  
-      </div>
-  
-      }
-  
-    </div> -->
     }
 
   </div>

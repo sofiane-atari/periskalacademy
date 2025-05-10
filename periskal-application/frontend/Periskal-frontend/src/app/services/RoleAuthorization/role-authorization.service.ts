@@ -33,4 +33,11 @@ export class RoleAuthorizationService {
     }
     return false;
   }
+  isFleetManager(): boolean{
+    const userRole = this.jwtDecoderService.getUserRole();
+    if (userRole === 'Fleetmanager') {
+      return true;
+    }
+    return false;
+  }
 }
