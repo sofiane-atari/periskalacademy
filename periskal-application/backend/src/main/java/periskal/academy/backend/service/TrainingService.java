@@ -52,6 +52,22 @@ public class TrainingService {
         dto.setDescription_nl(training.getDescription_nl());
         dto.setDescription_fr(training.getDescription_fr());
         dto.setDescription_de(training.getDescription_de());
+        dto.setModules(training.getModules() != null
+                ? training.getModules().stream().map(module -> {
+                    ModuleDTO mdto = new ModuleDTO();
+                    mdto.setId(module.getId());
+                    mdto.setDescriptionModule_en(module.getDescriptionModule_en());
+                    mdto.setDescriptionModule_de(module.getDescriptionModule_de());
+                    mdto.setDescriptionModule_fr(module.getDescriptionModule_fr());
+                    mdto.setDescriptionModule_nl(module.getDescriptionModule_nl());
+                    mdto.setNameModule_en(module.getNameModule_en());
+                    mdto.setNameModule_de(module.getNameModule_de());
+                    mdto.setNameModule_fr(module.getNameModule_fr());
+                    mdto.setNameModule_nl(module.getNameModule_nl());
+
+                    return mdto;
+                }).collect(Collectors.toList())
+                : new ArrayList<>());
         return dto;
     }
 
@@ -70,7 +86,9 @@ public class TrainingService {
     }
 
     public List<TrainingDTO> getFilteredTrainings(String role, List<String> products) {
-
+        List<Training> trainings = trainingRepository.findAllAsList();
+        trainings.forEach(t -> System.out.println("Training " + t.getId() + " has modules: "
+                + (t.getModules() != null ? t.getModules().size() : "null")));
         if (role == null || role.isBlank()) {
             throw new ValidationException("Role parameter cannot be null or empty.");
         }

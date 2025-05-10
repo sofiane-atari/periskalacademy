@@ -53,8 +53,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-     this.userName = this.jwtDecoderService.getUsername()!;
-     this.userRole = this.jwtDecoderService.getUserRole()!;
+    this.refreshUserData();
     // Only validate token when not on login-related pages
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
@@ -65,9 +64,14 @@ export class AppComponent implements OnInit {
           if (!isValid) {
             // Redirect to login if token is invalid
             this.router.navigate(['/login']);
+          } else {
+            this.refreshUserData();
           }
         });
         this.lang = localStorage.getItem('lang') || 'nl';
+      }else{
+        this.userName = undefined;
+        this.userRole = '';
       }
     }
     )
@@ -94,6 +98,10 @@ export class AppComponent implements OnInit {
   logout() { 
     this.authService.logout();
     this.router.navigate(['/login']);
+  }
+  refreshUserData(): void {
+    this.userName = this.jwtDecoderService.getUsername()!;
+    this.userRole = this.jwtDecoderService.getUserRole()!;
   }
 }
 
