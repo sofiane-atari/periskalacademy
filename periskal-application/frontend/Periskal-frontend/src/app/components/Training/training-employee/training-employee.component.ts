@@ -46,6 +46,7 @@ export class TrainingEmployeeComponent implements OnInit {
     this.trainingSvc.getFilteredTrainingData(role, products).subscribe({
       next: (data: Training[]) => {
         this.trainingsData = data;
+        console.log(data);
         this.loadExamsForTrainings();
       },
       error: (error) => {
@@ -150,10 +151,10 @@ export class TrainingEmployeeComponent implements OnInit {
       this.router.navigate(['/update-exam', exam.id]);
     }
   }
-  getCountModules(trainingId: number) {
-    const training = this.trainingsData.find(t => t.id === trainingId);
-    return training?.modules?.length || 0;
+  getCountModules(trainingId: number): number {
+    return this.trainingsData.find(t => t.id === trainingId)?.modules?.length ?? 0;
   }
+
 }
 
 
