@@ -1,4 +1,4 @@
-package periskal.academy.backend.security.Exceptions.AuthenticationExceptions;
+package periskal.academy.backend.security.exceptions.authentication;
 
 public class AuthenticationServerErrorException extends AuthenticationServiceException {
     private final int statusCode;

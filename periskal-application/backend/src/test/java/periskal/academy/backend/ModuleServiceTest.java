@@ -14,7 +14,7 @@ import periskal.academy.backend.jpa.ChapterRepository;
 import periskal.academy.backend.jpa.Module;
 import periskal.academy.backend.jpa.ModuleRepository;
 import periskal.academy.backend.jpa.Photo;
-import periskal.academy.backend.security.Exceptions.General.ResourceNotFoundException;
+import periskal.academy.backend.security.exceptions.general.ResourceNotFoundException;
 import periskal.academy.backend.service.ModuleService;
 
 import java.util.Collections;

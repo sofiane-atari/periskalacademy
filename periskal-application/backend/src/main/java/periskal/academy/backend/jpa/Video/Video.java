@@ -1,4 +1,4 @@
-package periskal.academy.backend.jpa.Video;
+package periskal.academy.backend.jpa.video;
 
 import periskal.academy.backend.jpa.*;
 
