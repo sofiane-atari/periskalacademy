@@ -26,16 +26,16 @@ public class Training {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String product_code;
+    private String productCode;
 
-    private String name_en;
-    private String description_en;
-    private String name_nl;
-    private String description_nl;
-    private String name_de;
-    private String description_de;
-    private String name_fr;
-    private String description_fr;
+    private String nameEn;
+    private String descriptionEn;
+    private String nameNl;
+    private String descriptionNl;
+    private String nameDe;
+    private String descriptionDe;
+    private String nameFr;
+    private String descriptionFr;
 
     @OneToMany(mappedBy = "training", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonManagedReference
@@ -44,24 +44,24 @@ public class Training {
     @OneToOne(mappedBy = "training", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private @Nullable Exam exam;
 
-    public Training(String product_code, String name_en, String description_en, String name_nl, String description_nl,
-            String name_de, String description_de, String name_fr, String description_fr,
+    public Training(String productCode, String nameEn, String descriptionEn, String nameNl, String descriptionNl,
+            String nameDe, String descriptionDe, String nameFr, String descriptionFr,
             List<Module> modules) {
-        this.product_code = product_code;
-        this.name_en = name_en;
-        this.description_en = description_en;
-        this.name_nl = name_nl;
-        this.description_nl = description_nl;
-        this.name_de = name_de;
-        this.description_de = description_de;
-        this.name_fr = name_fr;
-        this.description_fr = description_fr;
+        this.productCode = productCode;
+        this.nameEn = nameEn;
+        this.descriptionEn = descriptionEn;
+        this.nameNl = nameNl;
+        this.descriptionNl = descriptionNl;
+        this.nameDe = nameDe;
+        this.descriptionDe = descriptionDe;
+        this.nameFr = nameFr;
+        this.descriptionFr = descriptionFr;
         this.modules = modules;
     }
 
     public Training(String name, String description, List<Module> modules) {
-        this.name_en = name;
-        this.description_en = description;
+        this.nameEn = name;
+        this.descriptionEn = description;
         this.modules = modules;
     }
 }

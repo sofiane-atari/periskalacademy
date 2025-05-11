@@ -30,40 +30,38 @@ public class TrainingService {
     private TrainingRepository trainingRepository;
     private ModuleRepository moduleRepository;
     private PhotoRepository photoRepository;
-    private EntityManager entityManager;
 
     public TrainingService(TrainingRepository trainingRepository, ModuleRepository moduleRepository,
             PhotoRepository photoRepository, EntityManager entityManager) {
         this.trainingRepository = trainingRepository;
         this.moduleRepository = moduleRepository;
         this.photoRepository = photoRepository;
-        this.entityManager = entityManager;
     }
 
     private TrainingDTO convertToDto(Training training) {
         TrainingDTO dto = new TrainingDTO();
         dto.setId(training.getId());
-        dto.setProduct_code(training.getProduct_code());
-        dto.setName_en(training.getName_en());
-        dto.setName_nl(training.getName_nl());
-        dto.setName_de(training.getName_de());
-        dto.setName_fr(training.getName_fr());
-        dto.setDescription_en(training.getDescription_en());
-        dto.setDescription_nl(training.getDescription_nl());
-        dto.setDescription_fr(training.getDescription_fr());
-        dto.setDescription_de(training.getDescription_de());
+        dto.setProduct_code(training.getProductCode());
+        dto.setNameEn(training.getNameEn());
+        dto.setNameNl(training.getNameNl());
+        dto.setNameDe(training.getNameDe());
+        dto.setNameFr(training.getNameFr());
+        dto.setDescriptionEn(training.getDescriptionEn());
+        dto.setDescriptionNl(training.getDescriptionNl());
+        dto.setDescriptionFr(training.getDescriptionFr());
+        dto.setDescriptionDe(training.getDescriptionDe());
         dto.setModules(training.getModules() != null
                 ? training.getModules().stream().map(module -> {
                     ModuleDTO mdto = new ModuleDTO();
                     mdto.setId(module.getId());
-                    mdto.setDescriptionModule_en(module.getDescriptionModule_en());
-                    mdto.setDescriptionModule_de(module.getDescriptionModule_de());
-                    mdto.setDescriptionModule_fr(module.getDescriptionModule_fr());
-                    mdto.setDescriptionModule_nl(module.getDescriptionModule_nl());
-                    mdto.setNameModule_en(module.getNameModule_en());
-                    mdto.setNameModule_de(module.getNameModule_de());
-                    mdto.setNameModule_fr(module.getNameModule_fr());
-                    mdto.setNameModule_nl(module.getNameModule_nl());
+                    mdto.setDescriptionModuleEn(module.getDescriptionModuleEn());
+                    mdto.setDescriptionModuleDe(module.getDescriptionModuleDe());
+                    mdto.setDescriptionModuleFr(module.getDescriptionModuleFr());
+                    mdto.setDescriptionModuleNl(module.getDescriptionModuleNl());
+                    mdto.setNameModuleEn(module.getNameModuleEn());
+                    mdto.setNameModuleDe(module.getNameModuleDe());
+                    mdto.setNameModuleFr(module.getNameModuleFr());
+                    mdto.setNameModuleNl(module.getNameModuleNl());
 
                     return mdto;
                 }).collect(Collectors.toList())
@@ -102,7 +100,7 @@ public class TrainingService {
         return trainingRepository.findAllAsList()
                 .stream()
                 .filter(training -> products.stream()
-                        .anyMatch(product -> training.getProduct_code().toLowerCase().contains(product.toLowerCase())))
+                        .anyMatch(product -> training.getProductCode().toLowerCase().contains(product.toLowerCase())))
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
@@ -112,7 +110,7 @@ public class TrainingService {
         if (entity == null) {
             throw new ValidationException("Training data cannot be null.");
         }
-        if (entity.getName_en() == null || entity.getName_en().isBlank()) {
+        if (entity.getNameEn() == null || entity.getNameEn().isBlank()) {
             throw new ValidationException("Training name (English) cannot be empty.");
         }
 
@@ -122,8 +120,8 @@ public class TrainingService {
                 if (module.getChapters() != null) {
                     for (Chapter chapter : module.getChapters()) {
                         chapter.setModule(module);
-                        if (chapter.getPhotos_en() != null) {
-                            for (Photo photo : chapter.getPhotos_en()) {
+                        if (chapter.getPhotos() != null) {
+                            for (Photo photo : chapter.getPhotos()) {
                                 photo.setChapter(chapter);
                                 photoRepository.save(photo);
                             }
@@ -154,14 +152,14 @@ public class TrainingService {
         Training existingTraining = getTrainingById(id);
 
         // Update basic fields
-        existingTraining.setName_en(updatedTraining.getName_en());
-        existingTraining.setDescription_en(updatedTraining.getDescription_en());
-        existingTraining.setName_nl(updatedTraining.getName_nl());
-        existingTraining.setDescription_nl(updatedTraining.getDescription_nl());
-        existingTraining.setName_fr(updatedTraining.getName_fr());
-        existingTraining.setDescription_fr(updatedTraining.getDescription_fr());
-        existingTraining.setName_de(updatedTraining.getName_de());
-        existingTraining.setDescription_de(updatedTraining.getDescription_de());
+        existingTraining.setNameEn(updatedTraining.getNameEn());
+        existingTraining.setDescriptionEn(updatedTraining.getDescriptionEn());
+        existingTraining.setNameNl(updatedTraining.getNameNl());
+        existingTraining.setDescriptionNl(updatedTraining.getDescriptionNl());
+        existingTraining.setNameFr(updatedTraining.getNameFr());
+        existingTraining.setDescriptionFr(updatedTraining.getDescriptionFr());
+        existingTraining.setNameDe(updatedTraining.getNameDe());
+        existingTraining.setDescriptionDe(updatedTraining.getDescriptionDe());
 
         // Clear and replace modules (cascade + orphanRemoval will handle deletions)
         existingTraining.getModules().clear();
@@ -255,14 +253,14 @@ public class TrainingService {
         Training existingTraining = getTrainingById(trainingId);
 
         Module newModule = new Module();
-        newModule.setNameModule_en(moduleDto.getNameModule_en());
-        newModule.setDescriptionModule_en(moduleDto.getDescriptionModule_en());
-        newModule.setNameModule_nl(moduleDto.getNameModule_nl());
-        newModule.setDescriptionModule_nl(moduleDto.getDescriptionModule_nl());
-        newModule.setNameModule_fr(moduleDto.getNameModule_fr());
-        newModule.setDescriptionModule_fr(moduleDto.getDescriptionModule_fr());
-        newModule.setNameModule_de(moduleDto.getNameModule_de());
-        newModule.setDescriptionModule_de(moduleDto.getDescriptionModule_de());
+        newModule.setNameModuleEn(moduleDto.getNameModuleEn());
+        newModule.setDescriptionModuleEn(moduleDto.getDescriptionModuleEn());
+        newModule.setNameModuleNl(moduleDto.getNameModuleNl());
+        newModule.setDescriptionModuleNl(moduleDto.getDescriptionModuleNl());
+        newModule.setNameModuleFr(moduleDto.getNameModuleFr());
+        newModule.setDescriptionModuleFr(moduleDto.getDescriptionModuleFr());
+        newModule.setNameModuleDe(moduleDto.getNameModuleDe());
+        newModule.setDescriptionModuleDe(moduleDto.getDescriptionModuleDe());
         newModule.setChapters(moduleDto.getChapters());
         newModule.setTraining(existingTraining);
 
@@ -295,7 +293,7 @@ public class TrainingService {
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Chapter not found"));
 
-        List<Photo> photos = existingChapter.getPhotos_en();
+        List<Photo> photos = existingChapter.getPhotos();
         Photo photoToRemove = photos.stream()
                 .filter(p -> p.getId().equals(photoId))
                 .findFirst()

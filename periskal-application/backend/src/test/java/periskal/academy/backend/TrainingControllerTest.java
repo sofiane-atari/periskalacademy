@@ -40,20 +40,20 @@ class TrainingControllerTest {
     void setUp() {
         training = new Training();
         training.setId(1L);
-        training.setName_en("Test Training");
+        training.setNameEn("Test Training");
 
         module = new Module();
         module.setId(1L);
-        module.setNameModule_en("Test Module");
+        module.setNameModuleEn("Test Module");
 
         trainingDTOs = new ArrayList<>();
         TrainingDTO trainingDTO = new TrainingDTO();
         trainingDTO.setId(1L);
-        trainingDTO.setName_en("Test Training");
+        trainingDTO.setNameEn("Test Training");
         trainingDTOs.add(trainingDTO);
 
         moduleDTO = new ModuleDTO();
-        moduleDTO.setNameModule_en("New Module");
+        moduleDTO.setNameModuleEn("New Module");
     }
 
     @Test
@@ -116,7 +116,7 @@ class TrainingControllerTest {
         // Arrange
         Training updatedTraining = new Training();
         updatedTraining.setId(1L);
-        updatedTraining.setName_en("Updated Training");
+        updatedTraining.setNameEn("Updated Training");
 
         when(trainingService.updateTraining(1L, updatedTraining)).thenReturn(updatedTraining);
 
@@ -126,7 +126,7 @@ class TrainingControllerTest {
         // Assert
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().getName_en()).isEqualTo("Updated Training");
+        assertThat(response.getBody().getNameEn()).isEqualTo("Updated Training");
     }
 
     @Test
@@ -200,6 +200,6 @@ class TrainingControllerTest {
         // Assert
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().getNameModule_en()).isEqualTo("Test Module");
+        assertThat(response.getBody().getNameModuleEn()).isEqualTo("Test Module");
     }
 }

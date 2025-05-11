@@ -28,7 +28,6 @@ import { MatListModule } from '@angular/material/list';
     MatFormFieldModule,
     MatInputModule,
     MatTabsModule,
-    JsonPipe,
     MatCardModule,
     MatExpansionModule,
     MatIconModule,
@@ -50,15 +49,15 @@ export class AddTrainingComponent implements OnInit { // Implement OnInit
 
   ngOnInit() {
     this.trainingForm = this.fb.group({
-      product_code: ['', Validators.required],
-      name_en: ['', Validators.required],
-      name_nl: ['', Validators.required],
-      name_fr: ['', Validators.required],
-      name_de: ['', Validators.required],
-      description_en: ['', Validators.required],
-      description_nl: ['', Validators.required],
-      description_fr: ['', Validators.required],
-      description_de: ['', Validators.required],
+      productCode: ['', Validators.required],
+      nameEn: ['', Validators.required],
+      nameNl: ['', Validators.required],
+      nameFr: ['', Validators.required],
+      nameDe: ['', Validators.required],
+      descriptionEn: ['', Validators.required],
+      descriptionNl: ['', Validators.required],
+      descriptionFr: ['', Validators.required],
+      descriptionDe: ['', Validators.required],
       modules: this.fb.array([this.createModule()])
     });
 
@@ -66,14 +65,14 @@ export class AddTrainingComponent implements OnInit { // Implement OnInit
 
   createModule(): FormGroup {
     return this.fb.group({
-      nameModule_en: ['', Validators.required],
-      descriptionModule_en: ['', Validators.required],
-      nameModule_nl: ['', Validators.required],
-      descriptionModule_nl: ['', Validators.required],
-      nameModule_fr: ['', Validators.required],
-      descriptionModule_fr: ['', Validators.required],
-      nameModule_de: ['', Validators.required],
-      descriptionModule_de: ['', Validators.required],
+      nameModuleEn: ['', Validators.required],
+      descriptionModuleEn: ['', Validators.required],
+      nameModuleNl: ['', Validators.required],
+      descriptionModuleNl: ['', Validators.required],
+      nameModuleFr: ['', Validators.required],
+      descriptionModuleFr: ['', Validators.required],
+      nameModuleDe: ['', Validators.required],
+      descriptionModuleDe: ['', Validators.required],
       chapters: this.fb.array([this.createChapter()])
     });
   }
@@ -81,22 +80,19 @@ export class AddTrainingComponent implements OnInit { // Implement OnInit
 
   createChapter(): FormGroup {
     return this.fb.group({
-      nameChapter_en: ['', Validators.required],
-      descriptionChapter_en: ['', Validators.required],
-      textChapter_en: ['', Validators.required],
-      photos_en: [[]],
-      nameChapter_nl: ['', Validators.required],
-      descriptionChapter_nl: ['', Validators.required],
-      textChapter_nl: ['', Validators.required],
-      photos_nl: [[]],
-      nameChapter_fr: ['', Validators.required],
-      descriptionChapter_fr: ['', Validators.required],
-      textChapter_fr: ['', Validators.required],
-      photos_fr: [[]],
-      nameChapter_de: ['', Validators.required],
-      descriptionChapter_de: ['', Validators.required],
-      textChapter_de: ['', Validators.required],
-      photos_de: [[]]
+      nameChapterEn: ['', Validators.required],
+      descriptionChapterEn: ['', Validators.required],
+      textChapterEn: ['', Validators.required],
+      photos: [[]],
+      nameChapterNl: ['', Validators.required],
+      descriptionChapterNl: ['', Validators.required],
+      textChapterNl: ['', Validators.required],
+      nameChapterFr: ['', Validators.required],
+      descriptionChapterFr: ['', Validators.required],
+      textChapterFr: ['', Validators.required],
+      nameChapterDe: ['', Validators.required],
+      descriptionChapterDe: ['', Validators.required],
+      textChapterDe: ['', Validators.required],
     });
   }
 
@@ -157,7 +153,6 @@ export class AddTrainingComponent implements OnInit { // Implement OnInit
           });
         });
       } else {
-        console.log(trainingData);
         this.trainingService.postTraining(trainingData).subscribe({
           next: (response) => {
             // this.resetForm();

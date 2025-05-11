@@ -13,7 +13,7 @@ import { PhotoUploadComponent } from "../../photo-upload/photo-upload.component"
 
 @Component({
   selector: 'app-update-training',
-  imports: [FormsModule, TranslatePipe, ConfirmPromptComponent, TranslatePipe, MatSnackBarModule, PhotoUploadComponent],
+  imports: [FormsModule, TranslatePipe, TranslatePipe, MatSnackBarModule, PhotoUploadComponent],
   templateUrl: './update-training.component.html',
   styleUrl: './update-training.component.css'
 })
@@ -27,7 +27,6 @@ export class UpdateTrainingComponent {
 
   constructor(
     private trainingService: TrainingService,
-    private moduleService: ModuleService,
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
@@ -71,15 +70,9 @@ export class UpdateTrainingComponent {
 
       trainingToUpdate.modules?.forEach((module: any) => {
         module.chapters?.forEach((chapter: any) => {
-          delete chapter.photos_en;
-          delete chapter.photos_nl;
-          delete chapter.photos_fr;
-          delete chapter.photos_de;
+          delete chapter.photosEn;
         });
       });
-
-      console.log(trainingToUpdate);
-      console.log(this.training);
 
       this.trainingService.updateTraining(this.training.id, this.training).subscribe({
         next: (data) => {
@@ -153,11 +146,6 @@ export class UpdateTrainingComponent {
     });
   }
 
-  onPhotosChange(moduleIndex: number, chapterIndex: number): void {
-    // This method is triggered when photos are selected
-    console.log('Photos changed for module', moduleIndex, 'chapter', chapterIndex);
-  }
-
   savePhotos(moduleIndex: number, chapterIndex: number): void {
     const key = moduleIndex + '_' + chapterIndex;
     const photos = this.newPhotos[key] || [];
@@ -168,11 +156,9 @@ export class UpdateTrainingComponent {
       this.trainingService.addPhotos(chapterId, photos).subscribe({
         next: () => {
           this.getTrainingDetails(this.trainingId);
-          console.log("updated photos successfully")
         },
         error: (err) => {
-          console.log("error by adding photos");
-          console.log(err);
+          console.error("error by adding photos", err);
         }
       });
     }
@@ -193,21 +179,21 @@ export class UpdateTrainingComponent {
 
     const newModule = {
       id: highestId + 1,
-      nameModule_en: '',
-      descriptionModule_en: '',
-      nameModule_nl: '',
-      descriptionModule_nl: '',
-      nameModule_fr: '',
-      descriptionModule_fr: '',
-      nameModule_de: '',
-      descriptionModule_de: '',
+      nameModuleEn: '',
+      descriptionModuleEn: '',
+      nameModuleNl: '',
+      descriptionModuleNl: '',
+      nameModuleFr: '',
+      descriptionModuleFr: '',
+      nameModuleDe: '',
+      descriptionModuleDe: '',
       chapters: []
     };
     this.training?.modules.push(newModule);
   }
 
   removePhoto(moduleIndex: number, chapterIndex: number, photoIndex: number) {
-    const photoId = this.training?.modules[moduleIndex].chapters[chapterIndex].photos_en[photoIndex].id;
+    const photoId = this.training?.modules[moduleIndex].chapters[chapterIndex].photos[photoIndex].id;
     const dialogRef = this.dialog.open(ConfirmPromptComponent, {
       width: '600px',
       data: {

@@ -51,11 +51,11 @@ class TrainingServiceTest {
         // Setup dummy training and module
         training = new Training();
         training.setId(1L);
-        training.setName_en("Test Training");
+        training.setNameEn("Test Training");
 
         module = new Module();
         module.setId(1L);
-        module.setNameModule_en("Test Module");
+        module.setNameModuleEn("Test Module");
 
         List<Module> modulesList = new ArrayList<>();
         modulesList.add(module);
@@ -120,16 +120,16 @@ class TrainingServiceTest {
     public void givenTrainingWithModules_whenCreateTraining_thenTrainingIsCreated() {
         // Arrange
         Training training = new Training();
-        training.setName_en("Sample Training");
-        training.setDescription_en("Sample Description");
+        training.setNameEn("Sample Training");
+        training.setDescriptionEn("Sample Description");
 
         // Create a module and associate it with the training
         Module module = new Module();
-        module.setNameModule_en("Module 1");
+        module.setNameModuleEn("Module 1");
 
         // Create chapters and associate them with the module
         Chapter chapter = new Chapter();
-        chapter.setNameChapter_en("Chapter 1");
+        chapter.setNameChapterEn("Chapter 1");
 
         // Initialize an empty list of chapters if it's null
         module.setChapters(Collections.singletonList(chapter)); // Ensure it's not null
@@ -149,15 +149,15 @@ class TrainingServiceTest {
 
         // Assert using AssertJ
         assertThat(savedTraining).isNotNull();
-        assertThat(savedTraining.getName_en()).isEqualTo("Sample Training");
+        assertThat(savedTraining.getNameEn()).isEqualTo("Sample Training");
         assertThat(savedTraining.getModules()).isNotEmpty(); // Ensure modules are not empty
-        assertThat(savedTraining.getModules().get(0).getNameModule_en()).isEqualTo("Module 1"); // Ensure module is
-                                                                                                // added
+        assertThat(savedTraining.getModules().get(0).getNameModuleEn()).isEqualTo("Module 1"); // Ensure module is
+                                                                                               // added
         assertThat(savedTraining.getModules().get(0).getChapters()).isNotEmpty(); // Ensure chapters are not empty
-        assertThat(savedTraining.getModules().get(0).getChapters().get(0).getNameChapter_en()).isEqualTo("Chapter 1"); // Ensure
-                                                                                                                       // Chapter
-                                                                                                                       // is
-                                                                                                                       // added
+        assertThat(savedTraining.getModules().get(0).getChapters().get(0).getNameChapterEn()).isEqualTo("Chapter 1"); // Ensure
+                                                                                                                      // Chapter
+                                                                                                                      // is
+                                                                                                                      // added
 
     }
 
@@ -168,7 +168,7 @@ class TrainingServiceTest {
         Training foundTraining = trainingService.getTrainingById(1L);
 
         assertThat(foundTraining).isNotNull();
-        assertThat(foundTraining.getName_en()).isEqualTo("Test Training");
+        assertThat(foundTraining.getNameEn()).isEqualTo("Test Training");
     }
 
     @Test
@@ -183,21 +183,21 @@ class TrainingServiceTest {
     @Test
     void givenModuleDto_whenAddModule_thenModuleIsAdded() {
         ModuleDTO moduleDto = new ModuleDTO();
-        moduleDto.setNameModule_en("New Module");
-        moduleDto.setDescriptionModule_en("Module Description");
+        moduleDto.setNameModuleEn("New Module");
+        moduleDto.setDescriptionModuleEn("Module Description");
 
         when(trainingRepository.findByIdWithDetails(1L)).thenReturn(Optional.of(training));
 
         Module newModule = new Module();
-        newModule.setNameModule_en("New Module");
-        newModule.setDescriptionModule_en("Module Description");
+        newModule.setNameModuleEn("New Module");
+        newModule.setDescriptionModuleEn("Module Description");
         when(moduleRepository.save(any(Module.class))).thenReturn(newModule);
 
         Module addedModule = trainingService.addModuleWithDto(1L, moduleDto);
 
         assertThat(addedModule).isNotNull();
-        assertThat(addedModule.getNameModule_en()).isEqualTo("New Module");
-        assertThat(addedModule.getDescriptionModule_en()).isEqualTo("Module Description");
+        assertThat(addedModule.getNameModuleEn()).isEqualTo("New Module");
+        assertThat(addedModule.getDescriptionModuleEn()).isEqualTo("Module Description");
 
         verify(moduleRepository, times(1)).save(any(Module.class));
     }
@@ -207,23 +207,23 @@ class TrainingServiceTest {
         // Arrange
         Training existingTraining = new Training();
         existingTraining.setId(1L);
-        existingTraining.setName_en("Old Name");
-        existingTraining.setDescription_en("Old Description");
+        existingTraining.setNameEn("Old Name");
+        existingTraining.setDescriptionEn("Old Description");
 
         Module module1 = new Module();
         module1.setId(1L);
-        module1.setNameModule_en("Module 1");
+        module1.setNameModuleEn("Module 1");
 
         Module module2 = new Module();
         module2.setId(2L);
-        module2.setNameModule_en("Module 2");
+        module2.setNameModuleEn("Module 2");
 
         List<Module> updatedModules = List.of(module1, module2);
 
         Training updatedTraining = new Training();
         updatedTraining.setId(1L);
-        updatedTraining.setName_en("Updated Name");
-        updatedTraining.setDescription_en("Updated Description");
+        updatedTraining.setNameEn("Updated Name");
+        updatedTraining.setDescriptionEn("Updated Description");
         updatedTraining.setModules(updatedModules);
 
         when(trainingRepository.findByIdWithDetails(1L)).thenReturn(Optional.of(existingTraining));
@@ -234,11 +234,11 @@ class TrainingServiceTest {
 
         // Use AssertJ assertions
         assertThat(result).isNotNull();
-        assertThat(result.getName_en()).isEqualTo("Updated Name");
-        assertThat(result.getDescription_en()).isEqualTo("Updated Description");
+        assertThat(result.getNameEn()).isEqualTo("Updated Name");
+        assertThat(result.getDescriptionEn()).isEqualTo("Updated Description");
         assertThat(result.getModules()).hasSize(2);
-        assertThat(result.getModules().get(0).getNameModule_en()).isEqualTo("Module 1");
-        assertThat(result.getModules().get(1).getNameModule_en()).isEqualTo("Module 2");
+        assertThat(result.getModules().get(0).getNameModuleEn()).isEqualTo("Module 1");
+        assertThat(result.getModules().get(1).getNameModuleEn()).isEqualTo("Module 2");
 
         verify(trainingRepository, times(1)).save(existingTraining);
     }
@@ -247,7 +247,7 @@ class TrainingServiceTest {
     void givenNonExistingTraining_whenUpdateTraining_thenThrowResourceNotFoundException() {
         Training updatedTraining = new Training();
         updatedTraining.setId(1L);
-        updatedTraining.setName_en("Updated Training");
+        updatedTraining.setNameEn("Updated Training");
 
         when(trainingRepository.findById(1L)).thenReturn(Optional.empty());
 
@@ -268,7 +268,7 @@ class TrainingServiceTest {
 
         assertThat(result).isNotNull();
         assertThat(result).hasSize(1);
-        assertThat(result.get(0).getName_en()).isEqualTo("Test Training");
+        assertThat(result.get(0).getNameEn()).isEqualTo("Test Training");
 
         verify(trainingRepository, times(1)).findAllAsList();
     }

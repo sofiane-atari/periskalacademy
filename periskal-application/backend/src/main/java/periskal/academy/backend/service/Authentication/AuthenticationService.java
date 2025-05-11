@@ -14,16 +14,16 @@ public class AuthenticationService extends BaseAuthenticationService {
     @Override
     protected String buildSoapRequest(String token) {
         return "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-               "<soap12:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
-               "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
-               "xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\">\n" +
-               "  <soap12:Body>\n" +
-               "    <Authenticate xmlns=\"http://tempuri.org/\">\n" +
-               "      <Token>" + token + "</Token>\n" +
-               "    </Authenticate>\n" +
-               "  </soap12:Body>\n" +
-                       "</soap12:Envelope>";
-            }
+                "<soap12:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
+                "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
+                "xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\">\n" +
+                "  <soap12:Body>\n" +
+                "    <Authenticate xmlns=\"http://tempuri.org/\">\n" +
+                "      <Token>" + token + "</Token>\n" +
+                "    </Authenticate>\n" +
+                "  </soap12:Body>\n" +
+                "</soap12:Envelope>";
+    }
 
     /**
      * Public method for username/password authentication.
@@ -36,10 +36,11 @@ public class AuthenticationService extends BaseAuthenticationService {
             token = EncryptionUtil.encode(username, password);
         } catch (Exception encryptionEx) {
             log.error("Internal error: Failed to encode credentials for user: {}", username, encryptionEx);
-            throw new AuthenticationServiceException("Internal authentication process error during credential encoding", encryptionEx);
+            throw new AuthenticationServiceException("Internal authentication process error during credential encoding",
+                    encryptionEx);
         }
-            
-            return super.authenticate(token);
+
+        return super.authenticate(token);
 
     }
 }

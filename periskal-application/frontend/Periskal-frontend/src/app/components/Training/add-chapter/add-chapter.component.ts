@@ -38,27 +38,27 @@ export class AddChapterComponent implements OnInit {
     this.trainingId = Number(this.route.snapshot.paramMap.get('trainingid'));
     this.moduleId = Number(this.route.snapshot.paramMap.get('moduleid'));
     this.enForm = this.fb.group({
-      nameChapter_en: ['', Validators.required],
-      descriptionChapter_en: ['', Validators.required],
-      textChapter_en: ['', Validators.required],
+      nameChapterEn: ['', Validators.required],
+      descriptionChapterEn: ['', Validators.required],
+      textChapterEn: ['', Validators.required],
     });
 
     this.nlForm = this.fb.group({
-      nameChapter_nl: ['', Validators.required],
-      descriptionChapter_nl: ['', Validators.required],
-      textChapter_nl: ['', Validators.required],
+      nameChapterNl: ['', Validators.required],
+      descriptionChapterNl: ['', Validators.required],
+      textChapterNl: ['', Validators.required],
     });
 
     this.frForm = this.fb.group({
-      nameChapter_fr: ['', Validators.required],
-      descriptionChapter_fr: ['', Validators.required],
-      textChapter_fr: ['', Validators.required],
+      nameChapterFr: ['', Validators.required],
+      descriptionChapterFr: ['', Validators.required],
+      textChapterFr: ['', Validators.required],
     });
 
     this.deForm = this.fb.group({
-      nameChapter_de: ['', Validators.required],
-      descriptionChapter_de: ['', Validators.required],
-      textChapter_de: ['', Validators.required],
+      nameChapterDe: ['', Validators.required],
+      descriptionChapterDe: ['', Validators.required],
+      textChapterDe: ['', Validators.required],
     });
   }
 
@@ -89,16 +89,16 @@ export class AddChapterComponent implements OnInit {
 
 export interface ChapterDTO {
   id: number | null;
-  nameChapter_en: string;
-  descriptionChapter_en: string;
-  textChapter_en: string;
-  nameChapter_nl: string;
-  descriptionChapter_nl: string;
-  textChapter_nl: string;
-  nameChapter_fr: string;
-  descriptionChapter_fr: string;
-  textChapter_fr: string;
-  nameChapter_de: string;
-  descriptionChapter_de: string;
-  textChapter_de: string;
+  nameChapterEn: string;
+  descriptionChapterEn: string;
+  textChapterEn: string;
+  nameChapterNl: string;
+  descriptionChapterNl: string;
+  textChapterNl: string;
+  nameChapterFr: string;
+  descriptionChapterFr: string;
+  textChapterFr: string;
+  nameChapterDe: string;
+  descriptionChapterDe: string;
+  textChapterDe: string;
 }

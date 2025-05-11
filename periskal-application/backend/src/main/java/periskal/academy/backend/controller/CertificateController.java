@@ -15,7 +15,7 @@ import periskal.academy.backend.service.certificate.CertificateService;
 @RestController
 @RequestMapping("/api/certificate")
 public class CertificateController {
-    
+
     private final CertificateService certificateService;
 
     public CertificateController(CertificateService certificateService) {
@@ -30,6 +30,6 @@ public class CertificateController {
                 .header("Content-Disposition", "attachment; filename=certificate.pdf")
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(pdfBytes);
-            
+
     }
 }

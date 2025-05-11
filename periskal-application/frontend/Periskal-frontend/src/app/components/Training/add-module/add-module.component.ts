@@ -36,23 +36,23 @@ export class AddModuleComponent implements OnInit {
   ngOnInit(): void {
     this.trainingId = +this.route.snapshot.url[1].path;
     this.enForm = this.fb.group({
-      nameModule_en: ['', Validators.required],
-      descriptionModule_en: ['', Validators.required]
+      nameModuleEn: ['', Validators.required],
+      descriptionModuleEn: ['', Validators.required]
     });
 
     this.nlForm = this.fb.group({
-      nameModule_nl: ['', Validators.required],
-      descriptionModule_nl: ['', Validators.required]
+      nameModuleNl: ['', Validators.required],
+      descriptionModuleNl: ['', Validators.required]
     });
 
     this.frForm = this.fb.group({
-      nameModule_fr: ['', Validators.required],
-      descriptionModule_fr: ['', Validators.required]
+      nameModuleFr: ['', Validators.required],
+      descriptionModuleFr: ['', Validators.required]
     });
 
     this.deForm = this.fb.group({
-      nameModule_de: ['', Validators.required],
-      descriptionModule_de: ['', Validators.required]
+      nameModuleDe: ['', Validators.required],
+      descriptionModuleDe: ['', Validators.required]
     });
   }
 

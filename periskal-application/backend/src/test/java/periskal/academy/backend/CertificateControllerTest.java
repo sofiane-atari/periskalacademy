@@ -19,7 +19,7 @@ import periskal.academy.backend.controller.CertificateController;
 import periskal.academy.backend.jpa.TrainingRepository;
 import periskal.academy.backend.service.certificate.CertificateService;
 
-@WebMvcTest(controllers = CertificateController.class, excludeAutoConfiguration = {SecurityAutoConfiguration.class})
+@WebMvcTest(controllers = CertificateController.class, excludeAutoConfiguration = { SecurityAutoConfiguration.class })
 class CertificateControllerTest {
 
     @Autowired
@@ -28,7 +28,8 @@ class CertificateControllerTest {
     @MockitoBean
     private CertificateService certificateService;
 
-    @MockitoBean private TrainingRepository trainingRepository; // Mocked for completeness, not used in this test, Don't delete!
+    @MockitoBean
+    private TrainingRepository trainingRepository; // Mocked for completeness, not used in this test, Don't delete!
 
     private byte[] testPdfContent;
 
@@ -39,7 +40,7 @@ class CertificateControllerTest {
 
     @Test
     void whenCreateCertificate_thenReturnsPdfWithCorrectHeaders() throws Exception {
-        
+
         // Arrange
         when(certificateService.createCertificate()).thenReturn(testPdfContent);
 

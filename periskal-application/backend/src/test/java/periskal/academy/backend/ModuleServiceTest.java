@@ -5,7 +5,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DataAccessResourceFailureException;
 import periskal.academy.backend.dto.ChapterDTO;
@@ -13,11 +12,9 @@ import periskal.academy.backend.jpa.Chapter;
 import periskal.academy.backend.jpa.ChapterRepository;
 import periskal.academy.backend.jpa.Module;
 import periskal.academy.backend.jpa.ModuleRepository;
-import periskal.academy.backend.jpa.Photo;
 import periskal.academy.backend.security.exceptions.general.ResourceNotFoundException;
 import periskal.academy.backend.service.ModuleService;
 
-import java.util.Collections;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -57,7 +54,7 @@ public class ModuleServiceTest {
         Long existingModuleId = 1L;
         Module existingModule = new Module();
         existingModule.setId(existingModuleId);
-        existingModule.setNameModule_en("Test Module");
+        existingModule.setNameModuleEn("Test Module");
         when(moduleRepository.findById(existingModuleId)).thenReturn(Optional.of(existingModule));
 
         // Act
@@ -66,7 +63,7 @@ public class ModuleServiceTest {
         // Assert
         assertThat(retrievedModule).isNotNull();
         assertThat(retrievedModule.getId()).isEqualTo(existingModuleId);
-        assertThat(retrievedModule.getNameModule_en()).isEqualTo("Test Module");
+        assertThat(retrievedModule.getNameModuleEn()).isEqualTo("Test Module");
 
         verify(moduleRepository, times(1)).findById(existingModuleId);
     }
@@ -94,10 +91,10 @@ public class ModuleServiceTest {
         Module existingModule = new Module();
         existingModule.setId(moduleId);
         ChapterDTO chapterDTO = new ChapterDTO();
-        chapterDTO.setNameChapter_en("Test Chapter");
+        chapterDTO.setNameChapterEn("Test Chapter");
         Chapter savedChapter = new Chapter();
         savedChapter.setId(1L);
-        savedChapter.setNameChapter_en("Test Chapter");
+        savedChapter.setNameChapterEn("Test Chapter");
         savedChapter.setModule(existingModule);
 
         when(moduleRepository.findById(moduleId)).thenReturn(Optional.of(existingModule));
@@ -109,7 +106,7 @@ public class ModuleServiceTest {
         // Assert
         assertThat(result).isNotNull();
         assertThat(result.getId()).isEqualTo(1L);
-        assertThat(result.getNameChapter_en()).isEqualTo("Test Chapter");
+        assertThat(result.getNameChapterEn()).isEqualTo("Test Chapter");
         assertThat(result.getModule()).isEqualTo(existingModule);
 
         verify(moduleRepository, times(1)).findById(moduleId);
