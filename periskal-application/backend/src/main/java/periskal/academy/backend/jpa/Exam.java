@@ -21,7 +21,7 @@ public class Exam {
 
     private String examTitle;
     private String examDescription;
-    
+
     @Column(nullable = false)
     private int totalQuestions;
 
@@ -30,7 +30,7 @@ public class Exam {
     private List<Question> questions = new ArrayList<>();
 
     @OneToOne
-    @JoinColumn(name = "training_id", unique = true, nullable = true)
+    @JoinColumn(name = "trainingId", unique = true, nullable = true)
     @JsonBackReference
     private Training training;
 

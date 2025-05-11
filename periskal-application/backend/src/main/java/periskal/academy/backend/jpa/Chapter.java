@@ -28,51 +28,51 @@ public class Chapter {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String nameChapter_en;
-    private String descriptionChapter_en;
-    private String nameChapter_nl;
-    private String descriptionChapter_nl;
-    private String nameChapter_fr;
-    private String descriptionChapter_fr;
-    private String nameChapter_de;
-    private String descriptionChapter_de;
+    private String nameChapterEn;
+    private String descriptionChapterEn;
+    private String nameChapterNl;
+    private String descriptionChapterNl;
+    private String nameChapterFr;
+    private String descriptionChapterFr;
+    private String nameChapterDe;
+    private String descriptionChapterDe;
 
     @Lob
-    private String textChapter_en;
+    private String textChapterEn;
 
     @Lob
-    private String textChapter_nl;
+    private String textChapterNl;
     @Lob
-    private String textChapter_fr;
+    private String textChapterFr;
     @Lob
-    private String textChapter_de;
+    private String textChapterDe;
 
     @ManyToOne
-    @JoinColumn(name = "module_id", nullable = false)
+    @JoinColumn(name = "moduleId", nullable = false)
     @JsonBackReference
     private Module module;
 
     @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<Photo> photos_en = new ArrayList<>();
+    private List<Photo> photos = new ArrayList<>();
 
     @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Video> videos = new ArrayList<>();
 
     public Chapter(String nameChapter, String descriptionChapter, String textChapter) {
-        this.nameChapter_en = nameChapter;
-        this.descriptionChapter_en = descriptionChapter;
-        this.textChapter_en = textChapter;
+        this.nameChapterEn = nameChapter;
+        this.descriptionChapterEn = descriptionChapter;
+        this.textChapterEn = textChapter;
     }
 
     public void addPhoto(Photo photo) {
-        photos_en.add(photo);
+        photos.add(photo);
         photo.setChapter(this);
     }
 
     public void removePhoto(Photo photo) {
-        photos_en.remove(photo);
+        photos.remove(photo);
         photo.setChapter(null);
     }
 }

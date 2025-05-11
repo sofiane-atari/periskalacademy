@@ -8,16 +8,16 @@
                 [class.active]="$index === activeChapterId"
                 (click)="setActiveChapter($index)">
                   @switch(lang) {
-                    @case ('en') { {{ chapter.nameChapter_en || 'Unnamed chapter' }} }
-                    @case ('nl') { {{ chapter.nameChapter_nl || 'Naamloos hoofdstuk' }} }
-                    @case ('fr') { {{ chapter.nameChapter_fr || 'Chapitre sans nom' }} }
-                    @case ('de') { {{ chapter.nameChapter_de || 'Unbenanntes Kapitel' }} }
-                    @default { {{ chapter.nameChapter_en || 'Unknown language' }} }
+                    @case ('en') { {{ chapter.nameChapterEn || 'Unnamed chapter' }} }
+                    @case ('nl') { {{ chapter.nameChapterNl || 'Naamloos hoofdstuk' }} }
+                    @case ('fr') { {{ chapter.nameChapterFr || 'Chapitre sans nom' }} }
+                    @case ('de') { {{ chapter.nameChapterDe || 'Unbenanntes Kapitel' }} }
+                    @default { {{ chapter.nameChapterEn || 'Unknown language' }} }
                   }
                 </li>
               }
             } @else {
-              <li>No chapters found (Array length: {{ chapters?.length || 0 }})</li>
+              <li>No chapters found (Array length: {{ chapters.length || 0 }})</li>
             }
           </ul>
     </div>
@@ -36,28 +36,28 @@
             @case('en') {
           <p class="section-text" 
           [innerHTML]="chapters && chapters.length > activeChapterId && activeChapterId >= 0 ? 
-                      formatText(chapters[activeChapterId].textChapter_en || '') : 
+                      formatText(chapters[activeChapterId].textChapterEn || '') : 
                       'Loading content...'">
           </p>
         }
         @case ('nl') {
           <p class="section-text" 
           [innerHTML]="chapters && chapters.length > activeChapterId && activeChapterId >= 0 ? 
-                      formatText(chapters[activeChapterId].textChapter_nl || '') : 
+                      formatText(chapters[activeChapterId].textChapterNl || '') : 
                       'Loading content...'">
           </p>
         }
         @case ('fr') {
           <p class="section-text" 
           [innerHTML]="chapters && chapters.length > activeChapterId && activeChapterId >= 0 ? 
-                      formatText(chapters[activeChapterId].textChapter_fr || '') : 
+                      formatText(chapters[activeChapterId].textChapterFr || '') : 
                       'Loading content...'">
           </p>
         }
         @case ('de') {
           <p class="section-text" 
           [innerHTML]="chapters && chapters.length > activeChapterId && activeChapterId >= 0 ? 
-                      formatText(chapters[activeChapterId].textChapter_de || '') : 
+                      formatText(chapters[activeChapterId].textChapterDe || '') : 
                       'Loading content...'">
           </p>
         }
@@ -65,7 +65,7 @@
       </div>
         <div class="photos">
           <!-- TODO: implement photos per language -->
-        @for (photo of chapters[activeChapterId].photos_en; track $index) {
+        @for (photo of chapters[activeChapterId].photos; track $index) {
           <div class="photo">
             <img [src]="photo.imageData" alt="Chapter Image">
           </div>

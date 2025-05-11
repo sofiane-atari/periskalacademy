@@ -25,18 +25,18 @@ public class Module {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String nameModule_en;
-    private String nameModule_nl;
-    private String nameModule_fr;
-    private String nameModule_de;
+    private String nameModuleEn;
+    private String nameModuleNl;
+    private String nameModuleFr;
+    private String nameModuleDe;
 
-    private String descriptionModule_en;
-    private String descriptionModule_nl;
-    private String descriptionModule_fr;
-    private String descriptionModule_de;
+    private String descriptionModuleEn;
+    private String descriptionModuleNl;
+    private String descriptionModuleFr;
+    private String descriptionModuleDe;
 
     @ManyToOne
-    @JoinColumn(name = "training_id", nullable = false)
+    @JoinColumn(name = "trainingId", nullable = false)
     @JsonBackReference
     private Training training;
 
@@ -45,13 +45,13 @@ public class Module {
     private List<Chapter> chapters = new ArrayList<>();;
 
     public Module(String name, String description) {
-        this.nameModule_en = name;
-        this.descriptionModule_en = description;
+        this.nameModuleEn = name;
+        this.descriptionModuleEn = description;
     }
 
     public Module(String nameModule, String descriptionModule, List<Chapter> chapters) {
-        this.nameModule_en = nameModule;
-        this.descriptionModule_en = descriptionModule;
+        this.nameModuleEn = nameModule;
+        this.descriptionModuleEn = descriptionModule;
         this.chapters = chapters;
     }
 }

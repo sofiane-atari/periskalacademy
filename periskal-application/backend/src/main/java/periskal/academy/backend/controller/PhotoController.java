@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.extern.slf4j.Slf4j;
 import periskal.academy.backend.jpa.Photo;
 import periskal.academy.backend.service.PhotoService;
-import periskal.academy.backend.service.TrainingService;
 
 @Slf4j
 @RestController

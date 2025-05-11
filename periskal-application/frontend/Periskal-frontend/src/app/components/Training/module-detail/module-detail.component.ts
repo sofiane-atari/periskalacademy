@@ -103,8 +103,8 @@ export class ModuleDetailComponent {
 
         // Safely find the module and its chapter
         this.chapters = this.modules[this.moduleId - 1].chapters;
-        console.log(this.chapters[0].nameChapter_en)
-        console.log(this.chapters[1].nameChapter_en)
+        console.log(this.chapters[0].nameChapterEn)
+        console.log(this.chapters[1].nameChapterEn)
         console.log('Loaded chapters:', this.chapters);
         this.chapters.forEach((e) => this.updatedChapters.push(e));
       },
@@ -125,48 +125,48 @@ export class ModuleDetailComponent {
 
   getChapterName(chapterId: number) {
     if (this.lang == "en") {
-      return this.chapters[chapterId].nameChapter_en;
+      return this.chapters[chapterId].nameChapterEn;
     }
     if (this.lang == "nl") {
-      return this.chapters[chapterId].nameChapter_nl;
+      return this.chapters[chapterId].nameChapterNl;
     }
     if (this.lang == "fr") {
-      return this.chapters[chapterId].nameChapter_fr;
+      return this.chapters[chapterId].nameChapterFr;
     }
     if (this.lang == "de") {
-      return this.chapters[chapterId].nameChapter_de;
+      return this.chapters[chapterId].nameChapterDe;
     }
     return "Unknown language"
   }
 
   getActiveChapterName() {
     if (this.lang == "en") {
-      return this.chapters[this.activeChapterId].nameChapter_en;
+      return this.chapters[this.activeChapterId].nameChapterEn;
     }
     if (this.lang == "nl") {
-      return this.chapters[this.activeChapterId].nameChapter_nl;
+      return this.chapters[this.activeChapterId].nameChapterNl;
     }
     if (this.lang == "fr") {
-      return this.chapters[this.activeChapterId].nameChapter_fr;
+      return this.chapters[this.activeChapterId].nameChapterFr;
     }
     if (this.lang == "de") {
-      return this.chapters[this.activeChapterId].nameChapter_de;
+      return this.chapters[this.activeChapterId].nameChapterDe;
     }
     return "Unknown language"
   }
 
   getActiveChapterDescription() {
     if (this.lang == "en") {
-      return this.chapters[this.activeChapterId].descriptionChapter_en;
+      return this.chapters[this.activeChapterId].descriptionChapterEn;
     }
     if (this.lang == "nl") {
-      return this.chapters[this.activeChapterId].descriptionChapter_nl;
+      return this.chapters[this.activeChapterId].descriptionChapterNl;
     }
     if (this.lang == "fr") {
-      return this.chapters[this.activeChapterId].descriptionChapter_fr;
+      return this.chapters[this.activeChapterId].descriptionChapterFr;
     }
     if (this.lang == "de") {
-      return this.chapters[this.activeChapterId].descriptionChapter_de;
+      return this.chapters[this.activeChapterId].descriptionChapterDe;
     }
     return "Unknown language"
   }

@@ -18,20 +18,20 @@ public class Video {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String originalName;  // Originele bestandsnaam
-    private String storedName;    // Unieke naam op FTP server
-    private String filePath;      // Pad op FTP server
-    private Long fileSize;        // Grootte in bytes
-    private String mimeType;      // Bijv. "video/mp4"
+    private String originalName; // Originele bestandsnaam
+    private String storedName; // Unieke naam op FTP server
+    private String filePath; // Pad op FTP server
+    private Long fileSize; // Grootte in bytes
+    private String mimeType; // Bijv. "video/mp4"
     private LocalDateTime uploadDate;
 
     @ManyToOne
     @JoinColumn(name = "chapter_id", nullable = false)
     @JsonBackReference
-    private Chapter chapter;    // Relatie naar training
+    private Chapter chapter; // Relatie naar training
 
-    public Video(String originalName, String storedName, String filePath, 
-                Long fileSize, String mimeType, Chapter chapter) {
+    public Video(String originalName, String storedName, String filePath,
+            Long fileSize, String mimeType, Chapter chapter) {
         this.originalName = originalName;
         this.storedName = storedName;
         this.filePath = filePath;
@@ -40,6 +40,5 @@ public class Video {
         this.chapter = chapter;
         this.uploadDate = LocalDateTime.now();
     }
-
 
 }

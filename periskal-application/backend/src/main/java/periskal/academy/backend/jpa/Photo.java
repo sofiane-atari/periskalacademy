@@ -22,13 +22,13 @@ public class Photo {
 
     // Optional link to a Chapter
     @ManyToOne
-    @JoinColumn(name = "chapter_id", nullable = true)
+    @JoinColumn(name = "chapterId", nullable = true)
     @JsonBackReference
     private Chapter chapter;
 
     // Optional link to a Question
     @ManyToOne
-    @JoinColumn(name = "question_id", nullable = true)
+    @JoinColumn(name = "questionId", nullable = true)
     @JsonBackReference(value = "question-photos")
     private Question question;
 

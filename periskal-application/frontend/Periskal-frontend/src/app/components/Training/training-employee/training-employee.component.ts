@@ -46,7 +46,6 @@ export class TrainingEmployeeComponent implements OnInit {
     this.trainingSvc.getFilteredTrainingData(role, products).subscribe({
       next: (data: Training[]) => {
         this.trainingsData = data;
-        console.log(data);
         this.loadExamsForTrainings();
       },
       error: (error) => {
@@ -56,7 +55,7 @@ export class TrainingEmployeeComponent implements OnInit {
   }
   loadExamsForTrainings(): void {
     this.isLoadingExams = true;
-    
+
     this.trainingsData.forEach(training => {
       this.examService.getExamByTrainingId(training.id).subscribe({
         next: (exam) => {
@@ -92,16 +91,16 @@ export class TrainingEmployeeComponent implements OnInit {
 
   getTrainingName(index: number) {
     if (this.lang == "en") {
-      return this.trainingsData[index].name_en
+      return this.trainingsData[index].nameEn
     }
     if (this.lang == "nl") {
-      return this.trainingsData[index].name_nl
+      return this.trainingsData[index].nameNl
     }
     if (this.lang == "de") {
-      return this.trainingsData[index].name_de
+      return this.trainingsData[index].nameDe
     }
     if (this.lang == "fr") {
-      return this.trainingsData[index].name_fr
+      return this.trainingsData[index].nameFr
     } else {
       return "Unknown language"
     }
@@ -109,16 +108,16 @@ export class TrainingEmployeeComponent implements OnInit {
 
   getTrainingDescription(index: number) {
     if (this.lang == "en") {
-      return this.trainingsData[index].description_en
+      return this.trainingsData[index].descriptionEn
     }
     if (this.lang == "nl") {
-      return this.trainingsData[index].description_nl
+      return this.trainingsData[index].descriptionNl
     }
     if (this.lang == "de") {
-      return this.trainingsData[index].description_de
+      return this.trainingsData[index].descriptionDe
     }
     if (this.lang == "fr") {
-      return this.trainingsData[index].description_fr
+      return this.trainingsData[index].descriptionFr
     } else {
       return "Unknown language"
     }
@@ -131,7 +130,7 @@ export class TrainingEmployeeComponent implements OnInit {
     // Toggle de huidige
     this.openMenus[trainingId] = !this.openMenus[trainingId];
   }
-  
+
   toggleMenuAdd() {
     this.menuOpenAdd = !this.menuOpenAdd;
   }

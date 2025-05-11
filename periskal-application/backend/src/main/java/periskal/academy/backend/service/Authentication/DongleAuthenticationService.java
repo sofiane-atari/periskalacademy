@@ -14,21 +14,22 @@ public class DongleAuthenticationService extends BaseAuthenticationService {
         // Replace spaces with '+' as required.
         token = token.replace(" ", "+");
         return "<soap12:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
-               "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
-               "xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\">" +
-               "<soap12:Body>" +
-               "<Authenticate_Dongle xmlns=\"http://tempuri.org/\">" +
-               "<Dongle>" + token + "</Dongle>" +
-               "</Authenticate_Dongle>" +
-               "</soap12:Body>" +
-               "</soap12:Envelope>";
+                "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
+                "xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\">" +
+                "<soap12:Body>" +
+                "<Authenticate_Dongle xmlns=\"http://tempuri.org/\">" +
+                "<Dongle>" + token + "</Dongle>" +
+                "</Authenticate_Dongle>" +
+                "</soap12:Body>" +
+                "</soap12:Envelope>";
     }
 
     /**
      * Public method for dongle authentication.
      */
     public AuthenticateResponse authenticateDongle(String token) {
-        // TODO: SPRINT 3 - dongle validation here before letting it make a doomed soap request, an empty token is definitely invalid so why even bother sending it. 
+        // TODO: SPRINT 3 - dongle validation here before letting it make a doomed soap
+        // request, an empty token is definitely invalid so why even bother sending it.
         return super.authenticate(token);
     }
 }

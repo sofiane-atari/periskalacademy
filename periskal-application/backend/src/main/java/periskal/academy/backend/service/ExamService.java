@@ -12,16 +12,13 @@ import periskal.academy.backend.jpa.QuestionRepository;
 import periskal.academy.backend.jpa.Training;
 import periskal.academy.backend.jpa.TrainingRepository;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class ExamService {
     private final ExamRepository examRepository;
     private final TrainingRepository trainingRepository;
-    private final QuestionRepository questionRepository;
 
     public Optional<Exam> findById(Long id) {
         return examRepository.findById(id);
@@ -35,7 +32,6 @@ public class ExamService {
             QuestionRepository questionRepository) {
         this.examRepository = examRepository;
         this.trainingRepository = trainingRepository;
-        this.questionRepository = questionRepository;
     }
 
     public Optional<Exam> getExamByTrainingId(Long trainingId) {

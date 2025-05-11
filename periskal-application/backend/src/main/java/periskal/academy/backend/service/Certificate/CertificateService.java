@@ -13,7 +13,8 @@ import periskal.academy.backend.util.CertificateGeneratorUtil;
 public class CertificateService {
 
     public byte[] createCertificate() throws IOException {
-        // Dummy Data, later to be replaced with actual data from the database or JWT token
+        // Dummy Data, later to be replaced with actual data from the database or JWT
+        // token
         String productName = "DEMO PRODUCT";
         String productDetails = "DEMO PRODUCT DETAILS";
         String shipName = "DEMO SHIPNAME";
@@ -25,7 +26,6 @@ public class CertificateService {
         String companyAddress = "Den Isomo 11, 2990 Wuustwezel, Belgium";
         String companyPhone = "Phone +32 3 669 57 36";
 
-
         return CertificateGeneratorUtil.generateCertificatePdf(
                 productName,
                 productDetails,
@@ -36,7 +36,6 @@ public class CertificateService {
                 signerTitle,
                 companyName,
                 companyAddress,
-                companyPhone
-        );
+                companyPhone);
     }
 }

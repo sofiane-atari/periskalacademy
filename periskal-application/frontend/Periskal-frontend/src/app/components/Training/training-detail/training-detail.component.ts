@@ -45,16 +45,16 @@ export class TrainingDetailComponent {
 
   getModuleTitle(moduleId: number) {
     if (this.lang == "en") {
-      return this.training?.modules[moduleId].nameModule_en;
+      return this.training?.modules[moduleId].nameModuleEn;
     }
     if (this.lang == "nl") {
-      return this.training?.modules[moduleId].nameModule_nl;
+      return this.training?.modules[moduleId].nameModuleNl;
     }
     if (this.lang == "fr") {
-      return this.training?.modules[moduleId].nameModule_fr;
+      return this.training?.modules[moduleId].nameModuleFr;
     }
     if (this.lang == "de") {
-      return this.training?.modules[moduleId].nameModule_de;
+      return this.training?.modules[moduleId].nameModuleDe;
     }
     else {
       return "Unknown language"
@@ -63,16 +63,16 @@ export class TrainingDetailComponent {
 
   getModuleDescription(moduleId: number) {
     if (this.lang == "en") {
-      return this.training?.modules[moduleId].descriptionModule_en;
+      return this.training?.modules[moduleId].descriptionModuleEn;
     }
     if (this.lang == "nl") {
-      return this.training?.modules[moduleId].descriptionModule_nl;
+      return this.training?.modules[moduleId].descriptionModuleNl;
     }
     if (this.lang == "fr") {
-      return this.training?.modules[moduleId].descriptionModule_fr;
+      return this.training?.modules[moduleId].descriptionModuleFr;
     }
     if (this.lang == "de") {
-      return this.training?.modules[moduleId].descriptionModule_de;
+      return this.training?.modules[moduleId].descriptionModuleDe;
     }
     else {
       return "Unknown language"

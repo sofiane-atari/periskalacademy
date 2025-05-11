@@ -5,7 +5,7 @@ public class AuthenticationParsingException extends AuthenticationServiceExcepti
 
     public AuthenticationParsingException(String message, Throwable cause, String responseXml) {
         super(message, cause);
-        this.responseXml = responseXml; 
+        this.responseXml = responseXml;
     }
 
     public String getResponseXml() {

@@ -17,11 +17,10 @@ class CertificateServiceTest {
     @Test
     void createCertificate_callsUtil_andReturnsBytes() throws IOException {
 
-        //arrange
+        // arrange
         CertificateService service = new CertificateService();
         byte[] fakePdfBytes = new byte[] { 1, 2, 3 };
 
-        
         try (MockedStatic<CertificateGeneratorUtil> mockedUtil = mockStatic(CertificateGeneratorUtil.class)) {
 
             mockedUtil.when(() -> CertificateGeneratorUtil.generateCertificatePdf(
@@ -35,7 +34,7 @@ class CertificateServiceTest {
             // Assert
             assertThat(result).isEqualTo(fakePdfBytes);
 
-            // Assert 
+            // Assert
             mockedUtil.verify(() -> CertificateGeneratorUtil.generateCertificatePdf(
                     anyString(), anyString(), anyString(), anyString(),
                     anyList(), anyString(), anyString(), anyString(),

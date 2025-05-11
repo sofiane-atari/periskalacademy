@@ -10,10 +10,7 @@ import periskal.academy.backend.dto.ChapterDTO;
 import periskal.academy.backend.jpa.Chapter;
 import periskal.academy.backend.jpa.ChapterRepository;
 import periskal.academy.backend.jpa.ModuleRepository;
-import periskal.academy.backend.jpa.Photo;
-import periskal.academy.backend.jpa.Training;
 import periskal.academy.backend.security.exceptions.general.ResourceNotFoundException;
-import periskal.academy.backend.security.exceptions.general.ValidationException;
 
 @Slf4j
 @Service
@@ -37,19 +34,19 @@ public class ModuleService {
         periskal.academy.backend.jpa.Module existingModule = getModuleById(moduleId);
 
         Chapter newChapter = new Chapter();
-        newChapter.setNameChapter_en(chapterDTO.getNameChapter_en());
-        newChapter.setDescriptionChapter_en(chapterDTO.getDescriptionChapter_en());
-        newChapter.setTextChapter_en(chapterDTO.getTextChapter_en());
-        newChapter.setNameChapter_nl(chapterDTO.getNameChapter_nl());
-        newChapter.setDescriptionChapter_nl(chapterDTO.getDescriptionChapter_nl());
-        newChapter.setTextChapter_nl(chapterDTO.getTextChapter_nl());
-        newChapter.setNameChapter_fr(chapterDTO.getNameChapter_fr());
-        newChapter.setDescriptionChapter_fr(chapterDTO.getDescriptionChapter_fr());
-        newChapter.setTextChapter_fr(chapterDTO.getTextChapter_fr());
-        newChapter.setNameChapter_de(chapterDTO.getNameChapter_de());
-        newChapter.setDescriptionChapter_de(chapterDTO.getDescriptionChapter_de());
-        newChapter.setTextChapter_de(chapterDTO.getTextChapter_de());
-        newChapter.setPhotos_en(chapterDTO.getPhotos());
+        newChapter.setNameChapterEn(chapterDTO.getNameChapterEn());
+        newChapter.setDescriptionChapterEn(chapterDTO.getDescriptionChapterEn());
+        newChapter.setTextChapterEn(chapterDTO.getTextChapterEn());
+        newChapter.setNameChapterNl(chapterDTO.getNameChapterNl());
+        newChapter.setDescriptionChapterNl(chapterDTO.getDescriptionChapterNl());
+        newChapter.setTextChapterNl(chapterDTO.getTextChapterNl());
+        newChapter.setNameChapterFr(chapterDTO.getNameChapterFr());
+        newChapter.setDescriptionChapterFr(chapterDTO.getDescriptionChapterFr());
+        newChapter.setTextChapterFr(chapterDTO.getTextChapterFr());
+        newChapter.setNameChapterDe(chapterDTO.getNameChapterDe());
+        newChapter.setDescriptionChapterDe(chapterDTO.getDescriptionChapterDe());
+        newChapter.setTextChapterDe(chapterDTO.getTextChapterDe());
+        newChapter.setPhotos(chapterDTO.getPhotos());
         newChapter.setModule(existingModule);
 
         try {
