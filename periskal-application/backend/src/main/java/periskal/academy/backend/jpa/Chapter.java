@@ -17,7 +17,7 @@ import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import periskal.academy.backend.jpa.Video.Video;
+import periskal.academy.backend.jpa.video.Video;
 
 @Entity
 @Getter

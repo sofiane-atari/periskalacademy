@@ -1,4 +1,4 @@
-package periskal.academy.backend.service.Authentication;
+package periskal.academy.backend.service.authentication;
 
 import org.springframework.stereotype.Service;
 
