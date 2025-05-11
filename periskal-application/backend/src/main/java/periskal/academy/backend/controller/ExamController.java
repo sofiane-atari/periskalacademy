@@ -37,13 +37,13 @@ public class ExamController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/edit/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Exam> updateExam(@PathVariable Long id, @RequestBody Exam updatedExam) {
         Exam exam = examService.updateExam(id, updatedExam);
         return exam != null ? ResponseEntity.ok(exam) : ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, String>> deleteExam(@PathVariable Long id) {
 
         examService.deleteExam(id);

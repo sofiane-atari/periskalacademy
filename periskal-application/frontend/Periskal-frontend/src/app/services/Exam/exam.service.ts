@@ -32,11 +32,11 @@ export class ExamService {
     
 
   updateExam(id: number, examData: any): Observable<any> {
-    return this.client.put(`${this.baseUrl}/edit/${id}`, examData);
+    return this.client.put(`${this.baseUrl}/${id}`, examData);
   }
 
   deleteExam(id: number): Observable<any> {
-    return this.client.delete(`${this.baseUrl}/delete/${id}`);
+    return this.client.delete(`${this.baseUrl}/${id}`);
   }
   
   getExamByTrainingId(trainingId: number): Observable<Exam | null> {
