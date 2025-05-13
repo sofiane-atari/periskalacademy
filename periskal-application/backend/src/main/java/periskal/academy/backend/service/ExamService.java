@@ -96,31 +96,32 @@ public class ExamService {
         Optional<Exam> examOpt = examRepository.findById(id);
         if (examOpt.isPresent()) {
             Exam exam = examOpt.get();
-
+    
             exam.setExamTitle(updatedExam.getExamTitle());
             exam.setExamDescription(updatedExam.getExamDescription());
             exam.setTotalQuestions(updatedExam.getTotalQuestions());
-
+    
             // Oude vragen verwijderen
             exam.getQuestions().clear();
-
-            for (Question question : updatedExam.getQuestions()) {
-                question.setId(null);
-                question.setExam(exam);
-
-                if (question.getAnswers() != null) {
-                    for (Answer answer : question.getAnswers()) {
+    
+            for (Question updatedQuestion : updatedExam.getQuestions()) {
+                updatedQuestion.setId(null);
+                updatedQuestion.setExam(exam);
+    
+                // Answers koppelen aan question
+                if (updatedQuestion.getAnswers() != null) {
+                    for (Answer answer : updatedQuestion.getAnswers()) {
                         answer.setId(null);
-                        answer.setQuestion(question);
+                        answer.setQuestion(updatedQuestion);
                     }
-
-                exam.getQuestions().add(question);
+                }
+    
+                exam.getQuestions().add(updatedQuestion);
             }
-
+    
             return examRepository.save(exam);
         }
         return null;
-    }
     }
 
     public void deleteExam(Long id) {

@@ -7,11 +7,12 @@ import { ExamService } from '../../../services/Exam/exam.service';
 import { Exam } from '../../../models/exam.model';
 import { TranslatePipe } from '@ngx-translate/core';
 import { PhotoUploadComponent } from '../../photo-upload/photo-upload.component';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-add-exam',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, PhotoUploadComponent, TranslatePipe],
+  imports: [FormsModule, ReactiveFormsModule, PhotoUploadComponent, TranslatePipe, MatTabsModule],
   templateUrl: './add-exam.component.html',
   styleUrl: './add-exam.component.css'
 })
@@ -48,7 +49,14 @@ export class AddExamComponent implements OnInit {
   addQuestion(): void {
     const questionGroup = this.fb.group({
       text: ['', Validators.required],
-      photos: [[]]
+      photos: [[]],
+      answers: this.fb.array([
+        this.fb.control('', Validators.required),
+        this.fb.control('', Validators.required),
+        this.fb.control('', Validators.required),
+        this.fb.control('', Validators.required)
+      ]),
+      correctAnswer: ['', Validators.required]
     });
     this.questions.push(questionGroup);
   }
@@ -56,6 +64,15 @@ export class AddExamComponent implements OnInit {
   removeQuestion(index: number): void {
     this.questions.removeAt(index);
   }
+
+  getQuestions(): FormArray {
+    return this.examForm.get('questions') as FormArray;
+  }
+  
+  getAnswers(questionIndex: number): FormArray {
+    return this.questions.at(questionIndex).get('answers') as FormArray;
+  }
+  
 
   loadTrainings(): void {
     this.isLoading = true;
@@ -73,6 +90,7 @@ export class AddExamComponent implements OnInit {
       }
     });
   }
+
   checkExistingExams(): void {
     const checks = this.trainingsData.map(training => {
       return this.examService.getExamByTrainingId(training.id).toPromise()
@@ -87,6 +105,7 @@ export class AddExamComponent implements OnInit {
       this.isLoading = false;
     });
   }
+
   hasExam(trainingId: number): boolean {
     return this.trainingsWithExams.includes(trainingId);
   }
@@ -102,7 +121,9 @@ export class AddExamComponent implements OnInit {
           text: q.value.text,
           photos: (q.value.photos || []).map((photo: any) => ({
             imageData: photo.imageData  // This matches your Photo entity constructor
-          }))
+          })),
+          answers: q.value.answers,
+          correctAnswer: q.value.correctAnswer
         }))
       };
 

@@ -9,7 +9,7 @@
 }
 
 h2 {
-  color: #2c3e50;
+  color: #2c2c2c;
   margin-bottom: 1.5rem;
   font-size: 1.8rem;
   font-weight: 600;
@@ -22,7 +22,7 @@ form {
 }
 
 label {
-  color: #4a5568;
+  color: #4a4a4a;
   font-weight: 500;
   margin-bottom: 0.5rem;
   display: block;
@@ -33,7 +33,7 @@ select,
 textarea {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #ddd;
   border-radius: 6px;
   font-size: 1rem;
   transition: border-color 0.2s ease;
@@ -43,8 +43,8 @@ input:focus,
 select:focus,
 textarea:focus {
   outline: none;
-  border-color: #4299e1;
-  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+  border-color: #f0d04b;
+  box-shadow: 0 0 0 3px rgba(240, 208, 75, 0.2);
 }
 
 textarea {
@@ -53,23 +53,26 @@ textarea {
 }
 
 button {
-  background-color: #4299e1;
-  color: white;
+  background-color: #f0d04b;
+  color: #2c2c2c;
   padding: 0.75rem 1.5rem;
   border: none;
   border-radius: 6px;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease, transform 0.2s ease;
   margin-top: 1rem;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 }
 
 button:hover {
-  background-color: #3182ce;
+  background-color: #e0c040;
+  transform: translateY(-2px);
 }
 
 button:disabled {
-  background-color: #a0aec0;
+  background-color: #f0d04b80;
+  color: #999;
   cursor: not-allowed;
 }
 
@@ -93,7 +96,25 @@ body {
   background-color: #f7fafc;
   color: #2d3748;
 }
+
 .placeholder-option {
-  color: #999; /* Gray color */
-  font-style: italic; /* Cursive (italic) text */
+  color: #999;
+  font-style: italic;
 }
+
+.question-block {
+  background-color: #fffef5;
+  border: 1px solid #f0d04b;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.question-block h4 {
+  margin-bottom: 0.75rem;
+  color: #2c2c2c;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
