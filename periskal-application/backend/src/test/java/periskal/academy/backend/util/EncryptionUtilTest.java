@@ -1,4 +1,4 @@
-package periskal.academy.backend;
+package periskal.academy.backend.util;
 
 import static org.assertj.core.api.Assertions.*;
 

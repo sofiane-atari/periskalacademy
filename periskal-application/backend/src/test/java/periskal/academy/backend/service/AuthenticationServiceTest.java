@@ -1,4 +1,4 @@
-package periskal.academy.backend;
+package periskal.academy.backend.service;
 
 import java.lang.reflect.Field;
 import java.net.SocketTimeoutException;
@@ -213,4 +213,62 @@ public class AuthenticationServiceTest {
 
                 }
         }
+
+        @Test
+        void givenSoapResponseWithSkippers_whenAuthenticate_thenParsesSkippersCorrectly() throws Exception {
+                String soapResponseWithSkippers = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+                                "<soap12:Envelope xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\">\n" +
+                                "  <soap12:Body>\n" +
+                                "    <AuthenticateResponse>\n" +
+                                "      <AuthenticateResult>\n" +
+                                "        <ID>12345</ID>\n" +
+                                "        <Username>testUser</Username>\n" +
+                                "        <LoginResult>Success</LoginResult>\n" +
+                                "        <Skippers>\n" +
+                                "          <Client>\n" +
+                                "            <ID>1</ID>\n" +
+                                "            <Username>skipper1</Username>\n" +
+                                "            <Firstname>Anne</Firstname>\n" +
+                                "            <Lastname>Belle</Lastname>\n" +
+                                "            <Shipname>Neptunus</Shipname>\n" +
+                                "            <Role>Captain</Role>\n" +
+                                "            <Products>\n" +
+                                "              <string>Product1</string>\n" +
+                                "              <string>Product2</string>\n" +
+                                "            </Products>\n" +
+                                "          </Client>\n" +
+                                "          <Client>\n" +
+                                "            <ID>2</ID>\n" +
+                                "            <Username>skipper2</Username>\n" +
+                                "            <Firstname>Jos</Firstname>\n" +
+                                "            <Lastname>VanHoof</Lastname>\n" +
+                                "            <Shipname>Neptunus</Shipname>\n" +
+                                "            <Role>Matroos</Role>\n" +
+                                "            <Products>\n" +
+                                "              <string>Product1</string>\n" +
+                                "              <string>Product2</string>\n" +
+                                "            </Products>\n" +
+                                "          </Client>\n" +
+                                "        </Skippers>\n" +
+                                "      </AuthenticateResult>\n" +
+                                "    </AuthenticateResponse>\n" +
+                                "  </soap12:Body>\n" +
+                                "</soap12:Envelope>";
+
+                try (MockedStatic<EncryptionUtil> mockedStatic = Mockito.mockStatic(EncryptionUtil.class)) {
+                        mockedStatic.when(() -> EncryptionUtil.encode(anyString(), anyString()))
+                                        .thenReturn("encoded_token");
+
+                        mockServer.expect(requestTo(authenticateEndpointUrl))
+                                        .andRespond(withSuccess(soapResponseWithSkippers, MediaType.APPLICATION_XML));
+
+                        AuthenticateResponse response = authenticationService.authenticate("user", "pass");
+
+                        assertThat(response.getSkippers()).hasSize(2);
+                        assertThat(response.getSkippers().get(0).getUsername()).isEqualTo("skipper1");
+                        assertThat(response.getSkippers().get(0).getProducts()).containsExactly("Product1", "Product2");
+                        assertThat(response.getSkippers().get(1).getId()).isEqualTo("2");
+                }
+        }
+
 }

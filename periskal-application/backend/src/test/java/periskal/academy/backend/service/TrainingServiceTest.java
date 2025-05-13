@@ -1,4 +1,4 @@
-package periskal.academy.backend;
+package periskal.academy.backend.service;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,11 +14,13 @@ import static org.mockito.ArgumentMatchers.any;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
+import org.springframework.dao.DataAccessException;
 
 import periskal.academy.backend.dto.ModuleDTO;
 import periskal.academy.backend.dto.TrainingDTO;
@@ -28,6 +30,7 @@ import periskal.academy.backend.jpa.ModuleRepository;
 import periskal.academy.backend.jpa.Training;
 import periskal.academy.backend.jpa.TrainingRepository;
 import periskal.academy.backend.security.exceptions.general.ResourceNotFoundException;
+import periskal.academy.backend.security.exceptions.general.ValidationException;
 import periskal.academy.backend.service.TrainingService;
 
 class TrainingServiceTest {
@@ -50,6 +53,7 @@ class TrainingServiceTest {
 
         // Setup dummy training and module
         training = new Training();
+        training.setProductCode("ECIDS");
         training.setId(1L);
         training.setNameEn("Test Training");
 
@@ -185,6 +189,12 @@ class TrainingServiceTest {
         ModuleDTO moduleDto = new ModuleDTO();
         moduleDto.setNameModuleEn("New Module");
         moduleDto.setDescriptionModuleEn("Module Description");
+        moduleDto.setNameModuleNl("Nieuwe module");
+        moduleDto.setDescriptionModuleNl("Module Beschrijving");
+        moduleDto.setNameModuleFr("Frans");
+        moduleDto.setDescriptionModuleFr("Module frans");
+        moduleDto.setNameModuleDe("New Module");
+        moduleDto.setDescriptionModuleDe("Module duits");
 
         when(trainingRepository.findByIdWithDetails(1L)).thenReturn(Optional.of(training));
 
@@ -271,5 +281,142 @@ class TrainingServiceTest {
         assertThat(result.get(0).getNameEn()).isEqualTo("Test Training");
 
         verify(trainingRepository, times(1)).findAllAsList();
+    }
+
+    @Test
+    void givenAdministratorRole_whenGetFilteredTrainings_thenAllTrainingsAreReturned() {
+        // Arrange
+        when(trainingRepository.findAllAsList()).thenReturn(List.of(training));
+
+        // Act
+        List<TrainingDTO> filteredTrainings = trainingService.getFilteredTrainings("Administrator", List.of());
+
+        // Assert
+        assertThat(filteredTrainings).isNotEmpty();
+        verify(trainingRepository, times(1)).findAllAsList();
+    }
+
+    @Test
+    void givenSkipperRole_whenGetFilteredTrainings_thenFilteredTrainingsAreReturned() {
+        // Arrange
+        when(trainingRepository.findAllAsList()).thenReturn(List.of(training));
+
+        // Act
+        List<TrainingDTO> filteredTrainings = trainingService.getFilteredTrainings("Skipper", List.of("ECIDS"));
+
+        // Assert
+        assertThat(filteredTrainings).hasSize(1);
+        verify(trainingRepository, times(1)).findAllAsList();
+    }
+
+    @Test
+    void givenInvalidTrainingData_whenCreateTraining_thenThrowValidationException() {
+        Training invalidTraining = new Training();
+        invalidTraining.setNameEn("");
+
+        assertThatThrownBy(() -> trainingService.createTraining(invalidTraining))
+                .isInstanceOf(ValidationException.class);
+    }
+
+    @Test
+    void givenTrainingWithInvalidModule_whenDeleteModule_thenThrowResourceNotFoundException() {
+        when(trainingRepository.findById(1L)).thenReturn(Optional.of(training));
+
+        assertThatThrownBy(() -> trainingService.deleteModule(1L, 999L))
+                .isInstanceOf(ResourceNotFoundException.class);
+
+        verify(trainingRepository, never()).save(any());
+    }
+
+    @Test
+    void givenModuleDtoWithMissingName_whenAddModule_thenThrowValidationException() {
+        ModuleDTO invalidModuleDto = new ModuleDTO();
+        invalidModuleDto.setDescriptionModuleEn("Missing name");
+
+        when(trainingRepository.findByIdWithDetails(1L)).thenReturn(Optional.of(training));
+
+        assertThatThrownBy(() -> trainingService.addModuleWithDto(1L, invalidModuleDto))
+                .isInstanceOf(ValidationException.class);
+    }
+
+    @Test
+    void givenValidTraining_whenUpdateTraining_thenTrainingIsUpdated() {
+        // Arrange
+        Training existingTraining = new Training();
+        existingTraining.setId(1L);
+        existingTraining.setNameEn("Old Name");
+        existingTraining.setDescriptionEn("Old Description");
+
+        Training updatedTraining = new Training();
+        updatedTraining.setId(1L);
+        updatedTraining.setNameEn("Updated Name");
+        updatedTraining.setDescriptionEn("Updated Description");
+
+        when(trainingRepository.findByIdWithDetails(1L)).thenReturn(Optional.of(existingTraining));
+        when(trainingRepository.save(existingTraining)).thenReturn(existingTraining);
+
+        // Act
+        Training result = trainingService.updateTraining(1L, updatedTraining);
+
+        // Assert
+        assertThat(result).isNotNull();
+        assertThat(result.getNameEn()).isEqualTo("Updated Name");
+        assertThat(result.getDescriptionEn()).isEqualTo("Updated Description");
+
+        verify(trainingRepository, times(1)).save(existingTraining);
+    }
+
+    @Test
+    void givenValidTrainingIdAndModules_whenUpdateModules_thenModulesAreUpdated() {
+        Long trainingId = 1L;
+        Training existingTraining = new Training();
+        existingTraining.setId(trainingId);
+        existingTraining.setModules(new ArrayList<>());
+
+        Module module1 = new Module();
+        Module module2 = new Module();
+        List<Module> newModules = List.of(module1, module2);
+
+        when(trainingRepository.findById(trainingId)).thenReturn(Optional.of(existingTraining));
+        when(trainingRepository.save(any(Training.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Training updatedTraining = trainingService.updateModules(trainingId, newModules);
+
+        assertThat(updatedTraining.getModules()).containsExactlyInAnyOrder(module1, module2);
+        assertThat(module1.getTraining()).isEqualTo(existingTraining);
+        assertThat(module2.getTraining()).isEqualTo(existingTraining);
+        verify(trainingRepository).save(existingTraining);
+    }
+
+    @Test
+    void givenInvalidTrainingId_whenUpdateModules_thenThrowResourceNotFoundException() {
+        Long trainingId = 999L;
+        List<Module> modules = List.of(new Module());
+
+        when(trainingRepository.findById(trainingId)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> trainingService.updateModules(trainingId, modules))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining("Training not found with id: " + trainingId);
+
+        verify(trainingRepository, never()).save(any());
+    }
+
+    @Test
+    void givenDatabaseError_whenUpdateModules_thenThrowRuntimeException() {
+        Long trainingId = 1L;
+        Training training = new Training();
+        training.setId(trainingId);
+        training.setModules(new ArrayList<>());
+        List<Module> modules = List.of(new Module());
+
+        when(trainingRepository.findById(trainingId)).thenReturn(Optional.of(training));
+        when(trainingRepository.save(any())).thenThrow(mock(DataAccessException.class));
+
+        assertThatThrownBy(() -> trainingService.updateModules(trainingId, modules))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining("Failed to update modules for training " + trainingId);
+
+        verify(trainingRepository).save(training);
     }
 }

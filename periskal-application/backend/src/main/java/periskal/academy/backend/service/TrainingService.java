@@ -85,20 +85,19 @@ public class TrainingService {
 
     public List<TrainingDTO> getFilteredTrainings(String role, List<String> products) {
         List<Training> trainings = trainingRepository.findAllAsList();
-        trainings.forEach(t -> System.out.println("Training " + t.getId() + " has modules: "
-                + (t.getModules() != null ? t.getModules().size() : "null")));
         if (role == null || role.isBlank()) {
             throw new ValidationException("Role parameter cannot be null or empty.");
         }
 
         // If Admin/Support, return all trainings
         if ("Administrator".equals(role) || "Support".equals(role)) {
-            return getAllTrainings();
+            return trainings.stream()
+                    .map(this::convertToDto)
+                    .collect(Collectors.toList());
         }
 
         // For Skipper/Fleetmanager with products
-        return trainingRepository.findAllAsList()
-                .stream()
+        return trainings.stream()
                 .filter(training -> products.stream()
                         .anyMatch(product -> training.getProductCode().toLowerCase().contains(product.toLowerCase())))
                 .map(this::convertToDto)
@@ -250,6 +249,19 @@ public class TrainingService {
     @Transactional
     public Module addModuleWithDto(Long trainingId, ModuleDTO moduleDto) {
 
+        if (moduleDto.getNameModuleEn() == null || moduleDto.getNameModuleEn().isEmpty()) {
+            throw new ValidationException("Module name (English) cannot be empty.");
+        }
+        if (moduleDto.getNameModuleNl() == null || moduleDto.getNameModuleNl().isEmpty()) {
+            throw new ValidationException("Module name (Dutch) cannot be empty.");
+        }
+        if (moduleDto.getNameModuleFr() == null || moduleDto.getNameModuleFr().isEmpty()) {
+            throw new ValidationException("Module name (French) cannot be empty.");
+        }
+        if (moduleDto.getNameModuleDe() == null || moduleDto.getNameModuleDe().isEmpty()) {
+            throw new ValidationException("Module name (German) cannot be empty.");
+        }
+
         Training existingTraining = getTrainingById(trainingId);
 
         Module newModule = new Module();
@@ -278,31 +290,4 @@ public class TrainingService {
         }
 
     }
-
-    @Transactional
-    public Training removePhoto(Long trainingId, Long moduleId, Long chapterId, Long photoId) {
-        Training existingTraining = getTrainingById(trainingId);
-
-        Module existingModule = existingTraining.getModules().stream()
-                .filter(m -> m.getId().equals(moduleId))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Module not found"));
-
-        Chapter existingChapter = existingModule.getChapters().stream()
-                .filter(c -> c.getId().equals(chapterId))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Chapter not found"));
-
-        List<Photo> photos = existingChapter.getPhotos();
-        Photo photoToRemove = photos.stream()
-                .filter(p -> p.getId().equals(photoId))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Photo not found"));
-
-        photos.remove(photoToRemove);
-
-        photoToRemove.setChapter(null);
-        return existingTraining;
-    }
-
 }
