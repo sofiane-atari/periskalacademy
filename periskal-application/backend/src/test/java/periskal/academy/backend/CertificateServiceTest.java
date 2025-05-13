@@ -9,7 +9,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import org.mockito.MockedStatic;
 import static org.mockito.Mockito.mockStatic;
 
-import periskal.academy.backend.service.certificate.CertificateService;
+import periskal.academy.backend.service.Certificate.CertificateService;
 import periskal.academy.backend.util.CertificateGeneratorUtil;
 
 class CertificateServiceTest {

@@ -2,8 +2,10 @@ package periskal.academy.backend.service;
 
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
+import periskal.academy.backend.dto.AnswerDTO;
 import periskal.academy.backend.dto.ExamRequest;
 import periskal.academy.backend.dto.QuestionDTO;
+import periskal.academy.backend.jpa.Answer;
 import periskal.academy.backend.jpa.Exam;
 import periskal.academy.backend.jpa.ExamRepository;
 import periskal.academy.backend.jpa.Photo;
@@ -70,6 +72,18 @@ public class ExamService {
                 }
             }
 
+            if (qdto.getAnswers() != null) {
+                List<Answer> answers = new ArrayList<>();
+                for (AnswerDTO adto : qdto.getAnswers()) {
+                    Answer a = new Answer();
+                    a.setText(adto.getText());
+                    a.setCorrect(adto.isCorrect());
+                    a.setQuestion(q);
+                    answers.add(a);
+                }
+                q.setAnswers(answers);
+            }
+
             questions.add(q);
         }
         exam.setQuestions(questions);
@@ -93,12 +107,20 @@ public class ExamService {
             for (Question question : updatedExam.getQuestions()) {
                 question.setId(null);
                 question.setExam(exam);
+
+                if (question.getAnswers() != null) {
+                    for (Answer answer : question.getAnswers()) {
+                        answer.setId(null);
+                        answer.setQuestion(question);
+                    }
+
                 exam.getQuestions().add(question);
             }
 
             return examRepository.save(exam);
         }
         return null;
+    }
     }
 
     public void deleteExam(Long id) {

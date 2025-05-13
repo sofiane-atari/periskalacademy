@@ -23,11 +23,11 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 import periskal.academy.backend.model.AuthenticateResponse;
-import periskal.academy.backend.security.exceptions.authentication.AuthenticationCommunicationException;
-import periskal.academy.backend.security.exceptions.authentication.AuthenticationInvalidCredentialsException;
-import periskal.academy.backend.security.exceptions.authentication.AuthenticationParsingException;
-import periskal.academy.backend.security.exceptions.authentication.AuthenticationServiceException;
-import periskal.academy.backend.service.authentication.AuthenticationService;
+import periskal.academy.backend.security.Exceptions.authentication.AuthenticationCommunicationException;
+import periskal.academy.backend.security.Exceptions.authentication.AuthenticationInvalidCredentialsException;
+import periskal.academy.backend.security.Exceptions.authentication.AuthenticationParsingException;
+import periskal.academy.backend.security.Exceptions.authentication.AuthenticationServiceException;
+import periskal.academy.backend.service.Authentication.AuthenticationService;
 import periskal.academy.backend.util.EncryptionUtil;
 
 public class AuthenticationServiceTest {

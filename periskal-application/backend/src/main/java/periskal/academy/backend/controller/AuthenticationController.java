@@ -4,8 +4,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import periskal.academy.backend.model.AuthenticateResponse;
 import periskal.academy.backend.model.LoginRequest;
-import periskal.academy.backend.service.authentication.AuthenticationService;
-import periskal.academy.backend.service.authentication.DongleAuthenticationService;
+import periskal.academy.backend.service.Authentication.AuthenticationService;
+import periskal.academy.backend.service.Authentication.DongleAuthenticationService;
 import periskal.academy.backend.util.JwtUtil;
 
 @RestController
