@@ -1,4 +1,4 @@
-package periskal.academy.backend;
+package periskal.academy.backend.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;

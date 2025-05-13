@@ -1,4 +1,4 @@
-package periskal.academy.backend;
+package periskal.academy.backend.service;
 
 import java.lang.reflect.Field;
 import java.net.SocketTimeoutException;
