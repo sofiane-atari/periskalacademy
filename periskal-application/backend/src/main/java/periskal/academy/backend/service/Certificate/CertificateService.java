@@ -1,4 +1,4 @@
-package periskal.academy.backend.service.certificate;
+package periskal.academy.backend.service.Certificate;
 
 import java.io.IOException;
 import java.util.List;

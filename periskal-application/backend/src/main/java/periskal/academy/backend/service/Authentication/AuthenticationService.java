@@ -1,10 +1,10 @@
-package periskal.academy.backend.service.authentication;
+package periskal.academy.backend.service.Authentication;
 
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
 import periskal.academy.backend.model.AuthenticateResponse;
-import periskal.academy.backend.security.exceptions.authentication.AuthenticationServiceException;
+import periskal.academy.backend.security.Exceptions.authentication.AuthenticationServiceException;
 import periskal.academy.backend.util.EncryptionUtil;
 
 @Slf4j

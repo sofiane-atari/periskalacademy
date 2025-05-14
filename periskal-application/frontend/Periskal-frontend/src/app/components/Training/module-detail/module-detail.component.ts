@@ -7,6 +7,7 @@ import { Chapter } from '../../../models/chapter.model';
 import { Module } from '../../../models/module.model';
 import { CommonModule } from '@angular/common';
 import { CheckboxRequiredValidator } from '@angular/forms';
+import { Video } from '../../../models/video.model';
 import { ModuleProgress, TrainingProgress } from '../../../models/progress.model';
 import { JwtDecoderService } from '../../../services/JwtDecode/jwt-decoder.service';
 import { ProgressService } from '../../../services/Progress/progress.service';
@@ -18,42 +19,6 @@ import { ProgressService } from '../../../services/Progress/progress.service';
   styleUrl: './module-detail.component.css'
 })
 export class ModuleDetailComponent {
-
-  // chapters: Chapter[] = [
-  //   {
-  //     id: 1,
-  //     nameChapter_en: 'Introduction to Angular',
-  //     nameChapter_nl: 'Introductie tot Angular',
-  //     nameChapter_fr: 'Introduction à Angular',
-  //     nameChapter_de: 'Einführung in Angular',
-  //     descriptionChapter_en: 'Learn the basics',
-  //     descriptionChapter_de: 'duits',
-  //     descriptionChapter_fr: 'frans',
-  //     descriptionChapter_nl: "nederlands",
-  //     textChapter_de: 'duits',
-  //     textChapter_fr: 'frans',
-  //     textChapter_nl: 'nederlands',
-  //     textChapter_en: 'Angular is a platform...',
-  //     photos: []
-  //   },
-  //   {
-  //     id: 2,
-  //     nameChapter_en: 'Components',
-  //     nameChapter_nl: 'Componenten',
-  //     nameChapter_fr: 'Composants',
-  //     nameChapter_de: 'Komponenten',
-  //     descriptionChapter_de: 'duits',
-  //     descriptionChapter_fr: 'frans',
-  //     descriptionChapter_nl: "nederlands",
-  //     textChapter_de: 'duits',
-  //     textChapter_fr: 'frans',
-  //     textChapter_nl: 'nederlands',
-  //     descriptionChapter_en: 'Building blocks of Angular',
-  //     textChapter_en: 'Components are the main building blocks...',
-  //     photos: []
-  //   }
-  // ];
-
   training: Training | undefined;
   modules: Module[] = [];
   text: string = "";
@@ -63,7 +28,7 @@ export class ModuleDetailComponent {
 
   trainingId: number = 0;
   moduleId: number = 0;
-  activeChapterId: number = 0;
+  activeChapterId: number = -1;
 
   //progress
   private userId: string = '';
@@ -81,10 +46,11 @@ export class ModuleDetailComponent {
   }
 
 
-  formatText(content: string): string {
+  formatText(content: string | undefined): string {
     if (!content) return 'No content available';
     return content.replace(/\n/g, '<br>');
   }
+
 
   ngOnInit(): void {
 
@@ -130,6 +96,11 @@ export class ModuleDetailComponent {
         console.log(this.chapters[1].nameChapterEn)
         console.log('Loaded chapters:', this.chapters);
         this.chapters.forEach((e) => this.updatedChapters.push(e));
+        
+        if (this.chapters.length > 0) {
+          this.activeChapterId = this.chapters[0].id; // Set to first chapter's ID
+          this.cdr.detectChanges(); // Trigger change detection
+        }
       },
       error: (error) => {
         console.error('Error loading training data', error);
@@ -143,55 +114,96 @@ export class ModuleDetailComponent {
   }
 
   setActiveChapter(chapterId: number) {
-    this.activeChapterId = chapterId;
+    if (this.chapters.some(ch => ch.id === chapterId)) {
+      this.activeChapterId = chapterId;
+    }
   }
-
   getChapterName(chapterId: number) {
-    if (this.lang == "en") {
-      return this.chapters[chapterId].nameChapterEn;
+    const chapter = this.chapters.find(ch => ch.id === chapterId);
+    if (!chapter) return 'Chapter not found';
+    
+    switch(this.lang) {
+      case 'en': return chapter.nameChapterEn || 'Unnamed chapter';
+      case 'nl': return chapter.nameChapterNl || 'Naamloos hoofdstuk';
+      case 'fr': return chapter.nameChapterFr || 'Chapitre sans nom';
+      case 'de': return chapter.nameChapterDe || 'Unbenanntes Kapitel';
+      default: return chapter.nameChapterEn || 'Unknown language';
     }
-    if (this.lang == "nl") {
-      return this.chapters[chapterId].nameChapterNl;
-    }
-    if (this.lang == "fr") {
-      return this.chapters[chapterId].nameChapterFr;
-    }
-    if (this.lang == "de") {
-      return this.chapters[chapterId].nameChapterDe;
-    }
-    return "Unknown language"
   }
 
   getActiveChapterName() {
-    if (this.lang == "en") {
-      return this.chapters[this.activeChapterId].nameChapterEn;
-    }
-    if (this.lang == "nl") {
-      return this.chapters[this.activeChapterId].nameChapterNl;
-    }
-    if (this.lang == "fr") {
-      return this.chapters[this.activeChapterId].nameChapterFr;
-    }
-    if (this.lang == "de") {
-      return this.chapters[this.activeChapterId].nameChapterDe;
-    }
-    return "Unknown language"
+  const chapter = this.getActiveChapter();
+  if (!chapter) return 'Loading...';
+  
+  switch(this.lang) {
+    case 'en': return chapter.nameChapterEn || 'Unnamed chapter';
+    case 'nl': return chapter.nameChapterNl || 'Naamloos hoofdstuk';
+    case 'fr': return chapter.nameChapterFr || 'Chapitre sans nom';
+    case 'de': return chapter.nameChapterDe || 'Unbenanntes Kapitel';
+    default: return chapter.nameChapterEn || 'Unknown language';
+  }
   }
 
   getActiveChapterDescription() {
-    if (this.lang == "en") {
-      return this.chapters[this.activeChapterId].descriptionChapterEn;
+    const chapter = this.getActiveChapter();
+    if (!chapter) return 'Loading...';
+    
+    switch(this.lang) {
+      case 'en': return chapter.descriptionChapterEn || 'No description available';
+      case 'nl': return chapter.descriptionChapterNl || 'Geen beschrijving beschikbaar';
+      case 'fr': return chapter.descriptionChapterFr || 'Pas de description disponible';
+      case 'de': return chapter.descriptionChapterDe || 'Keine Beschreibung verfügbar';
+      default: return chapter.descriptionChapterEn || 'No description available';
     }
-    if (this.lang == "nl") {
-      return this.chapters[this.activeChapterId].descriptionChapterNl;
+  }
+  getActiveChapterContent(): string {
+    const chapter = this.getActiveChapter();
+    if (!chapter) return 'Loading content...';
+    
+    switch(this.lang) {
+      case 'en': return this.formatText(chapter.textChapterEn);
+      case 'nl': return this.formatText(chapter.textChapterNl);
+      case 'fr': return this.formatText(chapter.textChapterFr);
+      case 'de': return this.formatText(chapter.textChapterDe);
+      default: return this.formatText(chapter.textChapterEn);
     }
-    if (this.lang == "fr") {
-      return this.chapters[this.activeChapterId].descriptionChapterFr;
+  }
+  getActiveChapter(): Chapter | undefined {
+    return this.chapters.find(ch => ch.id === this.activeChapterId);
+  }
+  getCurrentChapterIndex(): number {
+    const index = this.chapters.findIndex(chapter => chapter.id === this.activeChapterId);
+    return index >= 0 ? index : 0; // Zorg altijd voor een geldige index
+  }
+  hasNextChapter(): boolean {
+    const currentIndex = this.getCurrentChapterIndex();
+    return currentIndex < this.chapters.length - 1 && this.chapters.length > 0;
+  }
+
+  
+  hasPreviousChapter(): boolean {
+    const currentIndex = this.getCurrentChapterIndex();
+    return currentIndex > 0 && this.chapters.length > 0;
+  }
+  goToNextChapter(): void {
+    if (this.hasNextChapter()) {
+      const currentIndex = this.getCurrentChapterIndex();
+      this.activeChapterId = this.chapters[currentIndex + 1].id;
     }
-    if (this.lang == "de") {
-      return this.chapters[this.activeChapterId].descriptionChapterDe;
+  }
+  getVideoUrl(video: Video | undefined): string {
+    if (!video) return '';
+    return `${video.filePath}/${video.storedName}`;
+  }
+  
+  goToPreviousChapter(): void {
+    if (this.hasPreviousChapter()) {
+      const currentIndex = this.getCurrentChapterIndex();
+      this.activeChapterId = this.chapters[currentIndex - 1].id;
     }
-    return "Unknown language"
+  }
+  getDisplayChapterNumber(): number {
+  return this.getCurrentChapterIndex() + 1; // Toon chapters vanaf 1 i.p.v. 0
   }
 
   // Method to check if a chapter is completed

@@ -1,4 +1,5 @@
 import { Photo } from "./photo.model"
+import { Video } from "./video.model"
 
 export interface Chapter {
     id: number
@@ -15,5 +16,6 @@ export interface Chapter {
     descriptionChapterDe: String
     textChapterDe: string
     photos: Photo[]
+    video: Video
     //todo: implement Photos_nl, Photos_fr and Photos_de
 }

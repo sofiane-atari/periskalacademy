@@ -9,9 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
 import periskal.academy.backend.model.AuthenticateResponse;
-import periskal.academy.backend.security.exceptions.authentication.AuthenticationCommunicationException;
-import periskal.academy.backend.service.authentication.BaseAuthenticationService;
-import periskal.academy.backend.service.authentication.DongleAuthenticationService;
+import periskal.academy.backend.security.Exceptions.authentication.AuthenticationCommunicationException;
+import periskal.academy.backend.service.Authentication.BaseAuthenticationService;
+import periskal.academy.backend.service.Authentication.DongleAuthenticationService;
 
 class DongleAuthenticationServiceTest {
 

@@ -1,4 +1,4 @@
-package periskal.academy.backend.security.exceptions.general;
+package periskal.academy.backend.security.Exceptions.General;
 
 public class ResourceNotFoundException extends RuntimeException {
     public ResourceNotFoundException(String message) {
