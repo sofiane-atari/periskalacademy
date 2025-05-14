@@ -26,48 +26,49 @@
     <div class="content">
       <div class="chapter-card">
         <div class="chapter-header">
-          <h3>{{"CHAPTER" | translate}} {{activeChapterId+1}}: {{ getActiveChapterName() }}</h3>
+          <h3>
+            {{"CHAPTER" | translate}} {{activeChapterId + 1}}:
+            {{getActiveChapterName()}}
+          </h3>
         </div>
         <div class="chapter-body">
           <h5 class="section-title">{{"DESCRIPTION" | translate}}</h5>
-          <p class="section-text">{{ getActiveChapterDescription() }}</p>
-          
+          <p class="section-text">{{getActiveChapterDescription()}}</p>
+
           <h5 class="section-title">{{"CONTENT" | translate}}</h5>
-          @switch (lang) {
-            @case('en') {
-          <p class="section-text" 
-          [innerHTML]="chapters && chapters.length > activeChapterId && activeChapterId >= 0 ? 
-                      formatText(chapters[activeChapterId].textChapterEn || '') : 
-                      'Loading content...'">
-          </p>
-        }
-        @case ('nl') {
-          <p class="section-text" 
-          [innerHTML]="chapters && chapters.length > activeChapterId && activeChapterId >= 0 ? 
-                      formatText(chapters[activeChapterId].textChapterNl || '') : 
-                      'Loading content...'">
-          </p>
-        }
-        @case ('fr') {
-          <p class="section-text" 
-          [innerHTML]="chapters && chapters.length > activeChapterId && activeChapterId >= 0 ? 
-                      formatText(chapters[activeChapterId].textChapterFr || '') : 
-                      'Loading content...'">
-          </p>
-        }
-        @case ('de') {
-          <p class="section-text" 
-          [innerHTML]="chapters && chapters.length > activeChapterId && activeChapterId >= 0 ? 
-                      formatText(chapters[activeChapterId].textChapterDe || '') : 
-                      'Loading content...'">
-          </p>
-        }
-        }
-      } @else {
-        <li>No chapters found</li>
-      }
-    </ul>
-  </div>
+          @if (chapters && chapters.length > activeChapterId && activeChapterId >= 0) {
+            @switch (lang) {
+              @case("en") {
+                <p
+                  class="section-text"
+                  [innerHTML]="formatText(chapters[activeChapterId].textChapterEn || '')"
+                ></p>
+              }
+              @case("nl") {
+                <p
+                  class="section-text"
+                  [innerHTML]="formatText(chapters[activeChapterId].textChapterNl || '')"
+                ></p>
+              }
+              @case("fr") {
+                <p
+                  class="section-text"
+                  [innerHTML]="formatText(chapters[activeChapterId].textChapterFr || '')"
+                ></p>
+              }
+              @case("de") {
+                <p
+                  class="section-text"
+                  [innerHTML]="formatText(chapters[activeChapterId].textChapterDe || '')"
+                ></p>
+              }
+            }
+          } @else {
+            <li>No chapters found</li>
+          }
+        </div>
+      </div>
+    </div>
   
   <div class="content">
     <div class="chapter-card">
@@ -145,4 +146,3 @@
       </div>
     </div>
   </div>
-</div>
