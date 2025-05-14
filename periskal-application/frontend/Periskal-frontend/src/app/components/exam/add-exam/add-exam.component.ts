@@ -21,7 +21,7 @@ export class AddExamComponent implements OnInit {
   trainingsWithExams: number[] = [];
   trainingsData: any[] = [];
   isLoading = true;
-  lang: string = "";
+  public lang: string | null = "";
 
   constructor(
     private fb: FormBuilder,
@@ -48,6 +48,7 @@ export class AddExamComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadTrainings();
+    this.lang = localStorage.getItem('lang');
   }
 
   addQuestion(): void {
@@ -77,11 +78,11 @@ export class AddExamComponent implements OnInit {
   getQuestions(): FormArray {
     return this.examForm.get('questions') as FormArray;
   }
-  
+
   getAnswers(questionIndex: number): FormArray {
     return this.questions.at(questionIndex).get('answers') as FormArray;
   }
-  
+
 
   loadTrainings(): void {
     this.isLoading = true;
@@ -152,28 +153,21 @@ export class AddExamComponent implements OnInit {
     }
   }
 
-  getTrainingName(training: Training){
-
+  getTrainingName(training: Training) {
     if (this.lang == "en") {
       return training?.nameEn
     }
-
     if (this.lang == "nl") {
       return training?.nameNl
     }
-
     if (this.lang == "fr") {
       return training?.nameFr
     }
-
     if (this.lang == "de") {
       return training?.nameDe
     }
-    else{
+    else {
       return "Unknown language"
     }
-
   }
-
-
 }

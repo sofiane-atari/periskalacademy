@@ -125,8 +125,6 @@
                           <mat-label>{{ "CHAPTER_TEXT_EN" | translate }}</mat-label>
                           <textarea matInput formControlName="textChapterEn" required></textarea>
                         </mat-form-field>
-                        <app-photo-upload formControlName="photos_en"></app-photo-upload>
-                        <app-video-upload></app-video-upload>  
                       </mat-tab>
                       <mat-tab label="{{ 'LANGUAGE_NL' | translate }}">
                         <mat-form-field appearance="fill" class="full-width">
@@ -141,7 +139,6 @@
                           <mat-label>{{ "CHAPTER_TEXT_NL" | translate }}</mat-label>
                           <textarea matInput formControlName="textChapterNl" required></textarea>
                         </mat-form-field>
-                        <app-video-upload></app-video-upload>  
                       </mat-tab>
                       <mat-tab label="{{ 'LANGUAGE_FR' | translate }}">
                         <mat-form-field appearance="fill" class="full-width">
@@ -156,7 +153,6 @@
                           <mat-label>{{ "CHAPTER_TEXT_FR" | translate }}</mat-label>
                           <textarea matInput formControlName="textChapterFr" required></textarea>
                         </mat-form-field>
-                        <app-video-upload></app-video-upload>  
                       </mat-tab>
                       <mat-tab label="{{ 'LANGUAGE_DE' | translate }}">
                         <mat-form-field appearance="fill" class="full-width">
@@ -171,7 +167,12 @@
                           <mat-label>{{ "CHAPTER_TEXT_DE" | translate }}</mat-label>
                           <textarea matInput formControlName="textChapterDe" required></textarea>
                         </mat-form-field>
-                        <app-video-upload></app-video-upload>  
+                      </mat-tab>
+                      <mat-tab label="{{ 'PHOTOS' | translate }}">
+                        <app-photo-upload formControlName="photos"></app-photo-upload>
+                      </mat-tab>
+                      <mat-tab label="{{ 'VIDEOS' | translate }}">
+                        <app-video-upload></app-video-upload>
                       </mat-tab>
                     </mat-tab-group>
                     @if(getChapters(moduleIndex).controls.length > 1) {
@@ -296,8 +297,8 @@
                     </mat-tab>
 
                     <mat-tab label="{{ 'IMAGES' | translate }}">
-                      @for (image of chapter.images; track $index) {
-                      <img src="image.imageData" alt="">
+                      @for (photo of chapter.photos; track $index) {
+                      <img [src]="photo.imageData" alt="">
                       }
                     </mat-tab>
                   </mat-tab-group>

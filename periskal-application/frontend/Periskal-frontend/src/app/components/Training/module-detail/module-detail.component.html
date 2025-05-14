@@ -14,6 +14,7 @@
                     @case ('de') { {{ chapter.nameChapterDe || 'Unbenanntes Kapitel' }} }
                     @default { {{ chapter.nameChapterEn || 'Unknown language' }} }
                   }
+                  <span class="status-icon" *ngIf="isChapterCompleted(chapter.id)">✓</span>
                 </li>
               }
             } @else {
@@ -62,15 +63,86 @@
           </p>
         }
         }
+      } @else {
+        <li>No chapters found</li>
+      }
+    </ul>
+  </div>
+  
+  <div class="content">
+    <div class="chapter-card">
+      <div class="chapter-header">
+        <h3>{{"CHAPTER"}} {{getCurrentChapterIndex() + 1}}: {{ getActiveChapterName() }}</h3>
       </div>
-        <div class="photos">
-          <!-- TODO: implement photos per language -->
-        @for (photo of chapters[activeChapterId].photos; track $index) {
-          <div class="photo">
-            <img [src]="photo.imageData" alt="Chapter Image">
+      
+      <div class="chapter-body">
+        <!-- Navigation Controls -->
+        <div class="navigation-controls">
+          <button 
+            class="nav-button prev-button" 
+            [disabled]="!hasPreviousChapter()" 
+            (click)="goToPreviousChapter()">
+            <span class="nav-icon">←</span> Previous Chapter
+          </button>
+          <button 
+            class="nav-button next-button" 
+            [disabled]="!hasNextChapter()" 
+            (click)="goToNextChapter()">
+            Next Chapter <span class="nav-icon">→</span>
+          </button>
+        </div>
+        
+        <!-- Video Section -->
+        @if (getActiveChapter()?.video) {
+          <div class="video-container">
+            <video controls class="main-video">
+              <source 
+                [src]="getVideoUrl(getActiveChapter()!.video)" 
+                [type]="getActiveChapter()!.video.mimeType || 'video/mp4'">
+              Your browser does not support the video tag.
+            </video>
+            <div class="video-caption">{{ getActiveChapter()!.video.originalName }}</div>
           </div>
         }
+        
+        
+        <h5 class="section-title">{{"DESCRIPTION"}}</h5>
+        <p class="section-text">{{ getActiveChapterDescription() }}</p>
+        
+        <h5 class="section-title">{{"CONTENT"}}</h5>
+        <p class="section-text" [innerHTML]="getActiveChapterContent()"></p>
+
+        
+        <!-- Separator Line -->
+        <div class="separator-line"></div>
+        
+        <!-- Photos Section -->
+        @if (getActiveChapter()?.photos) {
+          <div class="photos">
+            @for (photo of getActiveChapter()?.photos; track $index) {
+              <div class="photo">
+                <img [src]="photo.imageData" alt="Chapter Image">
+                <div class="photo-caption">Fig {{$index + 1}}: {{photo || 'Chapter image'}}</div>
+              </div>
+            }
+          </div>
+        }
+        </div>
+        <div class="chapter-actions">
+          <button 
+            class="complete-button" 
+            [disabled]="isChapterCompleted(chapters[activeChapterId].id) || isCompletingChapter"
+            (click)="completeChapter(chapters[activeChapterId].id)">
+            @if(isChapterCompleted(chapters[activeChapterId].id)) {
+              {{'CHAPTER_COMPLETED' | translate}}
+            } @else if(isCompletingChapter) {
+              {{'MARKING_COMPLETE' | translate}}...
+            } @else {
+              {{'MARK_COMPLETE' | translate}}
+            }
+          </button>
         </div>
       </div>
     </div>
   </div>
+</div>

@@ -1,43 +1,87 @@
 <div class="skippers-container">
   <h1>Skippers</h1>
-  
-    <div class="skippers-list">
-      @for (skipper of skippers; track skipper.id; let i = $index) {
-        <div 
-            class="skipper-item" 
-            [class.active]="selectedSkipperIndex === i"
-            (click)="toggleSkipperDetails(i)">
-          <div class="skipper-basic-info">
-            <h3>{{ skipper.username }}</h3>
-            <p class="shipname">{{ skipper.shipname }}</p>
-            <div class="products">
-              @for (product of skipper.products; track product) {
-                <span class="product-badge">
-                  {{ product }}
-                </span>
-              }
-            </div>
+
+  <div class="skippers-list">
+    @for (skipper of skippers; track skipper.id; let i = $index) {
+      <div
+          class="skipper-item"
+          [class.active]="selectedSkipperIndex === i"
+          (click)="toggleSkipperDetails(i)">
+        <div class="skipper-basic-info">
+          <h3>{{ skipper.username }}</h3>
+          <p class="shipname">{{ skipper.shipname }}</p>
+          <div class="products">
+            @for (product of skipper.products; track product) {
+              <span class="product-badge">
+                {{ product }}
+              </span>
+            }
           </div>
-          
-          @if (selectedSkipperIndex === i) {
-            <div class="skipper-details">
-              <div class="detail-row">
-                <span class="detail-label">ID:</span>
-                <span class="detail-value">{{ skipper.id }}</span>
-              </div>
-              <div class="detail-row">
-                <span class="detail-label">Name:</span>
-                <span class="detail-value">{{ skipper.firstname }} {{ skipper.lastname }}</span>
-              </div>
-              <div class="detail-row">
-                <span class="detail-label">Role:</span>
-                <span class="detail-value">{{ skipper.role }}</span>
-              </div>
-            </div>
-          } 
         </div>
-      } @empty {
-        <p class="no-data">No skippers available.</p>
-      }
-    </div>
+
+        @if (selectedSkipperIndex === i) {
+          <div class="skipper-details">
+            <div class="detail-row">
+              <span class="detail-label">ID:</span>
+              <span class="detail-value">{{ skipper.id }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Name:</span>
+              <span class="detail-value">{{ skipper.firstname }} {{ skipper.lastname }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Role:</span>
+              <span class="detail-value">{{ skipper.role }}</span>
+            </div>
+
+            <!-- Trainings and Progress g -->
+            <hr class="details-divider">
+            <h4>Trainings & Progress</h4>
+
+            @if (skipper.loadingTrainingsAndProgress) {
+              <p class="loading-indicator">Loading trainings and progress...</p>
+            } @else if (skipper.trainingsAndProgressError) {
+              <p class="error-message">{{ skipper.trainingsAndProgressError }}</p>
+            } @else if (skipper.accessibleTrainings && skipper.accessibleTrainings.length > 0) {
+              <div class="trainings-list">
+                @for (tp of skipper.accessibleTrainings; track tp.id) {
+                  <div class="training-item">
+                    <div class="training-info">
+                      <span [class]="'training-name'">{{ tp.nameEn }}</span> 
+                      @if (tp.loadingProgress) {
+                        <span class="progress-badge loading">Loading...</span>
+                      } @else if (tp.progressError) {
+                        <span class="progress-badge error">{{ tp.progressError }}</span>
+                      } @else if (tp.progress) {
+                        <span class="progress-badge {{ tp.progress.overallPercentComplete === 100 ? 'complete' : (tp.progress.overallPercentComplete > 0 ? 'in-progress' : 'not-started') }}">
+                          {{ tp.progress.overallPercentComplete | number:'1.0-0' }}%
+                        </span>
+                      } @else {
+                        <span class="progress-badge not-started">Not started</span>
+                      }
+                    </div>
+                    
+                    <!-- Optional: Display module progress if therr -->
+                    @if (tp.progress && tp.progress.moduleProgress && tp.progress.moduleProgress.length > 0) {
+                       <div class="module-progress-list">
+                         @for(mp of tp.progress.moduleProgress; track mp.moduleId) {
+                           <div class="module-progress-item">
+                             <span>Module {{mp.moduleId}}: {{ mp.percentComplete | number:'1.0-0' }}%</span>
+                           </div>
+                         }
+                       </div>
+                    }
+                  </div>
+                }
+              </div>
+            } @else {
+              <p class="no-data">No trainings found for this skipper</p>
+            }
+          </div>
+        }
+      </div>
+    } @empty {
+      <p class="no-data">No skippers available.</p>
+    }
+  </div>
 </div>
