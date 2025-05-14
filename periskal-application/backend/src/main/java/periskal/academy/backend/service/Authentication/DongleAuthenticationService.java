@@ -10,7 +10,7 @@ import periskal.academy.backend.model.AuthenticateResponse;
 public class DongleAuthenticationService extends BaseAuthenticationService {
 
     @Override
-    protected String buildSoapRequest(String token) {
+    public String buildSoapRequest(String token) {
         // Replace spaces with '+' as required.
         token = token.replace(" ", "+");
         return "<soap12:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
