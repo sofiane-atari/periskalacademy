@@ -1,3 +1,4 @@
+import { Exam } from "./exam.model"
 import { Module } from "./module.model"
 
 export interface Training {
@@ -12,4 +13,5 @@ export interface Training {
     descriptionFr: String
     descriptionDe: String
     modules: Module[]
+    exam: Exam | null
 }

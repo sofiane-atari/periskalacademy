@@ -23,13 +23,13 @@ export class TrainingDetailComponent {
 
   trainingId: number = 0;
 
-  
-  
+
+
   trainingProgress: TrainingProgress | undefined;
 
   constructor(
-    private route: ActivatedRoute, 
-    private trainingSvc: TrainingService, 
+    private route: ActivatedRoute,
+    private trainingSvc: TrainingService,
     private router: Router,
     private ProgressService: ProgressService,
     private jwtDecoderService: JwtDecoderService
@@ -55,8 +55,16 @@ export class TrainingDetailComponent {
       }
     });
 
-    this.loadProgressData(); 
+    this.loadProgressData();
 
+  }
+
+  goBack() {
+    this.router.navigate(['trainingEmployee'])
+  }
+
+  goToExam(): void {
+    this.router.navigate(['/take-exam', this.training?.exam?.id]);
   }
 
   goToChaptersPage(moduleId: number) {
@@ -99,6 +107,42 @@ export class TrainingDetailComponent {
     }
   }
 
+  getTrainingName() {
+    if (this.lang == "en") {
+      return this.training?.nameEn;
+    }
+    if (this.lang == "nl") {
+      return this.training?.nameNl;
+    }
+    if (this.lang == "fr") {
+      return this.training?.nameFr
+    }
+    if (this.lang == "de") {
+      return this.training?.nameDe;
+    }
+    else {
+      return "Unknown language"
+    }
+  }
+
+  getTrainingDescription() {
+    if (this.lang == "en") {
+      return this.training?.descriptionEn;
+    }
+    if (this.lang == "nl") {
+      return this.training?.descriptionNl;
+    }
+    if (this.lang == "fr") {
+      return this.training?.descriptionFr;
+    }
+    if (this.lang == "de") {
+      return this.training?.descriptionDe;
+    }
+    else {
+      return "Unknown language"
+    }
+  }
+
   getModuleProgressPercent(moduleId: number): number {
     if (!this.trainingProgress || !this.trainingProgress.moduleProgress) {
       return 0;
@@ -124,6 +168,4 @@ export class TrainingDetailComponent {
   getOverallProgressPercent(): number {
     return this.trainingProgress ? this.trainingProgress.overallPercentComplete : 0;
   }
-
-
 }
