@@ -82,4 +82,12 @@ h2 {
     font-size: 14px;
     padding: 10px 15px;
   }
+
+  .training-progress {
+  margin: 20px 0;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
 }

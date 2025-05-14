@@ -144,4 +144,115 @@ h1 {
         font-size: 11px;
         padding: 3px 6px;
     }
+
+  .skipper-details h4 {
+    margin-top: 15px;
+    margin-bottom: 10px;
+    color: #34495e; 
+    font-size: 1.1em;
+  }
+
+  .details-divider {
+    margin-top: 16px;
+    margin-bottom: 16px;
+    border: 0;
+    border-top: 1px solid #e0e0e0;
+  }
+
+  .loading-indicator,
+  .error-message,
+  .no-data {
+    padding: 10px;
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  .loading-indicator {
+    color: #555;
+  }
+
+  .error-message {
+    color: #D8000C; 
+    background-color: #FFD2D2; 
+    border: 1px solid #D8000C;
+    border-radius: 4px;
+  }
+
+  .trainings-list {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .training-item {
+    background-color: #f9f9f9;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid #eaeaea;
+  }
+
+  .training-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px; 
+  }
+
+  .training-name {
+    font-weight: 500;
+    color: #2c3e50;
+  }
+
+  .progress-badge {
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    font-weight: bold;
+    color: white;
+    min-width: 80px; 
+    text-align: center;
+  }
+
+  .progress-badge.loading {
+    background-color: #f39c12; 
+  }
+
+  .progress-badge.error {
+    background-color: #e74c3c; 
+  }
+
+  .progress-badge.not-started {
+    background-color: #95a5a6; 
+  }
+
+  .progress-badge.in-progress {
+    background-color: #3498db; 
+  }
+
+  .progress-badge.complete {
+    background-color: #2ecc71; 
+  }
+
+  .module-progress-list {
+    margin-top: 8px;
+    padding-left: 15px;
+    font-size: 0.9em;
+  }
+  .module-progress-item {
+    color: #555;
+    padding: 2px 0;
+  }
+
+  @media (max-width: 480px) {
+    .training-info {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .progress-badge {
+      margin-top: 5px;
+    }
+  }
+
 }

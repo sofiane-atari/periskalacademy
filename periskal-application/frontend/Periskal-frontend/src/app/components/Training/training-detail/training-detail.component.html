@@ -1,10 +1,20 @@
 <div class="container">
   <h2>{{ training?.nameEn }} {{'MODULES' | translate }}</h2>
+  <!-- Add overall progress bar -->
+    <div class="training-progress">
+      <h3>{{'OVERALL_PROGRESS' | translate}}</h3>
+      <app-progress-bar 
+        [percentComplete]="getOverallProgressPercent()">
+      </app-progress-bar>
+    </div>
   @for (module of modules; track $index) {
   <div class="product">
     <h3>{{ getModuleTitle($index) }}</h3>
     <p>{{ getModuleDescription($index) }}</p>
-    <button (click)="goToChaptersPage($index+1)">{{'TAKE_COURSE' | translate }}</button>
+    <app-progress-bar 
+      [percentComplete]="getModuleProgressPercent(module.id)">
+    </app-progress-bar>
+    <button (click)="goToChaptersPage(module.id)">{{'TAKE_COURSE' | translate }}</button>
   </div>
   }
 </div>

@@ -14,6 +14,7 @@
                     @case ('de') { {{ chapter.nameChapterDe || 'Unbenanntes Kapitel' }} }
                     @default { {{ chapter.nameChapterEn || 'Unknown language' }} }
                   }
+                  <span class="status-icon" *ngIf="isChapterCompleted(chapter.id)">✓</span>
                 </li>
               }
             } @else {
@@ -70,6 +71,20 @@
             <img [src]="photo.imageData" alt="Chapter Image">
           </div>
         }
+        </div>
+        <div class="chapter-actions">
+          <button 
+            class="complete-button" 
+            [disabled]="isChapterCompleted(chapters[activeChapterId].id) || isCompletingChapter"
+            (click)="completeChapter(chapters[activeChapterId].id)">
+            @if(isChapterCompleted(chapters[activeChapterId].id)) {
+              {{'CHAPTER_COMPLETED' | translate}}
+            } @else if(isCompletingChapter) {
+              {{'MARKING_COMPLETE' | translate}}...
+            } @else {
+              {{'MARK_COMPLETE' | translate}}
+            }
+          </button>
         </div>
       </div>
     </div>
