@@ -1,4 +1,4 @@
-package periskal.academy.backend.service.Authentication;
+package periskal.academy.backend.service.authentication;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -24,10 +24,10 @@ import org.xml.sax.SAXException;
 import lombok.extern.slf4j.Slf4j;
 import periskal.academy.backend.model.AuthenticateResponse;
 import periskal.academy.backend.model.Client;
-import periskal.academy.backend.security.Exceptions.authentication.AuthenticationCommunicationException;
-import periskal.academy.backend.security.Exceptions.authentication.AuthenticationInvalidCredentialsException;
-import periskal.academy.backend.security.Exceptions.authentication.AuthenticationParsingException;
-import periskal.academy.backend.security.Exceptions.authentication.AuthenticationServerErrorException;
+import periskal.academy.backend.security.exceptions.authentication.AuthenticationCommunicationException;
+import periskal.academy.backend.security.exceptions.authentication.AuthenticationInvalidCredentialsException;
+import periskal.academy.backend.security.exceptions.authentication.AuthenticationParsingException;
+import periskal.academy.backend.security.exceptions.authentication.AuthenticationServerErrorException;
 
 @Slf4j
 public abstract class BaseAuthenticationService {

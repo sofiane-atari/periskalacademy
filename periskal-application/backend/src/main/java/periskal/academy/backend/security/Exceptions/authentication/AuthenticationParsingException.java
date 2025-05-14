@@ -1,4 +1,4 @@
-package periskal.academy.backend.security.Exceptions.authentication;
+package periskal.academy.backend.security.exceptions.authentication;
 
 public class AuthenticationParsingException extends AuthenticationServiceException {
     private final String responseXml;
