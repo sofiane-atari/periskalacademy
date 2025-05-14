@@ -91,7 +91,28 @@ export class TakeExamComponent implements OnInit {
 
 
   submitExam(): void {
-    // Implementeer je inzendlogica hier
+
+    if (!this.exam) {
+      return;
+    }
+
+    let correctCount = 0
+
+    this.exam.questions.forEach((question, index) => {
+      const selected = this.selectedAnswers[index];
+      if (selected !== undefined && selected + 1 === question.correctAnswer) {
+        correctCount++;
+      }
+    });
+
+    const totalQuestions = this.exam.questions.length;
+    const scorePercentage = Math.round((correctCount / totalQuestions) * 100);
+
+    // tijdelijke popup voor Score te zien
+    alert(`Je score is: ${correctCount}/${totalQuestions} (${scorePercentage}%)`);
+
+    // TODO
+    // Score bewaren in db gelinkt aan user
     console.log('Exam submitted');
     this.router.navigate(['/exam-result']);
   }
