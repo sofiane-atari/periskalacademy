@@ -4,6 +4,9 @@
   <div class="product">
     <h3>{{ getModuleTitle($index) }}</h3>
     <p>{{ getModuleDescription($index) }}</p>
+    <app-progress-bar 
+      [percentComplete]="getModuleProgressPercent($index)">
+    </app-progress-bar>
     <button (click)="goToChaptersPage($index+1)">{{'TAKE_COURSE' | translate }}</button>
   </div>
   }

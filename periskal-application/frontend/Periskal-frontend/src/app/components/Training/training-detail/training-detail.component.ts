@@ -4,10 +4,13 @@ import { TrainingService } from '../../../services/Training/training.service';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Training } from '../../../models/training.model';
 import { Module } from '../../../models/module.model';
+import { ProgressService } from '../../../services/Progress/progress.service';
+import { TrainingProgress } from '../../../models/progress.model';
+import { ProgressBarComponent } from '../../progress-bar/progress-bar.component';
 
 @Component({
   selector: 'app-training-detail',
-  imports: [TranslatePipe],
+  imports: [TranslatePipe, ProgressBarComponent],
   templateUrl: './training-detail.component.html',
   styleUrl: './training-detail.component.css'
 })
@@ -18,8 +21,16 @@ export class TrainingDetailComponent {
 
   trainingId: number = 0;
 
-  constructor(private route: ActivatedRoute, private trainingSvc: TrainingService, private router: Router) {
-  }
+  // TODO: Replace 'mockUserId' with actual user ID from an auth service
+  private userId: string = 'userId'; 
+  trainingProgress: TrainingProgress | undefined;
+
+  constructor(
+    private route: ActivatedRoute, 
+    private trainingSvc: TrainingService, 
+    private router: Router,
+    private ProgressService: ProgressService
+  ) { }
 
   ngOnInit(): void {
     this.lang = localStorage.getItem('lang');
@@ -36,6 +47,15 @@ export class TrainingDetailComponent {
         console.error('Error fetching training products', error);
       }
     });
+
+    this.ProgressService.getTrainingProgress(this.userId, this.trainingId).subscribe({
+        next: (progressData) => {
+          this.trainingProgress = progressData;
+        },
+        error: (error) => {
+          console.error('Error fetching training progress', error);
+        }
+      });
 
   }
 
@@ -78,4 +98,15 @@ export class TrainingDetailComponent {
       return "Unknown language"
     }
   }
+
+  getModuleProgressPercent(moduleId: number): number {
+    if (!this.trainingProgress || !this.trainingProgress.moduleProgress) {
+      return 0;
+    }
+    const moduleProg = this.trainingProgress.moduleProgress.find(
+      (mp) => mp.moduleId === moduleId
+    );
+    return moduleProg ? moduleProg.percentComplete : 0;
+  }
+
 }
