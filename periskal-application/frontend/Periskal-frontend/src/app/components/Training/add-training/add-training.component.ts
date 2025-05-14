@@ -84,6 +84,7 @@ export class AddTrainingComponent implements OnInit { // Implement OnInit
       descriptionChapterEn: ['', Validators.required],
       textChapterEn: ['', Validators.required],
       photos: [[]],
+      video: [null],
       nameChapterNl: ['', Validators.required],
       descriptionChapterNl: ['', Validators.required],
       textChapterNl: ['', Validators.required],
@@ -94,6 +95,10 @@ export class AddTrainingComponent implements OnInit { // Implement OnInit
       descriptionChapterDe: ['', Validators.required],
       textChapterDe: ['', Validators.required],
     });
+  }
+
+  onVideoSelected(file: File): void {
+    console.log('test:', file);
   }
 
 

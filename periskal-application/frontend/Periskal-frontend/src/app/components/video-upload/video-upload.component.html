@@ -23,23 +23,9 @@
             <p>{{ formatFileSize(selectedFile.size) }}</p>
           </div>
           <div class="actions">
-            <button type="button" (click)="saveToLocal()">Opslaan</button>
             <button type="button" (click)="clearFile()">Annuleren</button>
           </div>
         </div>
       }
     </div>
-    
-    @if (savedVideos.length > 0) {
-      <div class="saved-videos">
-        <p>Opgeslagen video's</p>
-        @for (video of savedVideos; track $index) {
-          <div class="video-item">
-            <video controls [src]="video.url"></video>
-            <p>{{ video.name }} ({{ formatFileSize(video.size) }})</p>
-            <button (click)="removeVideo($index)">Verwijder</button>
-          </div>
-        }
-      </div>
-    }
   </div>

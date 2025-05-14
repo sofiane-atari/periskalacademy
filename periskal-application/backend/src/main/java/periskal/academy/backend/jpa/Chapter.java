@@ -56,7 +56,7 @@ public class Chapter {
     @JsonManagedReference
     private List<Photo> photos = new ArrayList<>();
 
-    private String remoteFilePath;
+    private String videoRemoteFilePath;
 
     public Chapter(String nameChapter, String descriptionChapter, String textChapter) {
         this.nameChapterEn = nameChapter;
