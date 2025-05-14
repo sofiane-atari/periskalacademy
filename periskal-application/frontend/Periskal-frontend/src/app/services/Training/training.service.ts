@@ -59,4 +59,10 @@ export class TrainingService {
   addPhotos(chapterId: number, photos?: Photo[]) {
     return this.client.post(`http://localhost:8080/api/photos/${chapterId}`, photos)
   }
+
+  uploadVideo(videoFile: File): Observable<string> {
+    const formData = new FormData();
+    formData.append('video', videoFile, videoFile.name);
+    return this.client.post<string>(`http://localhost:8080/api/video`, videoFile)
+  }
 }

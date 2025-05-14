@@ -172,7 +172,7 @@
                         <app-photo-upload formControlName="photos"></app-photo-upload>
                       </mat-tab>
                       <mat-tab label="{{ 'VIDEOS' | translate }}">
-                        <app-video-upload (videoSelected)="onVideoSelected($event)"></app-video-upload>
+                        <app-video-upload (videoSelected)="onVideoSelected(moduleIndex, chapterIndex, $event)"></app-video-upload>
                       </mat-tab>
                     </mat-tab-group>
                     @if(getChapters(moduleIndex).controls.length > 1) {

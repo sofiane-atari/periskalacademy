@@ -41,6 +41,7 @@ export class AddTrainingComponent implements OnInit { // Implement OnInit
   moduleCollapsedState: { [lang: string]: { [moduleIndex: number]: boolean } } = {};
   chapterCollapsedState: { [lang: string]: { [moduleIndex: number]: { [chapterIndex: number]: boolean } } } = {};
   selectedLanguage: String = "";
+  isUploadingVideo: boolean = false;
 
   trainingForm!: FormGroup;
   languages = ['en', 'nl', 'fr', 'de'];
@@ -97,8 +98,24 @@ export class AddTrainingComponent implements OnInit { // Implement OnInit
     });
   }
 
-  onVideoSelected(file: File): void {
-    console.log('test:', file);
+  onVideoSelected(moduleIndex: number, chapterIndex: number, file: File): void {
+    this.uploadVideoToFtp(moduleIndex, chapterIndex, file);
+  }
+
+  uploadVideoToFtp(moduleIndex: number, chapterIndex: number, videoFile: File): void {
+    this.isUploadingVideo = true;
+    this.trainingService.uploadVideo(videoFile)
+      .subscribe(
+        (ftpPath: string) => {
+          this.getChapters(moduleIndex).at(chapterIndex).patchValue({ videoPath: ftpPath });
+          console.log('Video uploaded to FTP:', ftpPath);
+          this.isUploadingVideo = false;
+        },
+        (error: any) => {
+          console.error('Error uploading video:', error);
+          this.isUploadingVideo = false;
+        }
+      );
   }
 
 
