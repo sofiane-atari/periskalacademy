@@ -15,7 +15,6 @@ public class Answer {
     private Long id;
 
     private String text;
-    private boolean correct;
 
     @ManyToOne
     @JoinColumn(name = "question_id", nullable = false)

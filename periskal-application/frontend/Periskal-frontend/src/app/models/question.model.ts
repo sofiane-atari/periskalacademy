@@ -6,4 +6,5 @@ export interface Question {
     text: string;
     photos?: Photo[];
     answers?: Answer[]; 
+    correctAnswer: Number;
   }

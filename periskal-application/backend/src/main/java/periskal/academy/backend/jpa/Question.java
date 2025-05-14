@@ -33,6 +33,8 @@ public class Question {
     @JsonManagedReference(value = "question-answers")
     private List<Answer> answers = new ArrayList<>();
 
+    private int correctAnswer;
+
     public void addPhoto(Photo p) {
         photos.add(p);
         p.setQuestion(this);

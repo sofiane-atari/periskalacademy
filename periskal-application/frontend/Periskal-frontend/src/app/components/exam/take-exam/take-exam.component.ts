@@ -80,6 +80,13 @@ export class TakeExamComponent implements OnInit {
     }
   }
 
+  selectedAnswers: number[] = [];
+
+  selectAnswer(questionIndex: number, answerIndex: number) {
+    this.selectedAnswers[questionIndex] = answerIndex;
+  }
+
+
   submitExam(): void {
     // Implementeer je inzendlogica hier
     console.log('Exam submitted');

@@ -60,7 +60,7 @@
             [value]="training.id" 
             [disabled]="hasExam(training.id)"
             [class.disabled-option]="hasExam(training.id)">
-            {{ training.name_nl }}
+            {{ getTrainingName(training) }}
             @if (hasExam(training.id)) {
               <span class="exam-exists">{{"EXAM_EXISTS" | translate}}</span>
             }

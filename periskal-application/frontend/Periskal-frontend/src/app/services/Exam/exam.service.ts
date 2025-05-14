@@ -59,7 +59,9 @@ export class ExamService {
         text: q.text,
         photos: (q.photos || []).map((photo: any) => ({
           imageData: photo.imageData
-        }))
+        })),
+        answers: q.answers.map((a: any) => ({ text: a.text})),
+      correctAnswer: q.correctAnswer
       }))
     };
     return this.client.post<Exam>(this.baseUrl, payload);

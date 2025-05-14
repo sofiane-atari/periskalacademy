@@ -71,7 +71,10 @@ export class UpdateExamComponent implements OnInit {
   }
 
   addQuestion(): void {
-    this.exam.questions.push({ id: 0, text: '' });
+    this.exam.questions.push({
+      id: 0, text: '',
+      correctAnswer: 0
+    });
   }
 
   removeQuestion(index: number): void {

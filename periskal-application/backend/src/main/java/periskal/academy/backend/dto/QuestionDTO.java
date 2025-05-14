@@ -11,4 +11,5 @@ public class QuestionDTO {
     private String text;
     private List<Photo> photos;
     private List<AnswerDTO> answers;
+    private int correctAnswer;
 }

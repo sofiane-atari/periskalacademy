@@ -21,6 +21,7 @@ export class AddExamComponent implements OnInit {
   trainingsWithExams: number[] = [];
   trainingsData: any[] = [];
   isLoading = true;
+  lang: string = "";
 
   constructor(
     private fb: FormBuilder,
@@ -33,15 +34,18 @@ export class AddExamComponent implements OnInit {
       examTitle: ['', Validators.required],
       examDescription: ['', Validators.required],
       totalQuestions: ['', Validators.required],
-      questions: this.fb.array([]) // Initialize empty FormArray
+      questions: this.fb.array([])// Initialize empty FormArray
     });
+    this.lang = localStorage.getItem('lang') || 'en';
   }
 
   initForm(): void {
   }
+
   get questions(): FormArray {
     return this.examForm.get('questions') as FormArray;
   }
+
   ngOnInit(): void {
     this.loadTrainings();
   }
@@ -120,11 +124,15 @@ export class AddExamComponent implements OnInit {
         questions: this.questions.controls.map(q => ({
           text: q.value.text,
           photos: (q.value.photos || []).map((photo: any) => ({
-            imageData: photo.imageData  // This matches your Photo entity constructor
+            imageData: photo.imageData
           })),
-          answers: q.value.answers,
-          correctAnswer: q.value.correctAnswer
+          answers: q.value.answers.map((a: any) => ({
+            text: a.text
+          })),
+          correctAnswer: Number(q.value.correctAnswer)
         }))
+
+        
       };
 
       console.log('Submitting exam data:', examData);
@@ -138,4 +146,29 @@ export class AddExamComponent implements OnInit {
       });
     }
   }
+
+  getTrainingName(training: Training){
+
+    if (this.lang == "en") {
+      return training?.nameEn
+    }
+
+    if (this.lang == "nl") {
+      return training?.nameNl
+    }
+
+    if (this.lang == "fr") {
+      return training?.nameFr
+    }
+
+    if (this.lang == "de") {
+      return training?.nameDe
+    }
+    else{
+      return "Unknown language"
+    }
+
+  }
+
+
 }

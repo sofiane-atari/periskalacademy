@@ -34,6 +34,27 @@
                 }
               </div>
 
+              <div class="answers-section mt-4">
+                @for (answer of currentQuestion.answers; track $index) {
+                  <div class="form-check mb-2">
+                    <input 
+                      class="form-check-input" 
+                      type="radio" 
+                      [attr.name]="'answer' + currentQuestionIndex"
+                      [attr.id]="'answer' + currentQuestionIndex + '-' + $index"
+                      [value]="$index"
+                      [checked]="selectedAnswers[currentQuestionIndex] === $index"
+                      (change)="selectAnswer(currentQuestionIndex, $index)"
+                    >
+                    <label 
+                      class="form-check-label" 
+                      [attr.for]="'answer' + currentQuestionIndex + '-' + $index">
+                      {{ answer.text }}
+                    </label>
+                  </div>
+                }
+              </div>
+
               <div class="d-flex justify-content-between align-items-center mt-4 pt-4 border-top">
                 <button
                   class="nav-button"
