@@ -25,35 +25,34 @@ public final class CertificateGeneratorUtil {
     }
 
     // --- Page Dimensions ---
-    private static final float PAGE_WIDTH = PDRectangle.A4.getWidth(); // 595.27...
-    private static final float PAGE_HEIGHT = PDRectangle.A4.getHeight(); // 841.88...
+    private static final float PAGE_WIDTH = PDRectangle.A4.getWidth(); 
+    private static final float PAGE_HEIGHT = PDRectangle.A4.getHeight(); 
     private static final float MARGIN_LEFT = 50;
     private static final float MARGIN_RIGHT = 50;
     private static final float MARGIN_TOP = 50;
     private static final float MARGIN_BOTTOM = 50;
 
     // --- Colors ---
-    private static final Color COLOR_PERISKAL_BLACK = new Color(0, 0, 0); // Or very dark gray
+    private static final Color COLOR_PERISKAL_BLACK = new Color(0, 0, 0); 
     private static final Color COLOR_PERISKAL_GRAY = new Color(130, 130, 130);
-    private static final Color COLOR_TITLE_GOLD = new Color(191, 144, 0); // Estimate
+    private static final Color COLOR_TITLE_GOLD = new Color(191, 144, 0); 
     private static final Color COLOR_PRODUCT_RED = new Color(192, 0, 0);
-    private static final Color COLOR_BODY_TEXT = new Color(64, 64, 64); // Dark Gray
-    private static final Color COLOR_DECO_YELLOW = new Color(255, 215, 0); // Gold/Yellow
+    private static final Color COLOR_BODY_TEXT = new Color(64, 64, 64); 
+    private static final Color COLOR_DECO_YELLOW = new Color(255, 215, 0); 
     private static final Color COLOR_DECO_LIGHT_GRAY = new Color(217, 217, 217);
     private static final Color COLOR_DECO_DARK_GRAY = new Color(166, 166, 166);
     private static final Color COLOR_CIRCLE_GRAY = new Color(128, 128, 128);
 
 
     // --- Fonts ---
-    // Replace with paths to your actual font files in resources/fonts/
-    private static final String FONT_BOLD_PATH = "/fonts/YourSansBold.ttf"; // e.g., NotoSans-Bold.ttf
-    private static final String FONT_REGULAR_PATH = "/fonts/YourSansRegular.ttf"; // e.g., NotoSans-Regular.ttf
-    private static final String FONT_SCRIPT_PATH = "/fonts/YourScript.ttf"; // e.g., DancingScript-Regular.ttf
+    private static final String FONT_BOLD_PATH = "/fonts/YourSansBold.ttf"; 
+    private static final String FONT_REGULAR_PATH = "/fonts/YourSansRegular.ttf"; 
+    private static final String FONT_SCRIPT_PATH = "/fonts/YourScript.ttf"; 
 
     // --- Logo ---
     private static final String LOGO_IMAGE_PATH = "/periskal_logo_globe.png"; // Logo in resources folder
     private static final float LOGO_IMG_X = MARGIN_LEFT + 20;
-    private static final float LOGO_IMG_Y = PAGE_HEIGHT - MARGIN_TOP - 85; // Adjusted slightly if needed
+    private static final float LOGO_IMG_Y = PAGE_HEIGHT - MARGIN_TOP - 85; 
     private static final float LOGO_IMG_WIDTH = 80;
     private static final float LOGO_IMG_HEIGHT = 80;
     private static final float LOGO_TEXT_PERISKAL_X = LOGO_IMG_X + LOGO_IMG_WIDTH + 15;
@@ -62,46 +61,53 @@ public final class CertificateGeneratorUtil {
     private static final float LOGO_TEXT_GROUP_Y = LOGO_TEXT_PERISKAL_Y - 25;
 
     // --- Title ---
-    private static final float TITLE_Y_START = LOGO_IMG_Y - 80; // INCREASED gap below logo (was based on -150 from top)
+    private static final float TITLE_Y_START = LOGO_IMG_Y - 80; 
     private static final float TITLE_LINE_HEIGHT = 30;
-    private static final float TITLE_X = PAGE_WIDTH / 2;
 
     // --- Product ---
     private static final float PRODUCT_X = MARGIN_LEFT + 40;
+
     // Add more space below the title
-    private static final float PRODUCT_Y = TITLE_Y_START - 120; // INCREASED gap (was -90)
-    private static final float PRODUCT_LINE_HEIGHT = 18; // Keep this for line wrapping within product info
+    private static final float PRODUCT_Y = TITLE_Y_START - 120; 
+    private static final float PRODUCT_LINE_HEIGHT = 18; 
 
     // --- Body Text ---
     private static final float BODY_X = MARGIN_LEFT + 40;
-    private static final float BODY_Y = PRODUCT_Y - 90; // Below product
+    private static final float BODY_Y = PRODUCT_Y - 90; 
     private static final float BODY_LINE_HEIGHT = 15f;
 
     // --- Crew Names ---
     private static final float CREW_COL1_X = MARGIN_LEFT + 40;
     private static final float CREW_COL2_X = PAGE_WIDTH / 2 + 20;
-    private static final float CREW_START_Y = BODY_Y - 110; // INCREASED gap (was -60)
-    private static final float CREW_SPACING_Y = 28; // Increased slightly for better spacing between names
+    private static final float CREW_START_Y = BODY_Y - 110; 
+    private static final float CREW_SPACING_Y = 28; 
 
     // --- Signatory ---
-    private static final float SIGNATORY_X = MARGIN_LEFT + 40;
-    // Keep signatory well above footer, adjust relative to bottom
-    // This value determines the space *between* crew names and signatory
-    private static final float SIGNATORY_Y = MARGIN_BOTTOM + 110; // Adjusted (was +150), ensures space above footer
+    private static final float SIGNATORY_TEXT_X = MARGIN_LEFT + 40;
+    private static final float SIGNATORY_TEXT_Y = MARGIN_BOTTOM + 110; 
+
+    // --- Signature Image ---
+    // User should provide an image,  150px wide, 50px high. Adjust these defaults as needed.
+    private static final float SIGNATURE_IMAGE_WIDTH = 120f;
+    private static final float SIGNATURE_IMAGE_HEIGHT = 50f;
+    private static final float SIGNATURE_IMAGE_X = SIGNATORY_TEXT_X; // Align with signatory text block
+    // Place the bottom of the signature image slightly above the signatory text
+    private static final float PADDING_BETWEEN_SIGNATURE_AND_TEXT = 5f; // Space between text and signature image bottom
+    private static final float SIGNATURE_IMAGE_Y = SIGNATORY_TEXT_Y + PADDING_BETWEEN_SIGNATURE_AND_TEXT; // Y for bottom-left of signature
+    private static final String SIGNATURE_IMAGE_PATH = "/signature.png"; // Signature image in resources folder
 
     // --- Footer ---
     private static final float FOOTER_X = MARGIN_LEFT + 40;
-    // Move footer lower down, closer to the absolute bottom margin
-    private static final float FOOTER_Y = MARGIN_BOTTOM + 30; // DECREASED value (was +50)
-    private static final float FOOTER_LINE_HEIGHT = 11f; // Keep smaller line height for footer
+    private static final float FOOTER_Y = MARGIN_BOTTOM + 30; 
+    private static final float FOOTER_LINE_HEIGHT = 11f; 
 
     // --- Decorative Elements ---
     private static final float DECO_BAR_WIDTH = 40;
     private static final float DECO_BAR_X = PAGE_WIDTH - MARGIN_RIGHT - DECO_BAR_WIDTH;
     private static final float DECO_LINE_WIDTH = 0.5f;
-    private static final float DECO_CIRCLE_CENTER_X = PAGE_WIDTH - MARGIN_RIGHT - DECO_BAR_WIDTH / 2; // Center in bar area
-    private static final float DECO_CIRCLE_CENTER_Y = SIGNATORY_Y - 80; // Position below names
-    private static final float DECO_CIRCLE_RADIUS = 45; // Adjust
+    private static final float DECO_CIRCLE_CENTER_X = PAGE_WIDTH - MARGIN_RIGHT - DECO_BAR_WIDTH / 2;
+    private static final float DECO_CIRCLE_CENTER_Y = SIGNATORY_TEXT_Y - 80; 
+    private static final float DECO_CIRCLE_RADIUS = 45; 
 
 
     public static byte[] generateCertificatePdf(
@@ -137,6 +143,19 @@ public final class CertificateGeneratorUtil {
                 System.err.println("Warning: Could not load logo image: " + e.getMessage());
             }
 
+            PDImageXObject pdSignatureImage = null;
+            try (InputStream pdsignatureImage = CertificateGeneratorUtil.class.getResourceAsStream(SIGNATURE_IMAGE_PATH)) {
+                if (pdsignatureImage != null) {
+                    pdSignatureImage = PDImageXObject.createFromByteArray(document, pdsignatureImage.readAllBytes(), "signature");
+                } else {
+                    System.err.println("Warning: SignatureImage image not found at " + SIGNATURE_IMAGE_PATH);
+                }
+            } catch (Exception e) {
+                System.err.println("Warning: Could not load logo image: " + e.getMessage());
+            }
+
+
+
             // --- Start Drawing ---
             try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
 
@@ -150,7 +169,7 @@ public final class CertificateGeneratorUtil {
                 drawLogo(contentStream, pdLogoImage, fontBold, fontRegular);
 
                 // 4. Draw Title
-                drawTitle(contentStream, fontBold); // Using bold, adjust if needed
+                drawTitle(contentStream, fontBold); 
 
                 // 5. Draw Product Info
                 drawProductInfo(contentStream, fontBold, fontRegular, productName);
@@ -159,10 +178,10 @@ public final class CertificateGeneratorUtil {
                 drawBodyText(contentStream, fontRegular, signerName, shipName, productdetails ,trainingDate);
 
                 // 7. Draw Crew Names
-                drawCrewNames(contentStream, fontScript, crewNames); // Using script font
+                drawCrewNames(contentStream, fontScript, crewNames); 
 
                 // 8. Draw Signatory
-                drawSignatory(contentStream, fontRegular, signerName, signerTitle);
+                drawSignatory(contentStream, fontRegular, signerName, signerTitle, pdSignatureImage);
 
                 // 9. Draw Footer
                 drawFooter(contentStream, fontRegular, companyName, companyAddress, companyPhone);
@@ -294,17 +313,17 @@ public final class CertificateGeneratorUtil {
         cs.setNonStrokingColor(COLOR_TITLE_GOLD);
         cs.newLineAtOffset(title1X, TITLE_Y_START);
         cs.showText(title1);
-        cs.newLineAtOffset(title2X - title1X, -TITLE_LINE_HEIGHT); // Adjust X for second line's center
-        cs.setFont(font, fontSize2); // Can change font/size per line
+        cs.newLineAtOffset(title2X - title1X, -TITLE_LINE_HEIGHT); 
+        cs.setFont(font, fontSize2); 
         cs.showText(title2);
         cs.endText();
     }
 
     private static void drawProductInfo(PDPageContentStream cs, PDFont fontBold, PDFont fontRegular, String productName) throws IOException {
         float fontSizeLabel = 14;
-    float fontSizeValue = 14; // Keep consistent with label or adjust if needed
-    float labelIndent = 0; // Indentation for "PRODUCT : "
-    float valueIndent = 10; // Indentation for the actual product name lines
+    float fontSizeValue = 14; 
+    float labelIndent = 0; 
+    float valueIndent = 10; 
     float currentX = PRODUCT_X + labelIndent;
     float currentY = PRODUCT_Y;
 
@@ -321,18 +340,13 @@ public final class CertificateGeneratorUtil {
     // Set X for the indented product name value
     currentX = PRODUCT_X + valueIndent;
 
-    // --- 2. Calculate Available Width for Product Name ---
-    // Max width = Page width - left margin - right margin - indent
-    // Subtracting PRODUCT_X already accounts for left margin + some padding
-    // Need to subtract right margin and the valueIndent itself from available space
-    // A safety margin might be good too.
+
     float availableWidth = PAGE_WIDTH - MARGIN_RIGHT - currentX - 5; // Added 5pt safety margin
 
     // --- 3. Prepare and Wrap the Product Name Text ---
-    // Use the same font for width calculation as for drawing (Bold Red in this case)
-    PDFont valueFont = fontBold; // Assuming value is also bold red like image
+    PDFont valueFont = fontBold; 
     List<String> lines = new ArrayList<>();
-    String[] words = productName.trim().split("\\s+"); // Split by whitespace
+    String[] words = productName.trim().split("\\s+"); 
     StringBuilder lineBuilder = new StringBuilder();
 
     for (String word : words) {
@@ -343,7 +357,7 @@ public final class CertificateGeneratorUtil {
              testWidth = valueFont.getStringWidth(testLine) / 1000f * fontSizeValue;
         } catch (IOException e) {
              System.err.println("Warning: Could not get string width. " + e.getMessage());
-             testWidth = (testLine.length() * fontSizeValue * 0.6f); // Rough fallback estimate
+             testWidth = (testLine.length() * fontSizeValue * 0.6f); 
         }
 
 
@@ -365,13 +379,11 @@ public final class CertificateGeneratorUtil {
              try {
                  wordWidth = valueFont.getStringWidth(word) / 1000f * fontSizeValue;
              } catch (IOException e) {
-                 // Handle error or use fallback
                  wordWidth = (word.length() * fontSizeValue * 0.6f);
              }
 
             if (wordWidth >= availableWidth) {
                  // Single word is too long, add it on its own line (will overflow)
-                 // More complex logic could hyphenate or truncate here if needed.
                  lines.add(word);
             } else {
                  // Start new line with this word
@@ -386,8 +398,8 @@ public final class CertificateGeneratorUtil {
 
     // --- 4. Draw the Wrapped Product Name Lines ---
     cs.beginText();
-    cs.setFont(valueFont, fontSizeValue); // Set font for value
-    cs.setNonStrokingColor(COLOR_PRODUCT_RED); // Set color for value
+    cs.setFont(valueFont, fontSizeValue); 
+    cs.setNonStrokingColor(COLOR_PRODUCT_RED); 
     // Set initial position for the first line of the value
     cs.newLineAtOffset(currentX, currentY);
 
@@ -403,7 +415,7 @@ public final class CertificateGeneratorUtil {
 }
 
     private static void drawBodyText(PDPageContentStream cs, PDFont font, String signerName, String shipName,String productDetails, String trainingDate) throws IOException {
-        float fontSize = 10.5f; // Adjust size
+        float fontSize = 10.5f; 
         cs.setFont(font, fontSize);
         cs.setNonStrokingColor(COLOR_BODY_TEXT);
         cs.setLeading(BODY_LINE_HEIGHT); // Set line height for newLine()
@@ -434,7 +446,7 @@ public final class CertificateGeneratorUtil {
     private static void drawCrewNames(PDPageContentStream cs, PDFont font, List<String> crewNames) throws IOException {
         float fontSize = 14f; // Adjust size for names
         cs.setFont(font, fontSize);
-        cs.setNonStrokingColor(COLOR_BODY_TEXT); // Same color as body or different?
+        cs.setNonStrokingColor(COLOR_BODY_TEXT); 
 
         for (int i = 0; i < crewNames.size(); i++) {
             float currentX = (i % 2 == 0) ? CREW_COL1_X : CREW_COL2_X;
@@ -447,21 +459,32 @@ public final class CertificateGeneratorUtil {
         }
     }
 
-    private static void drawSignatory(PDPageContentStream cs, PDFont font, String signerName, String signerTitle) throws IOException {
-        float fontSize = 10f; // Adjust size
+    private static void drawSignatory(PDPageContentStream cs, PDFont font, String signerName, String signerTitle, PDImageXObject signatureImg) throws IOException {
+        
+        if (signatureImg != null) {
+            try {
+                cs.drawImage(signatureImg, SIGNATURE_IMAGE_X, SIGNATURE_IMAGE_Y, SIGNATURE_IMAGE_WIDTH, SIGNATURE_IMAGE_HEIGHT);
+            } catch (IOException e) {
+                System.err.println("Error drawing signature image: " + e.getMessage());
+            }
+        }
+        
+        
+        
+        float fontSize = 10f; 
         cs.setFont(font, fontSize);
         cs.setNonStrokingColor(Color.BLACK);
 
         cs.beginText();
-        cs.newLineAtOffset(SIGNATORY_X, SIGNATORY_Y);
+        cs.newLineAtOffset(SIGNATORY_TEXT_X, SIGNATORY_TEXT_Y);
         cs.showText(signerName);
-        cs.newLineAtOffset(0, -BODY_LINE_HEIGHT + 2); // Use consistent line height
+        cs.newLineAtOffset(0, -BODY_LINE_HEIGHT + 2); 
         cs.showText(signerTitle);
         cs.endText();
     }
 
     private static void drawFooter(PDPageContentStream cs, PDFont font, String companyName, String companyAddress, String companyPhone) throws IOException {
-        float fontSize = 9f; // Smaller for footer
+        float fontSize = 9f;
         cs.setFont(font, fontSize);
         cs.setNonStrokingColor(Color.BLACK);
         cs.setLeading(FOOTER_LINE_HEIGHT);
