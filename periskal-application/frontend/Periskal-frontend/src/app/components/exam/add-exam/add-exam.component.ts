@@ -51,14 +51,19 @@ export class AddExamComponent implements OnInit {
   }
 
   addQuestion(): void {
+
+    const answerGroup = () => this.fb.group({
+      text: ['', Validators.required]
+    });
+
     const questionGroup = this.fb.group({
       text: ['', Validators.required],
       photos: [[]],
       answers: this.fb.array([
-        this.fb.control('', Validators.required),
-        this.fb.control('', Validators.required),
-        this.fb.control('', Validators.required),
-        this.fb.control('', Validators.required)
+        answerGroup(),
+        answerGroup(),
+        answerGroup(),
+        answerGroup()
       ]),
       correctAnswer: ['', Validators.required]
     });

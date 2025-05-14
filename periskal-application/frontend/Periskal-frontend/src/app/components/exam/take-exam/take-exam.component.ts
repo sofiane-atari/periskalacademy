@@ -36,6 +36,9 @@ export class TakeExamComponent implements OnInit {
 
     this.examService.getExamById(examId).subscribe({
       next: (exam) => {
+        console.log('Answers van eerste vraag:', exam.questions[0].answers);
+
+
         console.log('Full exam data:', exam);
         console.log('First question photos:', exam.questions[0]?.photos);
         if (exam.questions[0]?.photos?.length) {
