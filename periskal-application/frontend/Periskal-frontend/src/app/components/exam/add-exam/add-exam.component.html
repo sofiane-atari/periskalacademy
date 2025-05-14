@@ -92,19 +92,45 @@
 
       @if (examForm.get('questions')) {
         <div class="questions-section">
-          <h3>{{'QUESTIONS' |translate}}</h3>
-          <div formArrayName="questions">
-            @for (question of questions.controls; track $index) {
-              <div [formGroupName]="$index" class="question-block">
-                <textarea formControlName="text" placeholder="Question text"></textarea>
-                <label>Images for question {{ $index + 1 }}</label>
-                <app-photo-upload formControlName="photos"></app-photo-upload>
-                
-                <button type="button" (click)="removeQuestion($index)">{{'REMOVE_BUTTON' |translate}}</button>
+          <h3>{{'QUESTIONS' | translate}}</h3>
+        
+          <mat-tab-group>
+            <!-- Tab voor vragen -->
+            <mat-tab label="Vragen">
+              <div formArrayName="questions">
+                @for (question of questions.controls; track $index) {
+                  <div [formGroupName]="$index" class="question-block">
+                    <h4>Vraag {{ $index + 1 }}</h4>
+                    <textarea formControlName="text" placeholder="Question text"></textarea>
+                    <label>Images for question {{ $index + 1 }}</label>
+                    <app-photo-upload formControlName="photos"></app-photo-upload>
+                    <button type="button" (click)="removeQuestion($index)">
+                      {{'REMOVE_BUTTON' | translate}}
+                    </button>
+                  </div>
+                }
               </div>
-            }
-          </div>
-          <button type="button" (click)="addQuestion()">{{'ADD_QUESTION_BUTTON' |translate}}</button>
+              <button type="button" (click)="addQuestion()">{{'ADD_QUESTION_BUTTON' | translate}}</button>
+            </mat-tab>
+        
+            <!-- Tab voor antwoorden -->
+            <mat-tab label="Antwoorden">
+              <div formArrayName="questions">
+                @for (question of questions.controls; track $index) {
+                  <div [formGroupName]="$index" class="question-block">
+                    <h4>Antwoorden voor vraag {{ $index + 1 }}</h4>
+                    <div formArrayName="answers">
+                      @for (answer of getAnswers($index).controls; let i = $index; track i) {
+                        <input [formControlName]="i" placeholder="Antwoord {{i + 1}}">
+                      }
+                    </div>
+                    <label>Correct antwoord (1-4):</label>
+                    <input type="number" formControlName="correctAnswer" min="1" max="4">
+                  </div>
+                }
+              </div>
+            </mat-tab>
+          </mat-tab-group>
         </div>
       }
 

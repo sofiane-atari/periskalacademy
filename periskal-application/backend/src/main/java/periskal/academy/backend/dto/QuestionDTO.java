@@ -10,4 +10,5 @@ public class QuestionDTO {
     private Long id;
     private String text;
     private List<Photo> photos;
+    private List<AnswerDTO> answers;
 }

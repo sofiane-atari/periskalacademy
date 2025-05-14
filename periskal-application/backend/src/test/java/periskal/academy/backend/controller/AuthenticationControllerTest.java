@@ -23,10 +23,10 @@ import periskal.academy.backend.dto.ErrorResponse;
 import periskal.academy.backend.jpa.TrainingRepository;
 import periskal.academy.backend.model.AuthenticateResponse;
 import periskal.academy.backend.model.LoginRequest;
-import periskal.academy.backend.security.exceptions.authentication.AuthenticationCommunicationException;
-import periskal.academy.backend.security.exceptions.authentication.AuthenticationInvalidCredentialsException;
-import periskal.academy.backend.service.authentication.AuthenticationService;
-import periskal.academy.backend.service.authentication.DongleAuthenticationService;
+import periskal.academy.backend.security.Exceptions.authentication.AuthenticationCommunicationException;
+import periskal.academy.backend.security.Exceptions.authentication.AuthenticationInvalidCredentialsException;
+import periskal.academy.backend.service.Authentication.AuthenticationService;
+import periskal.academy.backend.service.Authentication.DongleAuthenticationService;
 import periskal.academy.backend.util.JwtUtil;
 
 @WebMvcTest(controllers = AuthenticationController.class, excludeAutoConfiguration = {

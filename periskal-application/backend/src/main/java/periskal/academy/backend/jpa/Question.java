@@ -29,6 +29,10 @@ public class Question {
     @JsonManagedReference(value = "question-photos")
     private List<Photo> photos = new ArrayList<>();
 
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JsonManagedReference(value = "question-answers")
+    private List<Answer> answers = new ArrayList<>();
+
     public void addPhoto(Photo p) {
         photos.add(p);
         p.setQuestion(this);

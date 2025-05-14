@@ -1,4 +1,4 @@
-package periskal.academy.backend.security.exceptions.authentication;
+package periskal.academy.backend.security.Exceptions.authentication;
 
 public class AuthenticationCommunicationException extends AuthenticationServiceException {
     public AuthenticationCommunicationException(String message, Throwable cause) {

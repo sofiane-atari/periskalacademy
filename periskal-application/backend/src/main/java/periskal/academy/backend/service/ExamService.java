@@ -2,8 +2,10 @@ package periskal.academy.backend.service;
 
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
+import periskal.academy.backend.dto.AnswerDTO;
 import periskal.academy.backend.dto.ExamRequest;
 import periskal.academy.backend.dto.QuestionDTO;
+import periskal.academy.backend.jpa.Answer;
 import periskal.academy.backend.jpa.Exam;
 import periskal.academy.backend.jpa.ExamRepository;
 import periskal.academy.backend.jpa.Photo;
@@ -70,6 +72,18 @@ public class ExamService {
                 }
             }
 
+            if (qdto.getAnswers() != null) {
+                List<Answer> answers = new ArrayList<>();
+                for (AnswerDTO adto : qdto.getAnswers()) {
+                    Answer a = new Answer();
+                    a.setText(adto.getText());
+                    a.setCorrect(adto.isCorrect());
+                    a.setQuestion(q);
+                    answers.add(a);
+                }
+                q.setAnswers(answers);
+            }
+
             questions.add(q);
         }
         exam.setQuestions(questions);
@@ -82,24 +96,34 @@ public class ExamService {
         Optional<Exam> examOpt = examRepository.findById(id);
         if (examOpt.isPresent()) {
             Exam exam = examOpt.get();
-
+    
             exam.setExamTitle(updatedExam.getExamTitle());
             exam.setExamDescription(updatedExam.getExamDescription());
             exam.setTotalQuestions(updatedExam.getTotalQuestions());
-
+    
             // Oude vragen verwijderen
             exam.getQuestions().clear();
-
-            for (Question question : updatedExam.getQuestions()) {
-                question.setId(null);
-                question.setExam(exam);
-                exam.getQuestions().add(question);
+    
+            for (Question updatedQuestion : updatedExam.getQuestions()) {
+                updatedQuestion.setId(null);
+                updatedQuestion.setExam(exam);
+    
+                // Answers koppelen aan question
+                if (updatedQuestion.getAnswers() != null) {
+                    for (Answer answer : updatedQuestion.getAnswers()) {
+                        answer.setId(null);
+                        answer.setQuestion(updatedQuestion);
+                    }
+                }
+    
+                exam.getQuestions().add(updatedQuestion);
             }
-
+    
             return examRepository.save(exam);
         }
         return null;
     }
+    
 
     public void deleteExam(Long id) {
         Optional<Exam> examOpt = examRepository.findById(id);

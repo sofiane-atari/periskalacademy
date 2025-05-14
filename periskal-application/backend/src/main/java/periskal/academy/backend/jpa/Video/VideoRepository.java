@@ -1,4 +1,4 @@
-package periskal.academy.backend.jpa.video;
+package periskal.academy.backend.jpa.Video;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
