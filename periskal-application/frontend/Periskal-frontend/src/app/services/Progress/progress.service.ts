@@ -13,44 +13,24 @@ export class ProgressService {
     private http: HttpClient
   ) { }
 
-  getMockUserProgress(userId: string) : Observable<TrainingProgress[]> { // TODO : remove mock data and implement real API call
 
-    const mockProgress: TrainingProgress = {
-      id: 0,
-      userId: userId,
-      trainingId: 1,
-      moduleProgress: [
-        {
-          moduleId: 0,
-          percentComplete: 75,
-          completedChapters: [1, 2, 3]
-        },
-        {
-          moduleId: 1,
-          percentComplete: 25,
-          completedChapters: [4]
-        }
-      ],
-      overallPercentComplete: 50,
-      lastUpdated: new Date(),
-    };
-    
-    return of([mockProgress]);
-  }
-
-  // To be implemented for real API calls later 
-  /*
   completeChapter(userId: string, trainingId: number, moduleId: number, chapterId: number): Observable<TrainingProgress> {
-    return 
-  } */
+    const request = {
+      userId,
+      trainingId,
+      moduleId,
+      chapterId
+    };
+    return this.http.post<TrainingProgress>(`${this.baseUrl}/complete-chapter`, request); 
+  } 
   
   getUserProgress(userId: string): Observable<TrainingProgress[]> {
-    return this.getMockUserProgress(userId); 
+
+    return this.http.get<TrainingProgress[]>(`${this.baseUrl}/user/${userId}`);
   }
   
   getTrainingProgress(userId: string, trainingId: number): Observable<TrainingProgress | undefined> {
-    return this.getMockUserProgress(userId).pipe(
-      map(progressList => progressList.find(p => p.trainingId === trainingId))
-    );
+
+    return this.http.get<TrainingProgress>(`${this.baseUrl}/training/${trainingId}/user/${userId}`);
   }
 }

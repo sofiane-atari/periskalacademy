@@ -7,6 +7,7 @@ import { Module } from '../../../models/module.model';
 import { ProgressService } from '../../../services/Progress/progress.service';
 import { TrainingProgress } from '../../../models/progress.model';
 import { ProgressBarComponent } from '../../progress-bar/progress-bar.component';
+import { JwtDecoderService } from '../../../services/JwtDecode/jwt-decoder.service';
 
 @Component({
   selector: 'app-training-detail',
@@ -18,21 +19,27 @@ export class TrainingDetailComponent {
   training: Training | undefined;
   modules: Module[] = [];
   public lang: String | null = "";
+  private userId: string = '';
 
   trainingId: number = 0;
 
-  // TODO: Replace 'mockUserId' with actual user ID from an auth service
-  private userId: string = 'userId'; 
+  
+  
   trainingProgress: TrainingProgress | undefined;
 
   constructor(
     private route: ActivatedRoute, 
     private trainingSvc: TrainingService, 
     private router: Router,
-    private ProgressService: ProgressService
+    private ProgressService: ProgressService,
+    private jwtDecoderService: JwtDecoderService
   ) { }
 
   ngOnInit(): void {
+
+    // Get the user ID from the JWT token
+    this.userId = this.jwtDecoderService.getId() ?? 'Error'; //Change this to thow an error or something else later
+
     this.lang = localStorage.getItem('lang');
     // Get the training ID from the URL
     this.trainingId = Number(this.route.snapshot.paramMap.get('id'));
@@ -48,14 +55,7 @@ export class TrainingDetailComponent {
       }
     });
 
-    this.ProgressService.getTrainingProgress(this.userId, this.trainingId).subscribe({
-        next: (progressData) => {
-          this.trainingProgress = progressData;
-        },
-        error: (error) => {
-          console.error('Error fetching training progress', error);
-        }
-      });
+    this.loadProgressData(); 
 
   }
 
@@ -108,5 +108,22 @@ export class TrainingDetailComponent {
     );
     return moduleProg ? moduleProg.percentComplete : 0;
   }
+
+
+  loadProgressData(): void {
+    this.ProgressService.getTrainingProgress(this.userId, this.trainingId).subscribe({
+      next: (progressData) => {
+        this.trainingProgress = progressData;
+      },
+      error: (error) => {
+        console.error('Error fetching training progress', error);
+      }
+    });
+  }
+
+  getOverallProgressPercent(): number {
+    return this.trainingProgress ? this.trainingProgress.overallPercentComplete : 0;
+  }
+
 
 }
