@@ -9,9 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.WebRequest;
 
-import periskal.academy.backend.security.exceptions.*;
-import periskal.academy.backend.security.exceptions.authentication.*;
-import periskal.academy.backend.security.exceptions.general.*;
+import periskal.academy.backend.security.Exceptions.*;
+import periskal.academy.backend.security.Exceptions.authentication.*;
+import periskal.academy.backend.security.Exceptions.General.*;
 import periskal.academy.backend.dto.ErrorResponse;
 
 public class GlobalExceptionHandlerTest {

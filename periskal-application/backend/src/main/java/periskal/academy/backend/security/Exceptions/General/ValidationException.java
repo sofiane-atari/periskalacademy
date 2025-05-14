@@ -1,4 +1,4 @@
-package periskal.academy.backend.security.exceptions.general;
+package periskal.academy.backend.security.Exceptions.General;
 
 import java.util.List;
 
