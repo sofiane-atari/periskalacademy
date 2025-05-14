@@ -125,5 +125,11 @@
   "PROGRESS": "progress:",
   "OVERAL_TRAINING_PROGRESS": "Overall training progress:",
   "START": "Start",
-  "TAKE_EXAM_CERT": "Take exam for certification"
+  "TAKE_EXAM_CERT": "Take exam for certification",
+  "CERTIFICATES": "Certificates",
+  "ISSUE_DATE": "Issue Date",
+  "EXPIRY_DATE": "Expiry Date",
+  "TRAINING": "Training",
+  "READY_FOR_DOWNLOAD": "Ready for Download",
+  "DOWNLOAD": "Download"
 }

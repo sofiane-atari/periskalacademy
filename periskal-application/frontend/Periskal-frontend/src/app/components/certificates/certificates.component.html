@@ -1,1 +1,38 @@
-<p>certificates works!</p>
+<div class="certificates-container">
+  <h2>{{"CERTIFICATES" | translate}}</h2>
+  
+  <div class="certificates-table-container">
+    <table class="certificates-table">
+      <thead>
+        <tr>
+          <th>{{"NAME" | translate}}</th>
+          <th>{{"ISSUE_DATE" | translate}}</th>
+          <th>{{"EXPIRY_DATE" | translate}}</th>
+          <th>{{"TRAINING" | translate}}</th>
+          <th>{{"READY_FOR_DOWNLOAD" | translate}}</th>
+          <th></th> <!-- Download button column -->
+        </tr>
+      </thead>
+      <tbody>
+        @for (certificate of certificates; track certificate.name) {
+          <tr>
+            <td>{{ certificate.name }}</td>
+            <td>{{ certificate.issueDate }}</td>
+            <td>{{ certificate.expiryDate }}</td>
+            <td>{{ certificate.training }}</td>
+            <td>{{ certificate.readyForDownload ? 'Yes' : 'No' }}</td>
+            <td>
+              <button 
+                class="download-button" 
+                [class.disabled]="!certificate.readyForDownload" 
+                [disabled]="!certificate.readyForDownload || isDownloading" 
+                (click)="downloadCertificate()">
+                {{"DOWNLOAD" | translate}}
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
