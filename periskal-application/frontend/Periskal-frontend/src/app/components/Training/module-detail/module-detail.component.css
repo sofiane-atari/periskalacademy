@@ -237,4 +237,47 @@
     font-size: 0.85rem;
     padding: 0.5rem;
   }
+
+  .chapter-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
 }
+
+.chapter-item.completed {
+  background-color: #f0f8ff; 
+  border-left: 4px solid #4CAF50; 
+}
+
+.status-icon {
+  color: #4CAF50;
+  font-weight: bold;
+  margin-left: 10px;
+}
+
+.chapter-actions {
+  margin-top: 30px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.complete-button {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.complete-button:hover {
+  background-color: #45a049;
+}
+
+.complete-button:disabled {
+  background-color: #cccccc;
+  cursor: default;
+}
+  
