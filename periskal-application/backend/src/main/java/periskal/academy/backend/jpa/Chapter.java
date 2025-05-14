@@ -56,9 +56,7 @@ public class Chapter {
     @JsonManagedReference
     private List<Photo> photos = new ArrayList<>();
 
-    @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<Video> videos = new ArrayList<>();
+    private String remoteFilePath;
 
     public Chapter(String nameChapter, String descriptionChapter, String textChapter) {
         this.nameChapterEn = nameChapter;
