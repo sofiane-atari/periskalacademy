@@ -119,5 +119,11 @@
   "CHAPTER_TEXT_DE": "Texte du chapitre (DE)",
   "REVIEW_SUBMIT": "Vérifier et soumettre",
   "TRAINING_SUMMARY": "Résumé de la formation",
-  "TAKE_EXAM": "Passer un examen"
+  "TAKE_EXAM": "Passer un examen",
+  "TRAINING_ABOUT": "À propos de cette formation",
+  "TRAINING_MODULES": "Modules de formation:",
+  "PROGRESS": "Progression:",
+  "OVERAL_TRAINING_PROGRESS": "Progression globale de la formation:",
+  "START": "Démarrer",
+  "TAKE_EXAM_CERT": "Passer l'examen pour la certification"
 }

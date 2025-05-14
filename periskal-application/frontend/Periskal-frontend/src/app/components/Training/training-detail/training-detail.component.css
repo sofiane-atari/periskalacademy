@@ -1,93 +1,220 @@
-/* General container for the page */
-.container {
-  max-width: 900px;
-  margin: 30px auto;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  font-family: "Arial", sans-serif;
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
-/* Header style for the page */
+body {
+    background-color: #f5f5f5;
+    color: #333;
+    line-height: 1.5;
+    padding: 24px;
+}
+
+.training-container {
+    max-width: 800px;
+    margin: 24px auto;
+    padding: 24px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.training-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.icon-container {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background-color: #fff9e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 16px;
+    transition: transform 0.3s ease;
+}
+
+.icon-container:hover {
+    transform: scale(1.05);
+}
+
+.icon {
+    font-size: 24px;
+}
+
+.training-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
+.training-description {
+    margin-bottom: 24px;
+}
+
+.training-description h2 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 8px 0;
+}
+
+.training-description p {
+    font-size: 14px;
+    color: #666;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.section-header {
+    margin-bottom: 16px;
+}
+
+.section-header h2 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
 h2 {
-  text-align: center;
-  font-size: 26px;
-  color: #333;
-  margin-bottom: 30px;
+    font-size: 16px;
+    color: #333;
+    margin: 0;
 }
 
-/* Product listing styling */
-.product {
-  background-color: #fff;
-  padding: 20px;
-  margin-bottom: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.training-list {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    background-color: white;
+    margin-bottom: 24px;
 }
 
-.product h3 {
-  font-size: 20px;
-  color: #333;
-  margin-bottom: 15px;
-  font-weight: bold;
+.training-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s ease;
 }
 
-.product p {
-  font-size: 16px;
-  color: #555;
-  margin-bottom: 20px;
+.training-item:hover {
+    background-color: #f9f9f9;
 }
 
-/* Button styling for 'Take Course' */
-.product button {
-  background-color: #f0d04b;
-  color: darkgrey;
-  padding: 12px 20px;
-  font-size: 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  border: none;
-  transition: background-color 0.3s ease;
+.training-content {
+    flex: 1;
 }
 
-.product button:hover {
-  background-color: #b18e04;
+.progress-bar-container {
+  padding: 16px;
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.2s ease;
 }
 
-.product button:disabled {
-  background-color: #aaa;
-  cursor: not-allowed;
+.training-title {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
 }
 
-/* Mobile responsiveness */
-@media (max-width: 768px) {
-  .container {
-    padding: 15px;
-  }
+.title {
+    font-weight: 600;
+    color: #333;
+}
 
-  .product {
-    padding: 15px;
-  }
+.training-meta {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+}
 
-  .product h3 {
-    font-size: 18px;
-  }
+.meta-item {
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    color: #777;
+}
 
-  .product p {
+.meta-icon {
+    color: #ffc107;
+    margin-right: 6px;
+    font-size: 10px;
+}
+
+.meta-icon.completed {
+    color: #4caf50;
+}
+
+.action-button {
+    padding: 8px 16px;
+    border-radius: 4px;
     font-size: 14px;
-  }
-
-  .product button {
-    font-size: 14px;
-    padding: 10px 15px;
-  }
-
-  .training-progress {
-  margin: 20px 0;
-  padding: 15px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    outline: none;
 }
 
+.action-button.start {
+    background-color: #ffc107;
+    color: black;
+}
+
+.action-button.start:hover {
+    background-color: #ffae00ef;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.footer button {
+    flex: 1;
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    outline: none;
+    font-size: 15px;
+}
+
+.back-button {
+    background-color: #f5f5f5;
+    color: #555;
+}
+
+.certificate-button {
+    background-color: #ffc107;
+    color: white;
+}
+
+.back-button:hover {
+    background-color: #e5e5e5;
+}
+
+.certificate-button:hover:not([disabled]) {
+    background-color: #ffae00ef;
+}
+
+.certificate-button[disabled] {
+    background-color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.7;
 }

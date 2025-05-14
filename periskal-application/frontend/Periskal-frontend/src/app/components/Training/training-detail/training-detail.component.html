@@ -1,20 +1,57 @@
-<div class="container">
-  <h2>{{ training?.nameEn }} {{'MODULES' | translate }}</h2>
-  <!-- Add overall progress bar -->
-    <div class="training-progress">
-      <h3>{{'OVERALL_PROGRESS' | translate}}</h3>
-      <app-progress-bar 
-        [percentComplete]="getOverallProgressPercent()">
-      </app-progress-bar>
+<div class="module-container">
+        <div class="module-header">
+            <div class="icon-container">
+                <span class="icon">📒</span>
+            </div>
+            <h1 class="module-title">{{getTrainingName()}}</h1>
+        </div>
+
+        <div class="module-description">
+            <h2>{{'TRAINING_ABOUT' |translate}}</h2>
+            <p>{{getTrainingDescription()}}</p>
+        </div>
+
+        <div class="section-header">
+            <h2>{{'TRAINING_MODULES' | translate}}</h2>
+        </div>
+
+        <div class="training-list">
+            @for (module of training?.modules; track $index) {
+            <div class="training-item">
+                <div class="training-content">
+                    <div class="training-title">
+                        <span class="title">{{$index+1}}. {{getModuleTitle($index)}}</span>
+                    </div>
+                    <div class="training-description">
+                        {{getModuleDescription($index)}}
+                    </div>
+                    <div class="training-meta">
+                        <div class="meta-item">
+                            <span class="meta-icon">●</span>
+                            <span class="meta-text">{{module.chapters.length}} {{'CHAPTERS' | translate}}</span>
+                        </div>
+                    </div>
+                      <div>
+                        <h2>{{"MODULE" | translate}} {{$index+1}} {{"PROGRESS" | translate}}</h2>
+                        <app-progress-bar 
+                          [percentComplete]="getModuleProgressPercent(module.id)">
+                        </app-progress-bar>
+                      </div>
+                </div>
+                <button class="action-button start" (click)="goToChaptersPage(module.id)">{{'START' |translate}}</button>
+            </div>
+        }
+        <div class="progress-bar-container">
+          <h2>{{"OVERAL_TRAINING_PROGRESS" |translate }}</h2>
+          <app-progress-bar
+            [percentComplete]="getOverallProgressPercent()">
+          </app-progress-bar>
+        </div>
+        <div class="footer">
+            <button class="back-button" (click)="goBack()">Back</button>
+            @if (training?.exam != null) {
+            <button class="certificate-button" (click)="goToExam()" [disabled]="getOverallProgressPercent()!==100">{{'TAKE_EXAM_CERT' | translate}}</button>
+            }
+        </div>
     </div>
-  @for (module of modules; track $index) {
-  <div class="product">
-    <h3>{{ getModuleTitle($index) }}</h3>
-    <p>{{ getModuleDescription($index) }}</p>
-    <app-progress-bar 
-      [percentComplete]="getModuleProgressPercent(module.id)">
-    </app-progress-bar>
-    <button (click)="goToChaptersPage(module.id)">{{'TAKE_COURSE' | translate }}</button>
-  </div>
-  }
-</div>
+

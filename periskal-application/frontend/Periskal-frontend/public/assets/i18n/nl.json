@@ -119,5 +119,11 @@
   "UPDATE_EXAM": "Examen bewerken",
   "EXAM_QUESTIONS": "Examen vragen",
   "DELETE_BUTTON": "Verwijder",
-  "TAKE_EXAM": "Examen afleggen"
+  "TAKE_EXAM": "Examen afleggen",
+  "TRAINING_ABOUT": "Over deze training",
+  "TRAINING_MODULES": "Training modules:",
+  "PROGRESS": "vooruitgang:",
+  "OVERAL_TRAINING_PROGRESS": "Algemene vooruitgang van de training:",
+  "START": "Start",
+  "TAKE_EXAM_CERT": "Examen afleggen voor certificering"
 }

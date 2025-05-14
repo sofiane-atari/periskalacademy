@@ -119,5 +119,11 @@
   "CHAPTER_NAME_DE": "Chapter Name (DE)",
   "CHAPTER_DESCRIPTION_DE": "Chapter Description (DE)",
   "CHAPTER_TEXT_DE": "Chapter Text (DE)",
-  "TAKE_EXAM": "Take exam"
+  "TAKE_EXAM": "Take exam",
+  "TRAINING_ABOUT": "About this training",
+  "TRAINING_MODULES": "Training modules:",
+  "PROGRESS": "progress:",
+  "OVERAL_TRAINING_PROGRESS": "Overall training progress:",
+  "START": "Start",
+  "TAKE_EXAM_CERT": "Take exam for certification"
 }
