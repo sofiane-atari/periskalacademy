@@ -6,7 +6,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 import org.junit.jupiter.api.Test;
 
-import periskal.academy.backend.util.CertificateGeneratorUtil;
 
 class CertificateGeneratorUtilTest {
 
