@@ -1,14 +1,14 @@
-package periskal.academy.backend.security.Exceptions;
+package periskal.academy.backend.security.exceptions;
 
 import lombok.extern.slf4j.Slf4j;
 import periskal.academy.backend.dto.ErrorResponse;
-import periskal.academy.backend.security.Exceptions.authentication.AuthenticationCommunicationException;
-import periskal.academy.backend.security.Exceptions.authentication.AuthenticationInvalidCredentialsException;
-import periskal.academy.backend.security.Exceptions.authentication.AuthenticationParsingException;
-import periskal.academy.backend.security.Exceptions.authentication.AuthenticationServerErrorException;
-import periskal.academy.backend.security.Exceptions.authentication.AuthenticationServiceException;
-import periskal.academy.backend.security.Exceptions.General.ResourceNotFoundException;
-import periskal.academy.backend.security.Exceptions.General.ValidationException;
+import periskal.academy.backend.security.exceptions.authentication.AuthenticationCommunicationException;
+import periskal.academy.backend.security.exceptions.authentication.AuthenticationInvalidCredentialsException;
+import periskal.academy.backend.security.exceptions.authentication.AuthenticationParsingException;
+import periskal.academy.backend.security.exceptions.authentication.AuthenticationServerErrorException;
+import periskal.academy.backend.security.exceptions.authentication.AuthenticationServiceException;
+import periskal.academy.backend.security.exceptions.general.ResourceNotFoundException;
+import periskal.academy.backend.security.exceptions.general.ValidationException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

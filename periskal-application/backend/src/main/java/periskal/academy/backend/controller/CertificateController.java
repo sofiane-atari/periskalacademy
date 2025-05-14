@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
-import periskal.academy.backend.service.Certificate.CertificateService;
+import periskal.academy.backend.service.certificate.CertificateService;
 
 @Slf4j
 @RestController

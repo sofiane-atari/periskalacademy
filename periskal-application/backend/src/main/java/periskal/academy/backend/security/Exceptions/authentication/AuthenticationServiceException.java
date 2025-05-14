@@ -1,4 +1,4 @@
-package periskal.academy.backend.security.Exceptions.authentication;
+package periskal.academy.backend.security.exceptions.authentication;
 
 public class AuthenticationServiceException extends RuntimeException {
     public AuthenticationServiceException(String message) {
