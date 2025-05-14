@@ -34,29 +34,37 @@ export class AddExamComponent implements OnInit {
       examTitle: ['', Validators.required],
       examDescription: ['', Validators.required],
       totalQuestions: ['', Validators.required],
-      questions: this.fb.array([]) // Initialize empty FormArray
+      questions: this.fb.array([])// Initialize empty FormArray
     });
+    this.lang = localStorage.getItem('lang') || 'en';
   }
 
   initForm(): void {
   }
+
   get questions(): FormArray {
     return this.examForm.get('questions') as FormArray;
   }
+
   ngOnInit(): void {
     this.loadTrainings();
     this.lang = localStorage.getItem('lang');
   }
 
   addQuestion(): void {
+
+    const answerGroup = () => this.fb.group({
+      text: ['', Validators.required]
+    });
+
     const questionGroup = this.fb.group({
       text: ['', Validators.required],
       photos: [[]],
       answers: this.fb.array([
-        this.fb.control('', Validators.required),
-        this.fb.control('', Validators.required),
-        this.fb.control('', Validators.required),
-        this.fb.control('', Validators.required)
+        answerGroup(),
+        answerGroup(),
+        answerGroup(),
+        answerGroup()
       ]),
       correctAnswer: ['', Validators.required]
     });
@@ -122,11 +130,15 @@ export class AddExamComponent implements OnInit {
         questions: this.questions.controls.map(q => ({
           text: q.value.text,
           photos: (q.value.photos || []).map((photo: any) => ({
-            imageData: photo.imageData  // This matches your Photo entity constructor
+            imageData: photo.imageData
           })),
-          answers: q.value.answers,
-          correctAnswer: q.value.correctAnswer
+          answers: q.value.answers.map((a: any) => ({
+            text: a.text
+          })),
+          correctAnswer: Number(q.value.correctAnswer)
         }))
+
+        
       };
 
       console.log('Submitting exam data:', examData);

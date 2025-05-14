@@ -63,6 +63,7 @@ public class ExamService {
             Question q = new Question();
             q.setText(qdto.getText());
             q.setExam(exam);
+            q.setCorrectAnswer(qdto.getCorrectAnswer());
 
             if (qdto.getPhotos() != null) {
                 for (Photo photo : qdto.getPhotos()) {
@@ -77,7 +78,6 @@ public class ExamService {
                 for (AnswerDTO adto : qdto.getAnswers()) {
                     Answer a = new Answer();
                     a.setText(adto.getText());
-                    a.setCorrect(adto.isCorrect());
                     a.setQuestion(q);
                     answers.add(a);
                 }

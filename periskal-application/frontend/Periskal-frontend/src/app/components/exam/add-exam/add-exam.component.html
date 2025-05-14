@@ -121,7 +121,9 @@
                     <h4>Antwoorden voor vraag {{ $index + 1 }}</h4>
                     <div formArrayName="answers">
                       @for (answer of getAnswers($index).controls; let i = $index; track i) {
-                        <input [formControlName]="i" placeholder="Antwoord {{i + 1}}">
+                        <div [formGroupName]="i" class="mb-2">
+                          <input type="text" formControlName="text" placeholder="Antwoord {{i + 1}}">
+                        </div>
                       }
                     </div>
                     <label>Correct antwoord (1-4):</label>

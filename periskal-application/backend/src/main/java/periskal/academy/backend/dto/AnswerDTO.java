@@ -9,5 +9,4 @@ import lombok.Setter;
 public class AnswerDTO {
     private int id;
     private String text;
-    private boolean correct;
 }

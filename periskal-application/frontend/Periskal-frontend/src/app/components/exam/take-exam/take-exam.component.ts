@@ -36,6 +36,9 @@ export class TakeExamComponent implements OnInit {
 
     this.examService.getExamById(examId).subscribe({
       next: (exam) => {
+        console.log('Answers van eerste vraag:', exam.questions[0].answers);
+
+
         console.log('Full exam data:', exam);
         console.log('First question photos:', exam.questions[0]?.photos);
         if (exam.questions[0]?.photos?.length) {
@@ -79,6 +82,13 @@ export class TakeExamComponent implements OnInit {
       this.currentQuestionIndex = index;
     }
   }
+
+  selectedAnswers: number[] = [];
+
+  selectAnswer(questionIndex: number, answerIndex: number) {
+    this.selectedAnswers[questionIndex] = answerIndex;
+  }
+
 
   submitExam(): void {
     // Implementeer je inzendlogica hier
