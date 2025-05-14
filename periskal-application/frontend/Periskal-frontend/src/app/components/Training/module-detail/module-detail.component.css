@@ -320,6 +320,171 @@
   border-radius: 0 0 8px 8px;
   margin-top: 5px;
 }
+/* Container Layout */
+.container {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  padding: 2rem;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Navigation Sidebar */
+.navigation {
+  width: 250px;
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.navigation h4 {
+  margin-bottom: 1rem;
+  color: #343a40;
+  font-size: 1.1rem;
+  border-bottom: 2px solid #dee2e6;
+  padding-bottom: 0.5rem;
+}
+
+.chapter-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.chapter-item {
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #ffffff;
+  transition: background-color 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.chapter-item:hover {
+  background-color: #e9ecef;
+}
+
+.chapter-item.active {
+  background-color: #0d6efd;
+  color: white;
+  font-weight: bold;
+  border-color: #0d6efd;
+}
+
+/* Main Content */
+.content {
+  flex-grow: 1;
+}
+
+.chapter-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Chapter Header */
+.chapter-header h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: #212529;
+}
+
+/* Section Titles & Text */
+.section-title {
+  font-size: 1.1rem;
+  color: #495057;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.section-text {
+  font-size: 1rem;
+  color: #343a40;
+  line-height: 1.6;
+}
+
+/* Navigation Buttons */
+.navigation-controls {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.nav-button {
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: #0d6efd;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.nav-button:disabled {
+  background-color: #adb5bd;
+  cursor: not-allowed;
+}
+
+.nav-icon {
+  font-size: 1.1rem;
+}
+
+/* Video Section */
+.video-container {
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.main-video {
+  width: 100%;
+  max-height: 400px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.video-caption {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+/* Photos Section */
+.photos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.photo {
+  text-align: center;
+}
+
+.photo img {
+  max-width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.photo-caption {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+/* Separator */
+.separator-line {
+  height: 1px;
+  background-color: #dee2e6;
+  margin: 2rem 0;
+}
 
 /* Responsive adjustments */
 @media (max-width: 768px) {

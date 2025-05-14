@@ -73,8 +73,10 @@ export class ModuleDetailComponent {
         console.log(this.chapters[1].nameChapterEn)
         console.log('Loaded chapters:', this.chapters);
         this.chapters.forEach((e) => this.updatedChapters.push(e));
+        
         if (this.chapters.length > 0) {
-          this.activeChapterId = this.chapters[0].id;
+          this.activeChapterId = this.chapters[0].id; // Set to first chapter's ID
+          this.cdr.detectChanges(); // Trigger change detection
         }
       },
       error: (error) => {
@@ -179,5 +181,5 @@ export class ModuleDetailComponent {
   }
   getDisplayChapterNumber(): number {
   return this.getCurrentChapterIndex() + 1; // Toon chapters vanaf 1 i.p.v. 0
-}
+  }
 }
