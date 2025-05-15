@@ -7,14 +7,21 @@ import org.springframework.stereotype.Service;
 import periskal.academy.backend.jpa.CompletedExam;
 import periskal.academy.backend.jpa.CompletedExamRepository;
 import periskal.academy.backend.dto.CompletedExamDTO;
+import periskal.academy.backend.jpa.ExamRepository;
+import periskal.academy.backend.jpa.TrainingRepository;
 
 @Service
 public class CompletedExamService {
     
     private final CompletedExamRepository completedExamRepository;
+    private final ExamRepository examRepository;
+    private final TrainingRepository trainingRepository;
 
-    public CompletedExamService(CompletedExamRepository completedExamRepository) {
+    public CompletedExamService(CompletedExamRepository completedExamRepository, ExamRepository examRepository, TrainingRepository trainingRepository) {
         this.completedExamRepository = completedExamRepository;
+        this.examRepository = examRepository;
+        this.trainingRepository = trainingRepository;
+
     }
 
     public CompletedExamDTO saveCompletedExam(CompletedExamDTO completedExamDTO) {
@@ -48,6 +55,13 @@ public class CompletedExamService {
         dto.setRequiredScore(completedExam.getRequiredScore());
         dto.setScore(completedExam.getScore());
         dto.setCompletedDate(completedExam.getCompletedDate());
+
+        dto.setExamName(examRepository.findById(completedExam.getExamId())
+        .map(exam -> exam.getExamTitle())
+        .orElse("N/A")); 
+        dto.setTrainingName(trainingRepository.findById(completedExam.getTrainingId())
+        .map(training -> training.getNameEn())
+        .orElse("N/A"));
         return dto;
     }
     

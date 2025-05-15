@@ -21,5 +21,8 @@ import lombok.Setter;
         private int score;
         private Date completedDate;
 
+        private String examName;
+        private String trainingName;
+
 
     }
