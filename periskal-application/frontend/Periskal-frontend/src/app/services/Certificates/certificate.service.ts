@@ -28,9 +28,25 @@ export class CertificateService {
   }
 
 
-   //Download a certificate by ID
+
   downloadCertificateById(certificateId: number): Observable<Blob> {
-    return this.http.get(`${this.certificatesUrl}/generate/${certificateId}`, { responseType: 'blob' });
+    
+    // Get user information from JWT token
+    const firstName = this.jwtDecoder.getFirstname() || '';
+    const lastName = this.jwtDecoder.getLastname() || '';
+    const shipName = this.jwtDecoder.getShipname() || '';
+    
+    // Create query parameters with user information
+    const params = {
+      firstName,
+      lastName,
+      shipName
+    };
+    
+    return this.http.get(`${this.certificatesUrl}/generate/${certificateId}`, {
+      params,
+      responseType: 'blob'
+    });
   }
 
 
