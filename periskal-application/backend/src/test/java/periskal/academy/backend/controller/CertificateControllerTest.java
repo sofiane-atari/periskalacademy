@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import periskal.academy.backend.dto.CertificateDTO;
+import periskal.academy.backend.jpa.Certificate;
 import periskal.academy.backend.jpa.TrainingRepository;
 import periskal.academy.backend.service.CertificateService;
 import periskal.academy.backend.service.certificate.PdfGeneratorService;
@@ -39,11 +40,13 @@ class CertificateControllerTest {
 
     private byte[] testPdfContent;
     private CertificateDTO mockCertificateDto;
+    private Certificate mockCertificate;
 
     @BeforeEach
     void setUp() {
         testPdfContent = "Test PDF Content".getBytes();
 
+        // Set up certificate DTO
         mockCertificateDto = new CertificateDTO(
             1L,
             "Certificate POE",
@@ -53,6 +56,16 @@ class CertificateControllerTest {
             true,
             "user123"
         );
+        
+        // Set up certificate entity
+        mockCertificate = new Certificate();
+        mockCertificate.setId(1L);
+        mockCertificate.setName("Certificate POE");
+        mockCertificate.setIssueDate(LocalDate.now());
+        mockCertificate.setExpiryDate(LocalDate.now());
+        mockCertificate.setTraining("Spring Boot Basics");
+        mockCertificate.setReadyForDownload(true);
+        mockCertificate.setUserId("user123");
     }
 
     @Test
@@ -65,10 +78,17 @@ class CertificateControllerTest {
         String expectedContentDispositionHeader = String.format("form-data; name=\"attachment\"; filename=\"%s\"", expectedFilename);
 
         when(certificateService.getCertificateById(certificateId)).thenReturn(mockCertificateDto);
-        when(pdfGeneratorService.createCertificate()).thenReturn(testPdfContent);
+        when(certificateService.getCertificateEntityById(certificateId)).thenReturn(mockCertificate);
+        when(pdfGeneratorService.createCertificate(mockCertificate, "Certificate", "Holder", "Vessel"))
+            .thenReturn(testPdfContent);
 
         // Act
-        MvcResult mvcResult = mockMvc.perform(get("/api/certificate/generate/{id}", certificateId)).andReturn();
+        MvcResult mvcResult = mockMvc.perform(
+            get("/api/certificate/generate/{id}", certificateId)
+                .param("firstName", "Certificate")
+                .param("lastName", "Holder")
+                .param("shipName", "Vessel")
+        ).andReturn();
 
         // Assert
         MockHttpServletResponse response = mvcResult.getResponse();
