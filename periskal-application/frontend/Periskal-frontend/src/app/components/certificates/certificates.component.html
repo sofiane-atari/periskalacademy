@@ -26,8 +26,13 @@
           </thead>
           <tbody>
             @for (certificate of certificates; track certificate.id) {
-              <tr>
-                <td>{{ certificate.name }}</td>
+              <tr [class.highlight-new]="certificate.id === newCertificateId">
+                <td>
+                  {{ certificate.name }}
+                  @if (certificate.id === newCertificateId) {
+                    <span class="new-badge">{{'NEW' | translate}}</span>
+                  }
+                </td>
                 <td>{{ certificate.issueDate | date:'mediumDate' }}</td>
                 <td>{{ certificate.expiryDate | date:'mediumDate' }}</td>
                 <td>{{ certificate.training }}</td>
