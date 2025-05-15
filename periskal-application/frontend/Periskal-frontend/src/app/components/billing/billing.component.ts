@@ -18,7 +18,9 @@ export class BillingComponent implements OnInit {
   constructor(private fb: FormBuilder, private billingSvc: BillingService, private snackBar: MatSnackBar, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.examId = Number(this.route.snapshot.paramMap.get('id'));
+    const rawExamId = this.route.snapshot.paramMap.get('examid');
+    this.examId = rawExamId ? Number(rawExamId) : NaN;
+
     this.billingForm = this.fb.group({
       fullName: ['', Validators.required],
       companyName: ['', Validators.required],
@@ -28,14 +30,21 @@ export class BillingComponent implements OnInit {
       city: ['', Validators.required],
       state: ['', Validators.required],
       zipCode: ['', Validators.required],
-      country: ['', Validators.required],
-      trainingId: [''],
+      countryCode: ['', Validators.required],
+      examId: [this.examId, Validators.required],
     });
   }
 
+
   onSubmit() {
+    this.billingForm.patchValue({ examId: this.examId });
+    console.log(this.billingForm);
+    const billingFormData = this.billingForm.value;
+    console.log(this.billingForm.valid);
+    console.log(billingFormData);
     if (this.billingForm.valid) {
-      const billingFormData = this.billingForm.value
+      const billingFormData = this.billingForm.value;
+      console.log(billingFormData);
       this.billingSvc.postBilling(billingFormData).subscribe({
         next: (response) => {
           console.log('Success:', response);

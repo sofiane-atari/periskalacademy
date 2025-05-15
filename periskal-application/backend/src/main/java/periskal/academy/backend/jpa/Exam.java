@@ -32,7 +32,7 @@ public class Exam {
 
     @OneToOne
     @JoinColumn(name = "trainingId", unique = true, nullable = true)
-    @JsonBackReference
+    @JsonBackReference("training-exam")
     private Training training;
 
     public Exam() {
@@ -43,7 +43,6 @@ public class Exam {
         this.examDescription = examDescription;
     }
 
-    
     @JsonProperty("trainingId")
     public Long getDerivedTrainingId() {
         return (this.training != null) ? this.training.getId() : null;

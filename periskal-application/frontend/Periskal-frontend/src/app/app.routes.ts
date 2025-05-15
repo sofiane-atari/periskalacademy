@@ -48,7 +48,7 @@ export const routes: Routes = [
             { path: 'skippers', component: SkippersComponent },
             { path: 'certificates', component: CertificatesComponent },
             { path: 'exams', component: ExamsListComponent },
-            { path: 'billing', component: BillingComponent }
+            { path: 'billing/:examid', component: BillingComponent }
         ]
     },
 
