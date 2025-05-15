@@ -131,5 +131,9 @@
   "EXPIRY_DATE": "Expiry Date",
   "TRAINING": "Training",
   "READY_FOR_DOWNLOAD": "Ready for Download",
-  "DOWNLOAD": "Download"
+  "DOWNLOAD": "Download",
+  "NEW": "New",
+  "YES": "Yes",
+  "NO": "No",
+  "NO_CERTIFICATES_AVAILABLE": "No certificates available"
 }
