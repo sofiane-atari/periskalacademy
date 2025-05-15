@@ -63,6 +63,6 @@ export class TrainingService {
   uploadVideo(videoFile: File): Observable<string> {
     const formData = new FormData();
     formData.append('video', videoFile, videoFile.name);
-    return this.client.post<string>(`http://localhost:8080/api/video`, videoFile)
+    return this.client.post<string>(`http://localhost:8080/api/trainings/video`, formData)
   }
 }

@@ -1,8 +1,18 @@
 package periskal.academy.backend.controller;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,12 +24,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import periskal.academy.backend.dto.ModuleDTO;
 import periskal.academy.backend.dto.TrainingDTO;
 import periskal.academy.backend.jpa.Module;
 import periskal.academy.backend.jpa.Training;
+import periskal.academy.backend.service.FtpService;
 import periskal.academy.backend.service.TrainingService;
 
 @Slf4j
@@ -27,10 +40,13 @@ import periskal.academy.backend.service.TrainingService;
 @RequestMapping("/api/trainings")
 public class TrainingController {
 
+    private static final Logger LOGGER = LogManager.getLogger();
     private final TrainingService trainingService;
+    private final FtpService ftpService;
 
-    public TrainingController(TrainingService trainingService) {
+    public TrainingController(TrainingService trainingService, FtpService ftpService) {
         this.trainingService = trainingService;
+        this.ftpService = ftpService;
     }
 
     @GetMapping
@@ -108,5 +124,46 @@ public class TrainingController {
         Module addedModule = trainingService.addModuleWithDto(trainingId, moduleDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(addedModule);
 
+    }
+
+    @PostMapping("/video")
+    public ResponseEntity<Map<String, String>> uploadVideoFtp(@RequestParam("video") MultipartFile video) {
+        if (video.isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "No video file provided"));
+        }
+
+        String filename = video.getOriginalFilename();
+        String sanitizedFilename = filename;
+
+        try {
+            // Start the async upload process
+            CompletableFuture<URI> futureUri = ftpService.uploadFile(video, sanitizedFilename);
+
+            // Option 1: Wait for completion with timeout
+            // This keeps the endpoint synchronous from client perspective but uses async
+            // internally
+            URI ftpUri = futureUri.get(60, TimeUnit.SECONDS);
+            return ResponseEntity.ok(Map.of(
+                    "ftpPath", ftpUri.toString(),
+                    "status", "uploaded"));
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            LOGGER.error("Upload interrupted: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Upload was interrupted"));
+        } catch (ExecutionException e) {
+            Throwable cause = e.getCause();
+            LOGGER.error("Error during FTP upload: {}", cause.getMessage(), cause);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Failed to upload video to FTP: " + cause.getMessage()));
+        } catch (TimeoutException e) {
+            LOGGER.error("Upload timed out: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT)
+                    .body(Map.of("error", "Upload timed out. Please try again later."));
+        } catch (Exception e) {
+            LOGGER.error("Unexpected error during upload: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Failed to upload: " + e.getMessage()));
+        }
     }
 }
