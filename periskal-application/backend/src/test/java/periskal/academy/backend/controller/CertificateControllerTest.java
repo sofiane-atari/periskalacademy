@@ -1,5 +1,7 @@
 package periskal.academy.backend.controller;
 
+import java.time.LocalDate;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +17,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
+import periskal.academy.backend.dto.CertificateDTO;
 import periskal.academy.backend.jpa.TrainingRepository;
+import periskal.academy.backend.service.CertificateService;
 import periskal.academy.backend.service.certificate.PdfGeneratorService;
 
 @WebMvcTest(controllers = CertificateController.class, excludeAutoConfiguration = { SecurityAutoConfiguration.class })
@@ -28,29 +32,49 @@ class CertificateControllerTest {
     private PdfGeneratorService pdfGeneratorService;
 
     @MockitoBean
+    private CertificateService certificateService; 
+
+    @MockitoBean
     private TrainingRepository trainingRepository; // Mocked for completeness, not used in this test, Don't delete!
 
     private byte[] testPdfContent;
+    private CertificateDTO mockCertificateDto;
 
     @BeforeEach
     void setUp() {
         testPdfContent = "Test PDF Content".getBytes();
+
+        mockCertificateDto = new CertificateDTO(
+            1L,
+            "Certificate POE",
+            LocalDate.now(),
+            LocalDate.now(),
+            "Spring Boot Basics",
+            true,
+            "user123"
+        );
     }
 
     @Test
-    void whenCreateCertificate_thenReturnsPdfWithCorrectHeaders() throws Exception {
-
+    void whenGenerateCertificate_thenReturnsPdfWithCorrectHeaders() throws Exception { 
+        
         // Arrange
+        Long certificateId = 1L; 
+        String expectedFilename = mockCertificateDto.getName().replace(" ", "_") + ".pdf";
+
+        String expectedContentDispositionHeader = String.format("form-data; name=\"attachment\"; filename=\"%s\"", expectedFilename);
+
+        when(certificateService.getCertificateById(certificateId)).thenReturn(mockCertificateDto);
         when(pdfGeneratorService.createCertificate()).thenReturn(testPdfContent);
 
         // Act
-        MvcResult mvcResult = mockMvc.perform(get("/api/certificate/generate")).andReturn();
+        MvcResult mvcResult = mockMvc.perform(get("/api/certificate/generate/{id}", certificateId)).andReturn();
 
         // Assert
         MockHttpServletResponse response = mvcResult.getResponse();
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.getContentType()).isEqualTo(MediaType.APPLICATION_PDF_VALUE);
-        assertThat(response.getHeader("Content-Disposition")).isEqualTo("attachment; filename=certificate.pdf");
+        assertThat(response.getHeader("Content-Disposition")).isEqualTo(expectedContentDispositionHeader);
         assertThat(response.getContentAsByteArray()).isEqualTo(testPdfContent);
     }
 }
