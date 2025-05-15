@@ -64,9 +64,8 @@
           </button>
           <button 
             class="nav-button next-button" 
-            [disabled]="!hasNextChapter()" 
             (click)="goToNextChapter()">
-            {{!hasNextChapter}} ? Next Chapter : Complete module<span class="nav-icon">→</span>
+            {{hasNextChapter() ? 'Next Chapter' : 'Complete module'}}<span class="nav-icon">→</span>
           </button>
         </div>
     </div>

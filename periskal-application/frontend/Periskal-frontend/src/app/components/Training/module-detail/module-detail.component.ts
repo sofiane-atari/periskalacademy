@@ -12,6 +12,9 @@ import { ModuleProgress, TrainingProgress } from '../../../models/progress.model
 import { JwtDecoderService } from '../../../services/JwtDecode/jwt-decoder.service';
 import { ProgressService } from '../../../services/Progress/progress.service';
 import { AddChapterComponent } from "../add-chapter/add-chapter.component";
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+import { interval } from 'rxjs/internal/observable/interval';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-training-detail',
@@ -47,7 +50,8 @@ export class ModuleDetailComponent {
     private router: Router,
     private cdr: ChangeDetectorRef,
     private jwtDecoderService: JwtDecoderService,
-    private progressService: ProgressService) {
+    private progressService: ProgressService,
+    private snackBar: MatSnackBar) {
   }
 
 
@@ -167,6 +171,19 @@ export class ModuleDetailComponent {
       if (!this.isChapterCompleted(this.activeChapterId))
         this.completeChapter(this.activeChapterId);
       this.activeChapterId = this.chapters[currentIndex + 1].id;
+    } else {
+      if (!this.isChapterCompleted(this.activeChapterId))
+        this.completeChapter(this.activeChapterId);
+      const snackBarConfig: MatSnackBarConfig = {
+        duration: 3000,
+        verticalPosition: 'bottom',
+        horizontalPosition: 'left',
+        panelClass: ['snackbar-success'],
+        politeness: 'assertive'
+      };
+
+      this.snackBar.open('Training completed!', 'Close', snackBarConfig);
+      this.router.navigate(['/training', this.trainingId]);
     }
   }
 

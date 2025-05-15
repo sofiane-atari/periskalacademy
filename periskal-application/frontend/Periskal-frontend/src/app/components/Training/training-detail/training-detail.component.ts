@@ -20,7 +20,6 @@ export class TrainingDetailComponent {
   modules: Module[] = [];
   public lang: String | null = "";
   private userId: string = '';
-
   trainingId: number = 0;
 
 
@@ -43,8 +42,6 @@ export class TrainingDetailComponent {
     this.lang = localStorage.getItem('lang');
     // Get the training ID from the URL
     this.trainingId = Number(this.route.snapshot.paramMap.get('id'));
-
-    // Call the service method to get the products for the specific training
     this.trainingSvc.getTrainingById(this.trainingId).subscribe({
       next: (data) => {
         this.training = data;
@@ -56,7 +53,6 @@ export class TrainingDetailComponent {
     });
 
     this.loadProgressData();
-
   }
 
   goBack() {
