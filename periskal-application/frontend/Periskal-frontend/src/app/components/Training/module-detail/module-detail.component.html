@@ -30,9 +30,6 @@
       
       <div class="chapter-body">
         
-        <!-- Video Section -->
-        
-        
         <h5 class="section-title">{{"DESCRIPTION"}}</h5>
         <p class="section-text">{{ getActiveChapterDescription() }}</p>
         
@@ -42,7 +39,21 @@
         
         <!-- Separator Line -->
         <div class="separator-line"></div>
-        
+        <!--Videos-->
+        <!-- Video Section -->
+      @if (loading ) {
+        Loading video...
+      }
+      @if (videoUrl) {
+        <div>
+          <video width="400" height="300" controls>
+            <source [src]="videoUrl" [type]="mimeType" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      } @else {
+          <p>{{ errorMessage }}</p>
+      }
         <!-- Photos Section -->
         @if (getActiveChapter()?.photos) {
           <div class="photos">
@@ -54,6 +65,7 @@
             }
           </div>
         }
+
       </div>
         <div class="navigation-controls">
           <button 

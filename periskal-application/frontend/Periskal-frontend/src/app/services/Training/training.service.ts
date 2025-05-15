@@ -67,6 +67,6 @@ export class TrainingService {
   }
 
   loadVideo(videoRemoteFilePath: string): Observable<Blob> {
-    return this.client.get<Blob>(`http://localhost:8080/api/trainings/video/stream?videoPath=${encodeURIComponent(videoRemoteFilePath)}`);
+    return this.client.get(`http://localhost:8080/api/trainings/video/stream?videoPath=${encodeURIComponent(videoRemoteFilePath)}`, { responseType: 'blob' });
   }
 }

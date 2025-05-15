@@ -33,6 +33,7 @@ export class ModuleDetailComponent {
   mimeType: string = 'video/mp4';
   videoUrl: string | null = null;
   errorMessage = "";
+  loading: boolean = false;
 
   trainingId: number = 0;
   moduleId: number = 0;
@@ -77,10 +78,6 @@ export class ModuleDetailComponent {
     return [];
   }
 
-  ngAfterViewChecked() {
-    console.log('Chapters:', this.chapters);
-  }
-
   private loadTrainingData(): void {
     this.trainingSvc.getTrainingById(this.trainingId).subscribe({
       next: (data) => {
@@ -94,6 +91,7 @@ export class ModuleDetailComponent {
           this.activeChapterId = this.chapters[0].id; // Initialize activeChapterId with the ID of the first chapter
           this.cdr.detectChanges();
         }
+        this.loadVideo();
       },
       error: (error) => {
         console.error('Error loading training data', error);
@@ -187,11 +185,6 @@ export class ModuleDetailComponent {
     }
   }
 
-  getVideoUrl(video: Video | undefined): string {
-    if (!video) return '';
-    return `${video.filePath}/${video.storedName}`;
-  }
-
   goToPreviousChapter(): void {
     if (this.hasPreviousChapter()) {
       const currentIndex = this.getCurrentChapterIndex();
@@ -260,13 +253,16 @@ export class ModuleDetailComponent {
   loadVideo(): void {
     const currentChapter = this.getActiveChapter();
     if (currentChapter?.videoRemoteFilePath) {
+      this.loading = true;
       this.trainingSvc.loadVideo(currentChapter.videoRemoteFilePath).subscribe({
         next: (videoBlob: Blob) => {
           this.mimeType = videoBlob.type || 'video/mp4';
           this.videoUrl = URL.createObjectURL(videoBlob);
+          this.loading = false;
         },
         error: (error) => {
           console.error('Error loading video:', error);
+          this.loading = false;
           this.errorMessage = 'Failed to load video.';
           this.videoUrl = null;
         },

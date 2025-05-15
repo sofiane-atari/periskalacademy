@@ -1,8 +1,9 @@
 package periskal.academy.backend.controller;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
+import org.springframework.http.HttpHeaders;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +14,6 @@ import java.util.concurrent.TimeoutException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -28,6 +28,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -179,21 +181,34 @@ public class TrainingController {
     }
 
     @GetMapping("/video/stream")
-    public ResponseEntity<Resource> streamVideo(@RequestParam String videoPath) {
+    public ResponseEntity<Resource> streamVideo(@RequestParam String videoPath, HttpServletRequest request) {
         try {
             Resource videoResource = ftpService.retrieveFileAsResource(videoPath);
 
-            if (videoResource != null && videoResource.exists()) {
-                return ResponseEntity.ok()
-                        .contentType(MediaType.APPLICATION_OCTET_STREAM) // Or determine the actual video MIME type
-                        .body(new InputStreamResource(videoResource.getInputStream()));
+            if (videoResource != null) {
+                HttpHeaders headers = new HttpHeaders();
+
+                headers.setContentType(MediaType.parseMediaType("video/mp4"));
+
+                headers.setContentDispositionFormData("inline", videoPath);
+
+                return ResponseEntity.status(HttpStatus.OK)
+                        .headers(headers)
+                        .body(videoResource);
+
             } else {
-                return ResponseEntity.notFound().build();
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
             }
+
+        } catch (FileNotFoundException e) {
+            LOGGER.error("Video file not found on FTP: {}", videoPath, e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (IOException e) {
-            LOGGER.error("Error streaming video from FTP: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            LOGGER.error("Error streaming video from FTP: {}", videoPath, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        } catch (Exception e) {
+            LOGGER.error("An unexpected error occurred while streaming video: {}", videoPath, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-
 }

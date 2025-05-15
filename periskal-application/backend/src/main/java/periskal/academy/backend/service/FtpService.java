@@ -2,30 +2,27 @@ package periskal.academy.backend.service;
 
 import org.apache.commons.net.PrintCommandListener;
 import org.apache.commons.net.ftp.FTP;
-import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.commons.net.ftp.FTPSClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.SocketException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
 
 @Service
 public class FtpService {
@@ -44,7 +41,7 @@ public class FtpService {
     @Value("${ftp.upload-folder}")
     private String ftpUploadFolder;
 
-    @Value("${ftp.port:21}")
+    @Value("${ftp.port:9910}")
     private int ftpPort;
 
     @Value("${ftp.connection-timeout:10000}")
@@ -146,9 +143,11 @@ public class FtpService {
 
         // Configure FTPS connection
         try {
+            ftp.setFileType(FTP.BINARY_FILE_TYPE);
             ftp.setAuthValue("SSL");
             ftp.execPBSZ(0);
             ftp.execPROT("P");
+            ftp.enterLocalPassiveMode();
         } catch (IOException e) {
             logger.warn("Error setting up FTPS security: {}", e.getMessage());
         }
@@ -200,49 +199,48 @@ public class FtpService {
     }
 
     public Resource retrieveFileAsResource(String remoteFilePath) throws IOException {
-        FTPClient ftpClient = new FTPClient();
-        InputStream inputStream = null;
+        FTPSClient ftp = new FTPSClient("SSL", false);
+        ftp.setAuthValue("SSL");
+        ftp.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out)));
 
         try {
-            URI uri = new URI(remoteFilePath);
-            String host = uri.getHost() != null ? uri.getHost() : ftpHost;
-            int port = uri.getPort() != -1 ? uri.getPort() : ftpPort;
-            String user = uri.getUserInfo() != null ? uri.getUserInfo().split(":")[0] : ftpUser;
-            String password = uri.getUserInfo() != null && uri.getUserInfo().split(":").length > 1
-                    ? uri.getUserInfo().split(":")[1]
-                    : ftpPassword;
-            String path = uri.getPath();
-
-            ftpClient.setConnectTimeout(connectionTimeout);
-            ftpClient.setDataTimeout(Duration.ofSeconds(dataTimeout));
-
-            ftpClient.connect(host, port);
-            if (FTPReply.isPositiveCompletion(ftpClient.getReplyCode())) {
-                if (ftpClient.login(user, password)) {
-                    ftpClient.enterLocalPassiveMode();
-                    inputStream = ftpClient.retrieveFileStream(path);
-                    if (inputStream != null) {
-                        return new InputStreamResource(inputStream);
-                    } else {
-                        logger.warn("Could not retrieve file: {}", remoteFilePath);
-                        return null;
-                    }
-                } else {
-                    logger.error("FTP login failed for retrieval of: {}", remoteFilePath);
-                    throw new IOException("FTP login failed");
-                }
-            } else {
-                logger.error("Failed to connect to FTP server for retrieval. Reply code: {}", ftpClient.getReplyCode());
-                throw new IOException("Failed to connect to FTP server");
+            ftp.connect("academyws.periskal.com", 9910);
+            int reply = ftp.getReplyCode();
+            if (!FTPReply.isPositiveCompletion(reply)) {
+                ftp.disconnect();
+                throw new IOException("Exception in connecting to FTP Server");
             }
-        } catch (URISyntaxException e) {
-            logger.error("Invalid FTP URI: {}", remoteFilePath, e);
-            throw new IOException("Invalid FTP URI");
+
+            ftp.login("AcademyWS", "Pass4Academy2025!");
+            System.out.println("Connected to FTP Server");
+
+            ftp.setFileType(FTP.BINARY_FILE_TYPE);
+            ftp.execPBSZ(0);
+            ftp.execPROT("P");
+            ftp.enterLocalPassiveMode();
+
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            boolean success = ftp.retrieveFile(remoteFilePath, outputStream);
+
+            if (!success) {
+                throw new IOException("Failed to retrieve file: " + remoteFilePath);
+            }
+
+            byte[] fileBytes = outputStream.toByteArray();
+            ByteArrayResource resource = new ByteArrayResource(fileBytes);
+
+            return resource;
+
         } finally {
-            // Note: Do NOT disconnect the FTP client here, as the InputStream needs to
-            // remain open for streaming.
-            // The caller (browser) will effectively close the connection when the stream
-            // ends.
+            if (ftp.isConnected()) {
+                try {
+                    ftp.logout();
+                    ftp.disconnect();
+                    System.out.println("Disconnected from FTP Server");
+                } catch (IOException ex) {
+                    System.err.println("Error disconnecting: " + ex.getMessage());
+                }
+            }
         }
     }
 }
