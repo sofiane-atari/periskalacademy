@@ -55,6 +55,7 @@ h2 {
   cursor: pointer;
   font-weight: 500;
   transition: background-color 0.2s;
+  min-width: 100px;
 }
 
 .download-button:hover:not(.disabled) {
@@ -65,6 +66,29 @@ h2 {
   background-color: #cccccc;
   color: #666666;
   cursor: not-allowed;
+}
+
+.loading-container {
+  text-align: center;
+  padding: 30px;
+  color: #666;
+  font-size: 16px;
+}
+
+.error-container {
+  padding: 15px;
+  margin: 15px 0;
+  background-color: #ffebee;
+  color: #d32f2f;
+  border-radius: 4px;
+  border-left: 4px solid #d32f2f;
+}
+
+.no-data {
+  text-align: center;
+  padding: 30px;
+  color: #777;
+  font-style: italic;
 }
 
 @media screen and (max-width: 768px) {

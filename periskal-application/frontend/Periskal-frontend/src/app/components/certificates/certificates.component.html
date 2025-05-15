@@ -1,38 +1,59 @@
 <div class="certificates-container">
   <h2>{{"CERTIFICATES" | translate}}</h2>
-  
-  <div class="certificates-table-container">
-    <table class="certificates-table">
-      <thead>
-        <tr>
-          <th>{{"NAME" | translate}}</th>
-          <th>{{"ISSUE_DATE" | translate}}</th>
-          <th>{{"EXPIRY_DATE" | translate}}</th>
-          <th>{{"TRAINING" | translate}}</th>
-          <th>{{"READY_FOR_DOWNLOAD" | translate}}</th>
-          <th></th> <!-- Download button column -->
-        </tr>
-      </thead>
-      <tbody>
-        @for (certificate of certificates; track certificate.name) {
-          <tr>
-            <td>{{ certificate.name }}</td>
-            <td>{{ certificate.issueDate }}</td>
-            <td>{{ certificate.expiryDate }}</td>
-            <td>{{ certificate.training }}</td>
-            <td>{{ certificate.readyForDownload ? 'Yes' : 'No' }}</td>
-            <td>
-              <button 
-                class="download-button" 
-                [class.disabled]="!certificate.readyForDownload" 
-                [disabled]="!certificate.readyForDownload || isDownloading" 
-                (click)="downloadCertificate()">
-                {{"DOWNLOAD" | translate}}
-              </button>
-            </td>
-          </tr>
-        }
-      </tbody>
-    </table>
-  </div>
+
+  @if (isLoading) {
+    <div class="loading-container">
+      <p>{{"LOADING" | translate}}...</p>
+    </div>
+  } @else if (loadError) {
+    <div class="error-container">
+      <p>{{"ERROR_LOADING_CERTIFICATES" | translate}}</p>
+    </div>
+  } @else {
+
+    <div class="certificates-table-container">
+      @if (certificates && certificates.length > 0) {
+        <table class="certificates-table">
+          <thead>
+            <tr>
+              <th>{{"NAME" | translate}}</th>
+              <th>{{"ISSUE_DATE" | translate}}</th>
+              <th>{{"EXPIRY_DATE" | translate}}</th>
+              <th>{{"TRAINING" | translate}}</th>
+              <th>{{"READY_FOR_DOWNLOAD" | translate}}</th>
+              <th></th> <!-- Download button column -->
+            </tr>
+          </thead>
+          <tbody>
+            @for (certificate of certificates; track certificate.id) {
+              <tr>
+                <td>{{ certificate.name }}</td>
+                <td>{{ certificate.issueDate | date:'mediumDate' }}</td>
+                <td>{{ certificate.expiryDate | date:'mediumDate' }}</td>
+                <td>{{ certificate.training }}</td>
+                <td>{{ certificate.readyForDownload ? ('YES' | translate) : ('NO' | translate) }}</td>
+                <td>
+                  <button
+                    class="download-button"
+                    [class.disabled]="!certificate.readyForDownload || isDownloading"
+                    [disabled]="!certificate.readyForDownload || isDownloading"
+                    (click)="certificate.id && certificate.readyForDownload && !isDownloading ? downloadCertificate(certificate.id) : null">
+                    @if (isDownloading && certificate.readyForDownload) {
+                      <span>{{"LOADING" | translate}}...</span>
+                    } @else {
+                      <span>{{"DOWNLOAD" | translate}}</span>
+                    }
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      } @else {
+        <div class="no-data">
+          <p>{{"NO_CERTIFICATES_AVAILABLE" | translate}}</p>
+        </div>
+      }
+    </div>
+  }
 </div>
