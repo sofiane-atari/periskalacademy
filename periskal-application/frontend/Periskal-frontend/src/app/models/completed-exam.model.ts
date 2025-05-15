@@ -7,7 +7,9 @@ export interface CompletedExam {
     score: number;
     completedDate: Date;
     
-        
+    certificateId?: number;
+    passed?: boolean;
+    
     examName?: string;
     trainingName?: string;
 }

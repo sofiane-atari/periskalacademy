@@ -6,5 +6,6 @@ export interface Exam {
     examTitle: string;
     examDescription: string;
     totalQuestions: number;
+    passingScore?: number; // optional for now until we can enter it during exam creation
     questions: Question[];
-  }
+}
