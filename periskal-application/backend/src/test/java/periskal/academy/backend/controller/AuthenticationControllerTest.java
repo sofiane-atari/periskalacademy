@@ -46,8 +46,7 @@ class AuthenticationControllerTest {
         private DongleAuthenticationService dongleAuthenticationService; // TODO: add Dongletest
 
         @MockitoBean // DON'T DELETE THIS LINE, IT'S NEEDED FOR THE TEST TO WORK
-        private TrainingRepository trainingRepository; // this has to be here to make the test work, idk why it needs to
-                                                       // load this but it does
+        private TrainingRepository trainingRepository; //TODO : remove this from backend and then remove this from all test,This is because the backendapplication uses the trainingrepository to initalize inital dummy data
 
         private LoginRequest loginRequest;
 
