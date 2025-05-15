@@ -6,7 +6,7 @@ import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-billing',
+  selector: 'app-order',
   imports: [ReactiveFormsModule],
   templateUrl: './billing.component.html',
   styleUrl: './billing.component.css'
@@ -25,12 +25,12 @@ export class BillingComponent implements OnInit {
       fullName: ['', Validators.required],
       companyName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      tax: ['', Validators.required],
+      tax: [''],
       address: ['', Validators.required],
       city: ['', Validators.required],
       state: ['', Validators.required],
       zipCode: ['', Validators.required],
-      countryCode: ['', Validators.required],
+      countryCode: [''],
       examId: [this.examId, Validators.required],
     });
   }
