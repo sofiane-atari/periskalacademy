@@ -27,6 +27,10 @@ export class ModuleDetailComponent {
   public lang: String | null = "";
   updatedChapters: Chapter[] = [];
 
+  mimeType: string = 'video/mp4';
+  video: any;
+  errorMessage = "";
+
   trainingId: number = 0;
   moduleId: number = 0;
   activeChapterId: number = -1;
