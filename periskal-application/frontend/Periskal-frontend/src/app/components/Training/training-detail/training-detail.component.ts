@@ -59,8 +59,8 @@ export class TrainingDetailComponent {
     this.router.navigate(['trainingEmployee'])
   }
 
-  goToExam(): void {
-    this.router.navigate(['/take-exam', this.training?.exam?.id]);
+  goToBilling(): void {
+    this.router.navigate(['/billing', this.training?.exam?.id]);
   }
 
   goToChaptersPage(moduleId: number) {

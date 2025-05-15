@@ -16,6 +16,7 @@ import { UpdateExamComponent } from './components/exam/update-exam/update-exam.c
 import { AddChapterComponent } from './components/Training/add-chapter/add-chapter.component';
 import { CertificatesComponent } from './components/certificates/certificates.component';
 import { ExamsListComponent } from './components/exams-list/exams-list.component';
+import { BillingComponent } from './components/billing/billing.component';
 
 export const routes: Routes = [
 
@@ -46,7 +47,8 @@ export const routes: Routes = [
             { path: 'profile', component: ProfileComponent },
             { path: 'skippers', component: SkippersComponent },
             { path: 'certificates', component: CertificatesComponent },
-            { path: 'exams', component: ExamsListComponent }
+            { path: 'exams', component: ExamsListComponent },
+            { path: 'billing/:examid', component: BillingComponent }
         ]
     },
 

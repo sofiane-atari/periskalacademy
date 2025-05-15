@@ -53,7 +53,6 @@ public class Exam {
         this.examDescription = examDescription;
     }
 
-    
     @JsonProperty("trainingId")
     public Long getDerivedTrainingId() {
         return (this.training != null) ? this.training.getId() : null;
