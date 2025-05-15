@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { BillingService } from '../../services/Billing/billing.service';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
+import { JwtDecoderService } from '../../services/JwtDecode/jwt-decoder.service';
 
 @Component({
   selector: 'app-order',
@@ -14,12 +15,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class BillingComponent implements OnInit {
   billingForm!: FormGroup;
   examId!: number;
+  userId!: string | null;
 
-  constructor(private fb: FormBuilder, private billingSvc: BillingService, private snackBar: MatSnackBar, private router: Router, private route: ActivatedRoute) { }
+  constructor(private fb: FormBuilder, private billingSvc: BillingService, private snackBar: MatSnackBar, private router: Router, private route: ActivatedRoute, private jwtDecoderService: JwtDecoderService) { }
 
   ngOnInit() {
     const rawExamId = this.route.snapshot.paramMap.get('examid');
     this.examId = rawExamId ? Number(rawExamId) : NaN;
+
+    this.userId = this.jwtDecoderService.getId();
 
     this.billingForm = this.fb.group({
       fullName: ['', Validators.required],
@@ -32,11 +36,13 @@ export class BillingComponent implements OnInit {
       zipCode: ['', Validators.required],
       countryCode: [''],
       examId: [this.examId, Validators.required],
+      userId: [this.userId, Validators.required],
     });
   }
 
 
   onSubmit() {
+    this.billingForm.patchValue({ userId: this.userId });
     this.billingForm.patchValue({ examId: this.examId });
     console.log(this.billingForm);
     const billingFormData = this.billingForm.value;

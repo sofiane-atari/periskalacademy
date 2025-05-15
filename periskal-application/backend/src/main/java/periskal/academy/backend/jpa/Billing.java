@@ -25,5 +25,6 @@ public class Billing {
     private String state;
     private String tax;
     private String zipCode;
+    private String userId;
 
 }
