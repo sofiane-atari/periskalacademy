@@ -13,7 +13,10 @@ import java.util.concurrent.TimeoutException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -174,4 +177,23 @@ public class TrainingController {
                     .body(Map.of("error", "Failed to upload: " + e.getMessage()));
         }
     }
+
+    @GetMapping("/video/stream")
+    public ResponseEntity<Resource> streamVideo(@RequestParam String videoPath) {
+        try {
+            Resource videoResource = ftpService.retrieveFileAsResource(videoPath);
+
+            if (videoResource != null && videoResource.exists()) {
+                return ResponseEntity.ok()
+                        .contentType(MediaType.APPLICATION_OCTET_STREAM) // Or determine the actual video MIME type
+                        .body(new InputStreamResource(videoResource.getInputStream()));
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (IOException e) {
+            LOGGER.error("Error streaming video from FTP: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 }
