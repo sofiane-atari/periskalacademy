@@ -10,11 +10,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.extern.slf4j.Slf4j;
 import periskal.academy.backend.dto.CompletedExamDTO;
+import periskal.academy.backend.security.exceptions.general.ValidationException;
 import periskal.academy.backend.service.CompletedExamService;
 
 @RestController
 @RequestMapping("/api/completed-exams")
+@Slf4j
 public class CompletedExamController {
     
     private final CompletedExamService completedExamService;
@@ -28,6 +31,9 @@ public class CompletedExamController {
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<CompletedExamDTO>> getUserCompletedExams(@PathVariable("userId") String userId) {
         List<CompletedExamDTO> completedExams = completedExamService.getCompletedExamsByUserId(userId);
+        if (completedExams.isEmpty()) {
+            log.info("No completed exams found for user: {}", userId);
+        }
         return ResponseEntity.ok(completedExams);
     }
     
