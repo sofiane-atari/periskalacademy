@@ -65,4 +65,8 @@ export class TrainingService {
     formData.append('video', videoFile, videoFile.name);
     return this.client.post<string>(`http://localhost:8080/api/trainings/video`, formData)
   }
+
+  loadVideo(videoRemoteFilePath: string): Observable<Blob> {
+    return this.client.get<Blob>(`http://localhost:8080/api/trainings/video/stream?videoPath=${encodeURIComponent(videoRemoteFilePath)}`);
+  }
 }

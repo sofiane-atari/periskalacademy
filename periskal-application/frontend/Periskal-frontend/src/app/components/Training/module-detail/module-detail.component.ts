@@ -28,7 +28,7 @@ export class ModuleDetailComponent {
   updatedChapters: Chapter[] = [];
 
   mimeType: string = 'video/mp4';
-  video: any;
+  videoUrl: string | null = null;
   errorMessage = "";
 
   trainingId: number = 0;
@@ -272,4 +272,24 @@ export class ModuleDetailComponent {
     });
   }
 
+
+  loadVideo(): void {
+    const currentChapter = this.getActiveChapter();
+    if (currentChapter?.videoRemoteFilePath) {
+      this.trainingSvc.loadVideo(currentChapter.videoRemoteFilePath).subscribe({
+        next: (videoBlob: Blob) => {
+          this.mimeType = videoBlob.type || 'video/mp4';
+          this.videoUrl = URL.createObjectURL(videoBlob);
+        },
+        error: (error) => {
+          console.error('Error loading video:', error);
+          this.errorMessage = 'Failed to load video.';
+          this.videoUrl = null;
+        },
+      });
+    } else {
+      this.videoUrl = null;
+      this.errorMessage = 'No video path available for this chapter.';
+    }
+  }
 }

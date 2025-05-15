@@ -93,14 +93,13 @@
           </button>
         </div>
         
-        <div class="container-videos">
         <!-- Video Section -->
          @if (getActiveChapter()?.videoRemoteFilePath) {
         <div class="video-container">
-          <video controls class="main-video" [src]="video"></video>
+          <video controls class="main-video" [src]="videoUrl"></video>
         </div>
       }
-      @if (getActiveChapter()?.videoRemoteFilePath && !video && !errorMessage) {
+      @if (getActiveChapter()?.videoRemoteFilePath && !videoUrl && !errorMessage) {
         <div>
           Loading video...
         </div>
@@ -110,7 +109,6 @@
           Error loading video: {{ errorMessage }}
         </div>
       }
-      </div>
         
         <h5 class="section-title">{{"DESCRIPTION"}}</h5>
         <p class="section-text">{{ getActiveChapterDescription() }}</p>
