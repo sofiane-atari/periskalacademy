@@ -1,74 +1,26 @@
 <div class="container">
-    <div class="navigation">
-      <h4>{{"CHAPTERS" | translate}}</h4>
-          <ul class="chapter-list">
-            @if (chapters && chapters.length > 0) {
-              @for (chapter of chapters; track chapter.id) {
-                <li class="chapter-item" 
-                [class.active]="$index === activeChapterId"
-                (click)="setActiveChapter($index)">
-                  @switch(lang) {
-                    @case ('en') { {{ chapter.nameChapterEn || 'Unnamed chapter' }} }
-                    @case ('nl') { {{ chapter.nameChapterNl || 'Naamloos hoofdstuk' }} }
-                    @case ('fr') { {{ chapter.nameChapterFr || 'Chapitre sans nom' }} }
-                    @case ('de') { {{ chapter.nameChapterDe || 'Unbenanntes Kapitel' }} }
-                    @default { {{ chapter.nameChapterEn || 'Unknown language' }} }
-                  }
-                  <span class="status-icon" *ngIf="isChapterCompleted(chapter.id)">✓</span>
-                </li>
-              }
-            } @else {
-              <li>No chapters found (Array length: {{ chapters.length || 0 }})</li>
-            }
-          </ul>
-    </div>
-    
-    <div class="content">
-      <div class="chapter-card">
-        <div class="chapter-header">
-          <h3>
-            {{"CHAPTER" | translate}} {{activeChapterId + 1}}:
-            {{getActiveChapterName()}}
-          </h3>
-        </div>
-        <div class="chapter-body">
-          <h5 class="section-title">{{"DESCRIPTION" | translate}}</h5>
-          <p class="section-text">{{getActiveChapterDescription()}}</p>
-
-          <h5 class="section-title">{{"CONTENT" | translate}}</h5>
-          @if (chapters && chapters.length > activeChapterId && activeChapterId >= 0) {
-            @switch (lang) {
-              @case("en") {
-                <p
-                  class="section-text"
-                  [innerHTML]="formatText(chapters[activeChapterId].textChapterEn || '')"
-                ></p>
-              }
-              @case("nl") {
-                <p
-                  class="section-text"
-                  [innerHTML]="formatText(chapters[activeChapterId].textChapterNl || '')"
-                ></p>
-              }
-              @case("fr") {
-                <p
-                  class="section-text"
-                  [innerHTML]="formatText(chapters[activeChapterId].textChapterFr || '')"
-                ></p>
-              }
-              @case("de") {
-                <p
-                  class="section-text"
-                  [innerHTML]="formatText(chapters[activeChapterId].textChapterDe || '')"
-                ></p>
-              }
-            }
-          } @else {
-            <li>No chapters found</li>
+  <div class="navigation">
+  <h4>{{"CHAPTERS" | translate}}</h4>
+  <ul class="chapter-list">
+    @if (chapters && chapters.length > 0) {
+      @for (chapter of chapters; track chapter.id) {
+        <li class="chapter-item" 
+            [class.active]="chapter.id === activeChapterId"
+            (click)="setActiveChapter(chapter.id)">
+          @switch(lang) {
+            @case ('en') { {{ chapter.nameChapterEn || 'Unnamed chapter' }} }
+            @case ('nl') { {{ chapter.nameChapterNl || 'Naamloos hoofdstuk' }} }
+            @case ('fr') { {{ chapter.nameChapterFr || 'Chapitre sans nom' }} }
+            @case ('de') { {{ chapter.nameChapterDe || 'Unbenanntes Kapitel' }} }
+            @default { {{ chapter.nameChapterEn || 'Unknown language' }} }
           }
-        </div>
-      </div>
-    </div>
+        </li>
+        }
+      } @else {
+        <li>No chapters found</li>
+      }
+    </ul>
+  </div>
   
   <div class="content">
     <div class="chapter-card">
@@ -77,38 +29,9 @@
       </div>
       
       <div class="chapter-body">
-        <!-- Navigation Controls -->
-        <div class="navigation-controls">
-          <button 
-            class="nav-button prev-button" 
-            [disabled]="!hasPreviousChapter()" 
-            (click)="goToPreviousChapter()">
-            <span class="nav-icon">←</span> Previous Chapter
-          </button>
-          <button 
-            class="nav-button next-button" 
-            [disabled]="!hasNextChapter()" 
-            (click)="goToNextChapter()">
-            Next Chapter <span class="nav-icon">→</span>
-          </button>
-        </div>
         
         <!-- Video Section -->
-         @if (getActiveChapter()?.videoRemoteFilePath) {
-        <div class="video-container">
-          <video controls class="main-video" [src]="videoUrl"></video>
-        </div>
-      }
-      @if (getActiveChapter()?.videoRemoteFilePath && !videoUrl && !errorMessage) {
-        <div>
-          Loading video...
-        </div>
-      }
-      @if (errorMessage) {
-        <div>
-          Error loading video: {{ errorMessage }}
-        </div>
-      }
+        
         
         <h5 class="section-title">{{"DESCRIPTION"}}</h5>
         <p class="section-text">{{ getActiveChapterDescription() }}</p>
@@ -131,21 +54,21 @@
             }
           </div>
         }
-        </div>
-        <div class="chapter-actions">
+      </div>
+        <div class="navigation-controls">
           <button 
-            class="complete-button" 
-            [disabled]="isChapterCompleted(chapters[activeChapterId].id) || isCompletingChapter"
-            (click)="completeChapter(chapters[activeChapterId].id)">
-            @if(isChapterCompleted(chapters[activeChapterId].id)) {
-              {{'CHAPTER_COMPLETED' | translate}}
-            } @else if(isCompletingChapter) {
-              {{'MARKING_COMPLETE' | translate}}...
-            } @else {
-              {{'MARK_COMPLETE' | translate}}
-            }
+            class="nav-button prev-button" 
+            [disabled]="!hasPreviousChapter()" 
+            (click)="goToPreviousChapter()">
+            <span class="nav-icon">←</span> Previous Chapter
+          </button>
+          <button 
+            class="nav-button next-button" 
+            [disabled]="!hasNextChapter()" 
+            (click)="goToNextChapter()">
+            {{!hasNextChapter}} ? Next Chapter : Complete module<span class="nav-icon">→</span>
           </button>
         </div>
-      </div>
     </div>
   </div>
+</div>
