@@ -139,13 +139,21 @@ public class TrainingController {
             // Start the async upload process
             CompletableFuture<URI> futureUri = ftpService.uploadFile(video, sanitizedFilename);
 
-            // Option 1: Wait for completion with timeout
-            // This keeps the endpoint synchronous from client perspective but uses async
-            // internally
-            URI ftpUri = futureUri.get(60, TimeUnit.SECONDS);
-            return ResponseEntity.ok(Map.of(
-                    "ftpPath", ftpUri.toString(),
-                    "status", "uploaded"));
+            // Wait for completion with timeout
+            URI ftpUri = futureUri.get(60, TimeUnit.SECONDS); // 60 second timeout
+
+            // Extract and return the file path from the URI
+            String filePath = ftpUri.getPath();
+
+            // Create a response with both the full URI and just the file path
+            Map<String, String> response = new HashMap<>();
+            response.put("ftpPath", ftpUri.toString());
+            response.put("filePath", filePath);
+            response.put("fileName", sanitizedFilename);
+            response.put("status", "uploaded");
+
+            LOGGER.info("Video uploaded successfully. Path: {}", filePath);
+            return ResponseEntity.ok(response);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             LOGGER.error("Upload interrupted: {}", e.getMessage());

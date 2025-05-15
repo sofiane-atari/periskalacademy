@@ -85,7 +85,7 @@ export class AddTrainingComponent implements OnInit { // Implement OnInit
       descriptionChapterEn: ['', Validators.required],
       textChapterEn: ['', Validators.required],
       photos: [[]],
-      video: [null],
+      videoRemoteFilePath: [''],
       nameChapterNl: ['', Validators.required],
       descriptionChapterNl: ['', Validators.required],
       textChapterNl: ['', Validators.required],
@@ -104,18 +104,26 @@ export class AddTrainingComponent implements OnInit { // Implement OnInit
 
   uploadVideoToFtp(moduleIndex: number, chapterIndex: number, videoFile: File): void {
     this.isUploadingVideo = true;
-    this.trainingService.uploadVideo(videoFile)
-      .subscribe(
-        (ftpPath: string) => {
-          this.getChapters(moduleIndex).at(chapterIndex).patchValue({ videoPath: ftpPath });
-          console.log('Video uploaded to FTP:', ftpPath);
-          this.isUploadingVideo = false;
-        },
-        (error: any) => {
-          console.error('Error uploading video:', error);
-          this.isUploadingVideo = false;
-        }
-      );
+
+    this.trainingService.uploadVideo(videoFile).subscribe({
+      next: (response: any) => {
+        const filePath = response.filePath;
+
+        console.log('Upload response:', response);
+
+        this.getChapters(moduleIndex).at(chapterIndex).patchValue({ videoRemoteFilePath: filePath });
+
+        console.log('Video uploaded to FTP:', filePath);
+        this.isUploadingVideo = false;
+      },
+      error: (error: any) => {
+        console.error('Error uploading video:', error);
+        this.isUploadingVideo = false;
+      },
+      complete: () => {
+        console.log('Upload process completed');
+      }
+    });
   }
 
 
@@ -146,6 +154,7 @@ export class AddTrainingComponent implements OnInit { // Implement OnInit
   postTraining(): void {
     if (this.trainingForm.valid) { // Removed checks for separate language forms
       const trainingData = this.trainingForm.value;
+      console.log(trainingData);
       const fileInput = this.trainingForm.get('image')?.value; // Assuming 'image' is a control somewhere
 
       // If there's a file, convert it to base64
