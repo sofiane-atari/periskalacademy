@@ -30,25 +30,25 @@ public class FtpService {
     private static final Logger logger = LoggerFactory.getLogger(FtpService.class);
 
     @Value("${ftp.host}")
-    private String ftpHost;
+    public String ftpHost;
 
     @Value("${ftp.user}")
-    private String ftpUser;
+    public String ftpUser;
 
     @Value("${ftp.password}")
-    private String ftpPassword;
+    public String ftpPassword;
 
     @Value("${ftp.upload-folder}")
-    private String ftpUploadFolder;
+    public String ftpUploadFolder;
 
     @Value("${ftp.port:9910}")
-    private int ftpPort;
+    public int ftpPort;
 
     @Value("${ftp.connection-timeout:10000}")
-    private int connectionTimeout;
+    public int connectionTimeout;
 
     @Value("${ftp.data-timeout:30000}")
-    private int dataTimeout;
+    public int dataTimeout;
 
     @Async
     public CompletableFuture<URI> uploadFile(MultipartFile file, String remoteFileName) {
@@ -114,7 +114,7 @@ public class FtpService {
         return future;
     }
 
-    private FTPSClient createAndConfigureClient() throws SocketException, IOException {
+    public FTPSClient createAndConfigureClient() throws SocketException, IOException {
         FTPSClient ftp = new FTPSClient("SSL", false);
         ftp.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out), true));
 
@@ -158,7 +158,7 @@ public class FtpService {
         return ftp;
     }
 
-    private boolean uploadFileToFtp(FTPSClient ftp, File file, String remotePath) throws IOException {
+    public boolean uploadFileToFtp(FTPSClient ftp, File file, String remotePath) throws IOException {
         try (FileOutputStream devNull = new FileOutputStream(new File("/dev/null"))) {
             ftp.sendNoOp();
 
@@ -178,7 +178,7 @@ public class FtpService {
         }
     }
 
-    private File convertMultiPartToFile(MultipartFile file) throws IOException {
+    public File convertMultiPartToFile(MultipartFile file) throws IOException {
         File tempFile = File.createTempFile("ftp-upload-", "-" + file.getOriginalFilename());
         try (FileOutputStream fos = new FileOutputStream(tempFile)) {
             fos.write(file.getBytes());
@@ -186,7 +186,7 @@ public class FtpService {
         return tempFile;
     }
 
-    private void disconnectFtpClient(FTPSClient ftp) {
+    public void disconnectFtpClient(FTPSClient ftp) {
         if (ftp != null && ftp.isConnected()) {
             try {
                 ftp.logout();

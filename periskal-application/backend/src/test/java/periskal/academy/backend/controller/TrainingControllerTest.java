@@ -10,17 +10,30 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.web.multipart.MultipartFile;
 
-import periskal.academy.backend.controller.TrainingController;
+import jakarta.servlet.http.HttpServletRequest;
 import periskal.academy.backend.dto.ModuleDTO;
 import periskal.academy.backend.dto.TrainingDTO;
 import periskal.academy.backend.jpa.Module;
 import periskal.academy.backend.jpa.Training;
+import periskal.academy.backend.jpa.TrainingRepository;
+import periskal.academy.backend.service.FtpService;
 import periskal.academy.backend.service.TrainingService;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URI;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 @ExtendWith(MockitoExtension.class)
 class TrainingControllerTest {
@@ -30,6 +43,14 @@ class TrainingControllerTest {
 
     @InjectMocks
     private TrainingController trainingController;
+
+    @MockitoBean
+    private TrainingRepository trainingRepository;
+
+    @Mock
+    private FtpService ftpService;
+
+    private MultipartFile mockVideoFile;
 
     private Training training;
     private Module module;
@@ -54,6 +75,9 @@ class TrainingControllerTest {
 
         moduleDTO = new ModuleDTO();
         moduleDTO.setNameModuleEn("New Module");
+
+        mockVideoFile = new MockMultipartFile(
+                "video", "test-video.mp4", "video/mp4", "dummy-content".getBytes());
     }
 
     @Test
@@ -202,4 +226,87 @@ class TrainingControllerTest {
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().getNameModuleEn()).isEqualTo("Test Module");
     }
+
+    @Test
+    void givenValidVideo_WhenUploadVideoFtp_ThenReturnOkResponse() throws Exception {
+        // Arrange
+        URI mockUri = new URI("ftp://mockserver/videos/test-video.mp4");
+        CompletableFuture<URI> futureUri = CompletableFuture.completedFuture(mockUri);
+
+        when(ftpService.uploadFile(mockVideoFile, "test-video.mp4")).thenReturn(futureUri);
+
+        // Act
+        ResponseEntity<Map<String, String>> response = trainingController.uploadVideoFtp(mockVideoFile);
+
+        // Assert
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody()).containsEntry("status", "uploaded");
+        assertThat(response.getBody()).containsEntry("filePath", "/videos/test-video.mp4");
+    }
+
+    @Test
+    void givenEmptyVideo_WhenUploadVideoFtp_ThenReturnBadRequest() {
+        // Arrange
+        MultipartFile emptyFile = new MockMultipartFile("video", "", "video/mp4", new byte[0]);
+
+        // Act
+        ResponseEntity<Map<String, String>> response = trainingController.uploadVideoFtp(emptyFile);
+
+        // Assert
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody()).containsKey("error");
+    }
+
+    @Test
+    void givenExistingVideoPath_WhenStreamVideo_ThenReturnVideoResource() throws Exception {
+        // Arrange
+        String videoPath = "videos/test.mp4";
+        byte[] content = "video-bytes".getBytes();
+        ByteArrayResource resource = new ByteArrayResource(content);
+
+        when(ftpService.retrieveFileAsResource(videoPath)).thenReturn(resource);
+
+        HttpServletRequest request = new MockHttpServletRequest();
+
+        // Act
+        ResponseEntity<Resource> response = trainingController.streamVideo(videoPath, request);
+
+        // Assert
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().contentLength()).isEqualTo(content.length);
+        assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.parseMediaType("video/mp4"));
+    }
+
+    @Test
+    void givenNonExistentVideoPath_WhenStreamVideo_ThenReturnNotFound() throws Exception {
+        // Arrange
+        String videoPath = "non-existent.mp4";
+        when(ftpService.retrieveFileAsResource(videoPath)).thenThrow(new FileNotFoundException());
+
+        HttpServletRequest request = new MockHttpServletRequest();
+
+        // Act
+        ResponseEntity<Resource> response = trainingController.streamVideo(videoPath, request);
+
+        // Assert
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+    }
+
+    @Test
+    void givenIOExceptionDuringStream_WhenStreamVideo_ThenReturnInternalServerError() throws Exception {
+        // Arrange
+        String videoPath = "videos/test.mp4";
+        when(ftpService.retrieveFileAsResource(videoPath)).thenThrow(new IOException("Error"));
+
+        HttpServletRequest request = new MockHttpServletRequest();
+
+        // Act
+        ResponseEntity<Resource> response = trainingController.streamVideo(videoPath, request);
+
+        // Assert
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 }
