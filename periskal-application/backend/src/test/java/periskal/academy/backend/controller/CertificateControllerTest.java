@@ -15,7 +15,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
-import periskal.academy.backend.controller.CertificateController;
 import periskal.academy.backend.jpa.TrainingRepository;
 import periskal.academy.backend.service.certificate.PdfGeneratorService;
 
@@ -26,7 +25,7 @@ class CertificateControllerTest {
     private MockMvc mockMvc;
 
     @MockitoBean
-    private PdfGeneratorService certificateService;
+    private PdfGeneratorService pdfGeneratorService;
 
     @MockitoBean
     private TrainingRepository trainingRepository; // Mocked for completeness, not used in this test, Don't delete!
@@ -42,7 +41,7 @@ class CertificateControllerTest {
     void whenCreateCertificate_thenReturnsPdfWithCorrectHeaders() throws Exception {
 
         // Arrange
-        when(certificateService.createCertificate()).thenReturn(testPdfContent);
+        when(pdfGeneratorService.createCertificate()).thenReturn(testPdfContent);
 
         // Act
         MvcResult mvcResult = mockMvc.perform(get("/api/certificate/generate")).andReturn();
