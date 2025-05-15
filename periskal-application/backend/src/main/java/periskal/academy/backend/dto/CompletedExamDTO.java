@@ -8,21 +8,26 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    public class CompletedExamDTO {
+@Getter
+@Setter
+@NoArgsConstructor
+public class CompletedExamDTO {
 
-        private Long id;
-        private String userId;
-        private Long trainingId;
-        private Long examId;
-        private int requiredScore;
-        private int score;
-        private Date completedDate;
-
-        private String examName;
-        private String trainingName;
-
-
+    private Long id;
+    private String userId;
+    private Long trainingId;
+    private Long examId;
+    private int requiredScore;
+    private int score;
+    private Date completedDate;
+    private Long certificateId;
+    
+    // Convenience properties for UI display
+    private String examName;
+    private String trainingName;
+    private boolean passed;
+    
+    public boolean isPassed() {
+        return score >= requiredScore;
     }
+}
