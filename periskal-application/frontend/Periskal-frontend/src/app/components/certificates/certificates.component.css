@@ -46,6 +46,43 @@ h2 {
   background-color: #f9f9f9;
 }
 
+/* Styling for highlighting new certificate */
+.certificates-table tr.highlight-new {
+  background-color: #ecf6ff;
+  animation: fadeHighlight 2s infinite alternate;
+}
+
+@keyframes fadeHighlight {
+  from {
+    background-color: #ecf6ff;
+  }
+  to {
+    background-color: #f0f8ff;
+  }
+}
+
+/* New badge styling */
+.new-badge {
+  display: inline-block;
+  padding: 2px 6px;
+  margin-left: 8px;
+  background-color: #4caf50;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 3px;
+  animation: pulse 1s infinite alternate;
+}
+
+@keyframes pulse {
+  from {
+    opacity: 0.8;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .download-button {
   background-color: #4285f4;
   color: white;
