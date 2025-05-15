@@ -52,7 +52,7 @@ public class ExamController {
         
         examService.deleteExam(id);
         Map<String, String> response = new HashMap<>();
-        response.put("message", "Training deleted successfully");
+        response.put("message", "Exam deleted successfully");
         return ResponseEntity.ok(response);
     }
 

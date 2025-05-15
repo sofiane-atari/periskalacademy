@@ -2,6 +2,7 @@ package periskal.academy.backend.controller;
 
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import periskal.academy.backend.controller.ExamController;
 import periskal.academy.backend.dto.ExamRequest;
 import periskal.academy.backend.jpa.Exam;
+import periskal.academy.backend.security.exceptions.general.ResourceNotFoundException;
 import periskal.academy.backend.service.ExamService;
 
 import java.util.*;
@@ -53,13 +55,14 @@ class ExamControllerTest {
     }
 
     @Test
-    void givenNoExamExists_whenGetExamById_thenReturnsNotFound() {
+    void givenNoExamExists_whenGetExamById_thenThrowsResourceNotFoundException() {
         when(examService.findById(1L)).thenReturn(Optional.empty());
 
-        ResponseEntity<Exam> response = examController.getExamById(1L);
-
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-        assertThat(response.getBody()).isNull();
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
+            examController.getExamById(1L);
+        });
+        
+        assertThat(exception.getMessage()).contains("Exam not found with id: 1");
     }
 
     @Test
@@ -73,13 +76,14 @@ class ExamControllerTest {
     }
 
     @Test
-    void givenNoExamForTraining_whenGetExamByTrainingId_thenReturnsNotFound() {
+    void givenNoExamForTraining_whenGetExamByTrainingId_thenThrowsResourceNotFoundException() {
         when(examService.findByTrainingId(1L)).thenReturn(Optional.empty());
 
-        ResponseEntity<Exam> response = examController.getExamByTrainingId(1L);
-
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-        assertThat(response.getBody()).isNull();
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
+            examController.getExamByTrainingId(1L);
+        });
+        
+        assertThat(exception.getMessage()).contains("Exam not found for training id: 1");
     }
 
     @Test
@@ -97,13 +101,14 @@ class ExamControllerTest {
     }
 
     @Test
-    void givenNullReturned_whenUpdateExam_thenReturnsNotFound() {
+    void givenNullReturned_whenUpdateExam_thenThrowsResourceNotFoundException() {
         when(examService.updateExam(eq(1L), any(Exam.class))).thenReturn(null);
 
-        ResponseEntity<Exam> response = examController.updateExam(1L, exam);
-
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-        assertThat(response.getBody()).isNull();
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
+            examController.updateExam(1L, exam);
+        });
+        
+        assertThat(exception.getMessage()).contains("Exam not found with id: 1");
     }
 
     @Test
@@ -124,7 +129,7 @@ class ExamControllerTest {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody()).containsEntry("message", "Training deleted successfully");
+        assertThat(response.getBody()).containsEntry("message", "Exam deleted successfully");
         verify(examService, times(1)).deleteExam(1L);
     }
 }

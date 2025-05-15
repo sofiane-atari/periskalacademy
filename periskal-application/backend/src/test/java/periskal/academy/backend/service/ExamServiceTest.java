@@ -19,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import periskal.academy.backend.dto.ExamRequest;
 import periskal.academy.backend.dto.QuestionDTO;
 import periskal.academy.backend.jpa.*;
+import periskal.academy.backend.security.exceptions.general.ResourceNotFoundException;
 
 @ExtendWith(MockitoExtension.class)
 class ExamServiceTest {
@@ -101,14 +102,14 @@ class ExamServiceTest {
     }
 
     @Test
-    void givenInvalidTrainingId_whenCreateExam_thenThrowsException() {
+    void givenInvalidTrainingId_whenCreateExam_thenThrowsResourceNotFoundException() {
         ExamRequest request = new ExamRequest();
         request.setTrainingId(999L);
         request.setQuestions(new ArrayList<>());
 
         when(trainingRepository.findById(999L)).thenReturn(Optional.empty());
 
-        assertThrows(RuntimeException.class, () -> examService.createExam(request));
+        assertThrows(ResourceNotFoundException.class, () -> examService.createExam(request));
     }
 
     @Test
@@ -152,10 +153,10 @@ class ExamServiceTest {
     }
 
     @Test
-    void givenNonExistingExamId_whenDeleteExam_thenThrowsException() {
+    void givenNonExistingExamId_whenDeleteExam_thenThrowsResourceNotFoundException() {
         when(examRepository.findById(999L)).thenReturn(Optional.empty());
 
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> examService.deleteExam(999L));
-        assertThat(exception.getMessage()).contains("Examen met ID 999 bestaat niet.");
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> examService.deleteExam(999L));
+        assertThat(exception.getMessage()).contains("Exam not found with id: 999");
     }
 }
