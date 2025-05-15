@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.*;
 
@@ -40,6 +41,12 @@ public class Exam {
     public Exam(String examTitle, String examDescription, int totalQuestions) {
         this.examTitle = examTitle;
         this.examDescription = examDescription;
+    }
+
+    
+    @JsonProperty("trainingId")
+    public Long getDerivedTrainingId() {
+        return (this.training != null) ? this.training.getId() : null;
     }
 
 }

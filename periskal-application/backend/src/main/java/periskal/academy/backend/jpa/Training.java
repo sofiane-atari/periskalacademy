@@ -42,6 +42,7 @@ public class Training {
     private List<Module> modules = new ArrayList<>();
 
     @OneToOne(mappedBy = "training", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference("training-exam")
     private @Nullable Exam exam;
 
     public Training(String productCode, String nameEn, String descriptionEn, String nameNl, String descriptionNl,

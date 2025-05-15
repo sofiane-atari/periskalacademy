@@ -14,34 +14,27 @@ export class CertificateService {
     private jwtDecoder: JwtDecoderService
   ) { }
 
-  /**
-   * Get all certificates for the current logged-in user
-   */
+
+  //Get all certificates for the current logged-in user
   getUserCertificates(): Observable<Certificate[]> {
     const userId = this.jwtDecoder.getId();
     return this.http.get<Certificate[]>(`${this.certificatesUrl}/user/${userId}`);
   }
 
-  /**
-   * Get a certificate by its ID
-   * @param id Certificate ID
-   */
+  
+  //Get a certificate by its ID
   getCertificateById(id: number): Observable<Certificate> {
     return this.http.get<Certificate>(`${this.certificatesUrl}/${id}`);
   }
 
-  /**
-   * Download a certificate by ID
-   * @param certificateId The ID of the certificate to download
-   */
+
+   //Download a certificate by ID
   downloadCertificateById(certificateId: number): Observable<Blob> {
     return this.http.get(`${this.certificatesUrl}/generate/${certificateId}`, { responseType: 'blob' });
   }
 
-  /**
-   * Save a new certificate or update an existing one
-   * @param certificate The certificate data to save
-   */
+
+  //Save a new certificate or update an existing ones
   saveCertificate(certificate: Certificate): Observable<Certificate> {
     return this.http.post<Certificate>(`${this.certificatesUrl}/save`, certificate);
   }

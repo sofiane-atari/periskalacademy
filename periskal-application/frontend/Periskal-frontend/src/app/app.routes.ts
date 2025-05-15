@@ -15,6 +15,7 @@ import { TakeExamComponent } from './components/exam/take-exam/take-exam.compone
 import { UpdateExamComponent } from './components/exam/update-exam/update-exam.component';
 import { AddChapterComponent } from './components/Training/add-chapter/add-chapter.component';
 import { CertificatesComponent } from './components/certificates/certificates.component';
+import { ExamsListComponent } from './components/exams-list/exams-list.component';
 
 export const routes: Routes = [
 
@@ -44,7 +45,8 @@ export const routes: Routes = [
             { path: 'training/:id/module/:moduleid', component: ModuleDetailComponent },
             { path: 'profile', component: ProfileComponent },
             { path: 'skippers', component: SkippersComponent },
-            { path: 'certificates', component: CertificatesComponent }
+            { path: 'certificates', component: CertificatesComponent },
+            { path: 'exams', component: ExamsListComponent }
         ]
     },
 
