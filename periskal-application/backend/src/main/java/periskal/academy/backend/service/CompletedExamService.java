@@ -1,13 +1,20 @@
 package periskal.academy.backend.service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import periskal.academy.backend.dto.CertificateDTO;
+import periskal.academy.backend.dto.CompletedExamDTO;
 import periskal.academy.backend.jpa.CompletedExam;
 import periskal.academy.backend.jpa.CompletedExamRepository;
-import periskal.academy.backend.dto.CompletedExamDTO;
+import periskal.academy.backend.jpa.Exam;
 import periskal.academy.backend.jpa.ExamRepository;
+import periskal.academy.backend.jpa.Training;
 import periskal.academy.backend.jpa.TrainingRepository;
 
 @Service
@@ -16,18 +23,58 @@ public class CompletedExamService {
     private final CompletedExamRepository completedExamRepository;
     private final ExamRepository examRepository;
     private final TrainingRepository trainingRepository;
+    private final CertificateService certificateService;
 
-    public CompletedExamService(CompletedExamRepository completedExamRepository, ExamRepository examRepository, TrainingRepository trainingRepository) {
+    public CompletedExamService(
+            CompletedExamRepository completedExamRepository, 
+            ExamRepository examRepository, 
+            TrainingRepository trainingRepository,
+            CertificateService certificateService) {
         this.completedExamRepository = completedExamRepository;
         this.examRepository = examRepository;
         this.trainingRepository = trainingRepository;
-
+        this.certificateService = certificateService;
     }
 
+    @Transactional
     public CompletedExamDTO saveCompletedExam(CompletedExamDTO completedExamDTO) {
         CompletedExam entity = convertToEntity(completedExamDTO);
         CompletedExam saved = completedExamRepository.save(entity);
-        return convertToDTO(saved);
+        CompletedExamDTO result = convertToDTO(saved);
+        
+        // Check if the exam was passed
+        boolean passed = completedExamDTO.isPassed();
+        result.setPassed(passed);
+        
+        // Generate certificate if passed
+        if (passed) {
+            // Get exam details for certificate
+            Optional<Exam> exam = examRepository.findById(completedExamDTO.getExamId());
+            Optional<Training> training = trainingRepository.findById(completedExamDTO.getTrainingId());
+            
+            if (exam.isPresent() && training.isPresent()) {
+                // Create certificate object
+                CertificateDTO certificateDTO = new CertificateDTO();
+                certificateDTO.setUserId(completedExamDTO.getUserId());
+                certificateDTO.setName(training.get().getNameEn() + " Certificate");  
+                certificateDTO.setIssueDate(LocalDate.now());
+                certificateDTO.setExpiryDate(LocalDate.now().plusYears(5));  // get from exam later TODO
+                certificateDTO.setTraining(training.get().getNameEn());
+                certificateDTO.setReadyForDownload(true); // allow periskal to decide this, TODO
+                
+                // Save the certificate
+                CertificateDTO savedCertificate = certificateService.saveCertificate(certificateDTO);
+                
+                // Update completed exam with certificate reference
+                saved.setCertificateId(savedCertificate.getId());
+                saved = completedExamRepository.save(saved);
+                
+                // Update result DTO
+                result.setCertificateId(savedCertificate.getId());
+            }
+        }
+        
+        return result;
     }
 
     // Method to retrieve all completed exams for a specific user
@@ -55,6 +102,8 @@ public class CompletedExamService {
         dto.setRequiredScore(completedExam.getRequiredScore());
         dto.setScore(completedExam.getScore());
         dto.setCompletedDate(completedExam.getCompletedDate());
+        dto.setCertificateId(completedExam.getCertificateId());
+        dto.setPassed(completedExam.isPassed());
 
         dto.setExamName(examRepository.findById(completedExam.getExamId())
         .map(exam -> exam.getExamTitle())
@@ -74,6 +123,7 @@ public class CompletedExamService {
         entity.setRequiredScore(dto.getRequiredScore());
         entity.setScore(dto.getScore());
         entity.setCompletedDate(dto.getCompletedDate());
+        entity.setCertificateId(dto.getCertificateId());
         return entity;
     }
     
