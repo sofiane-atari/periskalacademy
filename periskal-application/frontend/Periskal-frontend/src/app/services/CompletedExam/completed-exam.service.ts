@@ -1,73 +1,28 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, forkJoin, map, of, switchMap } from 'rxjs';
-import { CompletedExam } from '../../models/completed-exam.model';
-import { ExamService } from '../Exam/exam.service';
-import { TrainingService } from '../Training/training.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http'; 
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { CompletedExam } from '../../models/completed-exam.model'; 
 
 @Injectable({
   providedIn: 'root'
 })
 export class CompletedExamService {
-  private baseUrl = 'http://localhost:8080/api';
+  private baseUrl = 'http://localhost:8080/api/completed-exams';
 
   constructor(
-    private http: HttpClient,
-    private examService: ExamService,
-    private trainingService: TrainingService
+    private http: HttpClient
   ) {}
 
-  getUserCompletedExams(): Observable<CompletedExam[]> {
-    return this.http.get<CompletedExam[]>(`${this.baseUrl}/completed-exams/user`).pipe(
-      switchMap(exams => this.enhanceCompletedExams(exams))
-    );
+  getUserCompletedExams(userId: string): Observable<CompletedExam[]> {
+    
+    return this.http.get<CompletedExam[]>(`${this.baseUrl}/user/${userId}`);
   }
+
   
-
-  private enhanceCompletedExams(completedExams: CompletedExam[]): Observable<CompletedExam[]> {
-    if (completedExams.length === 0) {
-      return of([]);
-    }
-
-
-    const trainingIds = [...new Set(completedExams.map(exam => exam.trainingId))];
-    const examIds = [...new Set(completedExams.map(exam => exam.examId))];
-    
-
-    const trainingRequests = trainingIds.map(id => 
-      this.trainingService.getTrainingById(id).pipe(
-        map(training => ({ id, name: this.getTrainingName(training) }))
-      )
-    );
-    
-    const examRequests = examIds.map(id => 
-      this.examService.getExamById(id).pipe(
-        map(exam => ({ id, name: exam.examTitle }))
-      )
-    );
-    
-
-    return forkJoin([
-      forkJoin(trainingRequests),
-      forkJoin(examRequests)
-    ]).pipe(
-      map(([trainings, exams]) => {
-
-        const trainingMap = new Map(trainings.map(t => [t.id, t.name]));
-        const examMap = new Map(exams.map(e => [e.id, e.name]));
-        
-
-        return completedExams.map(completedExam => ({
-          ...completedExam,
-          examName: examMap.get(completedExam.examId) || 'Unknown Exam',
-          trainingName: trainingMap.get(completedExam.trainingId) || 'Unknown Training'
-        }));
-      })
-    );
+  saveCompletedExam(examData: CompletedExam): Observable<CompletedExam> {
+    return this.http.post<CompletedExam>(this.baseUrl, examData);
   }
+
   
-
-  private getTrainingName(training: any): string {
-    return training.nameEn || 'Unknown Training';
-  }
 }

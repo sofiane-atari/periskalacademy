@@ -5,6 +5,9 @@ import { ExamService } from '../../../services/Exam/exam.service';
 import { Exam } from '../../../models/exam.model';
 import { Question } from '../../../models/question.model';
 import { TranslatePipe } from '@ngx-translate/core';
+import { CompletedExam } from '../../../models/completed-exam.model';
+import { JwtDecoderService } from '../../../services/JwtDecode/jwt-decoder.service';
+import { CompletedExamService } from '../../../services/CompletedExam/completed-exam.service';
 
 @Component({
   selector: 'app-take-exam',
@@ -21,7 +24,9 @@ export class TakeExamComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private examService: ExamService,
-    private router: Router
+    private router: Router,
+    private jwtDecoderService :JwtDecoderService,
+    private completedExamService: CompletedExamService
   ) { }
 
   ngOnInit(): void {
@@ -96,6 +101,15 @@ export class TakeExamComponent implements OnInit {
       return;
     }
 
+    // ****** START DEBUGGING ******
+    console.log('Current exam object before submission:', JSON.stringify(this.exam, null, 2));
+    if (this.exam.trainingId === undefined || this.exam.trainingId === null) {
+      console.error('CRITICAL: this.exam.trainingId IS UNDEFINED OR NULL!');
+      alert('Error: Cannot submit exam. Training ID is missing from exam data. Please contact support.');
+      return; // Stop submission
+    }
+    // ****** END DEBUGGING ******
+
     let correctCount = 0
 
     this.exam.questions.forEach((question, index) => {
@@ -107,13 +121,33 @@ export class TakeExamComponent implements OnInit {
 
     const totalQuestions = this.exam.questions.length;
     const scorePercentage = Math.round((correctCount / totalQuestions) * 100);
+    const userId = this.jwtDecoderService.getId(); 
 
-    // tijdelijke popup voor Score te zien
-    alert(`Je score is: ${correctCount}/${totalQuestions} (${scorePercentage}%)`);
+ 
 
     // TODO
     // Score bewaren in db gelinkt aan user
-    console.log('Exam submitted');
-    this.router.navigate(['/exam-result']);
+    const completedExamData: Omit<CompletedExam, 'id'> = { 
+      userId: userId ?? 'unknown-user',
+      examId: this.exam.id ?? 0, 
+      trainingId: this.exam.trainingId, 
+      //requiredScore: this.exam.requiredScore, 
+      requiredScore: 100, // TODO: Set this to the actual required score
+      score: scorePercentage,
+      completedDate: new Date(),
+    };
+
+    //call service to save completed exam
+    this.completedExamService.saveCompletedExam(completedExamData as CompletedExam).subscribe({
+      next: (savedExam) => {
+        console.log('Exam submitted and results saved:', savedExam);
+        alert(`Your score is: ${correctCount}/${totalQuestions} (${scorePercentage}%).\nResults have been saved.`);
+        this.router.navigate(['/exams']); 
+      },
+      error: (err) => {
+        console.error('Failed to save completed exam:', err);
+        alert('Failed to save your results. Please try again later.');
+      }
+    });
   }
 }

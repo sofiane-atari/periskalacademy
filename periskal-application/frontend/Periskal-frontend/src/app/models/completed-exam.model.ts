@@ -7,7 +7,7 @@ export interface CompletedExam {
     score: number;
     completedDate: Date;
     
-    // These will be populated from related entities
+        
     examName?: string;
     trainingName?: string;
 }
