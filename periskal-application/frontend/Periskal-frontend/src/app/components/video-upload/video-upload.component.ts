@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-video-upload',
@@ -7,10 +7,10 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 })
 export class VideoUploadComponent {
   @ViewChild('videoPreview') videoPreview!: ElementRef<HTMLVideoElement>;
-  
+  @Output() videoSelected = new EventEmitter<File>();
+
   selectedFile: File | null = null;
   isDragOver = false;
-  savedVideos: {name: string, size: number, url: string}[] = [];
 
   onFileSelected(event: Event): void {
     const file = (event.target as HTMLInputElement).files?.[0];
@@ -40,36 +40,20 @@ export class VideoUploadComponent {
       return;
     }
 
-    if (file.size > 100 * 1024 * 1024) { // 100MB limiet
+    if (file.size > 100 * 1024 * 1024) {
       alert('Bestand is te groot (max 100MB)');
       return;
     }
 
     this.selectedFile = file;
-    
+
     const reader = new FileReader();
     reader.onload = (e) => {
       this.videoPreview.nativeElement.src = e.target?.result as string;
     };
     reader.readAsDataURL(file);
-  }
 
-  saveToLocal(): void {
-    if (!this.selectedFile) return;
-    
-    const videoUrl = URL.createObjectURL(this.selectedFile);
-    this.savedVideos.push({
-      name: this.selectedFile.name,
-      size: this.selectedFile.size,
-      url: videoUrl
-    });
-    
-    this.clearFile();
-  }
-
-  removeVideo(index: number): void {
-    URL.revokeObjectURL(this.savedVideos[index].url);
-    this.savedVideos.splice(index, 1);
+    this.videoSelected.emit(file);
   }
 
   clearFile(): void {

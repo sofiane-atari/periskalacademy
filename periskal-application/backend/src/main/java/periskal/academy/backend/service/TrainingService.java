@@ -106,6 +106,7 @@ public class TrainingService {
 
     @Transactional
     public Training createTraining(Training entity) {
+        System.out.println(entity);
         if (entity == null) {
             throw new ValidationException("Training data cannot be null.");
         }
@@ -119,6 +120,7 @@ public class TrainingService {
                 if (module.getChapters() != null) {
                     for (Chapter chapter : module.getChapters()) {
                         chapter.setModule(module);
+                        System.out.println(chapter.getVideoRemoteFilePath());
                         if (chapter.getPhotos() != null) {
                             for (Photo photo : chapter.getPhotos()) {
                                 photo.setChapter(chapter);

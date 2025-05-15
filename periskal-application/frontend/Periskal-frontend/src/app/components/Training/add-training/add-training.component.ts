@@ -41,6 +41,7 @@ export class AddTrainingComponent implements OnInit { // Implement OnInit
   moduleCollapsedState: { [lang: string]: { [moduleIndex: number]: boolean } } = {};
   chapterCollapsedState: { [lang: string]: { [moduleIndex: number]: { [chapterIndex: number]: boolean } } } = {};
   selectedLanguage: String = "";
+  isUploadingVideo: boolean = false;
 
   trainingForm!: FormGroup;
   languages = ['en', 'nl', 'fr', 'de'];
@@ -84,6 +85,7 @@ export class AddTrainingComponent implements OnInit { // Implement OnInit
       descriptionChapterEn: ['', Validators.required],
       textChapterEn: ['', Validators.required],
       photos: [[]],
+      videoRemoteFilePath: [''],
       nameChapterNl: ['', Validators.required],
       descriptionChapterNl: ['', Validators.required],
       textChapterNl: ['', Validators.required],
@@ -93,6 +95,34 @@ export class AddTrainingComponent implements OnInit { // Implement OnInit
       nameChapterDe: ['', Validators.required],
       descriptionChapterDe: ['', Validators.required],
       textChapterDe: ['', Validators.required],
+    });
+  }
+
+  onVideoSelected(moduleIndex: number, chapterIndex: number, file: File): void {
+    this.uploadVideoToFtp(moduleIndex, chapterIndex, file);
+  }
+
+  uploadVideoToFtp(moduleIndex: number, chapterIndex: number, videoFile: File): void {
+    this.isUploadingVideo = true;
+
+    this.trainingService.uploadVideo(videoFile).subscribe({
+      next: (response: any) => {
+        const filePath = response.filePath;
+
+        console.log('Upload response:', response);
+
+        this.getChapters(moduleIndex).at(chapterIndex).patchValue({ videoRemoteFilePath: filePath });
+
+        console.log('Video uploaded to FTP:', filePath);
+        this.isUploadingVideo = false;
+      },
+      error: (error: any) => {
+        console.error('Error uploading video:', error);
+        this.isUploadingVideo = false;
+      },
+      complete: () => {
+        console.log('Upload process completed');
+      }
     });
   }
 
@@ -124,6 +154,7 @@ export class AddTrainingComponent implements OnInit { // Implement OnInit
   postTraining(): void {
     if (this.trainingForm.valid) { // Removed checks for separate language forms
       const trainingData = this.trainingForm.value;
+      console.log(trainingData);
       const fileInput = this.trainingForm.get('image')?.value; // Assuming 'image' is a control somewhere
 
       // If there's a file, convert it to base64
