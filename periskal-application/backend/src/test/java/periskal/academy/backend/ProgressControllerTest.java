@@ -13,7 +13,10 @@ import periskal.academy.backend.controller.ProgressController;
 import periskal.academy.backend.dto.progress.ChapterCompletion;
 import periskal.academy.backend.dto.progress.ModuleProgressDTO;
 import periskal.academy.backend.dto.progress.TrainingProgressDTO;
+import periskal.academy.backend.security.exceptions.general.ResourceNotFoundException;
 import periskal.academy.backend.service.ProgressService;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -130,19 +133,21 @@ class ProgressControllerTest {
     }
 
     @Test
-    void whenGetTrainingProgress_withNonExistentProgress_thenReturnNotFound() {
+    void whenGetTrainingProgress_withNonExistentProgress_thenThrowsResourceNotFoundException() {
         
         // Arrange
         Long nonExistentTrainingId = 999L;
 
         when(progressService.getTrainingProgress(testUserId, nonExistentTrainingId)).thenReturn(null);
 
-        // Act
-        ResponseEntity<TrainingProgressDTO> response = progressController.getTrainingProgress(nonExistentTrainingId, testUserId);
-
-        // Assert
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND); 
-        assertThat(response.getBody()).isNull();
+        // Act & Assert
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
+            progressController.getTrainingProgress(nonExistentTrainingId, testUserId);
+        });
+        
+        // Assert exception message
+        assertThat(exception.getMessage()).contains("Progress not found for user " + testUserId);
+        assertThat(exception.getMessage()).contains("training " + nonExistentTrainingId);
 
         // Verify 
         verify(progressService).getTrainingProgress(testUserId, nonExistentTrainingId);
