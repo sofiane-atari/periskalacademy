@@ -1,0 +1,108 @@
+.certificates-container {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  max-width: 1200px;
+  margin: 20px auto;
+}
+
+h2 {
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 24px;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 10px;
+}
+
+.certificates-table-container {
+  overflow-x: auto;
+  margin-top: 20px;
+}
+
+.certificates-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.certificates-table th {
+  background-color: #f5f5f5;
+  color: #333;
+  font-weight: 600;
+  padding: 12px 15px;
+  border-bottom: 2px solid #ddd;
+  position: sticky;
+  top: 0;
+}
+
+.certificates-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #eee;
+  vertical-align: middle;
+}
+
+.certificates-table tr:hover {
+  background-color: #f9f9f9;
+}
+
+.download-button {
+  background-color: #4285f4;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+  min-width: 100px;
+}
+
+.download-button:hover:not(.disabled) {
+  background-color: #3367d6;
+}
+
+.download-button.disabled {
+  background-color: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
+}
+
+.loading-container {
+  text-align: center;
+  padding: 30px;
+  color: #666;
+  font-size: 16px;
+}
+
+.error-container {
+  padding: 15px;
+  margin: 15px 0;
+  background-color: #ffebee;
+  color: #d32f2f;
+  border-radius: 4px;
+  border-left: 4px solid #d32f2f;
+}
+
+.no-data {
+  text-align: center;
+  padding: 30px;
+  color: #777;
+  font-style: italic;
+}
+
+@media screen and (max-width: 768px) {
+  .certificates-table {
+    font-size: 14px;
+  }
+  
+  .certificates-table th,
+  .certificates-table td {
+    padding: 8px 10px;
+  }
+  
+  .download-button {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+}

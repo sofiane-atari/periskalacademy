@@ -55,20 +55,4 @@ export class ProfileComponent implements OnInit {
     this.activeTab = tab;
   }
 
-  logout() { 
-    this.authService.logout();
-    this.router.navigate(['/login']); // there is probably a better way to do this but this works for now
-  }
-
-  downloadCertificate() {
-    if (this.isDownloading) {
-      return;
-    }
-    this.isDownloading = true;
-
-    this.certificateService.downloadCertificate().pipe(finalize(() => this.isDownloading = false)).subscribe({
-      next: (blob: Blob) => {saveAs(blob, 'Certificate.pdf');},
-      error: (error) => {console.error('Download failed:', error);}
-    });
-  }
 }
