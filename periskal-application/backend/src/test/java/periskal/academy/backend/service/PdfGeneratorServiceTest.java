@@ -9,16 +9,16 @@ import static org.mockito.ArgumentMatchers.anyString;
 import org.mockito.MockedStatic;
 import static org.mockito.Mockito.mockStatic;
 
-import periskal.academy.backend.service.certificate.CertificateService;
+import periskal.academy.backend.service.certificate.PdfGeneratorService;
 import periskal.academy.backend.util.CertificateGeneratorUtil;
 
-class CertificateServiceTest {
+class PdfGeneratorServiceTest {
 
     @Test
     void createCertificate_callsUtil_andReturnsBytes() throws IOException {
 
         // arrange
-        CertificateService service = new CertificateService();
+        PdfGeneratorService service = new PdfGeneratorService();
         byte[] fakePdfBytes = new byte[] { 1, 2, 3 };
 
         try (MockedStatic<CertificateGeneratorUtil> mockedUtil = mockStatic(CertificateGeneratorUtil.class)) {

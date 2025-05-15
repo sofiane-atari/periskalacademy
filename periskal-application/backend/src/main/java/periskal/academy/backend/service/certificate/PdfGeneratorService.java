@@ -10,7 +10,7 @@ import periskal.academy.backend.util.CertificateGeneratorUtil;
 
 @Slf4j
 @Service
-public class CertificateService {
+public class PdfGeneratorService {
 
     public byte[] createCertificate() throws IOException {
         // Dummy Data, later to be replaced with actual data from the database or JWT

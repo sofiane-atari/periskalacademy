@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 import periskal.academy.backend.controller.CertificateController;
 import periskal.academy.backend.jpa.TrainingRepository;
-import periskal.academy.backend.service.certificate.CertificateService;
+import periskal.academy.backend.service.certificate.PdfGeneratorService;
 
 @WebMvcTest(controllers = CertificateController.class, excludeAutoConfiguration = { SecurityAutoConfiguration.class })
 class CertificateControllerTest {
@@ -26,7 +26,7 @@ class CertificateControllerTest {
     private MockMvc mockMvc;
 
     @MockitoBean
-    private CertificateService certificateService;
+    private PdfGeneratorService certificateService;
 
     @MockitoBean
     private TrainingRepository trainingRepository; // Mocked for completeness, not used in this test, Don't delete!
