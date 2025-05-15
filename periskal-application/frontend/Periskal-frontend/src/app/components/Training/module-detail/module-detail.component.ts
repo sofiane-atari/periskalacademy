@@ -11,10 +11,11 @@ import { Video } from '../../../models/video.model';
 import { ModuleProgress, TrainingProgress } from '../../../models/progress.model';
 import { JwtDecoderService } from '../../../services/JwtDecode/jwt-decoder.service';
 import { ProgressService } from '../../../services/Progress/progress.service';
+import { AddChapterComponent } from "../add-chapter/add-chapter.component";
 
 @Component({
   selector: 'app-training-detail',
-  imports: [TranslatePipe, CommonModule],
+  imports: [TranslatePipe, CommonModule, AddChapterComponent],
   templateUrl: './module-detail.component.html',
   styleUrl: './module-detail.component.css'
 })
@@ -37,9 +38,9 @@ export class ModuleDetailComponent {
   isCompletingChapter: boolean = false;
 
   constructor(
-    private route: ActivatedRoute, 
-    private trainingSvc: TrainingService, 
-    private router: Router, 
+    private route: ActivatedRoute,
+    private trainingSvc: TrainingService,
+    private router: Router,
     private cdr: ChangeDetectorRef,
     private jwtDecoderService: JwtDecoderService,
     private progressService: ProgressService) {
@@ -61,11 +62,11 @@ export class ModuleDetailComponent {
 
     // Get the user ID from the JWT token
     this.userId = this.jwtDecoderService.getId() ?? 'Error'; //replace this with a proper error handling later, same as trainingdetailcompnonenta
-    
-    
+
+
     this.loadTrainingData();
     this.loadProgressData();
-    
+
   }
 
   getChapterArray(chapters: any): any[] {
@@ -96,7 +97,7 @@ export class ModuleDetailComponent {
         console.log(this.chapters[1].nameChapterEn)
         console.log('Loaded chapters:', this.chapters);
         this.chapters.forEach((e) => this.updatedChapters.push(e));
-        
+
         if (this.chapters.length > 0) {
           this.activeChapterId = this.chapters[0].id; // Set to first chapter's ID
           this.cdr.detectChanges(); // Trigger change detection
@@ -121,8 +122,8 @@ export class ModuleDetailComponent {
   getChapterName(chapterId: number) {
     const chapter = this.chapters.find(ch => ch.id === chapterId);
     if (!chapter) return 'Chapter not found';
-    
-    switch(this.lang) {
+
+    switch (this.lang) {
       case 'en': return chapter.nameChapterEn || 'Unnamed chapter';
       case 'nl': return chapter.nameChapterNl || 'Naamloos hoofdstuk';
       case 'fr': return chapter.nameChapterFr || 'Chapitre sans nom';
@@ -132,23 +133,23 @@ export class ModuleDetailComponent {
   }
 
   getActiveChapterName() {
-  const chapter = this.getActiveChapter();
-  if (!chapter) return 'Loading...';
-  
-  switch(this.lang) {
-    case 'en': return chapter.nameChapterEn || 'Unnamed chapter';
-    case 'nl': return chapter.nameChapterNl || 'Naamloos hoofdstuk';
-    case 'fr': return chapter.nameChapterFr || 'Chapitre sans nom';
-    case 'de': return chapter.nameChapterDe || 'Unbenanntes Kapitel';
-    default: return chapter.nameChapterEn || 'Unknown language';
-  }
+    const chapter = this.getActiveChapter();
+    if (!chapter) return 'Loading...';
+
+    switch (this.lang) {
+      case 'en': return chapter.nameChapterEn || 'Unnamed chapter';
+      case 'nl': return chapter.nameChapterNl || 'Naamloos hoofdstuk';
+      case 'fr': return chapter.nameChapterFr || 'Chapitre sans nom';
+      case 'de': return chapter.nameChapterDe || 'Unbenanntes Kapitel';
+      default: return chapter.nameChapterEn || 'Unknown language';
+    }
   }
 
   getActiveChapterDescription() {
     const chapter = this.getActiveChapter();
     if (!chapter) return 'Loading...';
-    
-    switch(this.lang) {
+
+    switch (this.lang) {
       case 'en': return chapter.descriptionChapterEn || 'No description available';
       case 'nl': return chapter.descriptionChapterNl || 'Geen beschrijving beschikbaar';
       case 'fr': return chapter.descriptionChapterFr || 'Pas de description disponible';
@@ -159,8 +160,8 @@ export class ModuleDetailComponent {
   getActiveChapterContent(): string {
     const chapter = this.getActiveChapter();
     if (!chapter) return 'Loading content...';
-    
-    switch(this.lang) {
+
+    switch (this.lang) {
       case 'en': return this.formatText(chapter.textChapterEn);
       case 'nl': return this.formatText(chapter.textChapterNl);
       case 'fr': return this.formatText(chapter.textChapterFr);
@@ -180,7 +181,7 @@ export class ModuleDetailComponent {
     return currentIndex < this.chapters.length - 1 && this.chapters.length > 0;
   }
 
-  
+
   hasPreviousChapter(): boolean {
     const currentIndex = this.getCurrentChapterIndex();
     return currentIndex > 0 && this.chapters.length > 0;
@@ -195,7 +196,7 @@ export class ModuleDetailComponent {
     if (!video) return '';
     return `${video.filePath}/${video.storedName}`;
   }
-  
+
   goToPreviousChapter(): void {
     if (this.hasPreviousChapter()) {
       const currentIndex = this.getCurrentChapterIndex();
@@ -203,7 +204,7 @@ export class ModuleDetailComponent {
     }
   }
   getDisplayChapterNumber(): number {
-  return this.getCurrentChapterIndex() + 1; // Toon chapters vanaf 1 i.p.v. 0
+    return this.getCurrentChapterIndex() + 1; // Toon chapters vanaf 1 i.p.v. 0
   }
 
   // Method to check if a chapter is completed
@@ -219,11 +220,11 @@ export class ModuleDetailComponent {
     if (this.isCompletingChapter || this.isChapterCompleted(chapterId)) {
       return; // Prevent multiple clicks or completing already completed chapters
     }
-    
+
     this.isCompletingChapter = true;
 
-    
-    
+
+
     this.progressService.completeChapter(
       this.userId,
       this.trainingId,
@@ -232,14 +233,14 @@ export class ModuleDetailComponent {
     ).subscribe({
       next: (updatedProgress) => {
         this.trainingProgress = updatedProgress;
-        
+
         // Update the module progress
         if (this.trainingProgress && this.trainingProgress.moduleProgress) {
           this.moduleProgress = this.trainingProgress.moduleProgress.find(
             mp => mp.moduleId === this.moduleId
           );
         }
-        
+
         this.isCompletingChapter = false;
       },
       error: (error) => {
@@ -250,20 +251,20 @@ export class ModuleDetailComponent {
   }
 
   private loadProgressData(): void {
-  this.progressService.getTrainingProgress(this.userId, this.trainingId).subscribe({
-    next: (progressData) => {
-      this.trainingProgress = progressData;
-      
-      // Update the module progress
-      if (this.trainingProgress && this.trainingProgress.moduleProgress) {
-        this.moduleProgress = this.trainingProgress.moduleProgress.find(
-          mp => mp.moduleId === this.moduleId 
-        );
+    this.progressService.getTrainingProgress(this.userId, this.trainingId).subscribe({
+      next: (progressData) => {
+        this.trainingProgress = progressData;
+
+        // Update the module progress
+        if (this.trainingProgress && this.trainingProgress.moduleProgress) {
+          this.moduleProgress = this.trainingProgress.moduleProgress.find(
+            mp => mp.moduleId === this.moduleId
+          );
+        }
+      },
+      error: (error) => {
+        console.error('Error loading progress data', error);
       }
-    },
-    error: (error) => {
-      console.error('Error loading progress data', error);
-    }
     });
   }
 

@@ -16,6 +16,6 @@ export interface Chapter {
     descriptionChapterDe: String
     textChapterDe: string
     photos: Photo[]
-    video: Video
+    videoRemoteFilePath: string
     //todo: implement Photos_nl, Photos_fr and Photos_de
 }

@@ -94,18 +94,7 @@
         </div>
         
         <!-- Video Section -->
-        @if (getActiveChapter()?.video) {
-          <div class="video-container">
-            <video controls class="main-video">
-              <source 
-                [src]="getVideoUrl(getActiveChapter()!.video)" 
-                [type]="getActiveChapter()!.video.mimeType || 'video/mp4'">
-              Your browser does not support the video tag.
-            </video>
-            <div class="video-caption">{{ getActiveChapter()!.video.originalName }}</div>
-          </div>
-        }
-        
+        <!--implement-->
         
         <h5 class="section-title">{{"DESCRIPTION"}}</h5>
         <p class="section-text">{{ getActiveChapterDescription() }}</p>
