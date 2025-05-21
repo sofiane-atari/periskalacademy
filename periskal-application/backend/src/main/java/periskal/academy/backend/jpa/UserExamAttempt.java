@@ -17,8 +17,7 @@ public class UserExamAttempt {
 
     private String userId;
 
-    @ManyToOne
-    private Exam exam;
+    private String examId;
 
     private int totalAttempts;
     private int usedAttempts;

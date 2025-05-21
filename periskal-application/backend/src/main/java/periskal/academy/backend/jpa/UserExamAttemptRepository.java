@@ -9,9 +9,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserExamAttemptRepository extends CrudRepository<UserExamAttempt, Long> {
 
-    Optional<UserExamAttempt> findByUserIdAndExam(String userId, Exam exam);
+    Optional<UserExamAttempt> findByUserIdAndExamId(String userId, String examId);
 
     List<UserExamAttempt> findAllByUserId(String userId);
 
-    List<UserExamAttempt> findAllByExam(Exam exam);
+    List<UserExamAttempt> findAllByExamId(String exam);
 }

@@ -10,6 +10,7 @@ import { ProgressBarComponent } from '../../progress-bar/progress-bar.component'
 import { JwtDecoderService } from '../../../services/JwtDecode/jwt-decoder.service';
 import { UserAttemptService } from '../../../services/UserExamAttempts/user-attempt.service';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+import { HttpStatusCode } from '@angular/common/http';
 
 @Component({
   selector: 'app-training-detail',
@@ -67,16 +68,22 @@ export class TrainingDetailComponent {
     if (this.training?.exam?.id) {
       this.userAttemptSvc.startExam(this.training.exam.id, this.userId).subscribe({
         next: (response) => {
-          console.log('Exam started successfully:', response);
-          this.router.navigate(['/take-exam', this.training?.exam?.id]);
+          this.router.navigate(['/take-exam', this.training?.id]);
         },
         error: (err) => {
-          console.error(err);
-          this.goToBilling();
+          console.error('Error starting exam:', err);
+
+          // If 400 response, route to billing
+          if (err.status === 400) {
+            this.goToBilling();
+          } else {
+            alert('An unexpected error occurred.');
+          }
         }
       });
     }
   }
+
 
   goToBilling(): void {
     this.router.navigate(['/billing', this.training?.exam?.id]);

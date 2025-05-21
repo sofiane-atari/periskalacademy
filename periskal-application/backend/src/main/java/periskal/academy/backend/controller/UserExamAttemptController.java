@@ -1,5 +1,7 @@
 package periskal.academy.backend.controller;
 
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,14 +24,17 @@ public class UserExamAttemptController {
     }
 
     @PostMapping("/{userId}/{examId}/start")
-    public ResponseEntity<String> startExam(
+    public ResponseEntity<Map<String, String>> startExam(
             @PathVariable String userId,
-            @PathVariable Long examId) {
+            @PathVariable String examId) {
         boolean success = userExamAttemptController.consumeAttempt(userId, examId);
         if (success) {
-            return ResponseEntity.ok("Exam started.");
+            return ResponseEntity.ok(Map.of("message", "Exam started."));
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No remaining attempts.");
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "No remaining attempts."));
+
         }
     }
 }

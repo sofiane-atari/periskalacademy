@@ -1,9 +1,9 @@
 package periskal.academy.backend.service;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
-import periskal.academy.backend.jpa.Exam;
-import periskal.academy.backend.jpa.ExamRepository;
 import periskal.academy.backend.jpa.UserExamAttempt;
 import periskal.academy.backend.jpa.UserExamAttemptRepository;
 
@@ -11,25 +11,27 @@ import periskal.academy.backend.jpa.UserExamAttemptRepository;
 public class UserExamAttemptService {
 
     private final UserExamAttemptRepository userExamAttemptRepository;
-    private final ExamRepository examRepository;
 
-    public UserExamAttemptService(UserExamAttemptRepository userExamAttemptRepository, ExamRepository examRepository) {
+    public UserExamAttemptService(UserExamAttemptRepository userExamAttemptRepository) {
         this.userExamAttemptRepository = userExamAttemptRepository;
-        this.examRepository = examRepository;
     }
 
-    public boolean consumeAttempt(String userId, Long examId) {
-        Exam exam = examRepository.findById(examId)
-                .orElseThrow(() -> new RuntimeException("Exam not found"));
+    public boolean consumeAttempt(String userId, String examId) {
+        Optional<UserExamAttempt> optionalAttempt = userExamAttemptRepository.findByUserIdAndExamId(userId, examId);
 
-        UserExamAttempt attempt = userExamAttemptRepository.findByUserIdAndExam(userId, exam)
-                .orElseThrow(() -> new RuntimeException("No exam attempts found."));
-
-        if (!attempt.hasAttemptsLeft())
+        if (optionalAttempt.isEmpty()) {
             return false;
+        }
+
+        UserExamAttempt attempt = optionalAttempt.get();
+
+        if (!attempt.hasAttemptsLeft()) {
+            return false;
+        }
 
         attempt.useAttempt();
-        userExamAttemptRepository.save(attempt);
+        UserExamAttempt saved = userExamAttemptRepository.save(attempt);
+        saved.useAttempt();
         return true;
     }
 

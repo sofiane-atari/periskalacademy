@@ -20,11 +20,12 @@ public class Billing {
     private String companyName;
     private String countryCode;
     private String email;
-    private int examId;
+    private String examId;
     private String fullName;
     private String state;
     private String tax;
     private String zipCode;
     private String userId;
+    private int examAttempts;
 
 }

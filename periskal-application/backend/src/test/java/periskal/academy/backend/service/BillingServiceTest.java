@@ -34,7 +34,7 @@ public class BillingServiceTest {
         testBillingEntity = new Billing();
         testBillingEntity.setId(1L);
         testBillingEntity.setFullName("Test Customer");
-        testBillingEntity.setExamId(1);
+        testBillingEntity.setExamId("1");
         testBillingEntity.setAddress("test");
         testBillingEntity.setEmail("hallo@test.be");
         testBillingEntity.setTax("120213456");
