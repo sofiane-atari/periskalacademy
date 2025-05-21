@@ -17,17 +17,17 @@ import periskal.academy.backend.service.UserExamAttemptService;
 @Slf4j
 public class UserExamAttemptController {
 
-    private final UserExamAttemptService userExamAttemptController;
+    private final UserExamAttemptService userExamAttemptService;
 
-    public UserExamAttemptController(UserExamAttemptService userExamAttemptController) {
-        this.userExamAttemptController = userExamAttemptController;
+    public UserExamAttemptController(UserExamAttemptService userExamAttemptService) {
+        this.userExamAttemptService = userExamAttemptService;
     }
 
     @PostMapping("/{userId}/{examId}/start")
     public ResponseEntity<Map<String, String>> startExam(
             @PathVariable String userId,
             @PathVariable String examId) {
-        boolean success = userExamAttemptController.consumeAttempt(userId, examId);
+        boolean success = userExamAttemptService.consumeAttempt(userId, examId);
         if (success) {
             return ResponseEntity.ok(Map.of("message", "Exam started."));
         } else {

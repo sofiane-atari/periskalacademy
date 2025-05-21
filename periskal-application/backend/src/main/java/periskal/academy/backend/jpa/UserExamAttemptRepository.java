@@ -11,6 +11,8 @@ public interface UserExamAttemptRepository extends CrudRepository<UserExamAttemp
 
     Optional<UserExamAttempt> findByUserIdAndExamId(String userId, String examId);
 
+    List<UserExamAttempt> findAllByUserIdAndExamId(String userId, String examId);
+
     List<UserExamAttempt> findAllByUserId(String userId);
 
     List<UserExamAttempt> findAllByExamId(String exam);

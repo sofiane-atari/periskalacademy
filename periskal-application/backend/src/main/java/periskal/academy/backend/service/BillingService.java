@@ -27,7 +27,7 @@ public class BillingService {
         UserExamAttempt newUserExamAttempt = new UserExamAttempt();
         newUserExamAttempt.setExamId(entity.getExamId());
         newUserExamAttempt.setTotalAttempts(entity.getExamAttempts());
-        newUserExamAttempt.setUsedAttempts(0);
+        newUserExamAttempt.setUsedAttempts(1);
         newUserExamAttempt.setUserId(entity.getUserId());
         userExamAttemptRepository.save(newUserExamAttempt);
         return "ok";
