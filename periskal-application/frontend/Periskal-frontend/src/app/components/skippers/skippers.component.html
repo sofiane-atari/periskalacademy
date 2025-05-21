@@ -1,21 +1,46 @@
 <div class="skippers-container">
   <h1>Skippers</h1>
 
+  <div class="actions">
+    <button 
+      class="assign-btn" (click)="openAssignmentDialog()" [disabled]="mainListSelectedSkipperIds.length === 0">Assign Training to Selected ({{ mainListSelectedSkipperIds.length }})
+    </button>
+    <button
+      class="clear-btn" (click)="clearSkipperSelections()" [disabled]="mainListSelectedSkipperIds.length === 0">Clear Selections
+    </button>
+  </div>
+
+  @if (error && !assignmentDialogOpen) { 
+    <p class="error-message main-error">{{ error }}</p>
+  }
+
   <div class="skippers-list">
     @for (skipper of skippers; track skipper.id; let i = $index) {
       <div
           class="skipper-item"
           [class.active]="selectedSkipperIndex === i"
-          (click)="toggleSkipperDetails(i)">
-        <div class="skipper-basic-info">
-          <h3>{{ skipper.username }}</h3>
-          <p class="shipname">{{ skipper.shipname }}</p>
-          <div class="products">
-            @for (product of skipper.products; track product) {
-              <span class="product-badge">
-                {{ product }}
-              </span>
-            }
+          [class.selected-for-assignment]="isSkipperSelected(skipper.id)">
+        <div class="skipper-selection">
+          <input
+            type="checkbox"
+            [id]="'select-skipper-' + skipper.id"
+            [checked]="isSkipperSelected(skipper.id)"
+            (change)="toggleSkipperSelection(skipper.id, $event)"
+            (click)="$event.stopPropagation()" /> 
+          <label [for]="'select-skipper-' + skipper.id" (click)="$event.stopPropagation()"></label> 
+        </div>
+
+        <div class="skipper-info-clickable" (click)="toggleSkipperDetails(i)">
+          <div class="skipper-basic-info">
+            <h3>{{ skipper.username }}</h3>
+            <p class="shipname">{{ skipper.shipname }}</p>
+            <div class="products">
+              @for (product of skipper.products; track product) {
+                <span class="product-badge">
+                  {{ product }}
+                </span>
+              }
+            </div>
           </div>
         </div>
 
@@ -84,4 +109,52 @@
       <p class="no-data">No skippers available.</p>
     }
   </div>
+
+  @if(assignmentDialogOpen) {
+  <div class="modal-overlay" >
+  <div class="assignment-modal">
+    <h2>Assign Training to Skippers</h2>
+
+    @if (selectedSkipperIds.length > 0) {
+      <div class="selected-skippers">
+        <h3>Selected Skippers ({{ selectedSkipperIds.length }})</h3>
+        <ul>
+          @for (id of selectedSkipperIds; track id) {
+            <li>{{ getSkipperName(id) }}</li>
+          }
+        </ul>
+      </div>
+    }
+
+    <div class="training-selection">
+      <h3>Select Training</h3>
+      <select [(ngModel)]="selectedTrainingId">
+        <option [ngValue]="null" disabled>Select a training...</option>
+        @for (training of availableTrainings; track training.id) {
+          <option [value]="training.id">
+            {{ training.nameEn }}
+          </option>
+        }
+      </select>
+      @if (!availableTrainings || availableTrainings.length === 0) {
+            <p class="no-data">No trainings available to assign.</p>
+        }
+    </div>
+
+    @if (error && assignmentDialogOpen) {
+        <p class="error-message modal-error">{{ error }}</p>
+      }
+
+    <div class="actions modal-actions">
+      <button 
+        (click)="saveAssignment()" 
+        [disabled]="!selectedTrainingId || selectedSkipperIds.length === 0">
+        Save Assignments
+      </button>
+      <button class="cancel-btn" (click)="closeAssignmentDialog()">Cancel</button>
+    </div>
+  </div>
 </div>
+}
+
+

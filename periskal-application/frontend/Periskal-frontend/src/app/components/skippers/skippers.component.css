@@ -25,11 +25,13 @@ h1 {
     gap: 16px;
 }
 
-.skipper-item {
+.skipper-item { 
+    display: flex; 
+    align-items: flex-start; 
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     overflow: hidden;
-    cursor: pointer;
+    cursor: default; 
     transition: all 0.3s ease;
 }
 
@@ -53,7 +55,7 @@ h1 {
     color: #2c3e50;
 }
 
-.username {
+.shipname  {
     margin: 0 0 12px 0;
     color: #7f8c8d;
     font-size: 14px;
@@ -95,30 +97,117 @@ h1 {
     font-weight: 600;
     min-width: 80px;
     color: #34495e;
+    margin-right: 8px;
 }
 
 .detail-value {
     color: #2c3e50;
 }
 
+.skipper-details h4 {
+  margin-top: 15px;
+  margin-bottom: 10px;
+  color: #34495e;
+  font-size: 1.1em;
+}
+
+.details-divider {
+  margin-top: 16px;
+  margin-bottom: 16px;
+  border: 0;
+  border-top: 1px solid #e0e0e0;
+}
+
+.loading-indicator,
+.no-data {
+  padding: 10px;
+  text-align: center;
+  margin-top: 10px;
+  color: #555; 
+}
+
+
+.error-message { 
+  color: #D8000C;
+  background-color: #FFD2D2;
+  border: 1px solid #D8000C;
+  border-radius: 4px;
+
+}
+
+.trainings-list {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.training-item {
+  background-color: #f9f9f9;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #eaeaea;
+}
+
+.training-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.training-name {
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.progress-badge {
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.8em;
+  font-weight: bold;
+  color: white;
+  min-width: 80px;
+  text-align: center;
+}
+
+.progress-badge.loading { background-color: #f39c12; }
+.progress-badge.error { background-color: #e74c3c; }
+.progress-badge.not-started { background-color: #95a5a6; }
+.progress-badge.in-progress { background-color: #3498db; }
+.progress-badge.complete { background-color: #2ecc71; }
+
+.module-progress-list {
+  margin-top: 8px;
+  padding-left: 15px;
+  font-size: 0.9em;
+}
+.module-progress-item {
+  color: #555;
+  padding: 2px 0;
+}
+
+
 /* Responsive Styles */
 @media (max-width: 768px) {
     .skippers-container {
         padding: 16px;
     }
-    
+
     .skipper-basic-info,
     .skipper-details {
         padding: 12px;
     }
-    
+
     .detail-row {
         flex-direction: column;
         margin-bottom: 12px;
     }
-    
+
     .detail-label {
         margin-bottom: 4px;
+        min-width: auto; 
     }
 }
 
@@ -126,133 +215,321 @@ h1 {
     .skippers-container {
         padding: 12px;
     }
-    
+
     h1 {
         font-size: 24px;
         margin-bottom: 20px;
     }
-    
+
     .skipper-basic-info h3 {
         font-size: 18px;
     }
-    
+
     .products {
         margin-top: 8px;
     }
-    
+
     .product-badge {
         font-size: 11px;
         padding: 3px 6px;
     }
 
-  .skipper-details h4 {
-    margin-top: 15px;
-    margin-bottom: 10px;
-    color: #34495e; 
-    font-size: 1.1em;
-  }
-
-  .details-divider {
-    margin-top: 16px;
-    margin-bottom: 16px;
-    border: 0;
-    border-top: 1px solid #e0e0e0;
-  }
-
-  .loading-indicator,
-  .error-message,
-  .no-data {
-    padding: 10px;
-    text-align: center;
-    margin-top: 10px;
-  }
-
-  .loading-indicator {
-    color: #555;
-  }
-
-  .error-message {
-    color: #D8000C; 
-    background-color: #FFD2D2; 
-    border: 1px solid #D8000C;
-    border-radius: 4px;
-  }
-
-  .trainings-list {
-    margin-top: 10px;
-    display: flex;
+  .training-info { 
     flex-direction: column;
-    gap: 8px;
+    align-items: flex-start;
   }
-
-  .training-item {
-    background-color: #f9f9f9;
-    padding: 10px 12px;
-    border-radius: 6px;
-    border: 1px solid #eaeaea;
-  }
-
-  .training-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px; 
-  }
-
-  .training-name {
-    font-weight: 500;
-    color: #2c3e50;
-  }
-
-  .progress-badge {
-    padding: 3px 10px;
-    border-radius: 12px;
-    font-size: 0.8em;
-    font-weight: bold;
-    color: white;
-    min-width: 80px; 
-    text-align: center;
-  }
-
-  .progress-badge.loading {
-    background-color: #f39c12; 
-  }
-
-  .progress-badge.error {
-    background-color: #e74c3c; 
-  }
-
-  .progress-badge.not-started {
-    background-color: #95a5a6; 
-  }
-
-  .progress-badge.in-progress {
-    background-color: #3498db; 
-  }
-
-  .progress-badge.complete {
-    background-color: #2ecc71; 
-  }
-
-  .module-progress-list {
-    margin-top: 8px;
-    padding-left: 15px;
-    font-size: 0.9em;
-  }
-  .module-progress-item {
-    color: #555;
-    padding: 2px 0;
-  }
-
-  @media (max-width: 480px) {
-    .training-info {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-    .progress-badge {
-      margin-top: 5px;
-    }
+  .progress-badge { 
+    margin-top: 5px;
+    align-self: flex-start; 
   }
 
 }
+
+
+/* Action Buttons (Top Bar) */
+.actions {
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.actions button {
+  padding: 8px 15px;
+  border: 1px solid #ccc;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.actions button:disabled {
+  background-color: #e9ecef;
+  color: #adb5bd;
+  cursor: not-allowed;
+  border-color: #ced4da;
+}
+
+.actions .assign-btn {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+.actions .assign-btn:hover:not(:disabled) {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+.actions .clear-btn {
+  background-color: #6c757d;
+  color: white;
+  border-color: #6c757d;
+}
+.actions .clear-btn:hover:not(:disabled) {
+  background-color: #5a6268;
+  border-color: #545b62;
+}
+
+/* Main Error Message Styling (Below Action Bar) */
+.error-message.main-error {
+  color: #D8000C;
+  background-color: #FFD2D2;
+  border: 1px solid #D8000C;
+  border-radius: 4px;
+  padding: 10px 15px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+/* Skipper Item Selection Enhancements */
+.skipper-item.selected-for-assignment {
+  background-color: #e6f7ff;
+  border-left: 4px solid #007bff;
+}
+.skipper-item.selected-for-assignment.active {
+    border-color: #007bff;
+}
+
+/* Adjust background of basic info and details when selected */
+.skipper-item.selected-for-assignment .skipper-basic-info {
+    background-color: transparent; /* Or a slightly tinted version like #f0f8ff */
+}
+.skipper-item.selected-for-assignment .skipper-details {
+    background-color: #f5faff; /* Slightly different background for details when selected */
+}
+
+
+/* Checkbox Container within Skipper Item */
+.skipper-selection {
+  padding: 16px 0px 16px 16px; /* Align with skipper-basic-info padding */
+  display: flex;
+  align-items: center;
+}
+
+.skipper-selection input[type="checkbox"] {
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+  margin-right: 8px; /* If you had a label text directly next to it */
+}
+
+/* Clickable Area for Skipper Details */
+.skipper-info-clickable {
+    flex-grow: 1;
+    cursor: pointer;
+}
+
+/* Specific Error Message Styling within Skipper Details */
+.skipper-details .error-message {
+  padding: 10px 15px;
+  text-align: center;
+  margin-top: 10px;
+  /* color, background-color, border, border-radius are inherited from general .error-message */
+}
+
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px; /* For small screens so modal doesn't touch edges */
+}
+
+.assignment-modal {
+  background: white;
+  padding: 25px 30px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  width: 100%;
+  max-width: 550px;
+  z-index: 1001;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.assignment-modal h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #2c3e50;
+  font-size: 1.5em;
+  text-align: left;
+}
+
+.assignment-modal .selected-skippers {
+  margin-bottom: 20px;
+  max-height: 150px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  padding: 10px 15px;
+  border-radius: 4px;
+  background-color: #f8f9fa;
+}
+.assignment-modal .selected-skippers h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+    color: #34495e;
+}
+.assignment-modal .selected-skippers ul {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+.assignment-modal .selected-skippers li {
+    padding: 4px 0;
+    border-bottom: 1px solid #eee;
+}
+.assignment-modal .selected-skippers li:last-child {
+    border-bottom: none;
+}
+
+.assignment-modal .training-selection {
+  margin-bottom: 25px;
+}
+.assignment-modal .training-selection h3 {
+    font-size: 1.1em;
+    margin-bottom: 8px;
+    color: #34495e;
+}
+.assignment-modal .training-selection select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background-color: white;
+  font-size: 1em;
+}
+.assignment-modal .training-selection select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+.assignment-modal .actions.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.assignment-modal .actions.modal-actions button {
+  padding: 10px 20px;
+  font-size: 1em;
+}
+.assignment-modal .actions.modal-actions .save-btn {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+.assignment-modal .actions.modal-actions .save-btn:hover:not(:disabled) {
+    background-color: #0056b3;
+}
+.assignment-modal .actions.modal-actions .cancel-btn {
+    background-color: #6c757d;
+    color: white;
+    border-color: #6c757d;
+}
+.assignment-modal .actions.modal-actions .cancel-btn:hover:not(:disabled) {
+    background-color: #5a6268;
+}
+.assignment-modal .actions.modal-actions button:disabled {
+    background-color: #e9ecef;
+    color: #adb5bd;
+    border-color: #ced4da;
+}
+
+.assignment-modal .error-message.modal-error {
+  margin-top: 15px;
+  color: #D8000C;
+  font-size: 0.9em;
+  background-color: #FFD2D2;
+  border: 1px solid #D8000C;
+  border-radius: 4px;
+  padding: 8px 12px;
+  text-align: left;
+}
+.assignment-modal .no-data {
+    font-size: 0.9em;
+    color: #777;
+    padding: 8px 0;
+}
+
+/* Additional Responsive Adjustments for New Elements */
+@media (max-width: 768px) {
+    /* Action buttons stacking */
+    .actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .actions button {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+    .actions button:last-child {
+        margin-bottom: 0;
+    }
+
+    /* Checkbox padding on smaller screens */
+    .skipper-selection {
+        padding: 12px 0px 12px 12px;
+    }
+
+    /* Modal adjustments */
+    .assignment-modal {
+        padding: 20px;
+    }
+    .assignment-modal h2 {
+        font-size: 1.3em;
+    }
+    .assignment-modal .actions.modal-actions {
+        flex-direction: column-reverse;
+    }
+    .assignment-modal .actions.modal-actions button {
+        width: 100%;
+    }
+     .assignment-modal .actions.modal-actions button:not(:last-child) {
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Modal adjustments for very small screens */
+    .assignment-modal .selected-skippers {
+        max-height: 120px;
+    }
+    .assignment-modal .actions.modal-actions button {
+        padding: 10px 15px;
+    }
+}
+

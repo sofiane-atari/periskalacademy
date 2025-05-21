@@ -1,4 +1,4 @@
-package periskal.academy.backend;
+package periskal.academy.backend.service;
 
 import java.util.Arrays;
 import java.util.Collections;

@@ -8,11 +8,15 @@ import { Training } from '../../../models/training.model';
 import { Exam } from '../../../models/exam.model';
 import { ExamService } from '../../../services/Exam/exam.service';
 import { catchError, of } from 'rxjs';
+import { DisplayTraining } from '../../../models/display-training.model';
+import { TrainingAssignment } from '../../../models/training-assignment.model';
+import { TrainingAssignmentService } from '../../../services/Assignment/training-assignment.service';
+import { DatePipe } from '@angular/common';
 
 
 @Component({
   selector: 'app-training-employee',
-  imports: [TranslatePipe],
+  imports: [TranslatePipe,DatePipe],
   templateUrl: './training-employee.component.html',
   styleUrl: './training-employee.component.css'
 })
@@ -31,28 +35,108 @@ export class TrainingEmployeeComponent implements OnInit {
     private examService: ExamService,
     private trainingSvc: TrainingService,
     private jwtDecoderService: JwtDecoderService,
-    public roleAuth: RoleAuthorizationService
+    public roleAuth: RoleAuthorizationService,
+    private assignmentService: TrainingAssignmentService
   ) { }
 
+  public allTrainingsData: DisplayTraining[] = [];
+  public fleetManagerAssignedTrainings: DisplayTraining[] = [];
+  private userRawAssignments: TrainingAssignment[] = []; 
+  public isLoadingData = true;
 
   ngOnInit(): void {
     this.lang = localStorage.getItem('lang');
-    this.loadTrainings();
+    this.loadUserAssignments();
   }
-  loadTrainings(): void {
+
+  // Step 1: Load User's Assignments 
+  loadUserAssignments(): void {
+    this.isLoadingData = true;
+    this.loadingError = null;
+    const skipperId = this.jwtDecoderService.getId();
+
+    if (!skipperId) {
+      console.error("Skipper ID not found. Cannot load assignments.");
+      this.loadingError = "User ID not found, cannot load assignments.";
+      this.loadAllAvailableTrainings();
+      return;
+    }
+
+    this.assignmentService.getSkipperAssignments(skipperId).pipe(
+      catchError(err => {
+        console.error('Error fetching user assignments', err);
+        this.loadingError = "Failed to load your assignments.";
+        return of([] as TrainingAssignment[]); 
+      })
+    ).subscribe(assignments => {
+      this.userRawAssignments = assignments;
+      this.loadAllAvailableTrainings();
+    });
+  }
+
+  // Step 2: load all available trainings
+  loadAllAvailableTrainings(): void {
+    
     const role = this.jwtDecoderService.getUserRole() || "noRole";
     const products: string[] = this.jwtDecoderService.getProducts() || [];
 
     this.trainingSvc.getFilteredTrainingData(role, products).subscribe({
       next: (data: Training[]) => {
         this.trainingsData = data;
+        this.processLoadedData(this.trainingsData, this.userRawAssignments);
         this.loadExamsForTrainings();
+        this.isLoadingData = false;
       },
       error: (error) => {
         console.error('Error fetching trainings', error);
       }
     });
   }
+
+  // Step 3: Process and combine the data
+  processLoadedData(availableTrainings: Training[], assignments: TrainingAssignment[]): void {
+    
+    const assignmentMap = new Map<number, TrainingAssignment>();
+    assignments.forEach(assignment => {
+      assignmentMap.set(assignment.trainingId, assignment);
+    });
+
+    // Populate fleetManagerAssignedTrainings (for the top list)
+    this.fleetManagerAssignedTrainings = [];
+    assignments.forEach(assignment => {
+      const assignedTrainingDetails = availableTrainings.find(t => t.id === assignment.trainingId);
+      if (assignedTrainingDetails) {
+        this.fleetManagerAssignedTrainings.push({
+          ...assignedTrainingDetails,
+          isAssigned: true, 
+          assignedDate: assignment.assignedDate
+        });
+      } else {
+        // This assignment refers to a training not in the current user's 'availableTrainings', got assigned a training he doesn't have access to, how to handle this?
+        // For now, just log a warning
+        console.warn(`Assigned training ID ${assignment.trainingId} details not found in available trainings list.`);
+      }
+      });
+    // Populate allTrainingsData (for the main grid)
+    this.allTrainingsData = availableTrainings.map(training => {
+      const assignment = assignmentMap.get(training.id);
+      return {
+        ...training,
+        isAssigned: !!assignment,
+        assignedDate: assignment ? assignment.assignedDate : null
+      };
+    });
+    
+    
+
+    // sort the assigned trainings by date
+    this.fleetManagerAssignedTrainings.sort((a, b) => {
+        const dateA = a.assignedDate ? new Date(a.assignedDate).getTime() : 0;
+        const dateB = b.assignedDate ? new Date(b.assignedDate).getTime() : 0;
+        return dateB - dateA; 
+    });
+  }
+
   loadExamsForTrainings(): void {
     this.isLoadingExams = true;
 
@@ -85,6 +169,7 @@ export class TrainingEmployeeComponent implements OnInit {
       this.router.navigate(['/take-exam', exam.id]);
     }
   }
+
   goToTrainingDetails(trainingId: number) {
     this.router.navigate(['/training', trainingId]);
   }
@@ -122,6 +207,7 @@ export class TrainingEmployeeComponent implements OnInit {
       return "Unknown language"
     }
   }
+
   toggleMenuEdit(trainingId: number) {
     // Sluit alle andere open dropdowns
     Object.keys(this.openMenus).forEach(key => {
@@ -138,18 +224,22 @@ export class TrainingEmployeeComponent implements OnInit {
   goToAddTrainingPage() {
     this.router.navigate(['/add-training'])
   }
+
   goToEditTrainingPage(trainingId: number) {
     this.router.navigate(['/edit', trainingId])
   }
+
   goToAddExamPage() {
     this.router.navigate(['/add-exam'])
   }
+
   goToEditExamPage(trainingId: number) {
     const exam = this.examsMap.get(trainingId);
     if (exam) {
       this.router.navigate(['/update-exam', exam.id]);
     }
   }
+
   getCountModules(trainingId: number): number {
     return this.trainingsData.find(t => t.id === trainingId)?.modules?.length ?? 0;
   }

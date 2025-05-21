@@ -1,4 +1,4 @@
-package periskal.academy.backend;
+package periskal.academy.backend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -83,16 +83,16 @@ class CompletedExamControllerTest {
 
     @Test
     void givenUserIdWithCompletedExams_whenGetUserCompletedExams_thenReturnsOkWithListOfExams() throws Exception {
-        // Given
+        // Arrange
         String userId = "user123";
         List<CompletedExamDTO> expectedExams = Arrays.asList(completedExamDTO1, completedExamDTO2);
         given(completedExamService.getCompletedExamsByUserId(userId)).willReturn(expectedExams);
 
-        // When
+        // Act
         ResultActions response = mockMvc.perform(get("/api/completed-exams/user/{userId}", userId)
                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON));
 
-        // Then
+        // Assert
         response.andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -108,15 +108,15 @@ class CompletedExamControllerTest {
 
     @Test
     void givenUserIdWithNoCompletedExams_whenGetUserCompletedExams_thenReturnsOkWithEmptyList() throws Exception {
-        // Given
+        // Arrange
         String userId = "user-no-exams";
         given(completedExamService.getCompletedExamsByUserId(userId)).willReturn(Collections.emptyList());
 
-        // When
+        // Act
         ResultActions response = mockMvc.perform(get("/api/completed-exams/user/{userId}", userId)
                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON));
 
-        // Then
+        // Assert
         response.andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(0)));
@@ -126,7 +126,7 @@ class CompletedExamControllerTest {
 
     @Test
     void givenCompletedExamDTO_whenSaveCompletedExam_thenReturnsOkWithSavedExamDTO() throws Exception {
-        // Given
+        // Arrange
         CompletedExamDTO inputDTO = new CompletedExamDTO(); 
         inputDTO.setUserId("newUser");
         inputDTO.setTrainingId(30L);
@@ -148,12 +148,12 @@ class CompletedExamControllerTest {
 
         given(completedExamService.saveCompletedExam(any(CompletedExamDTO.class))).willReturn(savedDTO);
 
-        // When
+        // Act
         ResultActions response = mockMvc.perform(post("/api/completed-exams")
                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(inputDTO))); 
 
-        // Then
+        // Assert
         response.andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(savedDTO.getId().intValue())))

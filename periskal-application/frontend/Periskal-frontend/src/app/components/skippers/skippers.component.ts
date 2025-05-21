@@ -9,30 +9,42 @@ import { TrainingWithProgress } from '../../models/TrainingWithProgress.model';
 import { SkipperDisplay } from '../../models/SkipperDisplay.model';
 import { Training } from '../../models/training.model';
 import { catchError, forkJoin, map, of, switchMap } from 'rxjs';
+import { JwtDecoderService } from '../../services/JwtDecode/jwt-decoder.service';
+import { TrainingAssignmentService } from '../../services/Assignment/training-assignment.service';
+import { FormsModule } from '@angular/forms';
 
 
 @Component({
   selector: 'app-skippers',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   providers: [],
   templateUrl: './skippers.component.html',
   styleUrls: ['./skippers.component.css']
 })
 export class SkippersComponent implements OnInit {
-  skip: Skipper[] = [];
   skippers: SkipperDisplay[] = [];
   selectedSkipperIndex: number | null = null;
   error: string | null = null;
+
+  selectedTrainingId: number | null = null;
+  selectedSkipperIds: string[] = [];
+  availableTrainings: Training[] = [];
+  assignmentDialogOpen: boolean = false;
+
+  mainListSelectedSkipperIds: string[] = [];
 
   constructor(
     private skipperService: SkipperService,
     private trainingService: TrainingService,
     private progressService: ProgressService,
+    private assignmentService: TrainingAssignmentService,
+    private jwtDecoder: JwtDecoderService,
   ) {}
 
-  ngOnInit() {
+  ngOnInit() {  
     this.fetchSkippersData();
+    this.mainListSelectedSkipperIds = [];
   }
 
   fetchSkippersData() {
@@ -128,4 +140,99 @@ export class SkippersComponent implements OnInit {
       },
     });
   }
+
+  // Assignment Methods
+
+  saveAssignment() {
+
+    const fleetmanagerId = this.jwtDecoder.getId();
+
+    if (fleetmanagerId === null) {
+      console.error('Fleetmanager ID is null');
+      this.error = 'Failed to retrieve fleetmanager ID.';
+      return;}
+
+    if(this.selectedTrainingId === null) {
+      console.error('No training selected'); 
+      this.error = 'Please select a training to assign.';
+      return; }
+
+    this.assignmentService.assignTrainingToSkippers(
+      this.selectedTrainingId,
+      this.selectedSkipperIds,
+      fleetmanagerId
+    ).subscribe({
+      next: (response) => {
+        console.log('Assignment successful:', response);
+        this.assignmentDialogOpen = false;
+        this.fetchSkippersData(); // Refresh skippers data after assignment
+      },
+      error: (error) => {
+        console.error('Error during assignment:', error);
+        this.error = 'Failed to assign training. Please try again later.';
+      }
+    });
+  }
+
+  loadAvailableTrainings() { // TODO add a way to only load trainings that are ready, Add a Active button to the training that admins can click to set the training to active or inactive
+                             // Create a new endpoint in the backend to get all trainings that are active and then use that here.
+
+    this.trainingService.getTrainingData().subscribe({
+      next: (trainings) => {
+        this.availableTrainings = trainings;
+      },
+      error: (err) => {
+        console.error('Error loading trainings:', err);
+      }
+    });
+  }
+
+  openAssignmentDialog() {
+
+    this.selectedSkipperIds = [...this.mainListSelectedSkipperIds]; 
+    if (this.selectedSkipperIds.length === 0) {
+        alert("Please select at least one skipper from the list to assign training.");
+        return;
+    }
+
+    this.loadAvailableTrainings();
+    this.assignmentDialogOpen = true;
+    this.selectedTrainingId = null;
+  }
+
+  getSkipperName(id: string): string {
+  const skipper = this.skippers.find(s => s.id === id);
+
+  if (skipper) {
+
+     return `${skipper.username} (${skipper.firstname} ${skipper.lastname})`;
+
+  }
+
+  return `Skipper ID: ${id}`; // Fallback if skipper not found 
+  }
+
+  toggleSkipperSelection(skipperId: string, event: Event) {
+    const isChecked = (event.target as HTMLInputElement).checked;
+    if (isChecked) {
+      if (!this.mainListSelectedSkipperIds.includes(skipperId)) {
+        this.mainListSelectedSkipperIds.push(skipperId);
+      }
+    } else {
+      this.mainListSelectedSkipperIds = this.mainListSelectedSkipperIds.filter(id => id !== skipperId);
+    }
+  }
+
+  isSkipperSelected(skipperId: string): boolean {
+    return this.mainListSelectedSkipperIds.includes(skipperId);
+  }
+
+  clearSkipperSelections() {
+    this.mainListSelectedSkipperIds = [];
+  }
+
+  closeAssignmentDialog() {
+    this.assignmentDialogOpen = false;
+  }
+
 }

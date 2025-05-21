@@ -3,144 +3,136 @@
   <header class="content-header">
 
     <div class="header-left">
-      @if(roleAuth.isSkipper()){
-      <h1>{{'ASSIGNED_BY_FLEETMANAGER' | translate}}</h1>
+      @if(roleAuth.isSkipper()) {
+        <h1>{{ 'ASSIGNED_BY_FLEETMANAGER' | translate }}</h1>
       }
-      <h1>{{'TRAINING' | translate}}</h1>
+      <h1>{{ 'TRAINING' | translate }}</h1>
     </div>
 
     @if (roleAuth.canEditContent()) {
-
-    <div class="header-right">
-
-      <div class="dropdown-container">
-
-        <button class="create-btn" (click)="toggleMenuAdd()">
-
-          {{'CREATE' | translate}}
-
-        </button>
+      <div class="header-right">
+        <div class="dropdown-container">
+          <button class="create-btn" (click)="toggleMenuAdd()">
+            {{ 'CREATE' | translate }}
+          </button>
 
           @if (menuOpenAdd) {
-
             <div class="add-menu">
-
-              <button (click)="goToAddTrainingPage()">{{'ADD_TRAINING' | translate}}</button>
-
-              <button (click)="goToAddExamPage()">{{'ADD_EXAM' | translate}}</button>
-
+              <button (click)="goToAddTrainingPage()">{{ 'ADD_TRAINING' | translate }}</button>
+              <button (click)="goToAddExamPage()">{{ 'ADD_EXAM' | translate }}</button>
             </div>
-
           }
-
+        </div>
       </div>
-
-    </div>
-
     }
 
   </header>
 
-
-
-  <!-- Training Cards -->
-
-  <div class="training-grid">
-
-    @for (training of trainingsData; track $index) {
-
-    <div class="training-card" (click)="goToTrainingDetails(training.id)">
-
-  <div class="card-header">
-
-    <h2>{{ getTrainingName($index) }}</h2>
-
-    @if(roleAuth.canEditContent()){
-    <div class="card-actions">
-
-      <div class="dropdown-container">
-
-        <button class="icon-btn pencil-btn"
-
-                (click)="toggleMenuEdit(training.id); $event.stopPropagation()">
-
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-
-            <path d="M12 20h9"></path>
-
-            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
-
-          </svg>
-
-        </button>
-
-        @if (openMenus[training.id]) {
-          <div class="edit-dropdown" (click)="$event.stopPropagation()">
-
-            <button (click)="goToEditTrainingPage(training.id); $event.stopPropagation()">
-
-              {{'EDIT_TRAINING' | translate}}
-
-            </button>
-
-            @if (hasExam(training.id)) {
-
-              <button (click)="goToEditExamPage(training.id); $event.stopPropagation()">
-
-                {{'EDIT_EXAM' | translate}}
-
-              </button>
-
-            }
-
-          </div>
-
-        }
-
-      </div>
-
+  @if (isLoadingData) {
+    <div class="loading-indicator-fullpage">
+      <p>Loading trainings...</p>
     </div>
-  }
-  </div>
-
-     
-
-      <p class="card-description">{{ getTrainingDescription($index) }}</p>
-
-     
-
-      <div class="card-footer">
-
-        <span class="training-count">
-
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-
-            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path>
-
-          </svg>
-
-          {{ getCountModules(training.id) }} {{'MODULES' | translate}}
-
-        </span>
-
-      </div>
-
-     
-
-      <div class="language-tags">
-
-        <span class="language-tag nl">NL</span>
-
-        <span class="language-tag fr">FR</span>
-
-        <span class="language-tag de">DE</span>
-
-        <span class="language-tag en">EN</span>
-
-      </div>
+  } @else if (loadingError) {
+    <div class="error-message-fullpage">
+      <p>{{ loadingError }}</p>
     </div>
+  } @else {
+
+    @if (fleetManagerAssignedTrainings.length > 0) {
+      <!-- Assigned by Fleet Manager Section -->
+      <section class="assigned-by-fleet-manager">
+        <h2>{{ 'ASSIGNED_BY_FLEETMANAGER_SECTION_TITLE' | translate }}</h2>
+        <div class="assigned-list">
+          @for (training of fleetManagerAssignedTrainings; track $index) {
+            <div class="assigned-item">
+              <div class="assigned-item-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="assigned-icon-svg">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                </svg>
+              </div>
+              <div class="assigned-item-info">
+                <h3>{{ getTrainingName($index) }}</h3>
+                @if (training.assignedDate) {
+                  <p class="assignment-date">{{ 'ASSIGNED_ON' | translate }} {{ training.assignedDate | date:'dd-MM-yyyy' }}</p>
+                } @else {
+                  <p class="assignment-date">{{ 'ASSIGNED_WITHOUT_DATE_INFO' | translate }}</p>
+                }
+              </div>
+              <div class="assigned-item-actions">
+                <button class="start-now-btn" (click)="goToTrainingDetails(training.id)">
+                  {{ 'START_NOW' | translate }}
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      </section>
     }
 
-  </div>
+    <!-- All Available Modules Section -->
+    <section class="all-available-modules">
+      <h2>{{ 'ALL_AVAILABLE_MODULES' | translate }}</h2>
 
+      @if (allTrainingsData.length > 0) {
+        <div class="training-grid">
+          @for (training of allTrainingsData; track $index) {
+            <div class="training-card" (click)="goToTrainingDetails(training.id)">
+              <div class="card-header">
+                <h2>{{ getTrainingName($index) }}</h2>
+
+                @if (training.isAssigned) {
+                  <span class="assigned-badge">{{ 'ASSIGNED_BADGE' | translate }}</span>
+                }
+
+                @if (roleAuth.canEditContent()) {
+                  <div class="card-actions">
+                    <div class="dropdown-container">
+                      <button class="icon-btn pencil-btn" (click)="toggleMenuEdit(training.id); $event.stopPropagation()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M12 20h9"></path>
+                          <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                        </svg>
+                      </button>
+
+                      @if (openMenus[training.id]) {
+                        <div class="edit-dropdown" (click)="$event.stopPropagation()">
+                          <button (click)="goToEditTrainingPage(training.id); $event.stopPropagation()">
+                            {{ 'EDIT_TRAINING' | translate }}
+                          </button>
+
+                          @if (hasExam(training.id)) {
+                            <button (click)="goToEditExamPage(training.id); $event.stopPropagation()">
+                              {{ 'EDIT_EXAM' | translate }}
+                            </button>
+                          }
+                        </div>
+                      }
+                    </div>
+                  </div>
+                }
+              </div>
+
+              <p class="card-description">{{ getTrainingDescription($index) }}</p>
+
+              <div class="card-footer">
+                <span class="training-count">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path>
+                  </svg>
+                  {{ getCountModules(training.id) }} {{ 'MODULES' | translate }}
+                </span>
+              </div>
+
+              <div class="language-tags">
+                <span class="language-tag nl">NL</span>
+                <span class="language-tag fr">FR</span>
+                <span class="language-tag de">DE</span>
+                <span class="language-tag en">EN</span>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </section>
+  }
 </div>

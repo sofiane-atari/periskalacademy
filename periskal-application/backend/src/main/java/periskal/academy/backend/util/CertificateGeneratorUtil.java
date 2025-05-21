@@ -516,8 +516,8 @@ public final class CertificateGeneratorUtil {
         }
     }
 
-    // --- Example Usage ---
-     public static void main(String[] args) {
+    // --- Example Usage --- TODO: remove this in production
+     public static void main(String[] args) { 
 
         // --- Test Data ---
         String productName = "DEMO PRODUCT";
