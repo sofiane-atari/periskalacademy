@@ -1,4 +1,4 @@
-package periskal.academy.backend;
+package periskal.academy.backend.controller;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
