@@ -9,7 +9,7 @@ import { Exam } from '../../models/exam.model';
 export class ExamService {
   private baseUrl = 'http://localhost:8080/api/exams'; // Adjust the backend URL as needed
 
-  constructor(private client: HttpClient) {}
+  constructor(private client: HttpClient) { }
 
   getExams(): Observable<Exam[]> {
     return this.client.get<Exam[]>(this.baseUrl);
@@ -25,11 +25,11 @@ export class ExamService {
       })
     );
   }
-  
+
   postExam(examData: any): Observable<any> {
     return this.client.post(`${this.baseUrl}/training/${examData.trainingId}/create`, examData);
   }
-    
+
 
   updateExam(id: number, examData: any): Observable<any> {
     return this.client.put(`${this.baseUrl}/${id}`, examData);
@@ -38,7 +38,7 @@ export class ExamService {
   deleteExam(id: number): Observable<any> {
     return this.client.delete(`${this.baseUrl}/${id}`);
   }
-  
+
   getExamByTrainingId(trainingId: number): Observable<Exam | null> {
     return this.client.get<Exam>(`${this.baseUrl}/training/${trainingId}`).pipe(
       catchError(error => {
@@ -60,9 +60,10 @@ export class ExamService {
         photos: (q.photos || []).map((photo: any) => ({
           imageData: photo.imageData
         })),
-        answers: q.answers.map((a: any) => ({ text: a.text})),
-      correctAnswer: q.correctAnswer
-      }))
+        answers: q.answers.map((a: any) => ({ text: a.text })),
+        correctAnswer: q.correctAnswer
+      })),
+      price: examData.price
     };
     return this.client.post<Exam>(this.baseUrl, payload);
   }

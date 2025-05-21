@@ -17,14 +17,15 @@ export class UpdateExamComponent implements OnInit {
     id: 0, examTitle: '', examDescription: '',
     trainingId: 0,
     totalQuestions: 0,
-    questions: []
+    questions: [],
+    price: 0
   };
 
   constructor(
     private examService: ExamService,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.examId = Number(this.route.snapshot.paramMap.get('id'));
@@ -37,10 +38,10 @@ export class UpdateExamComponent implements OnInit {
       error: (err) => console.error('Examen ophalen mislukt', err)
     });
   }
-  
+
   deleteExam(trainingId: number): void {
     if (!confirm('Weet u zeker dat u dit examen wilt verwijderen?')) return;
-  
+
     this.examService.deleteExam(trainingId).subscribe({
       next: () => {
         this.router.navigate(['/training-employee'], {

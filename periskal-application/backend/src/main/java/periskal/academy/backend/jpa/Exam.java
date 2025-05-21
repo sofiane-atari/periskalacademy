@@ -26,6 +26,8 @@ public class Exam {
     @Column(nullable = false)
     private int totalQuestions;
 
+    private int price;
+
     @OneToMany(mappedBy = "exam", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference("exam-questions")
     private List<Question> questions = new ArrayList<>();

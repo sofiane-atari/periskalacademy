@@ -90,6 +90,12 @@
         <p class="error">{{'EXAM_TITLE_REQUIRED' | translate }}</p>
       }
 
+      <label for="price">{{'PRICE' | translate}}</label>
+      <input id="price" formControlName="price" type="number" min="1">
+      @if(examForm.get('totalQuestions')?.invalid && examForm.get('totalQuestions')?.touched){
+        <p class="error">TotalQuestions required</p>
+      }
+
       @if (examForm.get('questions')) {
         <div class="questions-section">
           <h3>{{'QUESTIONS' | translate}}</h3>

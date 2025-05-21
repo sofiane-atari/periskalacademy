@@ -11,4 +11,5 @@ public class ExamRequest {
     private Long trainingId;
     private int totalQuestions;
     private List<QuestionDTO> questions;
+    private int price;
 }
