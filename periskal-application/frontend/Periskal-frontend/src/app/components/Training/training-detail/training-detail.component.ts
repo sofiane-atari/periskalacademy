@@ -8,6 +8,7 @@ import { ProgressService } from '../../../services/Progress/progress.service';
 import { TrainingProgress } from '../../../models/progress.model';
 import { ProgressBarComponent } from '../../progress-bar/progress-bar.component';
 import { JwtDecoderService } from '../../../services/JwtDecode/jwt-decoder.service';
+import { UserAttemptService } from '../../../services/UserExamAttempts/user-attempt.service';
 
 @Component({
   selector: 'app-training-detail',
@@ -31,7 +32,8 @@ export class TrainingDetailComponent {
     private trainingSvc: TrainingService,
     private router: Router,
     private ProgressService: ProgressService,
-    private jwtDecoderService: JwtDecoderService
+    private jwtDecoderService: JwtDecoderService,
+    private userAttemptSvc: UserAttemptService,
   ) { }
 
   ngOnInit(): void {
@@ -57,6 +59,12 @@ export class TrainingDetailComponent {
 
   goBack() {
     this.router.navigate(['trainingEmployee'])
+  }
+
+  checkUserAttempts() {
+    if (this.training?.exam?.id) {
+      this.userAttemptSvc.checkUserAttempts(this.training?.exam?.id, this.userId);
+    }
   }
 
   goToBilling(): void {

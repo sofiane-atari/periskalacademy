@@ -138,20 +138,6 @@
         <span class="language-tag en">EN</span>
 
       </div>
-
-      <div class="training-actions">
-        @if (hasExam(training.id) && roleAuth.isSkipper()) {
-  
-          <button class="secondary-btn" (click)="$event.stopPropagation(); goToExam(training.id)">
-
-            {{'TAKE_EXAM' | translate}}
-  
-          </button>
-  
-        }
-  
-      </div>
-
     </div>
     }
 
