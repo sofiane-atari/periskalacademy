@@ -1,4 +1,5 @@
 package periskal.academy.backend;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +16,6 @@ import periskal.academy.backend.jpa.ExamRepository;
 import periskal.academy.backend.jpa.Training;
 import periskal.academy.backend.jpa.TrainingRepository;
 import periskal.academy.backend.service.CompletedExamService;
-
 
 import java.util.Collections;
 import java.util.Date;
@@ -51,8 +51,8 @@ class CompletedExamServiceTest {
     // --- Helper methods for creating test objects ---
 
     private CompletedExamDTO createCompletedExamDTO(Long id, String userId, Long trainingId, Long examId,
-                                                    int score, int requiredScore, Date completedDate,
-                                                    String examName, String trainingName) {
+            int score, int requiredScore, Date completedDate,
+            String examName, String trainingName) {
         CompletedExamDTO dto = new CompletedExamDTO();
         dto.setId(id);
         dto.setUserId(userId);
@@ -61,20 +61,19 @@ class CompletedExamServiceTest {
         dto.setScore(score);
         dto.setRequiredScore(requiredScore);
         dto.setCompletedDate(completedDate);
-        dto.setExamName(examName);     // For expected DTOs after conversion
+        dto.setExamName(examName); // For expected DTOs after conversion
         dto.setTrainingName(trainingName); // For expected DTOs after conversion
         return dto;
     }
-    
+
     // Overload for DTO before conversion (without examName, trainingName)
     private CompletedExamDTO createCompletedExamDTO(Long id, String userId, Long trainingId, Long examId,
-                                                    int score, int requiredScore, Date completedDate) {
+            int score, int requiredScore, Date completedDate) {
         return createCompletedExamDTO(id, userId, trainingId, examId, score, requiredScore, completedDate, null, null);
     }
 
-
     private CompletedExam createCompletedExamEntity(Long id, String userId, Long trainingId, Long examId,
-                                                    int score, int requiredScore, Date completedDate) {
+            int score, int requiredScore, Date completedDate) {
         CompletedExam entity = new CompletedExam();
         entity.setId(id);
         entity.setUserId(userId);
@@ -109,20 +108,22 @@ class CompletedExamServiceTest {
         baseTraining = createTrainingEntity(10L, "Core Java Training", "Comprehensive training on Core Java.");
 
         baseCompletedExamDTO = createCompletedExamDTO(1L, "user123", baseTraining.getId(), baseExam.getId(),
-                                                      85, 70, baseTestDate);
+                85, 70, baseTestDate);
         baseCompletedExamEntity = createCompletedExamEntity(1L, "user123", baseTraining.getId(), baseExam.getId(),
-                                                            85, 70, baseTestDate);
+                85, 70, baseTestDate);
     }
 
     @Test
     void givenCompletedExamDTO_whenSaveCompletedExam_thenReturnsSavedDTOWithNames() {
         // Given
         Date newDate = new Date(System.currentTimeMillis() - 86400000); // Yesterday
-        CompletedExamDTO inputDTO = createCompletedExamDTO(null, "userNew", 11L, 21L, 90, 75, newDate); // ID is null for new entity
+        CompletedExamDTO inputDTO = createCompletedExamDTO(null, "userNew", 11L, 21L, 90, 75, newDate); // ID is null
+                                                                                                        // for new
+                                                                                                        // entity
 
         CompletedExam savedEntity = createCompletedExamEntity(2L, inputDTO.getUserId(), inputDTO.getTrainingId(),
-                                                              inputDTO.getExamId(), inputDTO.getScore(),
-                                                              inputDTO.getRequiredScore(), inputDTO.getCompletedDate());
+                inputDTO.getExamId(), inputDTO.getScore(),
+                inputDTO.getRequiredScore(), inputDTO.getCompletedDate());
 
         Exam mockExam = createExamEntity(21L, "Advanced Java", "Deep dive into Java", 30);
         Training mockTraining = createTrainingEntity(11L, "Spring Boot Microservices", "Microservices desc");
@@ -165,9 +166,9 @@ class CompletedExamServiceTest {
         CompletedExamDTO inputDTO = createCompletedExamDTO(null, "userTest", 15L, 25L, 80, 70, testDate);
 
         CompletedExam savedEntity = createCompletedExamEntity(3L, inputDTO.getUserId(), inputDTO.getTrainingId(),
-                                                              inputDTO.getExamId(), inputDTO.getScore(),
-                                                              inputDTO.getRequiredScore(), inputDTO.getCompletedDate());
-        
+                inputDTO.getExamId(), inputDTO.getScore(),
+                inputDTO.getRequiredScore(), inputDTO.getCompletedDate());
+
         Training mockTraining = createTrainingEntity(15L, "Agile Methodology", "Agile desc");
 
         when(completedExamRepository.save(any(CompletedExam.class))).thenReturn(savedEntity);
@@ -182,11 +183,10 @@ class CompletedExamServiceTest {
         assertThat(resultDTO.getId()).isEqualTo(savedEntity.getId());
         assertThat(resultDTO.getExamName()).isEqualTo("N/A");
         assertThat(resultDTO.getTrainingName()).isEqualTo(mockTraining.getNameEn());
-        
+
         verify(examRepository).findById(25L);
         verify(trainingRepository).findById(mockTraining.getId());
     }
-
 
     @Test
     void givenUserIdWithCompletedExams_whenGetCompletedExamsByUserId_thenReturnsListOfDTOs() {
@@ -200,8 +200,10 @@ class CompletedExamServiceTest {
         Exam examDetails2 = createExamEntity(21L, "Spring Core", "Desc2", 15);
         Training trainingDetails2 = createTrainingEntity(11L, "Spring Framework", "Desc Spring");
 
-        CompletedExam entity1 = createCompletedExamEntity(1L, userId, trainingDetails1.getId(), examDetails1.getId(), 80, 70, date1);
-        CompletedExam entity2 = createCompletedExamEntity(2L, userId, trainingDetails2.getId(), examDetails2.getId(), 90, 75, date2);
+        CompletedExam entity1 = createCompletedExamEntity(1L, userId, trainingDetails1.getId(), examDetails1.getId(),
+                80, 70, date1);
+        CompletedExam entity2 = createCompletedExamEntity(2L, userId, trainingDetails2.getId(), examDetails2.getId(),
+                90, 75, date2);
         List<CompletedExam> mockEntities = List.of(entity1, entity2);
 
         when(completedExamRepository.findByUserId(userId)).thenReturn(mockEntities);
@@ -215,7 +217,7 @@ class CompletedExamServiceTest {
 
         // Then
         assertThat(resultDTOs).isNotNull().hasSize(2);
-        
+
         assertThat(resultDTOs.get(0).getId()).isEqualTo(entity1.getId());
         assertThat(resultDTOs.get(0).getExamName()).isEqualTo(examDetails1.getExamTitle());
         assertThat(resultDTOs.get(0).getTrainingName()).isEqualTo(trainingDetails1.getNameEn());
@@ -223,7 +225,7 @@ class CompletedExamServiceTest {
         assertThat(resultDTOs.get(1).getId()).isEqualTo(entity2.getId());
         assertThat(resultDTOs.get(1).getExamName()).isEqualTo(examDetails2.getExamTitle());
         assertThat(resultDTOs.get(1).getTrainingName()).isEqualTo(trainingDetails2.getNameEn());
-        
+
         verify(completedExamRepository).findByUserId(userId);
         verify(examRepository, times(1)).findById(examDetails1.getId());
         verify(examRepository, times(1)).findById(examDetails2.getId());
@@ -245,7 +247,7 @@ class CompletedExamServiceTest {
         verify(completedExamRepository).findByUserId(userId);
         verifyNoInteractions(examRepository, trainingRepository); // More concise
     }
-    
+
     @Test
     void givenUserIdWithCompletedExamButMissingTrainingDetails_whenGetCompletedExamsByUserId_thenReturnsDTOWithTrainingNameNA() {
         // Given
@@ -253,7 +255,6 @@ class CompletedExamServiceTest {
         Exam examDetails = createExamEntity(50L, "Some Exam", "Desc", 10);
         // Training details will be missing for trainingId 60L
         CompletedExam examEntity = createCompletedExamEntity(5L, userId, 60L, examDetails.getId(), 88, 70, new Date());
-
 
         when(completedExamRepository.findByUserId(userId)).thenReturn(List.of(examEntity));
         when(examRepository.findById(examDetails.getId())).thenReturn(Optional.of(examDetails));
@@ -266,10 +267,9 @@ class CompletedExamServiceTest {
         assertThat(resultDTOs).isNotNull().hasSize(1);
         assertThat(resultDTOs.get(0).getExamName()).isEqualTo(examDetails.getExamTitle());
         assertThat(resultDTOs.get(0).getTrainingName()).isEqualTo("N/A");
-        
+
         verify(trainingRepository).findById(60L);
     }
-
 
     @Test
     void givenUserIdAndTrainingIdWithCompletedExams_whenGetCompletedExamsByUserIdAndTrainingId_thenReturnsListOfDTOs() {
@@ -284,7 +284,8 @@ class CompletedExamServiceTest {
         when(trainingRepository.findById(baseTraining.getId())).thenReturn(Optional.of(baseTraining));
 
         // When
-        List<CompletedExamDTO> resultDTOs = completedExamService.getCompletedExamsByUserIdAndTrainingId(userId, trainingIdParam);
+        List<CompletedExamDTO> resultDTOs = completedExamService.getCompletedExamsByUserIdAndTrainingId(userId,
+                trainingIdParam);
 
         // Then
         assertThat(resultDTOs).isNotNull().hasSize(1);
@@ -312,7 +313,8 @@ class CompletedExamServiceTest {
         when(completedExamRepository.findByUserIdAndTrainingId(userId, trainingId)).thenReturn(Collections.emptyList());
 
         // When
-        List<CompletedExamDTO> resultDTOs = completedExamService.getCompletedExamsByUserIdAndTrainingId(userId, trainingId);
+        List<CompletedExamDTO> resultDTOs = completedExamService.getCompletedExamsByUserIdAndTrainingId(userId,
+                trainingId);
 
         // Then
         assertThat(resultDTOs).isNotNull().isEmpty();
