@@ -12,10 +12,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
 import periskal.academy.backend.dto.CertificateDTO;
+import periskal.academy.backend.jpa.Certificate;
+import periskal.academy.backend.security.exceptions.general.ResourceNotFoundException;
+import periskal.academy.backend.security.exceptions.general.ValidationException;
 import periskal.academy.backend.service.CertificateService;
 import periskal.academy.backend.service.certificate.PdfGeneratorService;
 
@@ -51,24 +55,32 @@ public class CertificateController {
     @GetMapping("/{id}")
     public ResponseEntity<CertificateDTO> getCertificate(@PathVariable Long id) {
         CertificateDTO certificate = certificateService.getCertificateById(id);
-        if (certificate != null) {
-            return ResponseEntity.ok(certificate);
-        } else {
-            return ResponseEntity.notFound().build();
+        if (certificate == null) {
+            throw new ResourceNotFoundException("Certificate not found with id: " + id);
         }
+        return ResponseEntity.ok(certificate);
     }
     
     // Generate a certificate PDF
     @GetMapping("/generate/{id}")
-    public ResponseEntity<byte[]> generateCertificate(@PathVariable Long id) {
-        CertificateDTO certificate = certificateService.getCertificateById(id);
-        if (certificate == null || !certificate.isReadyForDownload()) {
+    public ResponseEntity<byte[]> generateCertificate(
+            @PathVariable Long id, 
+            @RequestParam String firstName, 
+            @RequestParam String lastName,
+            @RequestParam String shipName) {
+                   
+        // Get the certificate entity
+        Certificate certificate = certificateService.getCertificateEntityById(id);
+        if (certificate == null) {
+            throw new ResourceNotFoundException("Certificate not found with id: " + id);
+        }
+        if (!certificate.isReadyForDownload()) {
             return ResponseEntity.notFound().build();
         }
         
         try {
-            // Use the PdfGeneratorService to generate a certificate
-            byte[] pdfBytes = pdfGeneratorService.createCertificate();
+            // Use the PdfGeneratorService to generate a certificate 
+            byte[] pdfBytes = pdfGeneratorService.createCertificate(certificate, firstName, lastName, shipName);
             
             // Set up the headers for PDF download
             HttpHeaders headers = new HttpHeaders();

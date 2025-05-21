@@ -1,7 +1,13 @@
 package periskal.academy.backend.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
+
 import jakarta.transaction.Transactional;
+import periskal.academy.backend.security.exceptions.general.ResourceNotFoundException;
 import periskal.academy.backend.dto.AnswerDTO;
 import periskal.academy.backend.dto.ExamRequest;
 import periskal.academy.backend.dto.QuestionDTO;
@@ -13,9 +19,6 @@ import periskal.academy.backend.jpa.Question;
 import periskal.academy.backend.jpa.QuestionRepository;
 import periskal.academy.backend.jpa.Training;
 import periskal.academy.backend.jpa.TrainingRepository;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ExamService {
@@ -52,10 +55,11 @@ public class ExamService {
         exam.setExamDescription(examRequest.getExamDescription());
         exam.setTotalQuestions(examRequest.getTotalQuestions());
         exam.setPrice(examRequest.getPrice());
+        exam.setPassingScore(examRequest.getPassingScore());
 
         // 2) Link Training
         Training training = trainingRepository.findById(examRequest.getTrainingId())
-                .orElseThrow(() -> new RuntimeException("Training not found with id " + examRequest.getTrainingId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Training not found with id: " + examRequest.getTrainingId()));
         exam.setTraining(training);
 
         // 3) Build Questions + Photos
@@ -101,7 +105,8 @@ public class ExamService {
             exam.setExamTitle(updatedExam.getExamTitle());
             exam.setExamDescription(updatedExam.getExamDescription());
             exam.setTotalQuestions(updatedExam.getTotalQuestions());
-
+            exam.setPassingScore(updatedExam.getPassingScore());
+    
             // Oude vragen verwijderen
             exam.getQuestions().clear();
 
@@ -128,7 +133,7 @@ public class ExamService {
     public void deleteExam(Long id) {
         Optional<Exam> examOpt = examRepository.findById(id);
         if (examOpt.isEmpty()) {
-            throw new RuntimeException("Examen met ID " + id + " bestaat niet.");
+            throw new ResourceNotFoundException("Exam not found with id: " + id);
         }
 
         Exam exam = examOpt.get();

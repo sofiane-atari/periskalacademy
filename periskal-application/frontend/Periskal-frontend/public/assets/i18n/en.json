@@ -146,4 +146,8 @@
   "ANSWERS_QUESTION": "Answers for question",
   "ANSWER": "Answer",
   "CORRECT_ANSWER": "Correct answer"
+  "NEW": "New",
+  "YES": "Yes",
+  "NO": "No",
+  "NO_CERTIFICATES_AVAILABLE": "No certificates available"
 }

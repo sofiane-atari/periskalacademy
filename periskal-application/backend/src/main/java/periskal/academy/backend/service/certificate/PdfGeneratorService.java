@@ -1,25 +1,48 @@
 package periskal.academy.backend.service.certificate;
 
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
+import periskal.academy.backend.jpa.Certificate;
 import periskal.academy.backend.util.CertificateGeneratorUtil;
 
 @Slf4j
 @Service
 public class PdfGeneratorService {
 
-    public byte[] createCertificate() throws IOException {
-        // Dummy Data, later to be replaced with actual data from the database or JWT
-        // token
-        String productName = "DEMO PRODUCT";
-        String productDetails = "DEMO PRODUCT DETAILS";
-        String shipName = "DEMO SHIPNAME";
+
+    public byte[] createCertificate(Certificate certificate, String firstName, String lastName, String shipName) throws IOException {
+       
+        // Format the user's full name
+        String crewName = firstName + " " + lastName;
+        
+       
         String trainingDate = java.time.LocalDate.now().toString();
-        List<String> crewNames = List.of("DEMO CREW", "DEMO CREW2", "DEMO CREW3", "DEMO CREW4");
+        
+        // expiry date (valid until date)
+        String validUntilDate = null;
+        if (certificate.getExpiryDate() != null) {
+            validUntilDate = "Valid until: " + certificate.getExpiryDate();
+        } else {
+            validUntilDate = "No expiration date";
+        }
+        
+        // Combine the training date and valid until date
+        String dateInfo = trainingDate + " | " + validUntilDate;
+        
+        String productName = certificate.getTraining();
+        
+        String productDetails = certificate.getName();
+        
+        // Create a list with just the single crew name, could just be a string, less to chagne
+        List<String> crewNames = Collections.singletonList(crewName);
+
+        //signer details
         String signerName = "Marc Persoons";
         String signerTitle = "Managing Director, Periskal bv";
         String companyName = "PERISKAL bv";
@@ -30,7 +53,7 @@ public class PdfGeneratorService {
                 productName,
                 productDetails,
                 shipName,
-                trainingDate,
+                dateInfo,
                 crewNames,
                 signerName,
                 signerTitle,

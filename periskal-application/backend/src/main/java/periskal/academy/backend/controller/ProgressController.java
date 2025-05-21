@@ -10,12 +10,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.extern.slf4j.Slf4j;
 import periskal.academy.backend.dto.progress.ChapterCompletion;
 import periskal.academy.backend.dto.progress.TrainingProgressDTO;
+import periskal.academy.backend.security.exceptions.general.ResourceNotFoundException;
 import periskal.academy.backend.service.ProgressService;
 
 @RestController
 @RequestMapping("/api/progress")
+@Slf4j
 public class ProgressController {
     
     private final ProgressService progressService;
@@ -46,10 +49,9 @@ public class ProgressController {
             @PathVariable Long trainingId, 
             @PathVariable String userId) {
         TrainingProgressDTO progress = progressService.getTrainingProgress(userId, trainingId);
-        if (progress != null) {
-            return ResponseEntity.ok(progress);
-        } else {
-            return ResponseEntity.notFound().build();
+        if (progress == null) {
+            throw new ResourceNotFoundException("Progress not found for user " + userId + " and training " + trainingId);
         }
+        return ResponseEntity.ok(progress);
     }
 }

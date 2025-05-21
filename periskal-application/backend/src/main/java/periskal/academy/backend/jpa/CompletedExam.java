@@ -36,5 +36,11 @@ public class CompletedExam {
 
     @Column(name = "completed_date", nullable = false)
     private Date completedDate;
-
+    
+    @Column(name = "certificate_id", nullable = true)
+    private Long certificateId;
+    
+    public boolean isPassed() {
+        return score >= requiredScore;
+    }
 }

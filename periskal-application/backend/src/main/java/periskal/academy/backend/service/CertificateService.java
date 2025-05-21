@@ -42,7 +42,7 @@ public class CertificateService {
                 .orElse(null);
     }
     
-
+ 
     private CertificateDTO convertToDTO(Certificate certificate) {
         return new CertificateDTO(
                 certificate.getId(),
@@ -66,4 +66,9 @@ public class CertificateService {
         certificate.setUserId(certificateDTO.getUserId());
         return certificate;
     }
+
+        public Certificate getCertificateEntityById(Long id) {
+        return certificateRepository.findById(id).orElse(null);
+    }
+    
 }

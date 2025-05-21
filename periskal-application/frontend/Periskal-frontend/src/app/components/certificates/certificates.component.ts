@@ -5,6 +5,7 @@ import { CertificateService } from '../../services/Certificates/certificate.serv
 import { finalize } from 'rxjs';
 import { saveAs } from 'file-saver';
 import { Certificate } from '../../models/Certificate.model';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-certificates',
@@ -19,10 +20,18 @@ export class CertificatesComponent implements OnInit {
   isLoading = false;
   isDownloading = false;
   loadError = false;
+  newCertificateId: number | null = null;
 
-  constructor(private certificateService: CertificateService) {}
+  constructor(private certificateService: CertificateService,private route: ActivatedRoute) {}
 
   ngOnInit() {
+    // Check if we're coming from exam completion with a new certificate
+    this.route.queryParams.subscribe(params => {
+      if (params['newCertificateId']) {
+        this.newCertificateId = Number(params['newCertificateId']);
+      }
+    });
+    
     this.loadCertificates();
   }
 

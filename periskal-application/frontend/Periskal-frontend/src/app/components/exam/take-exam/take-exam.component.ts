@@ -125,14 +125,12 @@ export class TakeExamComponent implements OnInit {
 
  
 
-    // TODO
-    // Score bewaren in db gelinkt aan user
+    // Prepare completed exam data with actual passing score from exam
     const completedExamData: Omit<CompletedExam, 'id'> = { 
       userId: userId ?? 'unknown-user',
       examId: this.exam.id ?? 0, 
       trainingId: this.exam.trainingId, 
-      //requiredScore: this.exam.requiredScore, 
-      requiredScore: 100, // TODO: Set this to the actual required score
+      requiredScore: this.exam.passingScore || 100, // Use exam's passing score with fallback to 100
       score: scorePercentage,
       completedDate: new Date(),
     };
@@ -141,8 +139,26 @@ export class TakeExamComponent implements OnInit {
     this.completedExamService.saveCompletedExam(completedExamData as CompletedExam).subscribe({
       next: (savedExam) => {
         console.log('Exam submitted and results saved:', savedExam);
-        alert(`Your score is: ${correctCount}/${totalQuestions} (${scorePercentage}%).\nResults have been saved.`);
-        this.router.navigate(['/exams']); 
+        
+        // Check if exam was passed and a certificate was generated
+        const passedMessage = savedExam.passed 
+          ? `Congratulations! You passed the exam with a score of ${scorePercentage}%.`
+          : `You did not pass the exam. The required score is ${savedExam.requiredScore}%. Please try again.`;
+        
+        const certificateMessage = savedExam.certificateId 
+          ? `\n\nA certificate has been generated and is available in your certificates list.`
+          : '';
+          
+        alert(`${passedMessage}${certificateMessage}`);
+        
+        // Navigate based on result - if they passed and got a certificate, go to certificates page with query parameter
+        if (savedExam.certificateId) {
+          this.router.navigate(['/certificates'], {
+            queryParams: { newCertificateId: savedExam.certificateId }
+          });
+        } else {
+          this.router.navigate(['/exams']);
+        }
       },
       error: (err) => {
         console.error('Failed to save completed exam:', err);
