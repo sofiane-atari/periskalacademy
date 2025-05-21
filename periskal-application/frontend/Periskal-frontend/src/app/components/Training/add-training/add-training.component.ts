@@ -84,47 +84,60 @@ export class AddTrainingComponent implements OnInit { // Implement OnInit
       nameChapterEn: ['', Validators.required],
       descriptionChapterEn: ['', Validators.required],
       textChapterEn: ['', Validators.required],
+      videoEn: [null],
       photos: [[]],
+
       videoRemoteFilePath: [''],
       nameChapterNl: ['', Validators.required],
       descriptionChapterNl: ['', Validators.required],
       textChapterNl: ['', Validators.required],
+      videoNl: [null],
+
       nameChapterFr: ['', Validators.required],
       descriptionChapterFr: ['', Validators.required],
       textChapterFr: ['', Validators.required],
+      videoFr: [null],
+
       nameChapterDe: ['', Validators.required],
       descriptionChapterDe: ['', Validators.required],
       textChapterDe: ['', Validators.required],
+      videoDe: [null],
     });
   }
 
-  onVideoSelected(moduleIndex: number, chapterIndex: number, file: File): void {
-    this.uploadVideoToFtp(moduleIndex, chapterIndex, file);
+  onVideoSelected(moduleIndex: number, chapterIndex: number,lang: string, file: File): void {
+    this.uploadVideoToFtp(moduleIndex, chapterIndex,lang, file);
   }
 
-  uploadVideoToFtp(moduleIndex: number, chapterIndex: number, videoFile: File): void {
-    this.isUploadingVideo = true;
+  uploadVideoToFtp(moduleIndex: number, chapterIndex: number, lang: string, videoFile: File): void {
+  console.log('uploadVideoToFtp called with:', { moduleIndex, chapterIndex, lang, videoFile });
+  this.isUploadingVideo = true;
 
-    this.trainingService.uploadVideo(videoFile).subscribe({
-      next: (response: any) => {
-        const filePath = response.filePath;
-
-        console.log('Upload response:', response);
-
-        this.getChapters(moduleIndex).at(chapterIndex).patchValue({ videoRemoteFilePath: filePath });
-
-        console.log('Video uploaded to FTP:', filePath);
+  this.trainingService.uploadVideo(videoFile).subscribe({
+    next: (response: any) => {
+      console.log('Upload response:', response);
+      const filePath = response.filePath;
+      if (!filePath) {
+        console.error('No filePath in response:', response);
         this.isUploadingVideo = false;
-      },
-      error: (error: any) => {
-        console.error('Error uploading video:', error);
-        this.isUploadingVideo = false;
-      },
-      complete: () => {
-        console.log('Upload process completed');
+        return;
       }
-    });
-  }
+      const chapter = this.getChapters(moduleIndex).at(chapterIndex);
+      const fieldName = `video${lang.charAt(0).toUpperCase() + lang.slice(1)}`;
+      chapter.patchValue({ [fieldName]: filePath });
+      console.log('Updated chapter:', chapter.value);
+      console.log('Full form:', this.trainingForm.value);
+      this.isUploadingVideo = false;
+    },
+    error: (error: any) => {
+      console.error('Error uploading video:', error);
+      this.isUploadingVideo = false;
+    },
+    complete: () => {
+      console.log('Upload process completed');
+    }
+  });
+}
 
 
   get modules(): FormArray {
@@ -176,6 +189,7 @@ export class AddTrainingComponent implements OnInit { // Implement OnInit
           this.trainingService.postTraining(trainingData).subscribe({
             next: (response) => {
               // this.resetForm();
+              console.log(trainingData);
               this.router.navigate(['/trainingEmployee']);
             },
             error: (error) => {
@@ -187,6 +201,7 @@ export class AddTrainingComponent implements OnInit { // Implement OnInit
         this.trainingService.postTraining(trainingData).subscribe({
           next: (response) => {
             // this.resetForm();
+            console.log(trainingData);
             this.router.navigate(['/trainingEmployee']);
           },
           error: (error) => {

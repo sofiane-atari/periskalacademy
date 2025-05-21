@@ -27,7 +27,7 @@ export class ModuleDetailComponent {
   modules: Module[] = [];
   text: string = "";
   chapters: Chapter[] = [];
-  public lang: String | null = "";
+  public lang: String | null = "en";
   updatedChapters: Chapter[] = []; // Still used, but activeChapterId will be an ID
 
   mimeType: string = 'video/mp4';
@@ -44,6 +44,8 @@ export class ModuleDetailComponent {
   trainingProgress: TrainingProgress | undefined;
   moduleProgress: ModuleProgress | undefined;
   isCompletingChapter: boolean = false;
+
+  private subscriptions: Subscription = new Subscription();
 
   constructor(
     private route: ActivatedRoute,
@@ -252,24 +254,39 @@ export class ModuleDetailComponent {
 
   loadVideo(): void {
     const currentChapter = this.getActiveChapter();
-    if (currentChapter?.videoRemoteFilePath) {
+    if (!currentChapter) {
+      this.videoUrl = null;
+      this.errorMessage = 'No chapter selected.';
+      return;
+    }
+
+    const videoKey = `video${this.lang}` as keyof Chapter;
+    const video = currentChapter[videoKey] as Video | undefined;
+
+    if (video?.filePath) {
       this.loading = true;
-      this.trainingSvc.loadVideo(currentChapter.videoRemoteFilePath).subscribe({
+      const sub = this.trainingSvc.loadVideo(video.filePath).subscribe({
         next: (videoBlob: Blob) => {
           this.mimeType = videoBlob.type || 'video/mp4';
           this.videoUrl = URL.createObjectURL(videoBlob);
           this.loading = false;
+          this.errorMessage = '';
+          this.cdr.detectChanges();
         },
         error: (error) => {
           console.error('Error loading video:', error);
           this.loading = false;
           this.errorMessage = 'Failed to load video.';
           this.videoUrl = null;
-        },
+          this.cdr.detectChanges();
+        }
       });
+      this.subscriptions.add(sub);
     } else {
       this.videoUrl = null;
-      this.errorMessage = 'No video path available for this chapter.';
+      this.errorMessage = `No video available for ${this.lang}.`;
+      this.loading = false;
+      this.cdr.detectChanges();
     }
   }
 }

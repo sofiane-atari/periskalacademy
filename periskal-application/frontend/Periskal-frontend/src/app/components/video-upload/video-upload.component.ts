@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-video-upload',
@@ -7,7 +7,16 @@ import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular
 })
 export class VideoUploadComponent {
   @ViewChild('videoPreview') videoPreview!: ElementRef<HTMLVideoElement>;
-  @Output() videoSelected = new EventEmitter<File>();
+  @Input() moduleIndex!: number;
+  @Input() chapterIndex!: number;
+  @Input() lang!: string;
+  // Update the EventEmitter type to match the emitted object
+  @Output() videoSelected = new EventEmitter<{
+    moduleIndex: number;
+    chapterIndex: number;
+    lang: string;
+    file: File;
+  }>();
 
   selectedFile: File | null = null;
   isDragOver = false;
@@ -53,7 +62,13 @@ export class VideoUploadComponent {
     };
     reader.readAsDataURL(file);
 
-    this.videoSelected.emit(file);
+    console.log('Emitting video:', { moduleIndex: this.moduleIndex, chapterIndex: this.chapterIndex, lang: this.lang, file });
+        this.videoSelected.emit({
+          moduleIndex: this.moduleIndex,
+          chapterIndex: this.chapterIndex,
+          lang: this.lang,
+          file
+    });
   }
 
   clearFile(): void {
