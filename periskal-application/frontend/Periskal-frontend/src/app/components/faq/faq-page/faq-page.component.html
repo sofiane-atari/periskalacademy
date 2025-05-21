@@ -1,0 +1,25 @@
+<div class="faq-container"> 
+  <h1>FAQ</h1>
+
+  <form [formGroup]="faqForm" (ngSubmit)="addFaq()">
+    <input formControlName="question" placeholder="Vraag">
+    <textarea formControlName="answer" placeholder="Antwoord"></textarea>
+    <button type="submit" [disabled]="faqForm.invalid">Voeg FAQ toe</button>
+  </form>
+
+  @if(faqs.length === 0){
+  <ng-container>
+    <p>Er zijn nog geen FAQ items.</p>
+  </ng-container>
+  }
+
+  @for (faq of faqs; track $index){
+    <div>
+      <div class="faq-item">
+        <h3>{{ faq.question }}</h3>
+        <p>{{ faq.answer }}</p>
+        <button (click)="deleteFaq($index)">Verwijderen</button>
+      </div>
+    </div>
+  }
+</div>
