@@ -125,5 +125,19 @@
   "PROGRESS": "Progression:",
   "OVERAL_TRAINING_PROGRESS": "Progression globale de la formation:",
   "START": "Démarrer",
-  "TAKE_EXAM_CERT": "Passer l'examen pour la certification"
+  "TAKE_EXAM_CERT": "Passer l'examen pour la certification",
+  "PRICE": "Prix de l'examen",
+  "QUESTION_AMOUNT": "Nombre de questions",
+  "TOTAL_QUESTIONS_REQUIRED": "Le champ du montant de la question est obligatoire.",
+  "PRICE_REQUIRED": "Le champ de prix est obligatoire.",
+  "PLACEHOLDER_TOTAL_QUESTIONS": "Entrez le nombre de questions de l'examen.",
+  "PLACEHOLDER_EXAM_TITLE": "Entrez le titre de l'examen.",
+  "PLACEHOLDER_EXAM_DESCRIPTION": "Entrez la description de l'examen.",
+  "PLACEHOLDER_PRICE": "Entrez le prix de l'examen.",
+  "QUESTION": "Question",
+  "QUESTION_TEXT_PLACEHOLDER": "Entrez le contenu du texte de la question.",
+  "IMAGES_QUESTIONS": "Image(s) pour la question",
+  "ANSWERS_QUESTION": "Réponses à la question",
+  "ANSWER": "Réponse",
+  "CORRECT_ANSWER": "Réponse correcte"
 }

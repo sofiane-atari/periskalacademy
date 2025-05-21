@@ -125,5 +125,19 @@
   "PROGRESS": "vooruitgang:",
   "OVERAL_TRAINING_PROGRESS": "Algemene vooruitgang van de training:",
   "START": "Start",
-  "TAKE_EXAM_CERT": "Examen afleggen voor certificering"
+  "TAKE_EXAM_CERT": "Examen afleggen voor certificering",
+  "PRICE": "Examen Prijs",
+  "QUESTION_AMOUNT": "Aantal vragen",
+  "TOTAL_QUESTIONS_REQUIRED": "Het veld voor aantal vragen is verplicht.",
+  "PRICE_REQUIRED": "Het veld voor de prijs is verplicht.",
+  "PLACEHOLDER_TOTAL_QUESTIONS": "Voer het aantal vragen in dat er op het examen zullen komen.",
+  "PLACEHOLDER_EXAM_TITLE": "Voer de titel van het examen in.",
+  "PLACEHOLDER_EXAM_DESCRIPTION": "Voer de beschrijving van het examen in.",
+  "PLACEHOLDER_PRICE": "Voer de prijs van het examen in.",
+  "QUESTION": "Vraag",
+  "QUESTION_TEXT_PLACEHOLDER": "Voer de titel van de vraag in.",
+  "IMAGES_QUESTIONS": "Afbeelding(en) voor vraag",
+  "ANSWERS_QUESTION": "Antwoorden voor vraag",
+  "ANSWER": "Antwoord",
+  "CORRECT_ANSWER": "Juist antwoord"
 }

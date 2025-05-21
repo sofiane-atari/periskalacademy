@@ -54,6 +54,7 @@ public class ExamService {
         exam.setExamTitle(examRequest.getExamTitle());
         exam.setExamDescription(examRequest.getExamDescription());
         exam.setTotalQuestions(examRequest.getTotalQuestions());
+        exam.setPrice(examRequest.getPrice());
         exam.setPassingScore(examRequest.getPassingScore());
 
         // 2) Link Training
@@ -100,7 +101,7 @@ public class ExamService {
         Optional<Exam> examOpt = examRepository.findById(id);
         if (examOpt.isPresent()) {
             Exam exam = examOpt.get();
-    
+
             exam.setExamTitle(updatedExam.getExamTitle());
             exam.setExamDescription(updatedExam.getExamDescription());
             exam.setTotalQuestions(updatedExam.getTotalQuestions());
@@ -108,11 +109,11 @@ public class ExamService {
     
             // Oude vragen verwijderen
             exam.getQuestions().clear();
-    
+
             for (Question updatedQuestion : updatedExam.getQuestions()) {
                 updatedQuestion.setId(null);
                 updatedQuestion.setExam(exam);
-    
+
                 // Answers koppelen aan question
                 if (updatedQuestion.getAnswers() != null) {
                     for (Answer answer : updatedQuestion.getAnswers()) {
@@ -120,15 +121,14 @@ public class ExamService {
                         answer.setQuestion(updatedQuestion);
                     }
                 }
-    
+
                 exam.getQuestions().add(updatedQuestion);
             }
-    
+
             return examRepository.save(exam);
         }
         return null;
     }
-    
 
     public void deleteExam(Long id) {
         Optional<Exam> examOpt = examRepository.findById(id);

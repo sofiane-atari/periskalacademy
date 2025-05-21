@@ -36,6 +36,8 @@ public class Exam {
     @Column(nullable = false)
     private int passingScore = 100; // Default 100% passing score
 
+    private int price;
+
     @OneToMany(mappedBy = "exam", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference("exam-questions")
     private List<Question> questions = new ArrayList<>();

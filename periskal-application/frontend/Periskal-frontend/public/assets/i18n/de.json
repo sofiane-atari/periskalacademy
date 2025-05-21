@@ -125,5 +125,19 @@
   "PROGRESS": "Fortschritt:",
   "OVERAL_TRAINING_PROGRESS": "Gesamter Fortschritt der Schulung:",
   "START": "Starten",
-  "TAKE_EXAM_CERT": "Prüfung zur Zertifizierung ablegen"
+  "TAKE_EXAM_CERT": "Prüfung zur Zertifizierung ablegen",
+  "PRICE": "Preis der Prüfung",
+  "QUESTION_AMOUNT": "Anzahl der Fragen",
+  "TOTAL_QUESTIONS_REQUIRED": "Das Feld für den Betrag der Frage ist obligatorisch.",
+  "PRICE_REQUIRED": "Das Feld für den Preis ist obligatorisch.",
+  "PLACEHOLDER_TOTAL_QUESTIONS": "Geben Sie die Anzahl der Fragen ein, die in der Prüfung gestellt werden.",
+  "PLACEHOLDER_EXAM_TITLE": "Geben Sie den Titel der Prüfung ein.",
+  "PLACEHOLDER_EXAM_DESCRIPTION": "Geben Sie die Beschreibung der Prüfung ein.",
+  "PLACEHOLDER_PRICE": "Geben Sie den Preis für die Prüfung ein..",
+  "QUESTION": "Frage",
+  "QUESTION_TEXT_PLACEHOLDER": "Geben Sie den Inhalt des Fragetextes ein..",
+  "IMAGES_QUESTIONS": "Bild(er) zur Frage",
+  "ANSWERS_QUESTION": "Antworten zur Frage",
+  "ANSWER": "Antwort",
+  "CORRECT_ANSWER": "Richtige Antwort"
 }

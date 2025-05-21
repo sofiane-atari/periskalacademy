@@ -73,21 +73,27 @@
 
       <!-- Exam title en description (onveranderd) -->
       <label for="title">{{'EXAM_TITLE' | translate}}</label>
-      <input id="title" formControlName="examTitle" type="text">
+      <input id="title" formControlName="examTitle" type="text" placeholder="{{'PLACEHOLDER_EXAM_TITLE'|translate}}">
       @if(examForm.get('examTitle')?.invalid && examForm.get('examTitle')?.touched){
         <p class="error">{{'EXAM_TITLE_REQUIRED' | translate }}</p>
       }
 
-      <label for="totalQuestions">Aantal Vragen</label>
-      <input id="totalQuestions" formControlName="totalQuestions" type="number" min="1" placeholder="Vul in hoeveel aantal vragen op het examen zullen komen">
-      @if(examForm.get('totalQuestions')?.invalid && examForm.get('totalQuestions')?.touched){
-        <p class="error">TotalQuestions required</p>
+      <label for="description">{{'EXAM_DESCRIPTION' | translate}}</label>
+      <textarea id="description" formControlName="examDescription" placeholder="{{'PLACEHOLDER_EXAM_DESCRIPTION'|translate}}"></textarea>
+      @if(examForm.get('examDescription')?.invalid && examForm.get('examDescription')?.touched){
+        <p class="error">{{'EXAM_DESCRIPTION_REQUIRED' | translate }}</p>
       }
 
-      <label for="description">{{'EXAM_DESCRIPTION' | translate}}</label>
-      <textarea id="description" formControlName="examDescription"></textarea>
-      @if(examForm.get('examDescription')?.invalid && examForm.get('examDescription')?.touched){
-        <p class="error">{{'EXAM_TITLE_REQUIRED' | translate }}</p>
+      <label for="totalQuestions">{{'QUESTION_AMOUNT' | translate}}</label>
+      <input id="totalQuestions" formControlName="totalQuestions" type="number" min="1" placeholder="{{'PLACEHOLDER_TOTAL_QUESTIONS'|translate}}">
+      @if(examForm.get('totalQuestions')?.invalid && examForm.get('totalQuestions')?.touched){
+        <p class="error">{{'TOTAL_QUESTIONS_REQUIRED' | translate}}</p>
+      }
+
+      <label for="price">{{'PRICE' | translate}}</label>
+      <input id="price" formControlName="price" type="number" min="1" placeholder="{{'PLACEHOLDER_PRICE'|translate}}">
+      @if(examForm.get('price')?.invalid && examForm.get('price')?.touched){
+        <p class="error">{{'PRICE_REQUIRED' | translate}}</p>
       }
 
       @if (examForm.get('questions')) {
@@ -100,9 +106,9 @@
               <div formArrayName="questions">
                 @for (question of questions.controls; track $index) {
                   <div [formGroupName]="$index" class="question-block">
-                    <h4>Vraag {{ $index + 1 }}</h4>
-                    <textarea formControlName="text" placeholder="Question text"></textarea>
-                    <label>Images for question {{ $index + 1 }}</label>
+                    <h4>{{'QUESTION' | translate}} {{ $index + 1 }}</h4>
+                    <textarea formControlName="text" placeholder="{{'QUESTION_TEXT_PLACEHOLDER' | translate}}"></textarea>
+                    <label>{{'IMAGES_QUESTIONS'}} {{ $index + 1 }}</label>
                     <app-photo-upload formControlName="photos"></app-photo-upload>
                     <button type="button" (click)="removeQuestion($index)">
                       {{'REMOVE_BUTTON' | translate}}
@@ -118,15 +124,15 @@
               <div formArrayName="questions">
                 @for (question of questions.controls; track $index) {
                   <div [formGroupName]="$index" class="question-block">
-                    <h4>Antwoorden voor vraag {{ $index + 1 }}</h4>
+                    <h4>{{'ANSWERS_QUESTION' | translate}} {{ $index + 1 }}</h4>
                     <div formArrayName="answers">
                       @for (answer of getAnswers($index).controls; let i = $index; track i) {
                         <div [formGroupName]="i" class="mb-2">
-                          <input type="text" formControlName="text" placeholder="Antwoord {{i + 1}}">
+                          <input type="text" formControlName="text" placeholder="{{'ANSWER'| translate}} {{i + 1}}">
                         </div>
                       }
                     </div>
-                    <label>Correct antwoord (1-4):</label>
+                    <label>{{'CORRECT_ANSWER'}} (1-4):</label>
                     <input type="number" formControlName="correctAnswer" min="1" max="4">
                   </div>
                 }
