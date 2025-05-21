@@ -78,4 +78,8 @@ export class BillingComponent implements OnInit {
       this.billingForm.markAllAsTouched();
     }
   }
+
+  goBack() {
+    this.router.navigate(['/trainingEmployee'])
+  }
 }
