@@ -8,7 +8,7 @@ export class UserAttemptService {
 
   constructor(private client: HttpClient) { }
 
-  checkUserAttempts(examId: number, userId: String) {
-    return this.client.get(`http://backend.localhost:8080/api/attempts/${examId}/${userId}`);
+  startExam(examId: number, userId: String) {
+    return this.client.post(`http://backend.localhost:8080/api/attempts/${userId}/${examId}/start`, null);
   }
 }
