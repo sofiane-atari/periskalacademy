@@ -9,8 +9,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import periskal.academy.backend.jpa.Billing;
 import periskal.academy.backend.jpa.BillingRepository;
+import periskal.academy.backend.jpa.UserExamAttemptRepository;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -27,6 +29,9 @@ public class BillingServiceTest {
     @InjectMocks
     private BillingService billingService;
 
+    @Mock
+    private UserExamAttemptRepository userExamAttemptRepository;
+
     private Billing testBillingEntity;
 
     @BeforeEach
@@ -34,7 +39,7 @@ public class BillingServiceTest {
         testBillingEntity = new Billing();
         testBillingEntity.setId(1L);
         testBillingEntity.setFullName("Test Customer");
-        testBillingEntity.setExamId(1);
+        testBillingEntity.setExamId("1");
         testBillingEntity.setAddress("test");
         testBillingEntity.setEmail("hallo@test.be");
         testBillingEntity.setTax("120213456");

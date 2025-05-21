@@ -8,6 +8,9 @@ import { ProgressService } from '../../../services/Progress/progress.service';
 import { TrainingProgress } from '../../../models/progress.model';
 import { ProgressBarComponent } from '../../progress-bar/progress-bar.component';
 import { JwtDecoderService } from '../../../services/JwtDecode/jwt-decoder.service';
+import { UserAttemptService } from '../../../services/UserExamAttempts/user-attempt.service';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+import { HttpStatusCode } from '@angular/common/http';
 
 @Component({
   selector: 'app-training-detail',
@@ -31,7 +34,9 @@ export class TrainingDetailComponent {
     private trainingSvc: TrainingService,
     private router: Router,
     private ProgressService: ProgressService,
-    private jwtDecoderService: JwtDecoderService
+    private jwtDecoderService: JwtDecoderService,
+    private userAttemptSvc: UserAttemptService,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -58,6 +63,27 @@ export class TrainingDetailComponent {
   goBack() {
     this.router.navigate(['trainingEmployee'])
   }
+
+  startExam() {
+    if (this.training?.exam?.id) {
+      this.userAttemptSvc.startExam(this.training.exam.id, this.userId).subscribe({
+        next: (response) => {
+          this.router.navigate(['/take-exam', this.training?.id]);
+        },
+        error: (err) => {
+          console.error('Error starting exam:', err);
+
+          // If 400 response, route to billing
+          if (err.status === 400) {
+            this.goToBilling();
+          } else {
+            alert('An unexpected error occurred.');
+          }
+        }
+      });
+    }
+  }
+
 
   goToBilling(): void {
     this.router.navigate(['/billing', this.training?.exam?.id]);

@@ -1,10 +1,10 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { BillingService } from '../../services/Billing/billing.service';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JwtDecoderService } from '../../services/JwtDecode/jwt-decoder.service';
+import { ExamService } from '../../services/Exam/exam.service';
 
 @Component({
   selector: 'app-order',
@@ -16,14 +16,20 @@ export class BillingComponent implements OnInit {
   billingForm!: FormGroup;
   examId!: number;
   userId!: string | null;
+  examAttempts!: number;
 
-  constructor(private fb: FormBuilder, private billingSvc: BillingService, private snackBar: MatSnackBar, private router: Router, private route: ActivatedRoute, private jwtDecoderService: JwtDecoderService) { }
+  constructor(private fb: FormBuilder, private billingSvc: BillingService, private snackBar: MatSnackBar, private router: Router, private route: ActivatedRoute, private jwtDecoderService: JwtDecoderService, private examService: ExamService) { }
 
   ngOnInit() {
     const rawExamId = this.route.snapshot.paramMap.get('examid');
     this.examId = rawExamId ? Number(rawExamId) : NaN;
 
     this.userId = this.jwtDecoderService.getId();
+    this.examService.getExamById(this.examId).subscribe({
+      next: (data) => {
+        this.examAttempts = data.examAttempts;
+      }
+    })
 
     this.billingForm = this.fb.group({
       fullName: ['', Validators.required],
@@ -37,6 +43,7 @@ export class BillingComponent implements OnInit {
       countryCode: [''],
       examId: [this.examId, Validators.required],
       userId: [this.userId, Validators.required],
+      examAttempts: [this.examAttempts, Validators.required]
     });
   }
 
@@ -44,10 +51,7 @@ export class BillingComponent implements OnInit {
   onSubmit() {
     this.billingForm.patchValue({ userId: this.userId });
     this.billingForm.patchValue({ examId: this.examId });
-    console.log(this.billingForm);
-    const billingFormData = this.billingForm.value;
-    console.log(this.billingForm.valid);
-    console.log(billingFormData);
+    this.billingForm.patchValue({ examAttempts: this.examAttempts });
     if (this.billingForm.valid) {
       const billingFormData = this.billingForm.value;
       console.log(billingFormData);
@@ -73,5 +77,9 @@ export class BillingComponent implements OnInit {
     } else {
       this.billingForm.markAllAsTouched();
     }
+  }
+
+  goBack() {
+    this.router.navigate(['/trainingEmployee'])
   }
 }

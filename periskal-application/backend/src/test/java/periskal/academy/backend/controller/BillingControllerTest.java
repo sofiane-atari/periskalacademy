@@ -46,7 +46,7 @@ public class BillingControllerTest {
         testBilling = new Billing();
         testBilling.setId(1L);
         testBilling.setFullName("Test Customer");
-        testBilling.setExamId(1);
+        testBilling.setExamId("1");
         testBilling.setAddress("Test Street 1");
         testBilling.setCity("Antwerpen");
         testBilling.setEmail("hallo@test.be");

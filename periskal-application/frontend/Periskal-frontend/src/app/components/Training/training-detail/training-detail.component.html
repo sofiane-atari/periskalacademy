@@ -50,7 +50,7 @@
         <div class="footer">
             <button class="back-button" (click)="goBack()">Back</button>
             @if (training?.exam != null) {
-            <button class="certificate-button" (click)="goToBilling()" [disabled]="getOverallProgressPercent()!==100">{{'TAKE_EXAM_CERT' | translate}}</button>
+            <button class="certificate-button" (click)="startExam()" [disabled]="getOverallProgressPercent()!==100">{{'TAKE_EXAM_CERT' | translate}}</button>
             }
         </div>
     </div>
