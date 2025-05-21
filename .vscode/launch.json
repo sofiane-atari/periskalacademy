@@ -1,0 +1,21 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Debug Frontend",
+      "url": "http://frontend.localhost:4200", 
+      "webRoot": "${workspaceFolder}/periskal-application/frontend/Periskal-frontend"
+    },
+    {
+      "type": "java",
+      "name": "Debug Backend (Remote)",
+      "request": "attach",
+      "hostName": "localhost",
+      "port": 5005,
+      "projectName": "periskal-academy-backend"
+    }
+  ]
+}
+

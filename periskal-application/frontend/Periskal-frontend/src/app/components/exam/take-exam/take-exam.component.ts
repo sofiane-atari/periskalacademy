@@ -8,6 +8,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { CompletedExam } from '../../../models/completed-exam.model';
 import { JwtDecoderService } from '../../../services/JwtDecode/jwt-decoder.service';
 import { CompletedExamService } from '../../../services/CompletedExam/completed-exam.service';
+import { TrainingAssignmentService } from '../../../services/Assignment/training-assignment.service';
 
 @Component({
   selector: 'app-take-exam',
@@ -20,13 +21,14 @@ export class TakeExamComponent implements OnInit {
   currentQuestionIndex = 0;
   loading = true;
   error: string | null = null;
+  isAssigned: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     private examService: ExamService,
     private router: Router,
     private jwtDecoderService :JwtDecoderService,
-    private completedExamService: CompletedExamService
+    private completedExamService: CompletedExamService,
   ) { }
 
   ngOnInit(): void {
@@ -34,6 +36,7 @@ export class TakeExamComponent implements OnInit {
     this.loadExam(examId);
   }
 
+  
 
   loadExam(examId: number): void {
     this.loading = true;
@@ -101,14 +104,14 @@ export class TakeExamComponent implements OnInit {
       return;
     }
 
-    // ****** START DEBUGGING ******
+
     console.log('Current exam object before submission:', JSON.stringify(this.exam, null, 2));
     if (this.exam.trainingId === undefined || this.exam.trainingId === null) {
       console.error('CRITICAL: this.exam.trainingId IS UNDEFINED OR NULL!');
       alert('Error: Cannot submit exam. Training ID is missing from exam data. Please contact support.');
-      return; // Stop submission
+      return; 
     }
-    // ****** END DEBUGGING ******
+
 
     let correctCount = 0
 
