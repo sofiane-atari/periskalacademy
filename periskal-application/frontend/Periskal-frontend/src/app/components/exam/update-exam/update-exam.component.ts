@@ -18,7 +18,8 @@ export class UpdateExamComponent implements OnInit {
     trainingId: 0,
     totalQuestions: 0,
     questions: [],
-    price: 0
+    price: 0,
+    examAttempts: 0,
   };
 
   constructor(

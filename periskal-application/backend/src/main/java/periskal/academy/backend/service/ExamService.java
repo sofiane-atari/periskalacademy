@@ -55,11 +55,13 @@ public class ExamService {
         exam.setExamDescription(examRequest.getExamDescription());
         exam.setTotalQuestions(examRequest.getTotalQuestions());
         exam.setPrice(examRequest.getPrice());
+        exam.setExamAttempts(examRequest.getExamAttempts());
         exam.setPassingScore(examRequest.getPassingScore());
 
         // 2) Link Training
         Training training = trainingRepository.findById(examRequest.getTrainingId())
-                .orElseThrow(() -> new ResourceNotFoundException("Training not found with id: " + examRequest.getTrainingId()));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Training not found with id: " + examRequest.getTrainingId()));
         exam.setTraining(training);
 
         // 3) Build Questions + Photos
@@ -106,7 +108,7 @@ public class ExamService {
             exam.setExamDescription(updatedExam.getExamDescription());
             exam.setTotalQuestions(updatedExam.getTotalQuestions());
             exam.setPassingScore(updatedExam.getPassingScore());
-    
+
             // Oude vragen verwijderen
             exam.getQuestions().clear();
 

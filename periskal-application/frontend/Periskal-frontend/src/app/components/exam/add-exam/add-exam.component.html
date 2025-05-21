@@ -96,6 +96,12 @@
         <p class="error">{{'PRICE_REQUIRED' | translate}}</p>
       }
 
+      <label for="examAttempts">{{'EXAM_ATTEMPTS' | translate}}</label>
+      <input id="examAttempts" formControlName="examAttempts" type="number" min="1" placeholder="{{'PLACEHOLDER_EXAM_ATTEMPTS'|translate}}">
+      @if(examForm.get('examAttempts')?.invalid && examForm.get('examAttempts')?.touched){
+        <p class="error">{{'EXAM_ATTEMPTS_REQUIRED' | translate}}</p>
+      }
+
       @if (examForm.get('questions')) {
         <div class="questions-section">
           <h3>{{'QUESTIONS' | translate}}</h3>

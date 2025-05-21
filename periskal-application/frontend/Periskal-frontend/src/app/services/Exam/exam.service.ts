@@ -63,7 +63,8 @@ export class ExamService {
         answers: q.answers.map((a: any) => ({ text: a.text })),
         correctAnswer: q.correctAnswer
       })),
-      price: examData.price
+      price: examData.price,
+      examAttempts: examData.examAttempts
     };
     return this.client.post<Exam>(this.baseUrl, payload);
   }
