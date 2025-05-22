@@ -5,10 +5,11 @@ import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JwtDecoderService } from '../../services/JwtDecode/jwt-decoder.service';
 import { ExamService } from '../../services/Exam/exam.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-order',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, TranslatePipe],
   templateUrl: './billing.component.html',
   styleUrl: './billing.component.css'
 })

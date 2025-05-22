@@ -7,13 +7,14 @@ import { MatTableDataSource } from '@angular/material/table';
 import { JwtDecoderService } from '../../services/JwtDecode/jwt-decoder.service';
 import { CompletedExam } from '../../models/completed-exam.model';
 import { CompletedExamService } from '../../services/CompletedExam/completed-exam.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 
 
 @Component({
-  selector: 'app-profile', 
+  selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule,MatTableModule,MatSortModule,MatProgressSpinnerModule],
+  imports: [CommonModule, MatTableModule, MatSortModule, MatProgressSpinnerModule, TranslatePipe],
   templateUrl: './exams-list.component.html',
   styleUrls: ['./exams-list.component.css']
 })
@@ -24,30 +25,30 @@ export class ExamsListComponent implements OnInit, AfterViewInit {
   dataSource = new MatTableDataSource<CompletedExam>([]);
   isLoading = true;
   error: string | null = null;
-  currentUserId: string | null = null; 
-  
+  currentUserId: string | null = null;
+
 
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
     private completedExamService: CompletedExamService,
     private jwtDecoderService: JwtDecoderService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-    this.currentUserId = this.jwtDecoderService.getId(); 
+    this.currentUserId = this.jwtDecoderService.getId();
     this.loadCompletedExams();
   }
 
   loadCompletedExams(): void {
     this.isLoading = true;
     this.error = null;
-    
-    if (!this.currentUserId) { 
-         this.error = "User ID is missing. Cannot load exams.";
-         this.isLoading = false;
-         this.dataSource.data = []; 
-         return;
+
+    if (!this.currentUserId) {
+      this.error = "User ID is missing. Cannot load exams.";
+      this.isLoading = false;
+      this.dataSource.data = [];
+      return;
     }
 
     this.completedExamService.getUserCompletedExams(this.currentUserId).subscribe({
@@ -59,7 +60,7 @@ export class ExamsListComponent implements OnInit, AfterViewInit {
         console.error('Error fetching completed exams:', err);
         this.error = `Failed to load exams: ${err.message || 'Server error'}`;
         this.isLoading = false;
-        this.dataSource.data = []; 
+        this.dataSource.data = [];
       }
     });
   }
@@ -67,5 +68,5 @@ export class ExamsListComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
   }
-  
+
 }

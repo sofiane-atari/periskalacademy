@@ -12,12 +12,13 @@ import { catchError, forkJoin, map, of, switchMap } from 'rxjs';
 import { JwtDecoderService } from '../../services/JwtDecode/jwt-decoder.service';
 import { TrainingAssignmentService } from '../../services/Assignment/training-assignment.service';
 import { FormsModule } from '@angular/forms';
+import { TranslatePipe } from '@ngx-translate/core';
 
 
 @Component({
   selector: 'app-skippers',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslatePipe],
   providers: [],
   templateUrl: './skippers.component.html',
   styleUrls: ['./skippers.component.css']
@@ -40,9 +41,9 @@ export class SkippersComponent implements OnInit {
     private progressService: ProgressService,
     private assignmentService: TrainingAssignmentService,
     private jwtDecoder: JwtDecoderService,
-  ) {}
+  ) { }
 
-  ngOnInit() {  
+  ngOnInit() {
     this.fetchSkippersData();
     this.mainListSelectedSkipperIds = [];
   }
@@ -150,12 +151,14 @@ export class SkippersComponent implements OnInit {
     if (fleetmanagerId === null) {
       console.error('Fleetmanager ID is null');
       this.error = 'Failed to retrieve fleetmanager ID.';
-      return;}
+      return;
+    }
 
-    if(this.selectedTrainingId === null) {
-      console.error('No training selected'); 
+    if (this.selectedTrainingId === null) {
+      console.error('No training selected');
       this.error = 'Please select a training to assign.';
-      return; }
+      return;
+    }
 
     this.assignmentService.assignTrainingToSkippers(
       this.selectedTrainingId,
@@ -175,7 +178,7 @@ export class SkippersComponent implements OnInit {
   }
 
   loadAvailableTrainings() { // TODO add a way to only load trainings that are ready, Add a Active button to the training that admins can click to set the training to active or inactive
-                             // Create a new endpoint in the backend to get all trainings that are active and then use that here.
+    // Create a new endpoint in the backend to get all trainings that are active and then use that here.
 
     this.trainingService.getTrainingData().subscribe({
       next: (trainings) => {
@@ -189,10 +192,10 @@ export class SkippersComponent implements OnInit {
 
   openAssignmentDialog() {
 
-    this.selectedSkipperIds = [...this.mainListSelectedSkipperIds]; 
+    this.selectedSkipperIds = [...this.mainListSelectedSkipperIds];
     if (this.selectedSkipperIds.length === 0) {
-        alert("Please select at least one skipper from the list to assign training.");
-        return;
+      alert("Please select at least one skipper from the list to assign training.");
+      return;
     }
 
     this.loadAvailableTrainings();
@@ -201,15 +204,15 @@ export class SkippersComponent implements OnInit {
   }
 
   getSkipperName(id: string): string {
-  const skipper = this.skippers.find(s => s.id === id);
+    const skipper = this.skippers.find(s => s.id === id);
 
-  if (skipper) {
+    if (skipper) {
 
-     return `${skipper.username} (${skipper.firstname} ${skipper.lastname})`;
+      return `${skipper.username} (${skipper.firstname} ${skipper.lastname})`;
 
-  }
+    }
 
-  return `Skipper ID: ${id}`; // Fallback if skipper not found 
+    return `Skipper ID: ${id}`; // Fallback if skipper not found 
   }
 
   toggleSkipperSelection(skipperId: string, event: Event) {
