@@ -36,6 +36,7 @@ export class AddExamComponent implements OnInit {
       totalQuestions: ['', Validators.required],
       price: ['', Validators.required],
       examAttempts: ['', Validators.required],
+      duration: [''],
       questions: this.fb.array([])// Initialize empty FormArray
     });
     this.lang = localStorage.getItem('lang') || 'en';
@@ -140,7 +141,8 @@ export class AddExamComponent implements OnInit {
           correctAnswer: Number(q.value.correctAnswer)
         })),
         price: Number(this.examForm.value.price),
-        examAttempts: Number(this.examForm.value.examAttempts)
+        examAttempts: Number(this.examForm.value.examAttempts),
+        duration: Number(this.examForm.value.duration)
       };
 
       console.log('Submitting exam data:', examData);

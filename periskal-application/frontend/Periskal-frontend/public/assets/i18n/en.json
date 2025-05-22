@@ -213,6 +213,10 @@
   "SUBMIT_EXAM": "Submit Exam",
   "SELECT_A_TRAINING": "Please select a training",
   "ENTER_A_VALID_EMAIL": "Please enter a valid email.",
+  "EXAM_DURATION": "Exam duration (in minutes)",
+  "PLACEHOLDER_DURATION": "Please enter the maximum duration for the exam in minutes.",
+  "TIME_REMAINING": "Time remaining:",
+  "OF": "of",
   "PROCEED_TO_BILLING": "Proceed to Billing",
   "Processing": "Processing"
 }

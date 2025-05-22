@@ -39,6 +39,7 @@ public class Exam {
     private int price;
 
     private int examAttempts;
+    private int duration;
 
     @OneToMany(mappedBy = "exam", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference("exam-questions")

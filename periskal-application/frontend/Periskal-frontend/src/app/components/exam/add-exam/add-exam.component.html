@@ -102,6 +102,9 @@
         <p class="error">{{'EXAM_ATTEMPTS_REQUIRED' | translate}}</p>
       }
 
+      <label for="duration">{{'EXAM_DURATION' | translate}}</label>
+      <input id="duration" formControlName="duration" type="number" min="1" placeholder="{{'PLACEHOLDER_DURATION'|translate}}">
+
       @if (examForm.get('questions')) {
         <div class="questions-section">
           <h3>{{'QUESTIONS' | translate}}</h3>

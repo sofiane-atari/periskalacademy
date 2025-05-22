@@ -20,6 +20,7 @@ export class UpdateExamComponent implements OnInit {
     questions: [],
     price: 0,
     examAttempts: 0,
+    duration: 0,
   };
 
   constructor(
