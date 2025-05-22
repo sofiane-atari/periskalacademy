@@ -216,5 +216,7 @@
   "EXAM_DURATION": "Examen duur (in minuten)",
   "PLACEHOLDER_DURATION": "Gelieve de maximale duur van het examen in minuten in te voeren.",
   "TIME_REMAINING": "Resterende tijd:",
-  "OF": "van"
+  "OF": "van",
+  "PROCEED_TO_BILLING": "Verder naar facturatie",
+  "Processing": "Bezig met verwerken"
 }

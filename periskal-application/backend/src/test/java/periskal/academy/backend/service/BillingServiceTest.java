@@ -3,19 +3,25 @@ package periskal.academy.backend.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import periskal.academy.backend.jpa.Billing;
 import periskal.academy.backend.jpa.BillingRepository;
+import periskal.academy.backend.jpa.UserExamAttempt;
 import periskal.academy.backend.jpa.UserExamAttemptRepository;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -136,4 +142,66 @@ public class BillingServiceTest {
         // Assert that the save method on the repository was called once with null
         verify(billingRepository, times(1)).save(nullBilling);
     }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    void givenValidBillingEntityList_whenSaveAttemptsBatch_thenReturnsSavedBillingListAndCreatesUserExamAttempts() {
+    // Arrange: Create a list of test billing entities
+    Billing billing1 = new Billing();
+    billing1.setId(1L);
+    billing1.setFullName("Customer 1");
+    billing1.setExamId("EXAM001");
+    billing1.setUserId("USER001");
+    billing1.setExamAttempts(3);
+    billing1.setEmail("customer1@test.com");
+
+    Billing billing2 = new Billing();
+    billing2.setId(2L);
+    billing2.setFullName("Customer 2");
+    billing2.setExamId("EXAM002");
+    billing2.setUserId("USER002");
+    billing2.setExamAttempts(5);
+    billing2.setEmail("customer2@test.com");
+
+    List<Billing> inputBillingList = Arrays.asList(billing1, billing2);
+    List<Billing> savedBillingList = Arrays.asList(billing1, billing2);
+
+    // Configure mocks
+    when(billingRepository.saveAll(inputBillingList)).thenReturn(savedBillingList);
+    when(userExamAttemptRepository.saveAll(ArgumentMatchers.<UserExamAttempt>anyList())).thenReturn(Collections.<UserExamAttempt>emptyList());
+
+    // Act: Call the saveAttemptsBatch method
+    List<Billing> result = billingService.saveAttemptsBatch(inputBillingList);
+
+    // Assert: Verify the returned billing list
+    assertThat(result)
+            .isNotNull()
+            .hasSize(2)
+            .containsExactlyElementsOf(savedBillingList);
+
+    // Verify billingRepository.saveAll was called once with correct input
+    verify(billingRepository, times(1)).saveAll(inputBillingList);
+
+    // Capture and verify the UserExamAttempt entities that were saved
+    ArgumentCaptor<List<UserExamAttempt>> attemptCaptor = ArgumentCaptor.forClass(List.class);
+    verify(userExamAttemptRepository, times(1)).saveAll(attemptCaptor.capture());
+
+    List<UserExamAttempt> capturedAttempts = attemptCaptor.getValue();
+    assertThat(capturedAttempts)
+            .hasSize(2);
+
+    // Verify first UserExamAttempt
+    UserExamAttempt attempt1 = capturedAttempts.get(0);
+    assertThat(attempt1.getExamId()).isEqualTo("EXAM001");
+    assertThat(attempt1.getUserId()).isEqualTo("USER001");
+    assertThat(attempt1.getTotalAttempts()).isEqualTo(3);
+    assertThat(attempt1.getUsedAttempts()).isEqualTo(0);
+
+    // Verify second UserExamAttempt
+    UserExamAttempt attempt2 = capturedAttempts.get(1); 
+    assertThat(attempt2.getExamId()).isEqualTo("EXAM002");
+    assertThat(attempt2.getUserId()).isEqualTo("USER002");
+    assertThat(attempt2.getTotalAttempts()).isEqualTo(5);
+    assertThat(attempt2.getUsedAttempts()).isEqualTo(0);
+}
 }

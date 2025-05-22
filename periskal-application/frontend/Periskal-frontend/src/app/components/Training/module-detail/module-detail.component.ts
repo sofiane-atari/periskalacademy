@@ -27,7 +27,7 @@ export class ModuleDetailComponent {
   modules: Module[] = [];
   text: string = "";
   chapters: Chapter[] = [];
-  public lang: String | null = "";
+  public lang: String | null = "En";
   updatedChapters: Chapter[] = []; // Still used, but activeChapterId will be an ID
 
   mimeType: string = 'video/mp4';
@@ -45,6 +45,8 @@ export class ModuleDetailComponent {
   moduleProgress: ModuleProgress | undefined;
   isCompletingChapter: boolean = false;
 
+  private subscriptions: Subscription = new Subscription();
+
   constructor(
     private route: ActivatedRoute,
     private trainingSvc: TrainingService,
@@ -61,16 +63,33 @@ export class ModuleDetailComponent {
     return content.replace(/\n/g, '<br>');
   }
 
-
   ngOnInit(): void {
-    this.lang = localStorage.getItem('lang');
-    this.trainingId = Number(this.route.snapshot.paramMap.get('id'));
-    this.moduleId = Number(this.route.snapshot.paramMap.get('moduleid'))
-    this.userId = this.jwtDecoderService.getId() ?? 'Error';
-
-    this.loadTrainingData();
-    this.loadProgressData();
+  console.log('Route params:', this.route.snapshot.paramMap);
+  this.lang = localStorage.getItem('lang')?.toLowerCase() || 'en';
+  const idParam = this.route.snapshot.paramMap.get('id');
+  this.trainingId = idParam ? Number(idParam) : 0;
+  if (this.trainingId === 0) {
+    console.error('Invalid training ID:', idParam);
+    this.errorMessage = 'Invalid training ID. Please check the URL.';
+    return;
   }
+
+  const moduleIdParam = this.route.snapshot.paramMap.get('moduleid');
+  this.moduleId = moduleIdParam ? Number(moduleIdParam) : 0;
+  if (this.moduleId === 0) {
+    console.error('Invalid module ID:', moduleIdParam);
+    this.errorMessage = 'Invalid module ID. Please check the URL.';
+    return;
+  }
+
+  this.userId = this.jwtDecoderService.getId() ?? 'Error';
+
+  this.loadTrainingData();
+  this.loadProgressData();
+}
+  disableContextMenu(event: Event): void {
+      event.preventDefault();
+    }
 
   getChapterArray(chapters: any): any[] {
     if (Array.isArray(chapters)) return chapters;
@@ -86,6 +105,10 @@ export class ModuleDetailComponent {
         const currentModule = this.modules.find(m => m.id === this.moduleId);
         this.chapters = currentModule?.chapters || [];
         this.updatedChapters = [...this.chapters];
+
+        console.log('Training data:', this.training); // Log the entire training
+        console.log('Current module:', currentModule); // Log the current module
+        console.log('Chapters:', this.chapters); // Log the chapters
 
         if (this.chapters.length > 0) {
           this.activeChapterId = this.chapters[0].id; // Initialize activeChapterId with the ID of the first chapter
@@ -252,24 +275,50 @@ export class ModuleDetailComponent {
 
   loadVideo(): void {
     const currentChapter = this.getActiveChapter();
-    if (currentChapter?.videoRemoteFilePath) {
+    if (!currentChapter) {
+      this.videoUrl = null;
+      this.errorMessage = 'No chapter selected.';
+      return;
+    }
+
+    const langCapitalized = this.lang ? this.lang.charAt(0).toUpperCase() + this.lang.slice(1).toLowerCase() : 'En';
+    const videoKey = `video${langCapitalized}` as keyof Chapter;
+    console.log('Current chapter:', currentChapter); // Log the entire chapter
+    console.log('Video key:', videoKey); // Log the computed key
+    let video = currentChapter[videoKey] as Video | undefined;
+
+    console.log(`Loading video for lang ${this.lang}, video:`, video); // Debug log
+    
+    // Fallback to videoEn if the language-specific video is not available
+    if (!video || !video.filePath) {
+      video = currentChapter.videoEn;
+      console.log('Falling back to videoEn:', video);
+    }
+
+    if (video?.filePath) {
       this.loading = true;
-      this.trainingSvc.loadVideo(currentChapter.videoRemoteFilePath).subscribe({
+      const sub = this.trainingSvc.loadVideo(video.filePath).subscribe({
         next: (videoBlob: Blob) => {
           this.mimeType = videoBlob.type || 'video/mp4';
           this.videoUrl = URL.createObjectURL(videoBlob);
           this.loading = false;
+          this.errorMessage = '';
+          this.cdr.detectChanges();
         },
         error: (error) => {
           console.error('Error loading video:', error);
           this.loading = false;
           this.errorMessage = 'Failed to load video.';
           this.videoUrl = null;
-        },
+          this.cdr.detectChanges();
+        }
       });
+      this.subscriptions.add(sub);
     } else {
       this.videoUrl = null;
-      this.errorMessage = 'No video path available for this chapter.';
+      this.errorMessage = `No video available for ${this.lang}.`;
+      this.loading = false;
+      this.cdr.detectChanges();
     }
   }
 }

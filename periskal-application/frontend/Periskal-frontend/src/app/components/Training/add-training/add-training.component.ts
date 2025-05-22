@@ -15,6 +15,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
+import { Video } from '../../../models/video.model';
 
 @Component({
   selector: 'app-add-training',
@@ -84,45 +85,61 @@ export class AddTrainingComponent implements OnInit { // Implement OnInit
       nameChapterEn: ['', Validators.required],
       descriptionChapterEn: ['', Validators.required],
       textChapterEn: ['', Validators.required],
+      videoEn: [null],
       photos: [[]],
+
       videoRemoteFilePath: [''],
       nameChapterNl: ['', Validators.required],
       descriptionChapterNl: ['', Validators.required],
       textChapterNl: ['', Validators.required],
+      videoNl: [null],
+
       nameChapterFr: ['', Validators.required],
       descriptionChapterFr: ['', Validators.required],
       textChapterFr: ['', Validators.required],
+      videoFr: [null],
+
       nameChapterDe: ['', Validators.required],
       descriptionChapterDe: ['', Validators.required],
       textChapterDe: ['', Validators.required],
+      videoDe: [null],
     });
   }
 
-  onVideoSelected(moduleIndex: number, chapterIndex: number, file: File): void {
-    this.uploadVideoToFtp(moduleIndex, chapterIndex, file);
+  onVideoSelected(moduleIndex: number, chapterIndex: number,lang: string, file: File): void {
+    this.uploadVideoToFtp(moduleIndex, chapterIndex,lang, file);
   }
 
-  uploadVideoToFtp(moduleIndex: number, chapterIndex: number, videoFile: File): void {
+  uploadVideoToFtp(moduleIndex: number, chapterIndex: number, lang: string, videoFile: File): void {
+    console.log('uploadVideoToFtp called with:', { moduleIndex, chapterIndex, lang, videoFile });
     this.isUploadingVideo = true;
 
     this.trainingService.uploadVideo(videoFile).subscribe({
-      next: (response: any) => {
-        const filePath = response.filePath;
-
+      next: (response: Video) => {
         console.log('Upload response:', response);
+        if (!response || !response.id || !response.filePath) {
+          console.error('Invalid response from server:', response);
+          this.isUploadingVideo = false;
+          alert('Fout bij het uploaden van de video. Controleer de serverrespons.');
+          return;
+        }
 
-        this.getChapters(moduleIndex).at(chapterIndex).patchValue({ videoRemoteFilePath: filePath });
-
-        console.log('Video uploaded to FTP:', filePath);
+        const chapter = this.getChapters(moduleIndex).at(chapterIndex);
+        const fieldName = `video${lang.charAt(0).toUpperCase() + lang.slice(1)}`;
+        // Sla het volledige Video-object op (met id en filePath)
+        chapter.patchValue({ [fieldName]: { id: response.id, filePath: response.filePath } });
+        console.log('Updated chapter:', chapter.value);
+        console.log('Full form:', this.trainingForm.value);
         this.isUploadingVideo = false;
       },
       error: (error: any) => {
         console.error('Error uploading video:', error);
         this.isUploadingVideo = false;
+        alert('Fout bij het uploaden van de video: ' + (error.message || 'Onbekende fout'));
       },
       complete: () => {
         console.log('Upload process completed');
-      }
+      },
     });
   }
 
@@ -176,6 +193,7 @@ export class AddTrainingComponent implements OnInit { // Implement OnInit
           this.trainingService.postTraining(trainingData).subscribe({
             next: (response) => {
               // this.resetForm();
+              console.log(trainingData);
               this.router.navigate(['/trainingEmployee']);
             },
             error: (error) => {
@@ -187,6 +205,7 @@ export class AddTrainingComponent implements OnInit { // Implement OnInit
         this.trainingService.postTraining(trainingData).subscribe({
           next: (response) => {
             // this.resetForm();
+            console.log(trainingData);
             this.router.navigate(['/trainingEmployee']);
           },
           error: (error) => {

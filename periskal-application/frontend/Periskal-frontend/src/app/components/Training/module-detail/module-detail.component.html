@@ -46,7 +46,7 @@
       }
       @if (videoUrl) {
         <div>
-          <video width="400" height="300" controls>
+          <video width="400" height="300" controls controlsList="nodownload" (contextmenu)="disableContextMenu($event)">
             <source [src]="videoUrl" [type]="mimeType" />
             Your browser does not support the video tag.
           </video>

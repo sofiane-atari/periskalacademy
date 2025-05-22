@@ -1,25 +1,39 @@
 package periskal.academy.backend.service;
 
+import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import io.jsonwebtoken.io.IOException;
+
+import org.springframework.core.io.Resource;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import periskal.academy.backend.dto.ModuleDTO;
 import periskal.academy.backend.dto.TrainingDTO;
 import periskal.academy.backend.jpa.Chapter;
+import periskal.academy.backend.jpa.ChapterRepository;
 import periskal.academy.backend.jpa.Module;
 import periskal.academy.backend.jpa.ModuleRepository;
 import periskal.academy.backend.jpa.Photo;
 import periskal.academy.backend.jpa.PhotoRepository;
 import periskal.academy.backend.jpa.Training;
 import periskal.academy.backend.jpa.TrainingRepository;
+import periskal.academy.backend.jpa.video.Video;
+import periskal.academy.backend.jpa.video.VideoRepository;
 import periskal.academy.backend.security.exceptions.general.ResourceNotFoundException;
 import periskal.academy.backend.security.exceptions.general.ValidationException;
 
@@ -29,13 +43,22 @@ public class TrainingService {
 
     private TrainingRepository trainingRepository;
     private ModuleRepository moduleRepository;
+    private ChapterRepository chapterRepository;
     private PhotoRepository photoRepository;
+    private final VideoRepository videoRepository;
+    private final FtpService ftpService;
+    private final EntityManager entityManager;
 
     public TrainingService(TrainingRepository trainingRepository, ModuleRepository moduleRepository,
-            PhotoRepository photoRepository, EntityManager entityManager) {
+            PhotoRepository photoRepository, VideoRepository videoRepository, FtpService ftpService,
+            EntityManager entityManager, ChapterRepository chapterRepository) {
         this.trainingRepository = trainingRepository;
         this.moduleRepository = moduleRepository;
         this.photoRepository = photoRepository;
+        this.videoRepository = videoRepository;
+        this.ftpService = ftpService;
+        this.entityManager = entityManager;
+        this.chapterRepository = chapterRepository;
     }
 
     private TrainingDTO convertToDto(Training training) {
@@ -120,7 +143,26 @@ public class TrainingService {
                 if (module.getChapters() != null) {
                     for (Chapter chapter : module.getChapters()) {
                         chapter.setModule(module);
-                        System.out.println(chapter.getVideoRemoteFilePath());
+                        if (chapter.getVideoEn() != null) {
+                            chapter.setVideoEn(videoRepository.findById(chapter.getVideoEn().getId())
+                                    .orElseThrow(() -> new RuntimeException(
+                                            "Video EN not found: " + chapter.getVideoEn().getId())));
+                        }
+                        if (chapter.getVideoDe() != null) {
+                            chapter.setVideoDe(videoRepository.findById(chapter.getVideoDe().getId())
+                                    .orElseThrow(() -> new RuntimeException(
+                                            "Video DE not found: " + chapter.getVideoDe().getId())));
+                        }
+                        if (chapter.getVideoFr() != null) {
+                            chapter.setVideoFr(videoRepository.findById(chapter.getVideoFr().getId())
+                                    .orElseThrow(() -> new RuntimeException(
+                                            "Video FR not found: " + chapter.getVideoFr().getId())));
+                        }
+                        if (chapter.getVideoNl() != null) {
+                            chapter.setVideoNl(videoRepository.findById(chapter.getVideoNl().getId())
+                                    .orElseThrow(() -> new RuntimeException(
+                                            "Video NL not found: " + chapter.getVideoNl().getId())));
+                        }
                         if (chapter.getPhotos() != null) {
                             for (Photo photo : chapter.getPhotos()) {
                                 photo.setChapter(chapter);
@@ -132,6 +174,7 @@ public class TrainingService {
             }
         }
         try {
+
             Training savedTraining = trainingRepository.save(entity);
             return savedTraining;
         } catch (DataIntegrityViolationException e) {
@@ -290,6 +333,69 @@ public class TrainingService {
             log.error("Failed to add module to training {} due to database error: {}", trainingId, e.getMessage(), e);
             throw new RuntimeException("Failed to add module to training " + trainingId + ".", e);
         }
+    }
 
+    @Transactional
+    public Video uploadVideo(MultipartFile videoFile) throws Exception {
+        if (videoFile == null || videoFile.isEmpty()) {
+            log.error("No video file provided");
+            throw new ValidationException("No video file provided.");
+        }
+
+        String originalName = videoFile.getOriginalFilename();
+        String storedName = UUID.randomUUID().toString() + "_" + originalName;
+
+        CompletableFuture<URI> futureUri = ftpService.uploadFile(videoFile, storedName);
+        URI ftpUri;
+        try {
+            ftpUri = futureUri.get(120, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            log.error("Video upload interrupted: {}", e.getMessage());
+            throw new RuntimeException("Video upload was interrupted.", e);
+        } catch (ExecutionException e) {
+            log.error("Error during FTP upload: {}", e.getCause().getMessage());
+            throw new RuntimeException("Failed to upload video to FTP.", e.getCause());
+        } catch (TimeoutException e) {
+            log.error("Video upload timed out: {}", e.getMessage());
+            throw new RuntimeException("Video upload timed out.");
+        }
+
+        Video video = new Video();
+        video.setOriginalName(originalName);
+        video.setStoredName(storedName);
+        video.setFilePath(ftpUri.getPath());
+        video.setFileSize(videoFile.getSize());
+        video.setMimeType(videoFile.getContentType());
+        video.setUploadDate(LocalDateTime.now());
+
+        try {
+            Video savedVideo = videoRepository.save(video);
+            log.info("Video uploaded and saved successfully: {}", savedVideo.getId());
+            return savedVideo;
+        } catch (DataAccessException e) {
+            log.error("Failed to save video to database: {}", e.getMessage());
+            throw new RuntimeException("Failed to save video to the database.", e);
+        }
+    }
+
+    public Resource streamVideoResource(String videoPath) throws Exception {
+        try {
+            Resource resource = ftpService.downloadFile(videoPath);
+            if (!resource.exists() || !resource.isReadable()) {
+                log.error("Resource not found or unreadable for path: {}", videoPath);
+                throw new IOException("Resource not found or unreadable: " + videoPath);
+            }
+            log.info("Successfully retrieved video resource for path: {}", videoPath);
+            return resource;
+        } catch (Exception e) {
+            log.error("Failed to stream video from path {}: {}", videoPath, e.getMessage(), e);
+            throw new RuntimeException("Failed to stream video.", e);
+        }
+    }
+
+    // Deprecated method (for backward compatibility, can be removed if not used)
+    public byte[] streamVideo(String videoPath) throws Exception {
+        return streamVideoResource(videoPath).getInputStream().readAllBytes();
     }
 }

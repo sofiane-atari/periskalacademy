@@ -216,5 +216,7 @@
   "EXAM_DURATION": "Prüfungsdauer (in Minuten)",
   "PLACEHOLDER_DURATION": "Bitte geben Sie die maximale Dauer der Prüfung in Minuten ein.",
   "TIME_REMAINING": "Verbleibende Zeit:",
-  "OF": "von "
+  "OF": "von ",
+  "PROCEED_TO_BILLING": "Weiter zur Abrechnung",
+  "Processing": "Wird verarbeitet"
 }

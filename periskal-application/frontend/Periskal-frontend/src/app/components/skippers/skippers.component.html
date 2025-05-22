@@ -3,14 +3,14 @@
 
   <div class="actions">
     <button 
-      class="assign-btn" (click)="openAssignmentDialog()" [disabled]="mainListSelectedSkipperIds.length === 0">{{'ASSIGN_TRAINING_TO_SELECTED' | translate}} ({{ mainListSelectedSkipperIds.length }})
+      class="assign-btn" (click)="openAssignmentDialog()" [disabled]="mainListSelectedSkipperIds.length === 0 || isProcessingAction">{{'ASSIGN_TRAINING_TO_SELECTED' | translate}} ({{ mainListSelectedSkipperIds.length }})
     </button>
     <button
-      class="clear-btn" (click)="clearSkipperSelections()" [disabled]="mainListSelectedSkipperIds.length === 0">{{'CLEAR_SELECTIONS'| translate}}
+      class="clear-btn" (click)="clearSkipperSelections()" [disabled]="mainListSelectedSkipperIds.length === 0 || isProcessingAction">{{'CLEAR_SELECTIONS'| translate}}
     </button>
   </div>
 
-  @if (error && !assignmentDialogOpen) { 
+  @if (error && !assignmentDialogOpen && !showBillingModal) { 
     <p class="error-message main-error">{{ error }}</p>
   }
 
@@ -147,14 +147,27 @@
 
     <div class="actions modal-actions">
       <button 
-        (click)="saveAssignment()" 
-        [disabled]="!selectedTrainingId || selectedSkipperIds.length === 0">
-        {{'SAVE_ASSIGNMENTS' |translate}}
+        (click)="InitiateBillingAndAssignment()" 
+        [disabled]="!selectedTrainingId || selectedSkipperIds.length === 0 || isProcessingAction">
+        {{ isProcessingAction ? ('Processing...' | translate) : ('PROCEED_TO_BILLING' | translate) }}
       </button>
-      <button class="cancel-btn" (click)="closeAssignmentDialog()">{{'CANCEL' | translate}}</button>
+      <button class="cancel-btn" (click)="closeAssignmentDialog()"[disabled]="isProcessingAction">{{'CANCEL' | translate}}</button>
     </div>
   </div>
 </div>
 }
+
+@if(showBillingModal && billingDataForForm) {
+    <div class="modal-overlay"> 
+      <app-billing-fleetmanager
+        [userIdsToBill]="billingDataForForm.userIds"
+        [examIdToBill]="billingDataForForm.examId"
+        [examAttemptsToBill]="billingDataForForm.examAttempts"
+        (billingSuccess)="saveAssignment()"
+        (billingCancel)="handleBillingCancel()">
+      </app-billing-fleetmanager>
+    </div>
+  }
+</div>
 
 

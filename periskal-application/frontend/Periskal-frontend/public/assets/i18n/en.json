@@ -216,5 +216,7 @@
   "EXAM_DURATION": "Exam duration (in minutes)",
   "PLACEHOLDER_DURATION": "Please enter the maximum duration for the exam in minutes.",
   "TIME_REMAINING": "Time remaining:",
-  "OF": "of"
+  "OF": "of",
+  "PROCEED_TO_BILLING": "Proceed to Billing",
+  "Processing": "Processing"
 }

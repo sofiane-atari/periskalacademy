@@ -4,12 +4,14 @@ import org.apache.commons.net.ftp.FTPSClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
+import org.mockito.stubbing.OngoingStubbing;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.net.URI;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -30,75 +32,129 @@ class FtpServiceTest {
         ftpService.ftpUser = "user";
         ftpService.ftpPassword = "password";
         ftpService.ftpUploadFolder = "/uploads/";
-        ftpService.ftpPort = 21;
+        ftpService.ftpPort = 9910; // Aangepast naar 9910 zoals in de nieuwe implementatie
         ftpService.connectionTimeout = 10000;
         ftpService.dataTimeout = 30000;
     }
 
     @Test
-    void GivenMultipartFile_thenConvertMultiPartToFile_whenCalled_shouldCreateTempFile() throws IOException {
-        // Assert
+    void GivenMultipartFile_thenConvertMultiPartToFile_whenCalled_shouldCreateTempFile()
+            throws IOException {
+        // Arrange
         byte[] content = "hello".getBytes();
-        MultipartFile multipartFile = new MockMultipartFile("file", "test.txt", "text/plain", content);
+        MultipartFile multipartFile = new MockMultipartFile("file", "test.txt",
+                "text/plain", content);
 
         // Act
         File file = ftpService.convertMultiPartToFile(multipartFile);
 
-        // Arrange
+        // Assert
         assertThat(file).exists();
         assertThat(file.length()).isEqualTo(content.length);
+        assertThat(file.getName()).contains("ftp-upload-").contains("test.txt");
         file.delete();
     }
 
     @Test
-    void GivenConnectedFtpClient_whenDisconnectFtpClient_shouldLogoutAndDisconnect() throws IOException {
-        // Assert
-        FTPSClient ftp = mock(FTPSClient.class);
-        when(ftp.isConnected()).thenReturn(true);
+    void GivenConnectedFtpClient_whenDisconnectFtpClient_shouldLogoutAndDisconnect()
+            throws IOException {
+        // Arrange
+        when(ftpClientMock.isConnected()).thenReturn(true);
 
         // Act
-        ftpService.disconnectFtpClient(ftp);
+        ftpService.disconnectFtpClient(ftpClientMock);
 
-        // Arrange
-        verify(ftp).logout();
-        verify(ftp).disconnect();
+        // Assert
+        verify(ftpClientMock).logout();
+        verify(ftpClientMock).disconnect();
     }
 
     @Test
-    void GivenNotConnectedFtpClient_whenDisconnectFtpClient_shouldNotLogoutOrDisconnect() throws IOException {
-        // Assert
-        FTPSClient ftp = mock(FTPSClient.class);
-        when(ftp.isConnected()).thenReturn(false);
+    void GivenNotConnectedFtpClient_whenDisconnectFtpClient_shouldNotLogoutOrDisconnect()
+            throws IOException {
+        // Arrange
+        when(ftpClientMock.isConnected()).thenReturn(false);
 
         // Act
-        ftpService.disconnectFtpClient(ftp);
+        ftpService.disconnectFtpClient(ftpClientMock);
 
-        // Arrange
-        verify(ftp, never()).logout();
-        verify(ftp, never()).disconnect();
+        // Assert
+        verify(ftpClientMock, never()).logout();
+        verify(ftpClientMock, never()).disconnect();
     }
 
     @Test
     void GivenValidFileAndRemoteName_whenUploadFile_thenCompleteFutureWithUri() throws Exception {
-        // This test is tricky because uploadFile spawns a new thread and uses real FTP
-        // client inside
-        // We can mock convertMultiPartToFile and uploadFileToFtp by partial mocking
-
+        // Arrange
         FtpService spyService = Mockito.spy(ftpService);
-        MultipartFile multipartFile = new MockMultipartFile("file", "file.txt", "text/plain", "test".getBytes());
+        MultipartFile multipartFile = new MockMultipartFile("file", "file.txt",
+                "text/plain", "test".getBytes());
 
         File fakeFile = File.createTempFile("ftp-upload-", "-file.txt");
-        doReturn(fakeFile).when(spyService).convertMultiPartToFile(any(MultipartFile.class));
-        doReturn(true).when(spyService).uploadFileToFtp(any(), eq(fakeFile), anyString());
-        doReturn(mock(FTPSClient.class)).when(spyService).createAndConfigureClient();
 
+        // Mock dependencies
+        doReturn(fakeFile).when(spyService).convertMultiPartToFile(any(MultipartFile.class));
+        doReturn(ftpClientMock).when(spyService).createAndConfigureClient();
+        when(ftpClientMock.storeFile(anyString(), any(FileInputStream.class))).thenReturn(true);
+
+        // Mock changeWorkingDirectory to return false first (directory doesn't exist),
+        // then true
+        OngoingStubbing<Boolean> changeWorkingDirectoryStubbing = when(
+                ftpClientMock.changeWorkingDirectory(anyString()));
+        changeWorkingDirectoryStubbing.thenReturn(false).thenReturn(true);
+
+        // Mock makeDirectory to return true (successful creation)
+        when(ftpClientMock.makeDirectory(anyString())).thenReturn(true);
+
+        // Mock isConnected to return true to ensure logout and disconnect are called
+        when(ftpClientMock.isConnected()).thenReturn(true);
+
+        // Act
         CompletableFuture<URI> future = spyService.uploadFile(multipartFile, "remoteFile.txt");
 
-        URI uri = future.get();
+        // Wait for the future to complete
+        URI uri = future.get(5, TimeUnit.SECONDS); // Increased timeout for reliability
 
+        // Assert
         assertThat(uri).isNotNull();
         assertThat(uri.getScheme()).isEqualTo("ftp");
         assertThat(uri.getHost()).isEqualTo(ftpService.ftpHost);
+        assertThat(uri.getPort()).isEqualTo(ftpService.ftpPort);
+        assertThat(uri.getPath()).isEqualTo(ftpService.ftpUploadFolder + "remoteFile.txt");
+
+        // Verify interactions
+        verify(spyService).convertMultiPartToFile(multipartFile);
+        verify(spyService).createAndConfigureClient();
+        verify(ftpClientMock).storeFile(contains("remoteFile.txt"), any(FileInputStream.class));
+        verify(ftpClientMock, times(2)).changeWorkingDirectory(anyString());
+        verify(ftpClientMock).makeDirectory(anyString());
+        verify(ftpClientMock).isConnected();
+        verify(ftpClientMock).logout(); // Now should be invoked
+        verify(ftpClientMock).disconnect(); // Now should be invoked
+
+        fakeFile.delete();
+    }
+
+    @Test
+    void GivenUploadFails_whenUploadFile_thenCompleteFutureExceptionally() throws Exception {
+        // Arrange
+        FtpService spyService = Mockito.spy(ftpService);
+        MultipartFile multipartFile = new MockMultipartFile("file", "file.txt",
+                "text/plain", "test".getBytes());
+
+        File fakeFile = File.createTempFile("ftp-upload-", "-file.txt");
+
+        doReturn(fakeFile).when(spyService).convertMultiPartToFile(any(MultipartFile.class));
+        doReturn(ftpClientMock).when(spyService).createAndConfigureClient();
+        when(ftpClientMock.storeFile(anyString(), any(FileInputStream.class))).thenReturn(false);
+
+        // Act
+        CompletableFuture<URI> future = spyService.uploadFile(multipartFile, "remoteFile.txt");
+
+        // Assert
+        assertThatThrownBy(future::get)
+                .hasCauseInstanceOf(IOException.class)
+                .hasMessageContaining("Failed to upload file to FTP");
 
         fakeFile.delete();
     }

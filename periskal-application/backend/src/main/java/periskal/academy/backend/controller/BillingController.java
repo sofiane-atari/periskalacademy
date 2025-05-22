@@ -1,5 +1,7 @@
 package periskal.academy.backend.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +25,12 @@ public class BillingController {
     public ResponseEntity<Billing> saveOrder(@RequestBody Billing entity) {
         Billing savedOrder = billingService.saveOrder(entity);
         return ResponseEntity.ok(savedOrder);
+    }
+
+    @PostMapping("/batch") 
+    public ResponseEntity<List<Billing>> saveOrdersBatch(@RequestBody List<Billing> billingList) {
+        List<Billing> savedOrders = billingService.saveAttemptsBatch(billingList);
+        return ResponseEntity.ok(savedOrders);
     }
 
 }

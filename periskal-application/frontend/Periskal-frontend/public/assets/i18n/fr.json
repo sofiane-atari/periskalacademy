@@ -216,5 +216,7 @@
   "EXAM_DURATION": "Durée de l'examen (en minutes)",
   "PLACEHOLDER_DURATION": "Veuillez entrer la durée maximale de l'examen en minutes.",
   "TIME_REMAINING": "Temps restant :",
-  "OF": "de"
+  "OF": "de",
+  "PROCEED_TO_BILLING": "Passer à la facturation",
+  "Processing": "Traitement"
 }

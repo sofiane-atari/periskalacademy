@@ -14,9 +14,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import periskal.academy.backend.jpa.video.Video;
 
 @Entity
 @Getter
@@ -55,7 +57,27 @@ public class Chapter {
     @JsonManagedReference
     private List<Photo> photos = new ArrayList<>();
 
-    private String videoRemoteFilePath;
+    // private String videoRemoteFilePath;
+
+    @OneToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH })
+    @JoinColumn(name = "video_en_id")
+    @JsonManagedReference
+    private Video videoEn;
+
+    @OneToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH })
+    @JoinColumn(name = "video_nl_id")
+    @JsonManagedReference
+    private Video videoNl;
+
+    @OneToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH })
+    @JoinColumn(name = "video_fr_id")
+    @JsonManagedReference
+    private Video videoFr;
+
+    @OneToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH })
+    @JoinColumn(name = "video_de_id")
+    @JsonManagedReference
+    private Video videoDe;
 
     public Chapter(String nameChapter, String descriptionChapter, String textChapter) {
         this.nameChapterEn = nameChapter;
