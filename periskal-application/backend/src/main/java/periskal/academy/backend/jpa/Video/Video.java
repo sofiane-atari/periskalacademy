@@ -29,6 +29,7 @@ public class Video {
     // @JoinColumn(name = "chapter_id", nullable = true)
     // @JsonBackReference
     @OneToOne(mappedBy = "videoEn")
+    @JsonBackReference
     private Chapter chapter; // Relatie naar training
 
     public Video(String originalName, String storedName, String filePath,

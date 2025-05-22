@@ -61,18 +61,22 @@ public class Chapter {
 
     @OneToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH })
     @JoinColumn(name = "video_en_id")
+    @JsonManagedReference
     private Video videoEn;
 
     @OneToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH })
     @JoinColumn(name = "video_nl_id")
+    @JsonManagedReference
     private Video videoNl;
 
     @OneToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH })
     @JoinColumn(name = "video_fr_id")
+    @JsonManagedReference
     private Video videoFr;
 
     @OneToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH })
     @JoinColumn(name = "video_de_id")
+    @JsonManagedReference
     private Video videoDe;
 
     public Chapter(String nameChapter, String descriptionChapter, String textChapter) {

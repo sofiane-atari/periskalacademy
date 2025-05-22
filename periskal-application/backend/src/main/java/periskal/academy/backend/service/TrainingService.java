@@ -143,21 +143,25 @@ public class TrainingService {
                 if (module.getChapters() != null) {
                     for (Chapter chapter : module.getChapters()) {
                         chapter.setModule(module);
-                        if (chapter.getVideoEn() != null && chapter.getVideoEn().getId() != null) {
+                        if (chapter.getVideoEn() != null) {
                             chapter.setVideoEn(videoRepository.findById(chapter.getVideoEn().getId())
-                                    .orElseThrow(() -> new IllegalArgumentException("Video EN not found")));
+                                    .orElseThrow(() -> new RuntimeException(
+                                            "Video EN not found: " + chapter.getVideoEn().getId())));
                         }
-                        if (chapter.getVideoNl() != null && chapter.getVideoNl().getId() != null) {
-                            chapter.setVideoNl(videoRepository.findById(chapter.getVideoNl().getId())
-                                    .orElseThrow(() -> new IllegalArgumentException("Video NL not found")));
-                        }
-                        if (chapter.getVideoFr() != null && chapter.getVideoFr().getId() != null) {
-                            chapter.setVideoFr(videoRepository.findById(chapter.getVideoFr().getId())
-                                    .orElseThrow(() -> new IllegalArgumentException("Video FR not found")));
-                        }
-                        if (chapter.getVideoDe() != null && chapter.getVideoDe().getId() != null) {
+                        if (chapter.getVideoDe() != null) {
                             chapter.setVideoDe(videoRepository.findById(chapter.getVideoDe().getId())
-                                    .orElseThrow(() -> new IllegalArgumentException("Video DE not found")));
+                                    .orElseThrow(() -> new RuntimeException(
+                                            "Video DE not found: " + chapter.getVideoDe().getId())));
+                        }
+                        if (chapter.getVideoFr() != null) {
+                            chapter.setVideoFr(videoRepository.findById(chapter.getVideoFr().getId())
+                                    .orElseThrow(() -> new RuntimeException(
+                                            "Video FR not found: " + chapter.getVideoFr().getId())));
+                        }
+                        if (chapter.getVideoNl() != null) {
+                            chapter.setVideoNl(videoRepository.findById(chapter.getVideoNl().getId())
+                                    .orElseThrow(() -> new RuntimeException(
+                                            "Video NL not found: " + chapter.getVideoNl().getId())));
                         }
                         if (chapter.getPhotos() != null) {
                             for (Photo photo : chapter.getPhotos()) {
@@ -170,6 +174,7 @@ public class TrainingService {
             }
         }
         try {
+
             Training savedTraining = trainingRepository.save(entity);
             return savedTraining;
         } catch (DataIntegrityViolationException e) {
@@ -363,7 +368,6 @@ public class TrainingService {
         video.setFileSize(videoFile.getSize());
         video.setMimeType(videoFile.getContentType());
         video.setUploadDate(LocalDateTime.now());
-        video.setChapter(null); // Explicitly set to null if not required yet
 
         try {
             Video savedVideo = videoRepository.save(video);
