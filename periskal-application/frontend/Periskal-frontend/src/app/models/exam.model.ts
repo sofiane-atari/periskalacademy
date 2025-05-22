@@ -10,4 +10,5 @@ export interface Exam {
   passingScore?: number; // optional for now until we can enter it during exam creation
   price: number;
   examAttempts: number;
+  duration: number;
 }
