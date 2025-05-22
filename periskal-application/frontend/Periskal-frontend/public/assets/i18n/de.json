@@ -212,5 +212,8 @@
   "PREVIOUS": "Zurück",
   "SUBMIT_EXAM": "Prüfung absenden",
   "SELECT_A_TRAINING": "Bitte wählen Sie eine Schulung",
-  "ENTER_A_VALID_EMAIL": "Bitte geben Sie eine gültige E-Mail ein."
+  "ENTER_A_VALID_EMAIL": "Bitte geben Sie eine gültige E-Mail ein.",
+  "PROCEED_TO_BILLING": "Weiter zur Abrechnung",
+  "Processing": "Wird verarbeitet"
+
 }

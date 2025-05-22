@@ -212,5 +212,7 @@
   "PREVIOUS": "Previous",
   "SUBMIT_EXAM": "Submit Exam",
   "SELECT_A_TRAINING": "Please select a training",
-  "ENTER_A_VALID_EMAIL": "Please enter a valid email."
+  "ENTER_A_VALID_EMAIL": "Please enter a valid email.",
+  "PROCEED_TO_BILLING": "Proceed to Billing",
+  "Processing": "Processing"
 }

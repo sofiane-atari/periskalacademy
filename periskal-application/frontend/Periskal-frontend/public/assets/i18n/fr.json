@@ -212,5 +212,7 @@
   "PREVIOUS": "Précédent",
   "SUBMIT_EXAM": "Soumettre l'examen",
   "SELECT_A_TRAINING": "Veuillez sélectionner une formation",
-  "ENTER_A_VALID_EMAIL": "Veuillez saisir un courriel valide."
+  "ENTER_A_VALID_EMAIL": "Veuillez saisir un courriel valide.",
+  "PROCEED_TO_BILLING": "Passer à la facturation",
+  "Processing": "Traitement"
 }

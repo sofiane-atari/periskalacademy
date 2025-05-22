@@ -149,7 +149,7 @@
       <button 
         (click)="InitiateBillingAndAssignment()" 
         [disabled]="!selectedTrainingId || selectedSkipperIds.length === 0 || isProcessingAction">
-        {{ {{'isProcessingAction' |translate}} ? {{'Processing...' |translate}} : {{'Proceed to Billing' |translate}} }}
+        {{ isProcessingAction ? ('Processing...' | translate) : ('PROCEED_TO_BILLING' | translate) }}
       </button>
       <button class="cancel-btn" (click)="closeAssignmentDialog()"[disabled]="isProcessingAction">{{'CANCEL' | translate}}</button>
     </div>

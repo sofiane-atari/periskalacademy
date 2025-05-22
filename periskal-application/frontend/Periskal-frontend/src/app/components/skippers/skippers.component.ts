@@ -15,12 +15,13 @@ import { FormsModule } from '@angular/forms';
 import { ExamService } from '../../services/Exam/exam.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { FleetManagerBillingComponent } from '../billing-fleetmanager/billing-fleetmanager.component';
+import { TranslatePipe } from '@ngx-translate/core';
 
 
   @Component({
     selector: 'app-skippers',
     standalone: true,
-    imports: [CommonModule, FormsModule, FleetManagerBillingComponent, MatSnackBarModule],
+    imports: [CommonModule, FormsModule, FleetManagerBillingComponent, MatSnackBarModule, TranslatePipe],
     providers: [],
     templateUrl: './skippers.component.html',
     styleUrls: ['./skippers.component.css']
