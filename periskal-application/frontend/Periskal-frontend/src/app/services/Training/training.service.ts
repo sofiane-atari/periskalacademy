@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { Training } from '../../models/training.model';
 import { Photo } from '../../models/photo.model';
+import { Video } from '../../models/video.model';
 
 @Injectable({
   providedIn: 'root'
@@ -60,10 +61,10 @@ export class TrainingService {
     return this.client.post(`http://localhost:8080/api/photos/${chapterId}`, photos)
   }
 
-  uploadVideo(videoFile: File): Observable<string> {
+  uploadVideo(videoFile: File): Observable<Video> {
     const formData = new FormData();
-    formData.append('video', videoFile, videoFile.name);
-    return this.client.post<string>(`http://localhost:8080/api/trainings/video`, formData)
+    formData.append('video', videoFile);
+    return this.client.post<Video>('http://localhost:8080/api/trainings/video', formData);
   }
 
   loadVideo(videoRemoteFilePath: string): Observable<Blob> {
