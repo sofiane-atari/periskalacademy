@@ -1,7 +1,7 @@
 <div class="container-fluid py-4">
   @if (loading) {
     <div class="loading-state">
-      <p class="mb-0">Loading exam...</p>
+      <p class="mb-0">{{'LOADING_EXAM'| translate}}</p>
     </div>
   } @else if (error) {
     <div class="error-state">
@@ -18,7 +18,7 @@
         <div class="col-md-9">
           <div class="question-section p-4">
             <h3 class="h5 mb-4">
-              Question {{ currentQuestionIndex + 1 }} of {{ exam.questions.length }}
+              {{'QUESTION' |translate}} {{ currentQuestionIndex + 1 }} of {{ exam.questions.length }}
             </h3>
 
             @if (currentQuestion) {
@@ -61,12 +61,12 @@
                   (click)="previousQuestion()"
                   [disabled]="currentQuestionIndex === 0"
                 >
-                  Previous
+                  {{'PREVIOUS' | translate}}
                 </button>
 
                 @if (currentQuestionIndex === exam.questions.length - 1) {
                   <button class="nav-button submit-button" (click)="submitExam()">
-                    Submit Exam
+                    {{'SUBMIT_EXAM' | translate}}
                   </button>
                 } @else {
                   <button
@@ -74,7 +74,7 @@
                     (click)="nextQuestion()"
                     [disabled]="currentQuestionIndex === exam.questions.length - 1"
                   >
-                    Next
+                    {{'NEXT' | translate}}
                   </button>
                 }
               </div>
@@ -84,7 +84,7 @@
 
         <div class="col-md-3">
           <div class="question-navigator p-4 sticky-top" style="top: 1rem;">
-            <h4 class="h6 mb-3 text-center">Questions</h4>
+            <h4 class="h6 mb-3 text-center">{{'QUESTIONS' | translate}}</h4>
             <div class="d-flex flex-wrap justify-content-center">
               @for (question of exam.questions; track $index) {
                 <div

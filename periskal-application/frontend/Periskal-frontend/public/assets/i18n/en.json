@@ -207,5 +207,8 @@
   "ITALY": "Italy",
   "SLOVAKIA": "Slovakia",
   "OTHER": "Other",
-  "ORDER_EXAM": "Order Exam"
+  "ORDER_EXAM": "Order Exam",
+  "LOADING_EXAM": "Loading exam...",
+  "PREVIOUS": "Previous",
+  "SUBMIT_EXAM": "Submit Exam"
 }
