@@ -14,4 +14,5 @@ public class ExamRequest {
     private List<QuestionDTO> questions;
     private int price;
     private int examAttempts;
+    private int duration;
 }

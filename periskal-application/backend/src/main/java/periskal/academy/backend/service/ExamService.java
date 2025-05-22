@@ -57,6 +57,7 @@ public class ExamService {
         exam.setPrice(examRequest.getPrice());
         exam.setExamAttempts(examRequest.getExamAttempts());
         exam.setPassingScore(examRequest.getPassingScore());
+        exam.setDuration(examRequest.getDuration());
 
         // 2) Link Training
         Training training = trainingRepository.findById(examRequest.getTrainingId())

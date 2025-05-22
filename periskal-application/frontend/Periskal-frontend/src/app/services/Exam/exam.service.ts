@@ -64,7 +64,8 @@ export class ExamService {
         correctAnswer: q.correctAnswer
       })),
       price: examData.price,
-      examAttempts: examData.examAttempts
+      examAttempts: examData.examAttempts,
+      duration: examData.duration
     };
     return this.client.post<Exam>(this.baseUrl, payload);
   }
