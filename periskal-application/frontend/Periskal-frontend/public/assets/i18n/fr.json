@@ -178,7 +178,7 @@
   "CANCEL": "Annuler",
   "ROLE :": "Role :",
   "COMPLETED_EXAMS": "Examens terminés",
-  "NO_COMPLETED_EXAMS_FOUND_FOR_THIS_USER": "No completed exams found for this user",
+  "NO_COMPLETED_EXAMS_FOUND_FOR_THIS_USER": "Aucun examen terminé n'a été trouvé pour cet utilisateur",
   "EXAM_NAME": "Nom de l'examen",
   "ACHIEVED_SCORE": "Score obtenu",
   "PASSING_GRADE": "Note de passage",
@@ -211,5 +211,6 @@
   "LOADING_EXAM": "Chargement de l'examen...",
   "PREVIOUS": "Précédent",
   "SUBMIT_EXAM": "Soumettre l'examen",
-  "SELECT_A_TRAINING": "Veuillez sélectionner une formation"
+  "SELECT_A_TRAINING": "Veuillez sélectionner une formation",
+  "ENTER_A_VALID_EMAIL": "Veuillez saisir un courriel valide."
 }

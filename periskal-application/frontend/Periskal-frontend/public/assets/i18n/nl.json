@@ -146,7 +146,7 @@
   "NO_CERTIFICATES_AVAILABLE": "Geen certificaten beschikbaar",
   "ASSIGNED_BY_FLEETMANAGER": "Toegewezen trainingen",
   "CREATE": "Creëren",
-  "ASSIGNED_BY_FLEETMANAGER_SECTION_TITLE": "Toegewezen door wagenparkbeheerder",
+  "ASSIGNED_BY_FLEETMANAGER_SECTION_TITLE": "Toegewezen door scheepmanager",
   "ASSIGNED_ON": "Toegewezen op",
   "ASSIGNED_WITHOUT_DATE_INFO": "Geen datum",
   "START_NOW": "Start nu",
@@ -211,5 +211,6 @@
   "LOADING_EXAM": "Examen laden...",
   "PREVIOUS": "Vorige",
   "SUBMIT_EXAM": "Examen indienen",
-  "SELECT_A_TRAINING": "Selecteer een training"
+  "SELECT_A_TRAINING": "Selecteer een training",
+  "ENTER_A_VALID_EMAIL": "Vul alstublieft een geldige email in."
 }
