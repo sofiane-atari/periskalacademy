@@ -12,7 +12,11 @@ public class Faq {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String question;
+
+    @Column(nullable = false)
     private String answer;
 
     public Faq() {}

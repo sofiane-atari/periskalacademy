@@ -1,52 +1,148 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { FaqService } from '../../../services/Faq/faq.service';
 import { HttpClientModule } from '@angular/common/http';
 import { Faq } from '../../../models/Faq.model';
+import { RoleAuthorizationService } from '../../../services/RoleAuthorization/role-authorization.service';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-faq-page',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, HttpClientModule],
   templateUrl: './faq-page.component.html',
-  styleUrl: './faq-page.component.scss'
+  styleUrl: './faq-page.component.css',
+  animations: [
+    trigger('expandCollapse', [
+      transition(':enter', [
+        style({ height: '0', opacity: 0, overflow: 'hidden' }),
+        animate('300ms ease-out', style({ height: '*', opacity: 1 }))
+      ]),
+      transition(':leave', [
+        style({ height: '*', opacity: 1, overflow: 'hidden' }),
+        animate('300ms ease-in', style({ height: '0', opacity: 0 }))
+      ])
+    ]),
+    trigger('fadeInOut', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('200ms ease-out', style({ opacity: 1 }))
+      ]),
+      transition(':leave', [
+        animate('200ms ease-in', style({ opacity: 0 }))
+      ])
+    ])
+  ]
 })
-export class FaqPageComponent {
-  faqs: any[] = [];
-  faqForm = new FormGroup({
-    question: new FormControl('', Validators.required),
-    answer: new FormControl('', Validators.required)
-  });
+export class FaqPageComponent implements OnInit {
+  faqs: Faq[] = [];
+  faqForm: FormGroup;
+  expandedFaqId: number | null = null;
+  errorMessage: string | null = null;
+  successMessage: string | null = null;
+  showDeleteConfirm: { [key: string]: boolean } = {};
+  isSubmitting = false;
+  showAddForm = false;
 
-  constructor(private faqService: FaqService) {
+  constructor(
+    private fb: FormBuilder,
+    public roleAuth: RoleAuthorizationService,
+    private faqService: FaqService
+  ) {
+    this.faqForm = this.fb.group({
+      question: ['', [Validators.required, Validators.minLength(5)]],
+      answer: ['', [Validators.required, Validators.minLength(10)]]
+    });
+  }
+
+  ngOnInit(): void {
     this.loadFaqs();
   }
 
-  loadFaqs() {
-    this.faqService.getFaqs().subscribe(data => this.faqs = data);
+  loadFaqs(): void {
+    this.faqService.getFaqs().subscribe({
+      next: (faqs) => {
+        this.faqs = faqs;
+      },
+      error: (error) => {
+        this.showError('Er is een fout opgetreden bij het laden van de FAQ-items.');
+        console.error('Error loading FAQs:', error);
+      }
+    });
   }
 
-  addFaq() {
-  if (this.faqForm.invalid) {
-    return;
+  addFaq(): void {
+    if (this.faqForm.invalid) return;
+    
+    this.isSubmitting = true;
+    this.clearMessages();
+    
+    const newFaq: Faq = this.faqForm.value;
+    
+    this.faqService.createFaq(newFaq).subscribe({
+      next: (addedFaq) => {
+        this.faqs = [...this.faqs, addedFaq];
+        this.faqForm.reset();
+        this.showSuccess('FAQ succesvol toegevoegd!');
+        this.isSubmitting = false;
+      },
+      error: (error) => {
+        this.showError('Er is een fout opgetreden bij het toevoegen van de FAQ.');
+        console.error('Error adding FAQ:', error);
+        this.isSubmitting = false;
+      }
+    });
   }
 
-  const formValue = this.faqForm.value;
+  deleteFaq(id: number): void {
+    if (this.showDeleteConfirm[id]) {
+      this.faqService.deleteFaq(id).subscribe({
+        next: () => {
+          this.faqs = this.faqs.filter(faq => faq.id !== id);
+          this.showSuccess('FAQ succesvol verwijderd!');
+          this.showDeleteConfirm[id] = false;
+        },
+        error: (error) => {
+          this.showError('Er is een fout opgetreden bij het verwijderen van de FAQ.');
+          console.error('Error deleting FAQ:', error);
+          this.showDeleteConfirm[id] = false;
+        }
+      });
+    } else {
+      // First click shows confirmation
+      this.showDeleteConfirm = { [id]: true };
+      
+      // Auto-hide after 3 seconds
+      setTimeout(() => {
+        this.showDeleteConfirm[id] = false;
+      }, 3000);
+    }
+  }
 
-  const newFaq: Faq = {
-    id: 0,
-    question: formValue.question ?? '',
-    answer: formValue.answer ?? ''
-  };
+  toggleFaq(id: number): void {
+    this.expandedFaqId = this.expandedFaqId === id ? null : id;
+  }
 
-  this.faqService.createFaq(newFaq).subscribe(() => {
-    this.loadFaqs();
-    this.faqForm.reset();
-  });
-}
+  cancelDelete(id: number, event: Event): void {
+    event.stopPropagation();
+    this.showDeleteConfirm[id] = false;
+  }
 
-  deleteFaq(id: number) {
-    this.faqService.deleteFaq(id).subscribe(() => this.loadFaqs());
+  private showError(message: string): void {
+    this.errorMessage = message;
+    this.successMessage = null;
+    setTimeout(() => this.errorMessage = null, 5000);
+  }
+
+  private showSuccess(message: string): void {
+    this.successMessage = message;
+    this.errorMessage = null;
+    setTimeout(() => this.successMessage = null, 5000);
+  }
+
+  private clearMessages(): void {
+    this.errorMessage = null;
+    this.successMessage = null;
   }
 }
