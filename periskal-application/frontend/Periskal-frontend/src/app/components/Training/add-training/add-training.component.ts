@@ -15,6 +15,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
+import { Video } from '../../../models/video.model';
 
 @Component({
   selector: 'app-add-training',
@@ -110,34 +111,37 @@ export class AddTrainingComponent implements OnInit { // Implement OnInit
   }
 
   uploadVideoToFtp(moduleIndex: number, chapterIndex: number, lang: string, videoFile: File): void {
-  console.log('uploadVideoToFtp called with:', { moduleIndex, chapterIndex, lang, videoFile });
-  this.isUploadingVideo = true;
+    console.log('uploadVideoToFtp called with:', { moduleIndex, chapterIndex, lang, videoFile });
+    this.isUploadingVideo = true;
 
-  this.trainingService.uploadVideo(videoFile).subscribe({
-    next: (response: any) => {
-      console.log('Upload response:', response);
-      const filePath = response.filePath;
-      if (!filePath) {
-        console.error('No filePath in response:', response);
+    this.trainingService.uploadVideo(videoFile).subscribe({
+      next: (response: Video) => {
+        console.log('Upload response:', response);
+        if (!response || !response.id || !response.filePath) {
+          console.error('Invalid response from server:', response);
+          this.isUploadingVideo = false;
+          alert('Fout bij het uploaden van de video. Controleer de serverrespons.');
+          return;
+        }
+
+        const chapter = this.getChapters(moduleIndex).at(chapterIndex);
+        const fieldName = `video${lang.charAt(0).toUpperCase() + lang.slice(1)}`;
+        // Sla het volledige Video-object op (met id en filePath)
+        chapter.patchValue({ [fieldName]: { id: response.id, filePath: response.filePath } });
+        console.log('Updated chapter:', chapter.value);
+        console.log('Full form:', this.trainingForm.value);
         this.isUploadingVideo = false;
-        return;
-      }
-      const chapter = this.getChapters(moduleIndex).at(chapterIndex);
-      const fieldName = `video${lang.charAt(0).toUpperCase() + lang.slice(1)}`;
-      chapter.patchValue({ [fieldName]: filePath });
-      console.log('Updated chapter:', chapter.value);
-      console.log('Full form:', this.trainingForm.value);
-      this.isUploadingVideo = false;
-    },
-    error: (error: any) => {
-      console.error('Error uploading video:', error);
-      this.isUploadingVideo = false;
-    },
-    complete: () => {
-      console.log('Upload process completed');
-    }
-  });
-}
+      },
+      error: (error: any) => {
+        console.error('Error uploading video:', error);
+        this.isUploadingVideo = false;
+        alert('Fout bij het uploaden van de video: ' + (error.message || 'Onbekende fout'));
+      },
+      complete: () => {
+        console.log('Upload process completed');
+      },
+    });
+  }
 
 
   get modules(): FormArray {

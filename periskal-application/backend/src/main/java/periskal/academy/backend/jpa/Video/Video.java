@@ -26,7 +26,7 @@ public class Video {
     private LocalDateTime uploadDate;
 
     @ManyToOne
-    @JoinColumn(name = "chapter_id", nullable = false)
+    @JoinColumn(name = "chapter_id", nullable = true)
     @JsonBackReference
     private Chapter chapter; // Relatie naar training
 

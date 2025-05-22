@@ -25,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import periskal.academy.backend.dto.ModuleDTO;
 import periskal.academy.backend.dto.TrainingDTO;
 import periskal.academy.backend.jpa.Chapter;
+import periskal.academy.backend.jpa.ChapterRepository;
 import periskal.academy.backend.jpa.Module;
 import periskal.academy.backend.jpa.ModuleRepository;
 import periskal.academy.backend.jpa.Photo;
@@ -42,6 +43,7 @@ public class TrainingService {
 
     private TrainingRepository trainingRepository;
     private ModuleRepository moduleRepository;
+    private ChapterRepository chapterRepository;
     private PhotoRepository photoRepository;
     private final VideoRepository videoRepository;
     private final FtpService ftpService;
@@ -49,13 +51,14 @@ public class TrainingService {
 
     public TrainingService(TrainingRepository trainingRepository, ModuleRepository moduleRepository,
             PhotoRepository photoRepository, VideoRepository videoRepository, FtpService ftpService,
-            EntityManager entityManager) {
+            EntityManager entityManager, ChapterRepository chapterRepository) {
         this.trainingRepository = trainingRepository;
         this.moduleRepository = moduleRepository;
         this.photoRepository = photoRepository;
         this.videoRepository = videoRepository;
         this.ftpService = ftpService;
         this.entityManager = entityManager;
+        this.chapterRepository = chapterRepository;
     }
 
     private TrainingDTO convertToDto(Training training) {
@@ -333,11 +336,10 @@ public class TrainingService {
         String originalName = videoFile.getOriginalFilename();
         String storedName = UUID.randomUUID().toString() + "_" + originalName;
 
-        // Upload to FTP
         CompletableFuture<URI> futureUri = ftpService.uploadFile(videoFile, storedName);
         URI ftpUri;
         try {
-            ftpUri = futureUri.get(60, TimeUnit.SECONDS);
+            ftpUri = futureUri.get(120, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             log.error("Video upload interrupted: {}", e.getMessage());
@@ -350,14 +352,14 @@ public class TrainingService {
             throw new RuntimeException("Video upload timed out.");
         }
 
-        // Save video entity
         Video video = new Video();
         video.setOriginalName(originalName);
         video.setStoredName(storedName);
-        video.setFilePath(ftpUri.getPath()); // Store relative path, e.g., /Uploads/filename
+        video.setFilePath(ftpUri.getPath());
         video.setFileSize(videoFile.getSize());
         video.setMimeType(videoFile.getContentType());
         video.setUploadDate(LocalDateTime.now());
+        video.setChapter(null); // Explicitly set to null if not required yet
 
         try {
             Video savedVideo = videoRepository.save(video);

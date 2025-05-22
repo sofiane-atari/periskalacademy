@@ -220,19 +220,17 @@ public class TrainingController {
     // }
     @PostMapping("/video")
     public ResponseEntity<Video> uploadVideo(@RequestParam("video") MultipartFile video) {
-        if (video == null || video.isEmpty()) {
-            LOGGER.error("No video file provided");
-            return ResponseEntity.badRequest().body(null);
-        }
-
         try {
+            if (video == null || video.isEmpty()) {
+                LOGGER.error("No video file provided");
+                return ResponseEntity.badRequest().body(null);
+            }
             Video savedVideo = trainingService.uploadVideo(video);
             LOGGER.info("Video uploaded successfully. ID: {}, Path: {}", savedVideo.getId(), savedVideo.getFilePath());
-            return ResponseEntity.status(HttpStatus.CREATED).body(savedVideo);
+            return ResponseEntity.ok(savedVideo);
         } catch (Exception e) {
             LOGGER.error("Failed to upload video: {}", e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
