@@ -212,5 +212,9 @@
   "PREVIOUS": "Zurück",
   "SUBMIT_EXAM": "Prüfung absenden",
   "SELECT_A_TRAINING": "Bitte wählen Sie eine Schulung",
-  "ENTER_A_VALID_EMAIL": "Bitte geben Sie eine gültige E-Mail ein."
+  "ENTER_A_VALID_EMAIL": "Bitte geben Sie eine gültige E-Mail ein.",
+  "EXAM_DURATION": "Prüfungsdauer (in Minuten)",
+  "PLACEHOLDER_DURATION": "Bitte geben Sie die maximale Dauer der Prüfung in Minuten ein.",
+  "TIME_REMAINING": "Verbleibende Zeit:",
+  "OF": "von "
 }

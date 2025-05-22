@@ -212,5 +212,9 @@
   "PREVIOUS": "Vorige",
   "SUBMIT_EXAM": "Examen indienen",
   "SELECT_A_TRAINING": "Selecteer een training",
-  "ENTER_A_VALID_EMAIL": "Vul alstublieft een geldige email in."
+  "ENTER_A_VALID_EMAIL": "Vul alstublieft een geldige email in.",
+  "EXAM_DURATION": "Examen duur (in minuten)",
+  "PLACEHOLDER_DURATION": "Gelieve de maximale duur van het examen in minuten in te voeren.",
+  "TIME_REMAINING": "Resterende tijd:",
+  "OF": "van"
 }
