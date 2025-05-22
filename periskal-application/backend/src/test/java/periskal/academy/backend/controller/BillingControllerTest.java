@@ -3,25 +3,28 @@ package periskal.academy.backend.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-
 import periskal.academy.backend.jpa.Billing;
 import periskal.academy.backend.jpa.TrainingRepository;
 import periskal.academy.backend.service.BillingService;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import java.util.Arrays;
+import java.util.List;
+import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @WebMvcTest(BillingController.class)
 @AutoConfigureMockMvc(addFilters = false)
@@ -66,5 +69,62 @@ public class BillingControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(malformedJson))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void givenValidBilling_whenSaveOrder_thenReturnsOkWithSavedBilling() throws Exception {
+    
+    // Arrange
+    when(billingService.saveOrder(any(Billing.class))).thenReturn(testBilling);
+
+    // Act & Assert
+    mockMvc.perform(post("/api/billing")
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)  
+            .content(objectMapper.writeValueAsString(testBilling)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(1))
+            .andExpect(jsonPath("$.fullName").value("Test Customer"))
+            .andExpect(jsonPath("$.examId").value("1"))
+            .andExpect(jsonPath("$.email").value("hallo@test.be"));
+
+    verify(billingService, times(1)).saveOrder(any(Billing.class));
+    }
+
+    @Test
+    void givenValidBillingList_whenSaveOrdersBatch_thenReturnsOkWithSavedBillingList() throws Exception {
+    
+    // Arrange
+    Billing billing2 = new Billing();
+    billing2.setId(2L);
+    billing2.setFullName("Test Customer 2");
+    billing2.setExamId("2");
+    billing2.setEmail("test2@test.be");
+
+    List<Billing> billingList = Arrays.asList(testBilling, billing2);
+    when(billingService.saveAttemptsBatch(ArgumentMatchers.<Billing>anyList())).thenReturn(billingList);
+
+
+    // Act & Assert
+    mockMvc.perform(post("/api/billing/batch")
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)  
+            .content(objectMapper.writeValueAsString(billingList)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", hasSize(2)))
+            .andExpect(jsonPath("$[0].id").value(1))
+            .andExpect(jsonPath("$[0].fullName").value("Test Customer"))
+            .andExpect(jsonPath("$[1].id").value(2))
+            .andExpect(jsonPath("$[1].fullName").value("Test Customer 2"));
+
+    verify(billingService, times(1)).saveAttemptsBatch(ArgumentMatchers.<Billing>anyList());
+    }
+
+    @Test
+    void givenEmptyRequestBody_whenSaveOrder_thenReturnsBadRequest() throws Exception {
+    mockMvc.perform(post("/api/billing")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(""))
+            .andExpect(status().isBadRequest());
     }
 }
