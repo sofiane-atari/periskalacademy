@@ -1,10 +1,10 @@
 <div class="exams-container">
-  <h2>Completed Exams</h2>
+  <h2>{{'COMPLETED_EXAMS' | translate}}</h2>
 
   @if (isLoading) {
     <div class="loading-container">
       <mat-spinner diameter="40"></mat-spinner>
-      <p>Loading exams...</p>
+      <p>{{'LOADING_EXAMS'| translate}}</p>
     </div>
   } @else if (error) {
     <div class="error-container">
@@ -15,25 +15,25 @@
     <div class="table-container">
       @if (!dataSource.data || dataSource.data.length === 0) {
         <div class="no-exams">
-          <p>No completed exams found for this user.</p>
+          <p>{{'NO_COMPLETED_EXAMS_FOUND_FOR_THIS_USER'}}</p>
         </div>
       } @else {
         <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
           <!-- Exam Name Column -->
           <ng-container matColumnDef="examName">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Exam Name </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'EXAM_NAME' | translate}} </th>
             <td mat-cell *matCellDef="let exam"> {{ exam.examName }} </td>
           </ng-container>
 
           <!-- Training Name Column -->
           <ng-container matColumnDef="trainingName">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Training Name </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'TRAINING_NAME' | translate}} </th>
             <td mat-cell *matCellDef="let exam"> {{ exam.trainingName }} </td>
           </ng-container>
 
           <!-- Achieved Score Column -->
           <ng-container matColumnDef="score">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Achieved Score </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'ACHIEVED_SCORE' | translate}} </th>
             <td mat-cell *matCellDef="let exam" [ngClass]="exam.score >= exam.requiredScore ? 'pass-score' : 'fail-score'">
               {{ exam.score }}%
             </td>
@@ -41,13 +41,13 @@
 
           <!-- Passing Grade Column -->
           <ng-container matColumnDef="requiredScore">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Passing Grade </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'PASSING_GRADE' | translate}} </th>
             <td mat-cell *matCellDef="let exam"> {{ exam.requiredScore }}% </td>
           </ng-container>
 
           <!-- Completed Date Column -->
           <ng-container matColumnDef="completedDate">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Completed Date </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'COMPLETED_DATE' | translate}} </th>
             <td mat-cell *matCellDef="let exam"> {{ exam.completedDate | date:'dd/MM/yyyy HH:mm' }} </td>
           </ng-container>
 

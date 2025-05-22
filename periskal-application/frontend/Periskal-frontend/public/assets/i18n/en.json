@@ -176,5 +176,11 @@
   "NO_TRAININGS_ABLE_TO_ASSIGN": "No trainings able to assign",
   "SAVE_ASSIGNMENTS": "Save assignments",
   "CANCEL": "Cancel",
-  "ROLE:": "Role:"
+  "ROLE:": "Role:",
+  "COMPLETED_EXAMS": "Completed exams",
+  "NO_COMPLETED_EXAMS_FOUND_FOR_THIS_USER": "No completed exams found for this user.",
+  "EXAM_NAME": "Exam name",
+  "ACHIEVED_SCORE": "Achieved Score",
+  "PASSING_GRADE": "Passing Grade",
+  "COMPLETED_DATE": "Date Completed"
 }
