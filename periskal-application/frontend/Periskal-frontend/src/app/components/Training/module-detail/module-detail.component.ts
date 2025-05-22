@@ -27,7 +27,7 @@ export class ModuleDetailComponent {
   modules: Module[] = [];
   text: string = "";
   chapters: Chapter[] = [];
-  public lang: String | null = "en";
+  public lang: String | null = "En";
   updatedChapters: Chapter[] = []; // Still used, but activeChapterId will be an ID
 
   mimeType: string = 'video/mp4';
@@ -64,15 +64,38 @@ export class ModuleDetailComponent {
   }
 
 
-  ngOnInit(): void {
-    this.lang = localStorage.getItem('lang');
-    this.trainingId = Number(this.route.snapshot.paramMap.get('id'));
-    this.moduleId = Number(this.route.snapshot.paramMap.get('moduleid'))
-    this.userId = this.jwtDecoderService.getId() ?? 'Error';
+  // ngOnInit(): void {
+  //   this.lang = localStorage.getItem('lang')?.toLowerCase() || 'en'; // Normalize to lowercase    this.trainingId = Number(this.route.snapshot.paramMap.get('id'));
+  //   this.moduleId = Number(this.route.snapshot.paramMap.get('moduleid'))
+  //   this.userId = this.jwtDecoderService.getId() ?? 'Error';
 
-    this.loadTrainingData();
-    this.loadProgressData();
+  //   this.loadTrainingData();
+  //   this.loadProgressData();
+  // }
+  ngOnInit(): void {
+  console.log('Route params:', this.route.snapshot.paramMap);
+  this.lang = localStorage.getItem('lang')?.toLowerCase() || 'en';
+  const idParam = this.route.snapshot.paramMap.get('id');
+  this.trainingId = idParam ? Number(idParam) : 0;
+  if (this.trainingId === 0) {
+    console.error('Invalid training ID:', idParam);
+    this.errorMessage = 'Invalid training ID. Please check the URL.';
+    return;
   }
+
+  const moduleIdParam = this.route.snapshot.paramMap.get('moduleid');
+  this.moduleId = moduleIdParam ? Number(moduleIdParam) : 0;
+  if (this.moduleId === 0) {
+    console.error('Invalid module ID:', moduleIdParam);
+    this.errorMessage = 'Invalid module ID. Please check the URL.';
+    return;
+  }
+
+  this.userId = this.jwtDecoderService.getId() ?? 'Error';
+
+  this.loadTrainingData();
+  this.loadProgressData();
+}
 
   getChapterArray(chapters: any): any[] {
     if (Array.isArray(chapters)) return chapters;
@@ -88,6 +111,10 @@ export class ModuleDetailComponent {
         const currentModule = this.modules.find(m => m.id === this.moduleId);
         this.chapters = currentModule?.chapters || [];
         this.updatedChapters = [...this.chapters];
+
+        console.log('Training data:', this.training); // Log the entire training
+        console.log('Current module:', currentModule); // Log the current module
+        console.log('Chapters:', this.chapters); // Log the chapters
 
         if (this.chapters.length > 0) {
           this.activeChapterId = this.chapters[0].id; // Initialize activeChapterId with the ID of the first chapter
@@ -260,8 +287,19 @@ export class ModuleDetailComponent {
       return;
     }
 
-    const videoKey = `video${this.lang}` as keyof Chapter;
-    const video = currentChapter[videoKey] as Video | undefined;
+    const langCapitalized = this.lang ? this.lang.charAt(0).toUpperCase() + this.lang.slice(1).toLowerCase() : 'En';
+    const videoKey = `video${langCapitalized}` as keyof Chapter;
+    console.log('Current chapter:', currentChapter); // Log the entire chapter
+    console.log('Video key:', videoKey); // Log the computed key
+    let video = currentChapter[videoKey] as Video | undefined;
+
+    console.log(`Loading video for lang ${this.lang}, video:`, video); // Debug log
+    
+    // Fallback to videoEn if the language-specific video is not available
+    if (!video || !video.filePath) {
+      video = currentChapter.videoEn;
+      console.log('Falling back to videoEn:', video);
+    }
 
     if (video?.filePath) {
       this.loading = true;
