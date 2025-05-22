@@ -59,20 +59,20 @@ public class Chapter {
 
     // private String videoRemoteFilePath;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "video_en_id", referencedColumnName = "id")
+    @OneToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH })
+    @JoinColumn(name = "video_en_id")
     private Video videoEn;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "video_nl_id", referencedColumnName = "id")
+    @OneToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH })
+    @JoinColumn(name = "video_nl_id")
     private Video videoNl;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "video_fr_id", referencedColumnName = "id")
+    @OneToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH })
+    @JoinColumn(name = "video_fr_id")
     private Video videoFr;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "video_de_id", referencedColumnName = "id")
+    @OneToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH })
+    @JoinColumn(name = "video_de_id")
     private Video videoDe;
 
     public Chapter(String nameChapter, String descriptionChapter, String textChapter) {

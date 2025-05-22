@@ -25,9 +25,10 @@ public class Video {
     private String mimeType; // Bijv. "video/mp4"
     private LocalDateTime uploadDate;
 
-    @ManyToOne
-    @JoinColumn(name = "chapter_id", nullable = true)
-    @JsonBackReference
+    // @ManyToOne
+    // @JoinColumn(name = "chapter_id", nullable = true)
+    // @JsonBackReference
+    @OneToOne(mappedBy = "videoEn")
     private Chapter chapter; // Relatie naar training
 
     public Video(String originalName, String storedName, String filePath,

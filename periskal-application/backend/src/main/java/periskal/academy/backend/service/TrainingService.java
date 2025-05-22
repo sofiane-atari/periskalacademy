@@ -143,17 +143,21 @@ public class TrainingService {
                 if (module.getChapters() != null) {
                     for (Chapter chapter : module.getChapters()) {
                         chapter.setModule(module);
-                        if (chapter.getVideoEn() != null) {
-                            videoRepository.save(chapter.getVideoEn());
+                        if (chapter.getVideoEn() != null && chapter.getVideoEn().getId() != null) {
+                            chapter.setVideoEn(videoRepository.findById(chapter.getVideoEn().getId())
+                                    .orElseThrow(() -> new IllegalArgumentException("Video EN not found")));
                         }
-                        if (chapter.getVideoNl() != null) {
-                            videoRepository.save(chapter.getVideoNl());
+                        if (chapter.getVideoNl() != null && chapter.getVideoNl().getId() != null) {
+                            chapter.setVideoNl(videoRepository.findById(chapter.getVideoNl().getId())
+                                    .orElseThrow(() -> new IllegalArgumentException("Video NL not found")));
                         }
-                        if (chapter.getVideoFr() != null) {
-                            videoRepository.save(chapter.getVideoFr());
+                        if (chapter.getVideoFr() != null && chapter.getVideoFr().getId() != null) {
+                            chapter.setVideoFr(videoRepository.findById(chapter.getVideoFr().getId())
+                                    .orElseThrow(() -> new IllegalArgumentException("Video FR not found")));
                         }
-                        if (chapter.getVideoDe() != null) {
-                            videoRepository.save(chapter.getVideoDe());
+                        if (chapter.getVideoDe() != null && chapter.getVideoDe().getId() != null) {
+                            chapter.setVideoDe(videoRepository.findById(chapter.getVideoDe().getId())
+                                    .orElseThrow(() -> new IllegalArgumentException("Video DE not found")));
                         }
                         if (chapter.getPhotos() != null) {
                             for (Photo photo : chapter.getPhotos()) {
