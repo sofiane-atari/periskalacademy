@@ -68,7 +68,7 @@ export class TrainingDetailComponent {
     if (this.training?.exam?.id) {
       this.userAttemptSvc.startExam(this.training.exam.id, this.userId).subscribe({
         next: (response) => {
-          this.router.navigate(['/take-exam', this.training?.id]);
+          this.router.navigate(['/take-exam', this.training?.exam?.id]);
         },
         error: (err) => {
           console.error('Error starting exam:', err);

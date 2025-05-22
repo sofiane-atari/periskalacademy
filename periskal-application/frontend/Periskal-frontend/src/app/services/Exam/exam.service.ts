@@ -7,7 +7,7 @@ import { Exam } from '../../models/exam.model';
   providedIn: 'root'
 })
 export class ExamService {
-  private baseUrl = 'http://localhost:8080/api/exams'; // Adjust the backend URL as needed
+  private baseUrl = 'http://localhost:8080/api/exams';
 
   constructor(private client: HttpClient) { }
 
@@ -20,7 +20,7 @@ export class ExamService {
       tap(exam => {
         if (!exam.questions) {
           console.warn('No questions found in exam response');
-          exam.questions = []; // Initialize empty array if null
+          exam.questions = [];
         }
       })
     );
@@ -29,7 +29,6 @@ export class ExamService {
   postExam(examData: any): Observable<any> {
     return this.client.post(`${this.baseUrl}/training/${examData.trainingId}/create`, examData);
   }
-
 
   updateExam(id: number, examData: any): Observable<any> {
     return this.client.put(`${this.baseUrl}/${id}`, examData);
@@ -70,4 +69,3 @@ export class ExamService {
     return this.client.post<Exam>(this.baseUrl, payload);
   }
 }
-
