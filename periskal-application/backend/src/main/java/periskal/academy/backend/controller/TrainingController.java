@@ -131,6 +131,7 @@ public class TrainingController {
         return ResponseEntity.status(HttpStatus.CREATED).body(addedModule);
 
     }
+
     @PostMapping("/video")
     public ResponseEntity<Video> uploadVideo(@RequestParam("video") MultipartFile video) {
         try {
@@ -164,6 +165,9 @@ public class TrainingController {
             return ResponseEntity.ok()
                     .headers(headers)
                     .body(videoResource);
+        } catch (IOException e) {
+            LOGGER.error("Video file not found: {}", videoPath, e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
             LOGGER.error("Error streaming video from path {}: {}", videoPath, e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

@@ -70,7 +70,9 @@ public class FtpService {
             FTPSClient ftp = null;
             try {
                 ftp = createAndConfigureClient();
-                String remotePath = ftpUploadFolder + remoteFileName;
+                String remotePath = ftpUploadFolder + (ftpUploadFolder.endsWith("/") ? "" : "/") + remoteFileName; // Ensure
+                                                                                                                   // correct
+                                                                                                                   // path
                 logger.info("Uploading file to: {}", remotePath);
 
                 createFtpDirectory(ftp, ftpUploadFolder);
@@ -121,50 +123,6 @@ public class FtpService {
     }
 
     public FTPSClient createAndConfigureClient() throws SocketException, IOException {
-        // FTPSClient ftp = new FTPSClient("SSL", false);
-        // ftp.addProtocolCommandListener(new PrintCommandListener(new
-        // PrintWriter(System.out), true));
-
-        // // Set timeouts to prevent hanging
-        // ftp.setConnectTimeout(connectionTimeout);
-        // ftp.setDefaultTimeout(connectionTimeout);
-        // ftp.setDataTimeout(Duration.ofSeconds(connectionTimeout));
-
-        // logger.info("Connecting to FTP server {}:{}", ftpHost, 9910);
-        // ftp.connect(ftpHost, 9910);
-
-        // int reply = ftp.getReplyCode();
-        // if (!FTPReply.isPositiveCompletion(reply)) {
-        // ftp.disconnect();
-        // throw new IOException("Exception in connecting to FTP Server. Reply code: " +
-        // reply);
-        // }
-
-        // logger.info("Logging in with user: {}", ftpUser);
-        // boolean loggedIn = ftp.login(ftpUser, ftpPassword);
-        // if (!loggedIn) {
-        // ftp.disconnect();
-        // throw new IOException("FTP login failed");
-        // }
-
-        // logger.info("Connected to FTP Server");
-
-        // // Configure FTPS connection
-        // try {
-        // ftp.setFileType(FTP.BINARY_FILE_TYPE);
-        // ftp.setAuthValue("SSL");
-        // ftp.execPBSZ(0);
-        // ftp.execPROT("P");
-        // ftp.enterLocalPassiveMode();
-        // } catch (IOException e) {
-        // logger.warn("Error setting up FTPS security: {}", e.getMessage());
-        // }
-
-        // ftp.enterLocalPassiveMode();
-        // ftp.setFileType(FTP.BINARY_FILE_TYPE);
-
-        // return ftp;
-
         FTPSClient ftp = new FTPSClient("SSL", false);
         ftp.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out), true));
 
@@ -195,28 +153,6 @@ public class FtpService {
         logger.info("Connected to FTP Server");
         return ftp;
     }
-
-    // public boolean uploadFileToFtp(FTPSClient ftp, File file, String remotePath)
-    // throws IOException {
-    // try (FileOutputStream devNull = new FileOutputStream(new File("/dev/null")))
-    // {
-    // ftp.sendNoOp();
-
-    // String remoteDir = remotePath.substring(0, remotePath.lastIndexOf('/'));
-    // boolean dirExists = ftp.changeWorkingDirectory(remoteDir);
-    // if (!dirExists) {
-    // logger.error("Creating directory structure: {}", remoteDir);
-    // }
-
-    // logger.info("Starting file transfer for: {}", remotePath);
-    // try (FileInputStream fis = new FileInputStream(file)) {
-    // return ftp.storeFile(remotePath, fis);
-    // }
-    // } catch (Exception e) {
-    // logger.error("Error during file upload: {}", e.getMessage(), e);
-    // throw e;
-    // }
-    // }
 
     private void createFtpDirectory(FTPSClient ftp, String dirPath) throws IOException {
         String[] directories = dirPath.split("/");
@@ -251,52 +187,4 @@ public class FtpService {
             }
         }
     }
-
-    // public Resource retrieveFileAsResource(String remoteFilePath) throws
-    // IOException {
-    // FTPSClient ftp = new FTPSClient("SSL", false);
-    // ftp.setAuthValue("SSL");
-    // ftp.addProtocolCommandListener(new PrintCommandListener(new
-    // PrintWriter(System.out)));
-
-    // try {
-    // ftp.connect("academyws.periskal.com", 9910);
-    // int reply = ftp.getReplyCode();
-    // if (!FTPReply.isPositiveCompletion(reply)) {
-    // ftp.disconnect();
-    // throw new IOException("Exception in connecting to FTP Server");
-    // }
-
-    // ftp.login("AcademyWS", "Pass4Academy2025!");
-    // System.out.println("Connected to FTP Server");
-
-    // ftp.setFileType(FTP.BINARY_FILE_TYPE);
-    // ftp.execPBSZ(0);
-    // ftp.execPROT("P");
-    // ftp.enterLocalPassiveMode();
-
-    // ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-    // boolean success = ftp.retrieveFile(remoteFilePath, outputStream);
-
-    // if (!success) {
-    // throw new IOException("Failed to retrieve file: " + remoteFilePath);
-    // }
-
-    // byte[] fileBytes = outputStream.toByteArray();
-    // ByteArrayResource resource = new ByteArrayResource(fileBytes);
-
-    // return resource;
-
-    // } finally {
-    // if (ftp.isConnected()) {
-    // try {
-    // ftp.logout();
-    // ftp.disconnect();
-    // System.out.println("Disconnected from FTP Server");
-    // } catch (IOException ex) {
-    // System.err.println("Error disconnecting: " + ex.getMessage());
-    // }
-    // }
-    // }
-    // }
 }
