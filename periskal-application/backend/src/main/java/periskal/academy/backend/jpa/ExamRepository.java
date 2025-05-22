@@ -7,7 +7,6 @@ import java.util.Optional;
 
 @Repository
 public interface ExamRepository extends CrudRepository<Exam, Long> {
-    // Add your custom methods
     Optional<Exam> findByTrainingId(Long trainingId);
 
     boolean existsByTrainingId(Long trainingId);
