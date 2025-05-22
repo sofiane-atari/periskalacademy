@@ -6,10 +6,11 @@ import { Router } from 'express';
 import { BillingService } from '../../services/Billing/billing.service';
 import { ExamService } from '../../services/Exam/exam.service';
 import { JwtDecoderService } from '../../services/JwtDecode/jwt-decoder.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-billing-fleetmanager',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, TranslatePipe],
   templateUrl: './billing-fleetmanager.component.html',
   styleUrl: './billing-fleetmanager.component.css'
 })

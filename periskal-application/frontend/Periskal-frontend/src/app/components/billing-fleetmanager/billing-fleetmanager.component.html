@@ -1,8 +1,8 @@
     <div id="app">
       <div class="billing-container">
         <div class="header">
-          <h1>Billing Information</h1>
-          <p>Please enter your billing details to order your exam</p>
+          <h1>{{'BILLING_INFORMATION' | translate}}</h1>
+          <p>{{'ENTER_BILLING_DETAILS' | translate}}</p>
         </div>
 
         <form (ngSubmit)="onSubmit()" [formGroup]="billingForm">
@@ -12,17 +12,17 @@
               <div class="card-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
               </div>
-              <h2>Personal Information</h2>
+              <h2>{{'PERSONAL_INFORMATION' | translate}}</h2>
             </div>
             
             <div class="form-row">
               <div class="form-group">
-                <label for="fullName">Full Name</label>
+                <label for="fullName">{{'FULL_NAME' | translate}}</label>
                 <input type="text" id="fullName" name="fullName" formControlName="fullName" required>
                 <div class="error-message" id="fullName-error"></div>
               </div>
               <div class="form-group">
-                <label for="companyName">Company Name</label>
+                <label for="companyName">{{'COMPANY_NAME' | translate}}</label>
                 <input type="text" id="companyName" name="companyName" formControlName="companyName" required>
                 <div class="error-message" id="companyName-error"></div>
               </div>
@@ -30,21 +30,21 @@
             
             <div class="form-row">
               <div class="form-group">
-                <label for="email">Email Address</label>
+                <label for="email">{{'EMAIL_ADDRESS'| translate}}</label>
                 <input type="text" id="email" name="email" formControlName="email" required>
                 @if (billingForm.get('email')?.touched && billingForm.get('email')?.invalid) {
                 <div class="error-message">
                   @if (billingForm.get('email')?.errors?.['required']) {
-                  <span>Email is required.</span>
+                  <span>{{'EMAIL_REQUIRED'|translate}}</span>
                   }
                   @if (billingForm.get('email')?.errors?.['email']) {
-                  <span>Please enter a valid email address.</span>
+                  <span>{{'ENTER_A_VALID_EMAIL' | translate}}</span>
                   }
                 </div>
               }
               </div>
               <div class="form-group">
-                <label for="tax">Tax Number</label>
+                <label for="tax">{{'TAX_NUMBER'|translate}}</label>
                 <input type="text" id="tax" name="tax" formControlName="tax" required>
                 <div class="error-message" id="tax-error"></div>
               </div>
@@ -57,23 +57,23 @@
               <div class="card-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
               </div>
-              <h2>Billing Address</h2>
+              <h2>{{'BILLING_ADDRESS'|translate}}</h2>
             </div>
             
             <div class="form-group">
-              <label for="address">Street Address</label>
+              <label for="address">{{'STREET_ADDRESS' | translate}}</label>
               <input type="text" id="address" name="address" formControlName="address" required>
               <div class="error-message" id="address-error"></div>
             </div>
             
             <div class="form-row">
               <div class="form-group">
-                <label for="city">City</label>
+                <label for="city">{{'CITY' | translate}}</label>
                 <input type="text" id="city" name="city" formControlName="city" required>
                 <div class="error-message" id="city-error"></div>
               </div>
               <div class="form-group">
-                <label for="state">State / Province</label>
+                <label for="state">{{'STATE_PROVINCE' | translate}}</label>
                 <input type="text" id="state" name="state" formControlName="state"required>
                 <div class="error-message" id="state-error"></div>
               </div>
@@ -81,24 +81,25 @@
             
             <div class="form-row">
               <div class="form-group">
-                <label for="zipCode">Zip / Postal Code</label>
+                <label for="zipCode">{{'POSTAL_CODE' | translate }}</label>
                 <input type="text" id="zipCode" name="zipCode" formControlName="zipCode" required>
                 <div class="error-message" id="zipCode-error"></div>
               </div>
               <div class="form-group">
-                <label for="country">Country</label>
+                <label for="country">{{'COUNTRY' | translate}}</label>
                 <select id="country" name="country" formControlName="countryCode" required>
-                  <option value="" disabled selected>Select a country</option>
-                  <option value="be">Belgium</option>
-                  <option value="nl">Netherlands</option>
-                  <option value="fr">France</option>
-                  <option value="de">Germany</option>
-                  <option value="es">Spain</option>
-                  <option value="ro">Romania</option>
-                  <option value="pl">Poland</option>
-                  <option value="it">Italy</option>
-                  <option value="sk">Slovakia</option>
-                  <option value="other">Other</option>
+                  <option value="" disabled selected>{{'SELECT_A_COUNTRY' | translate}}</option>
+                  <option value="be">{{'BELGIUM' | translate}}</option>
+                  <option value="nl">{{'NETHERLANDS' | translate}}</option>
+                  <option value="fr">{{'FRANCE' | translate}}</option>
+                  <option value="de">{{'GERMANY' | translate}}</option>
+                  <option value="es">{{'SPAIN' | translate}}</option>
+                  <option value="ro">{{'ROMANIA' | translate}}</option>
+                  <option value="pl">{{'POLAND' | translate}}</option>
+                  <option value="it">{{'ITALY' | translate}}</option>
+                  <option value="sk">{{'SLOVAKIA' | translate}}</option>
+                  <option value="other">{{'OTHER' | translate}}</option>
+
                 </select>
                 <div class="error-message" id="country-error"></div>
               </div>
@@ -106,8 +107,8 @@
           </div>
           
           <div class="form-actions">
-            <button type="button" (click)="goBack()" class="button-secondary">Cancel</button>
-            <button type="submit" class="button-primary">Order exams</button>
+            <button type="button" (click)="goBack()" class="button-secondary">{{'CANCEL' | translate}}</button>
+            <button type="submit" class="button-primary">{{'ORDER_EXAM' | translate}}</button>
           </div>
           <input type="hidden" formControlName="examId">
         </form>
