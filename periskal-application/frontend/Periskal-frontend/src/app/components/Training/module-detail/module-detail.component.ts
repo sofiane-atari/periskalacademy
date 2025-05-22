@@ -63,15 +63,6 @@ export class ModuleDetailComponent {
     return content.replace(/\n/g, '<br>');
   }
 
-
-  // ngOnInit(): void {
-  //   this.lang = localStorage.getItem('lang')?.toLowerCase() || 'en'; // Normalize to lowercase    this.trainingId = Number(this.route.snapshot.paramMap.get('id'));
-  //   this.moduleId = Number(this.route.snapshot.paramMap.get('moduleid'))
-  //   this.userId = this.jwtDecoderService.getId() ?? 'Error';
-
-  //   this.loadTrainingData();
-  //   this.loadProgressData();
-  // }
   ngOnInit(): void {
   console.log('Route params:', this.route.snapshot.paramMap);
   this.lang = localStorage.getItem('lang')?.toLowerCase() || 'en';
@@ -96,6 +87,9 @@ export class ModuleDetailComponent {
   this.loadTrainingData();
   this.loadProgressData();
 }
+  disableContextMenu(event: Event): void {
+      event.preventDefault();
+    }
 
   getChapterArray(chapters: any): any[] {
     if (Array.isArray(chapters)) return chapters;
