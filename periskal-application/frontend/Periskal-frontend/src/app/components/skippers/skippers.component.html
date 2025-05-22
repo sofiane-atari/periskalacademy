@@ -1,12 +1,12 @@
 <div class="skippers-container">
-  <h1>Skippers</h1>
+  <h1>{{'SKIPPERS' | translate}}</h1>
 
   <div class="actions">
     <button 
-      class="assign-btn" (click)="openAssignmentDialog()" [disabled]="mainListSelectedSkipperIds.length === 0 || isProcessingAction">Assign Training to Selected ({{ mainListSelectedSkipperIds.length }})
+      class="assign-btn" (click)="openAssignmentDialog()" [disabled]="mainListSelectedSkipperIds.length === 0 || isProcessingAction">{{'ASSIGN_TRAINING_TO_SELECTED' | translate}} ({{ mainListSelectedSkipperIds.length }})
     </button>
     <button
-      class="clear-btn" (click)="clearSkipperSelections()" [disabled]="mainListSelectedSkipperIds.length === 0 || isProcessingAction">Clear Selections
+      class="clear-btn" (click)="clearSkipperSelections()" [disabled]="mainListSelectedSkipperIds.length === 0 || isProcessingAction">{{'CLEAR_SELECTIONS'| translate}}
     </button>
   </div>
 
@@ -51,20 +51,20 @@
               <span class="detail-value">{{ skipper.id }}</span>
             </div>
             <div class="detail-row">
-              <span class="detail-label">Name:</span>
+              <span class="detail-label">{{'NAME'|translate}}:</span>
               <span class="detail-value">{{ skipper.firstname }} {{ skipper.lastname }}</span>
             </div>
             <div class="detail-row">
-              <span class="detail-label">Role:</span>
+              <span class="detail-label">{{'ROLE:'| translate}}</span>
               <span class="detail-value">{{ skipper.role }}</span>
             </div>
 
             <!-- Trainings and Progress g -->
             <hr class="details-divider">
-            <h4>Trainings & Progress</h4>
+            <h4>{{'TRAININGS_AND_PROGRESS' | translate}}</h4>
 
             @if (skipper.loadingTrainingsAndProgress) {
-              <p class="loading-indicator">Loading trainings and progress...</p>
+              <p class="loading-indicator">{{'TRAININGS_AND_PROGRESS_LOADING'}}</p>
             } @else if (skipper.trainingsAndProgressError) {
               <p class="error-message">{{ skipper.trainingsAndProgressError }}</p>
             } @else if (skipper.accessibleTrainings && skipper.accessibleTrainings.length > 0) {
@@ -74,7 +74,7 @@
                     <div class="training-info">
                       <span [class]="'training-name'">{{ tp.nameEn }}</span> 
                       @if (tp.loadingProgress) {
-                        <span class="progress-badge loading">Loading...</span>
+                        <span class="progress-badge loading">{{'LOADING' | translate}}</span>
                       } @else if (tp.progressError) {
                         <span class="progress-badge error">{{ tp.progressError }}</span>
                       } @else if (tp.progress) {
@@ -82,7 +82,7 @@
                           {{ tp.progress.overallPercentComplete | number:'1.0-0' }}%
                         </span>
                       } @else {
-                        <span class="progress-badge not-started">Not started</span>
+                        <span class="progress-badge not-started">{{'NOT_STARTED'|translate}}</span>
                       }
                     </div>
                     
@@ -91,7 +91,7 @@
                        <div class="module-progress-list">
                          @for(mp of tp.progress.moduleProgress; track mp.moduleId) {
                            <div class="module-progress-item">
-                             <span>Module {{mp.moduleId}}: {{ mp.percentComplete | number:'1.0-0' }}%</span>
+                             <span>{{'MODULE' | translate}} {{mp.moduleId}}: {{ mp.percentComplete | number:'1.0-0' }}%</span>
                            </div>
                          }
                        </div>
@@ -100,24 +100,24 @@
                 }
               </div>
             } @else {
-              <p class="no-data">No trainings found for this skipper</p>
+              <p class="no-data">{{'NO_TRAININGS_FOUND_FOR_SKIPPER'}}</p>
             }
           </div>
         }
       </div>
     } @empty {
-      <p class="no-data">No skippers available.</p>
+      <p class="no-data">{{'NO_SKIPPERS_AVAILABLE' | translate}}</p>
     }
   </div>
 
   @if(assignmentDialogOpen) {
   <div class="modal-overlay" >
   <div class="assignment-modal">
-    <h2>Assign Training to Skippers</h2>
+    <h2>{{'ASSIGN_TRAINING_TO_SKIPPER' | translate}}</h2>
 
     @if (selectedSkipperIds.length > 0) {
       <div class="selected-skippers">
-        <h3>Selected Skippers ({{ selectedSkipperIds.length }})</h3>
+        <h3>{{'SELECTED_SKIPPERS'| translate}} ({{ selectedSkipperIds.length }})</h3>
         <ul>
           @for (id of selectedSkipperIds; track id) {
             <li>{{ getSkipperName(id) }}</li>
@@ -127,9 +127,9 @@
     }
 
     <div class="training-selection">
-      <h3>Select Training</h3>
+      <h3>{{'SELECT_TRAINING' | translate}}</h3>
       <select [(ngModel)]="selectedTrainingId">
-        <option [ngValue]="null" disabled>Select a training...</option>
+        <option [ngValue]="null" disabled>{{'SELECT_A_TRAINING' | translate}}</option>
         @for (training of availableTrainings; track training.id) {
           <option [value]="training.id">
             {{ training.nameEn }}
@@ -137,7 +137,7 @@
         }
       </select>
       @if (!availableTrainings || availableTrainings.length === 0) {
-            <p class="no-data">No trainings available to assign.</p>
+            <p class="no-data">{{'NO_TRAININGS_ABLE_TO_ASSIGN'}}</p>
         }
     </div>
 
@@ -149,9 +149,9 @@
       <button 
         (click)="InitiateBillingAndAssignment()" 
         [disabled]="!selectedTrainingId || selectedSkipperIds.length === 0 || isProcessingAction">
-        {{ isProcessingAction ? 'Processing...' : 'Proceed to Billing' }}
+        {{ {{'isProcessingAction' |translate}} ? {{'Processing...' |translate}} : {{'Proceed to Billing' |translate}} }}
       </button>
-      <button class="cancel-btn" (click)="closeAssignmentDialog()"[disabled]="isProcessingAction">Cancel</button>
+      <button class="cancel-btn" (click)="closeAssignmentDialog()"[disabled]="isProcessingAction">{{'CANCEL' | translate}}</button>
     </div>
   </div>
 </div>

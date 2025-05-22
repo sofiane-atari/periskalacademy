@@ -16,7 +16,7 @@ import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-training-employee',
-  imports: [TranslatePipe,DatePipe],
+  imports: [TranslatePipe, DatePipe],
   templateUrl: './training-employee.component.html',
   styleUrl: './training-employee.component.css'
 })
@@ -41,7 +41,7 @@ export class TrainingEmployeeComponent implements OnInit {
 
   public allTrainingsData: DisplayTraining[] = [];
   public fleetManagerAssignedTrainings: DisplayTraining[] = [];
-  private userRawAssignments: TrainingAssignment[] = []; 
+  private userRawAssignments: TrainingAssignment[] = [];
   public isLoadingData = true;
 
   ngOnInit(): void {
@@ -66,7 +66,7 @@ export class TrainingEmployeeComponent implements OnInit {
       catchError(err => {
         console.error('Error fetching user assignments', err);
         this.loadingError = "Failed to load your assignments.";
-        return of([] as TrainingAssignment[]); 
+        return of([] as TrainingAssignment[]);
       })
     ).subscribe(assignments => {
       this.userRawAssignments = assignments;
@@ -76,7 +76,7 @@ export class TrainingEmployeeComponent implements OnInit {
 
   // Step 2: load all available trainings
   loadAllAvailableTrainings(): void {
-    
+
     const role = this.jwtDecoderService.getUserRole() || "noRole";
     const products: string[] = this.jwtDecoderService.getProducts() || [];
 
@@ -95,7 +95,7 @@ export class TrainingEmployeeComponent implements OnInit {
 
   // Step 3: Process and combine the data
   processLoadedData(availableTrainings: Training[], assignments: TrainingAssignment[]): void {
-    
+
     const assignmentMap = new Map<number, TrainingAssignment>();
     assignments.forEach(assignment => {
       assignmentMap.set(assignment.trainingId, assignment);
@@ -108,7 +108,7 @@ export class TrainingEmployeeComponent implements OnInit {
       if (assignedTrainingDetails) {
         this.fleetManagerAssignedTrainings.push({
           ...assignedTrainingDetails,
-          isAssigned: true, 
+          isAssigned: true,
           assignedDate: assignment.assignedDate
         });
       } else {
@@ -116,7 +116,7 @@ export class TrainingEmployeeComponent implements OnInit {
         // For now, just log a warning
         console.warn(`Assigned training ID ${assignment.trainingId} details not found in available trainings list.`);
       }
-      });
+    });
     // Populate allTrainingsData (for the main grid)
     this.allTrainingsData = availableTrainings.map(training => {
       const assignment = assignmentMap.get(training.id);
@@ -126,14 +126,14 @@ export class TrainingEmployeeComponent implements OnInit {
         assignedDate: assignment ? assignment.assignedDate : null
       };
     });
-    
-    
+
+
 
     // sort the assigned trainings by date
     this.fleetManagerAssignedTrainings.sort((a, b) => {
-        const dateA = a.assignedDate ? new Date(a.assignedDate).getTime() : 0;
-        const dateB = b.assignedDate ? new Date(b.assignedDate).getTime() : 0;
-        return dateB - dateA; 
+      const dateA = a.assignedDate ? new Date(a.assignedDate).getTime() : 0;
+      const dateB = b.assignedDate ? new Date(b.assignedDate).getTime() : 0;
+      return dateB - dateA;
     });
   }
 
@@ -188,6 +188,31 @@ export class TrainingEmployeeComponent implements OnInit {
       return this.trainingsData[index].nameFr
     } else {
       return "Unknown language"
+    }
+  }
+
+  getAssignedTrainingName(index: number) {
+    const trainingId = this.trainingsData[index].id;
+    const training = this.trainingsData.find(t => t.id === trainingId);
+
+    if (!training) {
+      console.warn(`Training with ID ${trainingId} not found.`);
+      return "Training Not Found";
+    }
+
+    if (this.lang === "en") {
+      return training.nameEn;
+    }
+    if (this.lang === "nl") {
+      return training.nameNl;
+    }
+    if (this.lang === "de") {
+      return training.nameDe;
+    }
+    if (this.lang === "fr") {
+      return training.nameFr;
+    } else {
+      return "Unknown language";
     }
   }
 

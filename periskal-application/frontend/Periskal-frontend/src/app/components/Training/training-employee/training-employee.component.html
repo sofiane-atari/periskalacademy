@@ -6,7 +6,6 @@
       @if(roleAuth.isSkipper()) {
         <h1>{{ 'ASSIGNED_BY_FLEETMANAGER' | translate }}</h1>
       }
-      <h1>{{ 'TRAINING' | translate }}</h1>
     </div>
 
     @if (roleAuth.canEditContent()) {
@@ -32,12 +31,7 @@
     <div class="loading-indicator-fullpage">
       <p>Loading trainings...</p>
     </div>
-  } @else if (loadingError) {
-    <div class="error-message-fullpage">
-      <p>{{ loadingError }}</p>
-    </div>
   } @else {
-
     @if (fleetManagerAssignedTrainings.length > 0) {
       <!-- Assigned by Fleet Manager Section -->
       <section class="assigned-by-fleet-manager">
@@ -51,7 +45,7 @@
                 </svg>
               </div>
               <div class="assigned-item-info">
-                <h3>{{ getTrainingName($index) }}</h3>
+                <h3>{{ getAssignedTrainingName($index) }}</h3>
                 @if (training.assignedDate) {
                   <p class="assignment-date">{{ 'ASSIGNED_ON' | translate }} {{ training.assignedDate | date:'dd-MM-yyyy' }}</p>
                 } @else {
@@ -71,7 +65,7 @@
 
     <!-- All Available Modules Section -->
     <section class="all-available-modules">
-      <h2>{{ 'ALL_AVAILABLE_MODULES' | translate }}</h2>
+      <h2>{{ 'ALL_AVAILABLE_TRAININGS' | translate }}</h2>
 
       @if (allTrainingsData.length > 0) {
         <div class="training-grid">
