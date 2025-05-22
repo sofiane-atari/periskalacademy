@@ -2,27 +2,45 @@ package periskal.academy.backend.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+
+import lombok.extern.slf4j.Slf4j;
 import periskal.academy.backend.jpa.Billing;
 import periskal.academy.backend.jpa.BillingRepository;
+import periskal.academy.backend.jpa.Exam;
 import periskal.academy.backend.jpa.UserExamAttempt;
 import periskal.academy.backend.jpa.UserExamAttemptRepository;
 
 @Service
+@Slf4j
 public class BillingService {
 
     private final BillingRepository billingRepository;
     private final UserExamAttemptRepository userExamAttemptRepository;
+    private final EmailService emailService;
+    private final ExamService examService;
 
-    public BillingService(BillingRepository billingRepository, UserExamAttemptRepository userExamAttemptRepository) {
+    @Value("${spring.mail.username}")
+    private String CompanyEmail;
+
+    public BillingService(BillingRepository billingRepository, UserExamAttemptRepository userExamAttemptRepository, EmailService emailService, ExamService examService) {
         this.billingRepository = billingRepository;
         this.userExamAttemptRepository = userExamAttemptRepository;
-    }
+        this.emailService = emailService;
+        this.examService = examService;
+    }   
 
     public Billing saveOrder(Billing entity) {
         Billing saved = billingRepository.save(entity);
         SaveAttempts(entity);
+
+        sendBillingConfirmationEmail(saved);
+            
+
         return saved;
     }
 
@@ -51,8 +69,88 @@ public class BillingService {
         }
 
         userExamAttemptRepository.saveAll(attemptsToSave);
+
+        sendFleetManagerBatchOrderEmail(savedBillingEntities.size(), entity.get(0).getExamId());
+
         return savedBillingEntities;
     }
+    
+    private void sendBillingConfirmationEmail(Billing billing) {
+        if (billing.getEmail() == null || billing.getEmail().isEmpty()) {
+            log.warn("Cannot send billing email: recipient email is missing for order ID {}", billing.getId());
+            return;
+        }
 
+        String to = CompanyEmail;
+        String subject = "Billing Information - Order #" + billing.getId();
+
+        Optional<Exam> examOptional = examService.findById(Long.parseLong(billing.getExamId()));
+        Exam exam = examOptional.get();
+        String examName;
+        examName = exam.getExamTitle();
+
+        // Constructing a simple HTML email content
+        StringBuilder contentBuilder = new StringBuilder();
+        contentBuilder.append("<html><body>");
+        contentBuilder.append("<h2>Order From, ").append(billing.getFullName()).append("!</h2>");
+        contentBuilder.append("<p>Here is a summary of the billing information:</p>");
+        contentBuilder.append("<ul>");
+        contentBuilder.append("<li><strong>Full Name:</strong> ").append(billing.getFullName()).append("</li>");
+        contentBuilder.append("<li><strong>Company Name:</strong> ").append(billing.getCompanyName() != null ? billing.getCompanyName() : "N/A").append("</li>");
+        contentBuilder.append("<li><strong>Address:</strong> ").append(billing.getAddress()).append("</li>");
+        contentBuilder.append("<li><strong>City:</strong> ").append(billing.getCity()).append("</li>");
+        contentBuilder.append("<li><strong>State:</strong> ").append(billing.getState()).append("</li>");
+        contentBuilder.append("<li><strong>Zip Code:</strong> ").append(billing.getZipCode()).append("</li>");
+        contentBuilder.append("<li><strong>Country:</strong> ").append(billing.getCountryCode()).append("</li>");
+        contentBuilder.append("</ul>");
+        contentBuilder.append("<p><strong>Tax Information:</strong> ").append(billing.getTax() != null ? billing.getTax() : "N/A").append("</p>");
+        contentBuilder.append("<p>1 Exam of ").append(examName).append("</p>");
+        contentBuilder.append("<p>Price is:</p>");
+        contentBuilder.append("</body></html>");
+
+        String content = contentBuilder.toString();
+
+        emailService.sendHtmlEmail(billing.getEmail(), to, subject, content);
+        log.info("Billing confirmation email sent to {} for order ID {}", to, billing.getId());
+    }
+
+
+    private void sendFleetManagerBatchOrderEmail(int numberOfBillings, String examId) {
+        if (numberOfBillings <= 0) {
+            log.warn("Not sending fleet manager email: number of billings is zero or negative.");
+            return;
+        }
+        if (examId == null || examId.isEmpty()) {
+            log.warn("Not sending fleet manager email: Exam ID is missing for the batch order.");
+            // You might still want to send an email with a generic message if examId is critical
+            // examId = "Not specified"; // Or handle as an error
+            return; // Or proceed with a modified message
+        }
+
+        String fromAddress = CompanyEmail; // Email is from the system
+        String toAddress = CompanyEmail;   // Email is to the fleet manager (using CompanyEmail as placeholder)
+        String subject = "Fleet Manager Batch Order Processed - Exam: " + examId;
+
+        StringBuilder contentBuilder = new StringBuilder();
+        contentBuilder.append("<html><body>");
+        contentBuilder.append("<h2>Fleet Manager Batch Order Notification</h2>");
+        contentBuilder.append("<p>A batch order has been successfully processed.</p>");
+        contentBuilder.append("<ul>");
+        contentBuilder.append("<li><strong>Exam ID:</strong> ").append(examId).append("</li>");
+        contentBuilder.append("<li><strong>Number of Users/Billings Processed:</strong> ").append(numberOfBillings).append("</li>");
+        contentBuilder.append("</ul>");
+        contentBuilder.append("<p>User exam attempts have been created accordingly.</p>");
+        contentBuilder.append("<p>Thank you.</p>");
+        contentBuilder.append("</body></html>");
+
+        String content = contentBuilder.toString();
+
+        try {
+            emailService.sendHtmlEmail(fromAddress, toAddress, subject, content);
+            log.info("Fleet manager batch order email sent to {} (from {}) for exam ID {} ({} users).", toAddress, fromAddress, examId, numberOfBillings);
+        } catch (Exception e) {
+            log.error("Failed to send fleet manager batch order email for exam ID {} to {}: {}", examId, toAddress, e.getMessage(), e);
+        }
+    }
     
 }
