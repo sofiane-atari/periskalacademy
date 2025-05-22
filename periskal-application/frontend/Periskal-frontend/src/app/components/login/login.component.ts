@@ -5,11 +5,12 @@ import { FormsModule } from '@angular/forms';
 import { AuthenticationService } from '../../services/Authentication/authentication.service';
 import { JwtDecoderService } from '../../services/JwtDecode/jwt-decoder.service';
 import { LoginService } from '../../services/Login/login.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslatePipe],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -40,28 +41,28 @@ export class LoginComponent {
     this.showPassword = !this.showPassword;
     const passwordField = document.getElementById('password') as HTMLInputElement;
     const toggleButton = document.querySelector('.toggle-password');
-    
+
     if (passwordField) {
       passwordField.type = this.showPassword ? 'text' : 'password';
     }
-    
+
     if (toggleButton) {
       toggleButton.classList.toggle('show-password', this.showPassword);
     }
   }
 
   onLogin() {
-    
+
     this.isLoading = true;
     this.errorMessage = null;
 
-    this.loginhandler.LoginUser(this.username,this.password,() => {
-        this.isLoading = false;
-        this.router.navigate(['/trainingEmployee']); // change to /dashboard when we have a Single Dashboard with Conditional Rendering
-      },
-      
+    this.loginhandler.LoginUser(this.username, this.password, () => {
+      this.isLoading = false;
+      this.router.navigate(['/trainingEmployee']); // change to /dashboard when we have a Single Dashboard with Conditional Rendering
+    },
+
     );
 
   }
-  
+
 }
