@@ -39,29 +39,34 @@ export class UpdateTrainingComponent {
       this.getTrainingDetails(this.trainingId);
     }
   }
-
-  //retrieve training data from database with id from the path
   getTrainingDetails(id: number): void {
-    this.trainingService.getTrainingById(id).subscribe({
-      next: (training) => {
-        this.training = training;
+  this.trainingService.getTrainingById(id).subscribe({
+    next: (training) => {
+      this.training = training;
 
-        // Ensure all modules have a chapters array
-        if (this.training?.modules) {
-          this.training.modules.forEach(module => {
-            if (!module.chapters) {
-              module.chapters = [];
+      // Ensure all modules have a chapters array and initialize newPhotos
+      if (this.training?.modules) {
+        this.training.modules.forEach((module, moduleIndex) => {
+          if (!module.chapters) {
+            module.chapters = [];
+          }
+          // Initialize newPhotos for each chapter in this module
+          module.chapters.forEach((chapter, chapterIndex) => {
+            const key = `${moduleIndex}_${chapterIndex}`;
+            if (!this.newPhotos[key]) {
+              this.newPhotos[key] = [];
             }
           });
-        }
-
-        this.loading = false;
-      },
-      error: (error) => {
-        this.errorMessage = 'Failed to load training details.';
+        });
       }
-    });
-  }
+
+      this.loading = false;
+    },
+    error: (error) => {
+      this.errorMessage = 'Failed to load training details.';
+    }
+  });
+}
 
   updateTraining() {
     if (this.training?.id) {
@@ -104,43 +109,43 @@ export class UpdateTrainingComponent {
   }
 
   deleteTraining() {
-    const dialogRef = this.dialog.open(ConfirmPromptComponent, {
-      width: '600px',
-      data: {
-        title: 'Delete Training',
-        message: 'Are you sure you want to delete this training? This action cannot be undone.',
-        confirmText: 'Delete',
-        cancelText: "Cancel"
-      }
-    });
+  const dialogRef = this.dialog.open(ConfirmPromptComponent, {
+    width: '600px',
+    data: {
+      title: 'Delete Training',
+      message: 'Are you sure you want to delete this training? This action cannot be undone.',
+      confirmText: 'Delete',
+      cancelText: 'Cancel'
+    }
+  });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result && this.training?.id) {
-        this.trainingService.deleteTraining(this.training?.id).subscribe({
-          next: () => {
-            const snackBarConfig: MatSnackBarConfig = {
-              duration: 3000,
-              verticalPosition: 'bottom',
-              horizontalPosition: 'left',
-              panelClass: ['snackbar-success'],
-              politeness: 'assertive'
-            };
+  dialogRef.afterClosed().subscribe(result => {
+    if (result && this.training?.id) {
+      this.trainingService.deleteTraining(this.training.id).subscribe({
+        next: () => {
+          const snackBarConfig: MatSnackBarConfig = {
+            duration: 3000,
+            verticalPosition: 'bottom',
+            horizontalPosition: 'left',
+            panelClass: ['snackbar-success'],
+            politeness: 'assertive'
+          };
 
-            this.snackBar.open('Training has been successfully deleted.', 'Close', snackBarConfig);
-            this.router.navigate(['/trainingEmployee']);
-          },
-          error: (err) => {
-            console.error('Error deleting training:', err);
-            const errorSnackBarConfig: MatSnackBarConfig = {
-              duration: 5000,
-              verticalPosition: 'bottom',
-              horizontalPosition: 'left',
-              panelClass: ['snackbar-error'],
-              politeness: 'assertive'
-            };
+          this.snackBar.open('Training has been successfully deleted.', 'Close', snackBarConfig);
+          this.router.navigate(['/trainingEmployee']);
+        },
+        error: (err) => {
+          console.error('Error deleting training:', err);
+          const errorSnackBarConfig: MatSnackBarConfig = {
+            duration: 5000,
+            verticalPosition: 'bottom',
+            horizontalPosition: 'left',
+            panelClass: ['snackbar-error'],
+            politeness: 'assertive'
+          };
 
-            this.snackBar.open('Error deleting training.', 'Close', errorSnackBarConfig);
-          }
+          this.snackBar.open('Error deleting training.', 'Close', errorSnackBarConfig);
+        }
         });
       }
     });
