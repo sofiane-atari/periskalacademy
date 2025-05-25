@@ -7,4 +7,5 @@ export interface Skipper {
   shipname: string;
   role: string;
   products: string[];
+  overallTrainingProgress: number;
 }

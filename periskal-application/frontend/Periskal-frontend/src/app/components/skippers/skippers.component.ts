@@ -4,7 +4,6 @@ import { SkipperService } from '../../services/Skippers/skipper.service';
 import { Skipper } from '../../models/Skipper.model';
 import { TrainingService } from '../../services/Training/training.service';
 import { ProgressService } from '../../services/Progress/progress.service';
-import { ModuleProgress } from '../../models/progress.model';
 import { TrainingWithProgress } from '../../models/TrainingWithProgress.model';
 import { SkipperDisplay } from '../../models/SkipperDisplay.model';
 import { Training } from '../../models/training.model';
@@ -16,12 +15,13 @@ import { ExamService } from '../../services/Exam/exam.service';
 import { MatSnackBar, MatSnackBarConfig, MatSnackBarModule } from '@angular/material/snack-bar';
 import { FleetManagerBillingComponent } from '../billing-fleetmanager/billing-fleetmanager.component';
 import { TranslatePipe } from '@ngx-translate/core';
+import { ProgressBarComponent } from "../progress-bar/progress-bar.component";
 
 
 @Component({
   selector: 'app-skippers',
   standalone: true,
-  imports: [CommonModule, FormsModule, FleetManagerBillingComponent, MatSnackBarModule, TranslatePipe],
+  imports: [CommonModule, FormsModule, FleetManagerBillingComponent, MatSnackBarModule, TranslatePipe, ProgressBarComponent],
   providers: [],
   templateUrl: './skippers.component.html',
   styleUrls: ['./skippers.component.css']
@@ -77,6 +77,7 @@ export class SkippersComponent implements OnInit {
           accessibleTrainings: [],
           loadingTrainingsAndProgress: false,
           trainingsAndProgressError: null,
+          overallTrainingProgress: 0,
         }));
       },
       error: (err: unknown) => {
@@ -95,6 +96,8 @@ export class SkippersComponent implements OnInit {
       // Load trainings and progress only if not already loaded and not currently loading
       if (skipper && skipper.accessibleTrainings.length === 0 && !skipper.loadingTrainingsAndProgress && !skipper.trainingsAndProgressError) {
         this.loadTrainingsAndProgressForSkipper(skipper);
+      } else if (skipper) {
+        this.calculateOverallProgressForSkipper(skipper);
       }
     }
   }
@@ -103,10 +106,13 @@ export class SkippersComponent implements OnInit {
     if (!skipper.products || skipper.products.length === 0) {
       skipper.trainingsAndProgressError = 'Skipper has no products to determine trainings.';
       skipper.accessibleTrainings = [];
+      skipper.overallTrainingProgress = 0;
       return;
     }
     if (!skipper.role) {
       skipper.trainingsAndProgressError = 'Skipper role is missing, cannot filter trainings.';
+      skipper.accessibleTrainings = [];
+      skipper.overallTrainingProgress = 0;
       return;
     }
 
@@ -117,6 +123,7 @@ export class SkippersComponent implements OnInit {
       switchMap((trainings: Training[]) => {
         if (!trainings || trainings.length === 0) {
           skipper.accessibleTrainings = [];
+          skipper.overallTrainingProgress = 0;
           return of([]); // No trainings
         }
 
@@ -127,7 +134,6 @@ export class SkippersComponent implements OnInit {
             progress: null,
             progressError: undefined
           };
-
 
           const userIdForProgress = skipper.id;
 
@@ -142,24 +148,41 @@ export class SkippersComponent implements OnInit {
               trainingItem.progressError = 'Progress unavailable';
               trainingItem.loadingProgress = false;
               trainingItem.progress = null;
-              return of(trainingItem); // Return the item with error info
+              return of(trainingItem);
             })
           );
         });
-        return forkJoin(progressObservables); // Wait for all fetches
+        return forkJoin(progressObservables);
       }),
       catchError(err => {
         console.error(`Error fetching trainings for skipper ${skipper.username}:`, err);
         skipper.trainingsAndProgressError = 'Failed to load trainings information.';
         skipper.accessibleTrainings = [];
-        return of([]); // Return empty array 
+        skipper.overallTrainingProgress = 0;
+        return of([]);
       })
     ).subscribe({
       next: (trainingsWithProgress: TrainingWithProgress[]) => {
         skipper.accessibleTrainings = trainingsWithProgress;
         skipper.loadingTrainingsAndProgress = false;
+        this.calculateOverallProgressForSkipper(skipper);
       },
     });
+  }
+
+  calculateOverallProgressForSkipper(skipper: SkipperDisplay): void {
+    if (skipper.accessibleTrainings && skipper.accessibleTrainings.length > 0) {
+      const totalTrainings = skipper.accessibleTrainings.length;
+
+      const totalPercentage = skipper.accessibleTrainings.reduce((sum, training) => {
+        return sum + (training.progress?.overallPercentComplete || 0);
+      }, 0);
+
+      skipper.overallTrainingProgress = totalTrainings > 0 ? Math.round(totalPercentage / totalTrainings) : 0;
+
+    } else {
+      skipper.overallTrainingProgress = 0;
+    }
   }
 
   // Assignment Methods
@@ -194,11 +217,14 @@ export class SkippersComponent implements OnInit {
             examAttempts: exam.examAttempts
           };
 
-
           this.assignmentDialogOpen = false;
           this.showBillingModal = true;
           this.isProcessingAction = false;
 
+        } else {
+          console.warn('No exam found for this training. Proceeding without billing details.');
+          this.saveAssignment(); // Directly save assignment without billing modal
+          this.isProcessingAction = false;
         }
       },
       error: (error) => {
@@ -210,7 +236,6 @@ export class SkippersComponent implements OnInit {
   }
 
   saveAssignment() {
-
     this.showBillingModal = false;
     this.isProcessingAction = true;
     const fleetmanagerId = this.jwtDecoder.getId();
@@ -229,7 +254,11 @@ export class SkippersComponent implements OnInit {
       next: (response) => {
         console.log('Assignment successful:', response);
         this.assignmentDialogOpen = false;
-        this.fetchSkippersData(); // Refresh skippers data after assignment
+        this.clearSkipperSelections();
+        this.snackBar.open('Training successfully assigned!', 'Close', { duration: 3000, panelClass: ['snackbar-success'] });
+        this.fetchSkippersData();
+        this.isProcessingAction = false;
+        this.selectedSkipperIndex = null;
       },
       error: (error) => {
         console.error('Error during assignment after Billing:', error);
@@ -257,7 +286,6 @@ export class SkippersComponent implements OnInit {
   }
 
   openAssignmentDialog() {
-
     this.selectedSkipperIds = [...this.mainListSelectedSkipperIds];
     if (this.selectedSkipperIds.length === 0) {
       alert("Please select at least one skipper from the list to assign training.");
@@ -273,9 +301,7 @@ export class SkippersComponent implements OnInit {
     const skipper = this.skippers.find(s => s.id === id);
 
     if (skipper) {
-
       return `${skipper.username} (${skipper.firstname} ${skipper.lastname})`;
-
     }
 
     return `Skipper ID: ${id}`; // Fallback if skipper not found 
@@ -302,25 +328,29 @@ export class SkippersComponent implements OnInit {
 
   closeAssignmentDialog() {
     this.assignmentDialogOpen = false;
+    this.selectedTrainingId = null;
+    this.billingDataForForm = null;
+    this.isProcessingAction = false;
   }
 
   handleBillingCancel() {
     this.showBillingModal = false;
     this.isProcessingAction = false;
     this.snackBar.open('Billing cancelled. Training assignment aborted.', 'Close', { duration: 3000 });
-    this.assignmentDialogOpen = true; // If you want to go back to assignment selection
+    this.assignmentDialogOpen = true;
   }
 
   getFilteredSkippers() {
     const searchTerm = this.searchTerm.toLowerCase();
-    console.log(this.skippers);
     return this.skippers.filter(skipper => {
       const matchesSearch =
         !searchTerm ||
         skipper.lastname.toLowerCase().includes(searchTerm) ||
         skipper.shipname.toLowerCase().includes(searchTerm) ||
         skipper.products.some(product => product.toLowerCase().includes(searchTerm)) ||
-        skipper.id.toLowerCase().includes(searchTerm);
+        skipper.id.toLowerCase().includes(searchTerm) ||
+        skipper.username.toLowerCase().includes(searchTerm) ||
+        (skipper.firstname && skipper.firstname.toLowerCase().includes(searchTerm));
 
       const matchesProductFilter =
         !this.selectedProduct || skipper.products.includes(this.selectedProduct);
@@ -338,7 +368,7 @@ export class SkippersComponent implements OnInit {
   }
 
   getAllUniqueShips(): string[] {
-    const allShips = this.skippers.flatMap(skipper => skipper.shipname);
+    const allShips = this.skippers.map(skipper => skipper.shipname);
     return [...new Set(allShips)];
   }
 
@@ -363,6 +393,7 @@ export class SkippersComponent implements OnInit {
       this.currentPage++;
     }
   }
+
   onFilterChange() {
     this.currentPage = 1;
   }
@@ -409,7 +440,27 @@ export class SkippersComponent implements OnInit {
   }
 
   getPageNumbers(): number[] {
-    return Array.from({ length: this.totalPages }, (_, i) => i + 1);
+    const pageNumbers: number[] = [];
+    const totalPages = this.totalPages;
+    const maxPagesToShow = 5;
+
+    if (totalPages <= maxPagesToShow) {
+      for (let i = 1; i <= totalPages; i++) {
+        pageNumbers.push(i);
+      }
+    } else {
+      let startPage = Math.max(1, this.currentPage - Math.floor(maxPagesToShow / 2));
+      let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
+
+      if (endPage - startPage + 1 < maxPagesToShow) {
+        startPage = Math.max(1, endPage - maxPagesToShow + 1);
+      }
+
+      for (let i = startPage; i <= endPage; i++) {
+        pageNumbers.push(i);
+      }
+    }
+    return pageNumbers;
   }
 
   goToPage(index: number) {
