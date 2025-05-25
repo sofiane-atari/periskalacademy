@@ -2,16 +2,18 @@
   <h1>{{'SKIPPERS' | translate}}</h1>
 
   <div class="search-bar">
-    <h4>Search based on lastname, shipname or products</h4>
-    <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="onFilterChange()" placeholder="Search skippers" />
+    <div>
+      <select class="product-select" [(ngModel)]="selectedProduct" (ngModelChange)="onFilterChange()">
+        <option value="">All Products</option>
+        @for (product of getAllUniqueProducts(); track $index) {
+        <option [value]="product">{{product}}</option>
+        }
+      </select>
+    </div>
+    <div>
+      <input class="search-input" type="text" [(ngModel)]="searchTerm" (ngModelChange)="onFilterChange()" placeholder="Search skippers" />
+    </div>
   </div>
-
-  <select [(ngModel)]="selectedProduct" (ngModelChange)="onFilterChange()">
-    <option value="">All products</option>
-    @for (product of getAllUniqueProducts(); track $index) {
-      <option [value]="product">{{product}}</option>
-    }
-  </select>
   
   <div class="actions">
     <button 
@@ -121,10 +123,10 @@
       <p class="no-data">{{'NO_SKIPPERS_AVAILABLE' | translate}}</p>
     }
   </div>
-  <div class="pagination">
+  <div class="pagination-container">
     <button (click)="prevPage()" [disabled]="currentPage === 1">Previous</button>
     <span>Page {{ currentPage }} of {{ totalPages }}</span>
-    <input type="number" [(ngModel)]="itemsPerPage" (ngModelChange)="onPageSizeChange()" min="1" />
+    <input class="pagination-container-input" type="number" [(ngModel)]="itemsPerPage" (ngModelChange)="onPageSizeChange()" min="1" />
     <button (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
   </div>
 
