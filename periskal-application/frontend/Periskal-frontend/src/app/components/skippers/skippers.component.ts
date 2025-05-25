@@ -39,6 +39,7 @@ export class SkippersComponent implements OnInit {
   mainListSelectedSkipperIds: string[] = [];
 
   searchTerm = '';
+  selectedProduct = '';
 
   showBillingModal: boolean = false;
   billingDataForForm: {
@@ -309,7 +310,22 @@ export class SkippersComponent implements OnInit {
 
   getFilteredSkippers() {
     const searchTerm = this.searchTerm.toLowerCase();
-    return this.skippers.filter(skipper => skipper.lastname.toLowerCase().includes(searchTerm) || skipper.shipname.toLowerCase().includes(searchTerm) || skipper.products.some(product => product.toLowerCase().includes(searchTerm)));
+    return this.skippers.filter(skipper => {
+      const matchesSearch =
+        !searchTerm ||
+        skipper.lastname.toLowerCase().includes(searchTerm) ||
+        skipper.shipname.toLowerCase().includes(searchTerm) ||
+        skipper.products.some(product => product.toLowerCase().includes(searchTerm));
+
+      const matchesFilter =
+        !this.selectedProduct || skipper.products.includes(this.selectedProduct);
+
+      return matchesFilter && matchesSearch;
+    })
   }
 
+  getAllUniqueProducts(): string[] {
+    const allProducts = this.skippers.flatMap(skipper => skipper.products);
+    return [...new Set(allProducts)];
+  }
 }

@@ -5,6 +5,13 @@
     <h4>Search based on lastname, shipname or products</h4>
     <input type="text" [(ngModel)]="searchTerm" placeholder="Search skippers" />
   </div>
+
+  <select [(ngModel)]="selectedProduct">
+    <option value="">All products</option>
+    @for (product of getAllUniqueProducts(); track $index) {
+      <option [value]="product">{{product}}</option>
+    }
+  </select>
   
   <div class="actions">
     <button 
