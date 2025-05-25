@@ -1,6 +1,11 @@
 <div class="skippers-container">
   <h1>{{'SKIPPERS' | translate}}</h1>
 
+  <div class="search-bar">
+    <h4>Search based on lastname, shipname or products</h4>
+    <input type="text" [(ngModel)]="searchTerm" placeholder="Search skippers" />
+  </div>
+  
   <div class="actions">
     <button 
       class="assign-btn" (click)="openAssignmentDialog()" [disabled]="mainListSelectedSkipperIds.length === 0 || isProcessingAction">{{'ASSIGN_TRAINING_TO_SELECTED' | translate}} ({{ mainListSelectedSkipperIds.length }})
@@ -15,7 +20,7 @@
   }
 
   <div class="skippers-list">
-    @for (skipper of skippers; track skipper.id; let i = $index) {
+    @for (skipper of getFilteredSkippers(); track skipper.id; let i = $index) {
       <div
           class="skipper-item"
           [class.active]="selectedSkipperIndex === i"
