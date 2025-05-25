@@ -40,6 +40,8 @@ export class SkippersComponent implements OnInit {
 
   searchTerm = '';
   selectedProduct = '';
+  currentPage = 1;
+  itemsPerPage = 5;
 
   showBillingModal: boolean = false;
   billingDataForForm: {
@@ -328,4 +330,34 @@ export class SkippersComponent implements OnInit {
     const allProducts = this.skippers.flatMap(skipper => skipper.products);
     return [...new Set(allProducts)];
   }
+
+  getPaginatedSkippers() {
+    const filtered = this.getFilteredSkippers();
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    return filtered.slice(startIndex, startIndex + this.itemsPerPage);
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.getFilteredSkippers().length / this.itemsPerPage);
+  }
+
+  prevPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
+  }
+  onFilterChange() {
+    this.currentPage = 1;
+  }
+
+  onPageSizeChange() {
+    this.currentPage = 1;
+  }
+
 }
