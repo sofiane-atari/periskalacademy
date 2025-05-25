@@ -13,7 +13,7 @@ import { JwtDecoderService } from '../../services/JwtDecode/jwt-decoder.service'
 import { TrainingAssignmentService } from '../../services/Assignment/training-assignment.service';
 import { FormsModule } from '@angular/forms';
 import { ExamService } from '../../services/Exam/exam.service';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarConfig, MatSnackBarModule } from '@angular/material/snack-bar';
 import { FleetManagerBillingComponent } from '../billing-fleetmanager/billing-fleetmanager.component';
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -40,8 +40,9 @@ export class SkippersComponent implements OnInit {
 
   searchTerm = '';
   selectedProduct = '';
+  selectedShipname = '';
   currentPage = 1;
-  itemsPerPage = 5;
+  itemsPerPage = 10;
 
   showBillingModal: boolean = false;
   billingDataForForm: {
@@ -312,23 +313,33 @@ export class SkippersComponent implements OnInit {
 
   getFilteredSkippers() {
     const searchTerm = this.searchTerm.toLowerCase();
+    console.log(this.skippers);
     return this.skippers.filter(skipper => {
       const matchesSearch =
         !searchTerm ||
         skipper.lastname.toLowerCase().includes(searchTerm) ||
         skipper.shipname.toLowerCase().includes(searchTerm) ||
-        skipper.products.some(product => product.toLowerCase().includes(searchTerm));
+        skipper.products.some(product => product.toLowerCase().includes(searchTerm)) ||
+        skipper.id.toLowerCase().includes(searchTerm);
 
-      const matchesFilter =
+      const matchesProductFilter =
         !this.selectedProduct || skipper.products.includes(this.selectedProduct);
 
-      return matchesFilter && matchesSearch;
+      const matchesShipFilter =
+        !this.selectedShipname || skipper.shipname.includes(this.selectedShipname);
+
+      return matchesProductFilter && matchesShipFilter && matchesSearch;
     })
   }
 
   getAllUniqueProducts(): string[] {
     const allProducts = this.skippers.flatMap(skipper => skipper.products);
     return [...new Set(allProducts)];
+  }
+
+  getAllUniqueShips(): string[] {
+    const allShips = this.skippers.flatMap(skipper => skipper.shipname);
+    return [...new Set(allShips)];
   }
 
   getPaginatedSkippers() {
@@ -360,4 +371,48 @@ export class SkippersComponent implements OnInit {
     this.currentPage = 1;
   }
 
+  addAllToSkipperSelection(): void {
+    const filteredSkippers = this.getFilteredSkippers();
+
+    const selectedSkipperIdsSet = new Set<string>(this.mainListSelectedSkipperIds);
+
+    let skippersAddedCount = 0;
+
+    filteredSkippers.forEach(skipper => {
+      if (!selectedSkipperIdsSet.has(skipper.id)) {
+        selectedSkipperIdsSet.add(skipper.id);
+        skippersAddedCount++;
+      }
+    });
+
+    this.mainListSelectedSkipperIds = Array.from(selectedSkipperIdsSet);
+
+    if (skippersAddedCount > 0) {
+      const successSnackBarConfig: MatSnackBarConfig = {
+        duration: 3000,
+        verticalPosition: 'bottom',
+        horizontalPosition: 'left',
+        panelClass: ['snackbar-success'],
+        politeness: 'assertive'
+      };
+      this.snackBar.open(`${skippersAddedCount} new skippers added to selection.`, 'Close', successSnackBarConfig);
+    } else {
+      const infoSnackBarConfig: MatSnackBarConfig = {
+        duration: 5000,
+        verticalPosition: 'bottom',
+        horizontalPosition: 'left',
+        panelClass: ['snackbar-info'],
+        politeness: 'assertive'
+      };
+      this.snackBar.open('All relevant skippers are already selected.', 'Close', infoSnackBarConfig);
+    }
+  }
+
+  getPageNumbers(): number[] {
+    return Array.from({ length: this.totalPages }, (_, i) => i + 1);
+  }
+
+  goToPage(index: number) {
+    this.currentPage = index;
+  }
 }

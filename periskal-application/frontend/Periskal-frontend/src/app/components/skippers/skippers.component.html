@@ -3,21 +3,33 @@
 
   <div class="search-bar">
     <div>
+      <label for="product-select" class="filter-label">{{'FILTER_BY_PRODUCT' | translate}}</label>
       <select class="product-select" [(ngModel)]="selectedProduct" (ngModelChange)="onFilterChange()">
-        <option value="">All Products</option>
+        <option value="">{{'ALL_PRODUCTS' | translate}}</option>
         @for (product of getAllUniqueProducts(); track $index) {
         <option [value]="product">{{product}}</option>
         }
       </select>
+      <label for="shipname-select" class="filter-label">{{'FILTER_BY_SHIPNAME' | translate}}</label>
+      <select class="product-select" [(ngModel)]="selectedShipname" (ngModelChange)="onFilterChange()">
+        <option value="">{{'ALL_SHIPS' | translate}}</option>
+        @for (ship of getAllUniqueShips(); track $index) {
+        <option [value]="ship">{{ship}}</option>
+        }
+      </select>
     </div>
     <div>
-      <input class="search-input" type="text" [(ngModel)]="searchTerm" (ngModelChange)="onFilterChange()" placeholder="Search skippers" />
+      <label for="shipname-select" class="filter-label">{{'SEARCH_SKIPPERS' | translate}}</label>
+      <input class="search-input" type="text" [(ngModel)]="searchTerm" (ngModelChange)="onFilterChange()" placeholder="{{'SEARCH_PLACEHOLDER' | translate}}" />
     </div>
   </div>
   
   <div class="actions">
     <button 
       class="assign-btn" (click)="openAssignmentDialog()" [disabled]="mainListSelectedSkipperIds.length === 0 || isProcessingAction">{{'ASSIGN_TRAINING_TO_SELECTED' | translate}} ({{ mainListSelectedSkipperIds.length }})
+    </button>
+    <button
+      class="select-all-btn" (click)="addAllToSkipperSelection()" [disabled]="isProcessingAction || mainListSelectedSkipperIds.length === skippers.length">{{'SELECT_ALL_SKIPPERS'| translate}} ({{getFilteredSkippers().length}})
     </button>
     <button
       class="clear-btn" (click)="clearSkipperSelections()" [disabled]="mainListSelectedSkipperIds.length === 0 || isProcessingAction">{{'CLEAR_SELECTIONS'| translate}}
@@ -123,12 +135,50 @@
       <p class="no-data">{{'NO_SKIPPERS_AVAILABLE' | translate}}</p>
     }
   </div>
-  <div class="pagination-container">
-    <button (click)="prevPage()" [disabled]="currentPage === 1">Previous</button>
-    <span>Page {{ currentPage }} of {{ totalPages }}</span>
-    <input class="pagination-container-input" type="number" [(ngModel)]="itemsPerPage" (ngModelChange)="onPageSizeChange()" min="1" />
-    <button (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
-  </div>
+<div class="pagination-wrapper"> <div class="pagination-main-controls">
+        <button
+            class="pagination-btn previous-button"
+            (click)="prevPage()"
+            [disabled]="currentPage === 1"
+            [attr.aria-disabled]="currentPage === 1 ? 'true' : null"
+        >
+            Previous
+        </button>
+        <span class="pagination-info">Page {{ currentPage }} of {{ totalPages }}</span>
+        <div class="pagination-pages">
+            @for (pageNumber of getPageNumbers(); track pageNumber) {
+                <button
+                    class="page-number"
+                    [class.active]="pageNumber === currentPage"
+                    (click)="goToPage(pageNumber)"
+                    [attr.aria-current]="pageNumber === currentPage ? 'page' : null"
+                >
+                    {{ pageNumber }}
+                </button>
+            }
+        </div>
+        <button
+            class="pagination-btn next-button"
+            (click)="nextPage()"
+            [disabled]="currentPage === totalPages"
+            [attr.aria-disabled]="currentPage === totalPages ? 'true' : null"
+        >
+            Next
+        </button>
+    </div>
+    <div class="pagination-page-size-selector">
+        <label for="items-per-page-input" class="pagination-label">Items per page:</label>
+        <input
+            id="items-per-page-input"
+            class="pagination-input"
+            type="number"
+            [(ngModel)]="itemsPerPage"
+            (ngModelChange)="onPageSizeChange()"
+            min="1"
+            aria-label="Number of items per page"
+        />
+    </div>
+</div>
 
   @if(assignmentDialogOpen) {
   <div class="modal-overlay" >

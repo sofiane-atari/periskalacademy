@@ -218,5 +218,6 @@
   "TIME_REMAINING": "Temps restant :",
   "OF": "de",
   "PROCEED_TO_BILLING": "Passer à la facturation",
-  "Processing": "Traitement"
+  "Processing": "Traitement",
+  "SELECT_ALL_SKIPPERS": "Sélectionner tous les skippers avec le filtre actuel."
 }

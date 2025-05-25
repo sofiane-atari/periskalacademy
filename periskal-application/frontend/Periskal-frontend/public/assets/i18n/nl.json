@@ -218,5 +218,6 @@
   "TIME_REMAINING": "Resterende tijd:",
   "OF": "van",
   "PROCEED_TO_BILLING": "Verder naar facturatie",
-  "Processing": "Bezig met verwerken"
+  "Processing": "Bezig met verwerken",
+  "SELECT_ALL_SKIPPERS": "Selecteer alle schippers met huidige filter"
 }

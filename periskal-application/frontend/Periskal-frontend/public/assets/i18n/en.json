@@ -218,5 +218,12 @@
   "TIME_REMAINING": "Time remaining:",
   "OF": "of",
   "PROCEED_TO_BILLING": "Proceed to Billing",
-  "Processing": "Processing"
+  "Processing": "Processing",
+  "SELECT_ALL_SKIPPERS": "Select all skippers with current filter",
+  "SEARCH_PLACEHOLDER": "By name, ship, product, or ID...",
+  "SEARCH_SKIPPERS": "Search Skippers:",
+  "FILTER_BY_SHIPNAME": "Filter by Shipname",
+  "ALL_SHIPS": "All ships",
+  "ALL_PRODUCTS": "All products",
+  "FILTER_BY_PRODUCT": "Filter by product"
 }
