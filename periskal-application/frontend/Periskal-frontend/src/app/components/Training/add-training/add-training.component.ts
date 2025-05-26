@@ -194,7 +194,7 @@ export class AddTrainingComponent implements OnInit { // Implement OnInit
             next: (response) => {
               // this.resetForm();
               console.log(trainingData);
-              this.router.navigate(['/trainingEmployee']);
+              this.router.navigate(['/dashboard']);
             },
             error: (error) => {
               console.error('Error posting training', error);
@@ -206,7 +206,7 @@ export class AddTrainingComponent implements OnInit { // Implement OnInit
           next: (response) => {
             // this.resetForm();
             console.log(trainingData);
-            this.router.navigate(['/trainingEmployee']);
+            this.router.navigate(['/dashboard']);
           },
           error: (error) => {
             console.error('Error posting training', error);
