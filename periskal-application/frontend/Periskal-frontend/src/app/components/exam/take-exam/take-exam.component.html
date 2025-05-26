@@ -18,6 +18,7 @@
         <div class="col-md-9">
           <div class="question-section p-4">
             <h3 class="h5 mb-4">
+              <span class="question-number-circle">{{ currentQuestionIndex + 1 }}</span>
               {{'QUESTION' |translate}} {{ currentQuestionIndex + 1 }} of {{ exam.questions.length }}
             </h3>
 
@@ -35,25 +36,33 @@
               </div>
 
               <div class="answers-section mt-4">
-                @for (answer of currentQuestion.answers; track $index) {
-                  <div class="form-check mb-2">
-                    <input 
-                      class="form-check-input" 
-                      type="radio" 
-                      [attr.name]="'answer' + currentQuestionIndex"
-                      [attr.id]="'answer' + currentQuestionIndex + '-' + $index"
-                      [value]="$index"
-                      [checked]="selectedAnswers[currentQuestionIndex] === $index"
-                      (change)="selectAnswer(currentQuestionIndex, $index)"
-                    >
-                    <label 
-                      class="form-check-label" 
-                      [attr.for]="'answer' + currentQuestionIndex + '-' + $index">
-                      {{ answer.text }}
-                    </label>
-                  </div>
-                }
-              </div>
+                  @for (answer of currentQuestion.answers; track $index) {
+                    <div class="form-check mb-3">
+                      <input 
+                        class="form-check-input custom-radio" 
+                        type="radio" 
+                        [attr.name]="'answer' + currentQuestionIndex"
+                        [attr.id]="'answer' + currentQuestionIndex + '-' + $index"
+                        [value]="$index"
+                        [checked]="selectedAnswers[currentQuestionIndex] === $index"
+                        (change)="selectAnswer(currentQuestionIndex, $index)"
+                      >
+                      <label 
+                        class="form-check-label" 
+                        [attr.for]="'answer' + currentQuestionIndex + '-' + $index"
+                        (change)="selectAnswer(currentQuestionIndex, $index)">
+                        {{ answer.text }}
+                      </label>
+                    </div>
+                  }
+                  @if (selectedAnswers[currentQuestionIndex] !== undefined) {
+                    <div class="clear-selection mt-3">
+                      <button class="btn btn-sm btn-outline-danger" (click)="clearSelection()">
+                        <i class="bi bi-x-circle"></i> {{'ERASE_SELECTION' | translate}}
+                      </button>
+                    </div>
+                  }
+                </div>
 
               <div class="d-flex justify-content-between align-items-center mt-4 pt-4 border-top">
                 <button
@@ -85,16 +94,29 @@
         <div class="col-md-3">
           <div class="question-navigator p-4 sticky-top" style="top: 1rem;">
             <h4 class="h6 mb-3 text-center">{{'QUESTIONS' | translate}}</h4>
-            <div class="d-flex flex-wrap justify-content-center">
+            <div class="d-flex flex-wrap justify-content-center mb-4">
               @for (question of exam.questions; track $index) {
-                <div
-                  class="question-number"
-                  [class.active]="$index === currentQuestionIndex"
-                  (click)="goToQuestion($index)"
-                >
+                <div class="question-number" 
+                    [class.active]="$index === currentQuestionIndex"
+                    [class.answered]="selectedAnswers[$index] !== undefined"
+                    (click)="goToQuestion($index)">
                   {{ $index + 1 }}
                 </div>
               }
+            </div>
+            <div class="progress-section">
+              <h4 class="h6 mb-2 text-center">{{'EXAM_PROGRESS' | translate}}</h4>
+              <div class="progress">
+                <div
+                  class="progress-bar"
+                  role="progressbar"
+                  [style.width]="(currentQuestionIndex + 1) / exam.questions.length * 100 + '%'"
+                  [attr.aria-valuenow]="(currentQuestionIndex + 1) / exam.questions.length * 100"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                ></div>
+              </div>
+              <p class="text-muted text-center mt-2">{{ currentQuestionIndex + 1 }} of {{ exam.questions.length }} answered</p>
             </div>
           </div>
         </div>

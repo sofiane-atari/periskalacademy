@@ -22,6 +22,7 @@ export class TakeExamComponent implements OnInit {
   loading = true;
   error: string | null = null;
   isAssigned: boolean = false;
+  selectedAnswers: (number | undefined)[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -35,7 +36,6 @@ export class TakeExamComponent implements OnInit {
     const examId = Number(this.route.snapshot.paramMap.get('id'));
     this.loadExam(examId);
   }
-
   
 
   loadExam(examId: number): void {
@@ -73,6 +73,10 @@ export class TakeExamComponent implements OnInit {
     return this.exam.questions[this.currentQuestionIndex];
   }
 
+  clearSelection() {
+    this.selectedAnswers[this.currentQuestionIndex] = undefined;
+  }
+
   nextQuestion(): void {
     if (this.exam && this.currentQuestionIndex < this.exam.questions.length - 1) {
       this.currentQuestionIndex++;
@@ -90,8 +94,6 @@ export class TakeExamComponent implements OnInit {
       this.currentQuestionIndex = index;
     }
   }
-
-  selectedAnswers: number[] = [];
 
   selectAnswer(questionIndex: number, answerIndex: number) {
     this.selectedAnswers[questionIndex] = answerIndex;
