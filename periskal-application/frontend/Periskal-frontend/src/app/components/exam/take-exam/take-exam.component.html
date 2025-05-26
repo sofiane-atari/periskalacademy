@@ -14,12 +14,16 @@
         <p class="text-muted mb-0">{{ exam.examDescription }}</p>
       </div>
 
+      <div class="timer">
+        {{'TIME_REMAINING' | translate}} <strong>{{ formatTime(remainingTime) }}</strong>
+      </div>
+
       <div class="row">
         <div class="col-md-9">
           <div class="question-section p-4">
             <h3 class="h5 mb-4">
               <span class="question-number-circle">{{ currentQuestionIndex + 1 }}</span>
-              {{'QUESTION' |translate}} {{ currentQuestionIndex + 1 }} of {{ exam.questions.length }}
+              {{'QUESTION' |translate}} {{ currentQuestionIndex + 1 }} {{'OF'| translate}} {{ exam.questions.length }}
             </h3>
 
             @if (currentQuestion) {
