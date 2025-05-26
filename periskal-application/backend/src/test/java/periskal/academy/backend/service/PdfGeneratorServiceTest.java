@@ -50,7 +50,7 @@ class PdfGeneratorServiceTest {
             mockedUtil.when(() -> CertificateGeneratorUtil.generateCertificatePdf(
                     anyString(), anyString(), anyString(), anyString(),
                     anyList(), anyString(), anyString(), anyString(),
-                    anyString(), anyString())).thenReturn(fakePdfBytes);
+                    anyString(), anyString(), anyString())).thenReturn(fakePdfBytes);
 
             // Act
             byte[] result = service.createCertificate(mockCertificate, testFirstName, testLastName, testShipName);
@@ -62,7 +62,7 @@ class PdfGeneratorServiceTest {
             mockedUtil.verify(() -> CertificateGeneratorUtil.generateCertificatePdf(
                     anyString(), anyString(), anyString(), anyString(),
                     anyList(), anyString(), anyString(), anyString(),
-                    anyString(), anyString()));
+                    anyString(), anyString(), anyString()));
         }
     }
 }
