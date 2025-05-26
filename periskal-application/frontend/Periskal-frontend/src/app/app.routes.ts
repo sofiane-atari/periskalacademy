@@ -18,6 +18,7 @@ import { CertificatesComponent } from './components/certificates/certificates.co
 import { ExamsListComponent } from './components/exams-list/exams-list.component';
 import { BillingComponent } from './components/billing/billing.component';
 import { FaqPageComponent } from './components/faq/faq-page/faq-page.component';
+import { ContactPageComponent } from './components/contact/contact-page.component';
 
 export const routes: Routes = [
 
@@ -50,7 +51,8 @@ export const routes: Routes = [
             { path: 'certificates', component: CertificatesComponent },
             { path: 'exams', component: ExamsListComponent },
             { path: 'billing/:examid', component: BillingComponent },
-            { path: 'faq-page', component: FaqPageComponent}
+            { path: 'faq-page', component: FaqPageComponent},
+            { path: 'contact', component: ContactPageComponent}
         ]
     },
 
@@ -58,7 +60,5 @@ export const routes: Routes = [
     { path: '**', redirectTo: 'login' }
 ];
 
-RouterModule.forRoot(routes, {
-    enableTracing: true // ✅ This will log route changes in the console
-})
+
 
