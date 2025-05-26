@@ -116,9 +116,9 @@
 
                         @if (tp.progress && tp.progress.moduleProgress && tp.progress.moduleProgress.length > 0) {
                         <div class="module-progress-list">
-                            @for(mp of tp.progress.moduleProgress; track mp.moduleId) {
+                            @for(mp of tp.progress.moduleProgress; let i = $index; track mp.moduleId) {
                             <div class="module-progress-item">
-                                <span>{{'MODULE' | translate}} {{mp.moduleId}}: </span>
+                                <span>{{'MODULE' | translate}} {{ i + 1 }}: </span>
                                 <app-progress-bar [percentComplete]="mp.percentComplete"></app-progress-bar>
                             </div>
                             }
@@ -129,7 +129,7 @@
                 </div>
 
                 <hr class="details-divider">
-                <h4>{{ 'EXAMS_AND_CERTIFICATIONS' | translate }}</h4>
+                <h4>{{ 'EXAM_ATTEMPTS' | translate }}</h4>
 
                 @if (loadingCompletedExams) {
                 <p class="loading-indicator">{{ 'LOADING_EXAMS' | translate }}</p>
@@ -181,6 +181,9 @@
 
 
                 </div>
+                <hr class="details-divider">
+                <h4>{{ 'CERTIFCATES' | translate }}:</h4>
+                <!--TODO: implement certificates section-->
             }
             }
             </div>

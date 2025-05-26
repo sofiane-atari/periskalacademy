@@ -225,5 +225,7 @@
   "FILTER_BY_SHIPNAME": "Filter by Shipname",
   "ALL_SHIPS": "All ships",
   "ALL_PRODUCTS": "All products",
-  "FILTER_BY_PRODUCT": "Filter by product"
+  "FILTER_BY_PRODUCT": "Filter by product",
+  "OVERALL_PROGRESS": "Overall Progress",
+  "EXAMS_ATTEMPTS": "Exam attempts:"
 }
