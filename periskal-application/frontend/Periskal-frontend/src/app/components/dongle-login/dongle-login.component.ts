@@ -48,7 +48,7 @@ export class DongleLoginComponent implements OnInit {
           this.isLoading = false;
           // Verify token exists before navigating
           if (this.authService.isAuthenticated()) {
-            this.router.navigate(['/trainingEmployee']);
+            this.router.navigate(['/dashboard']);
           } else {
             this.errorMessage = '❌ Authentication token not stored properly';
           }

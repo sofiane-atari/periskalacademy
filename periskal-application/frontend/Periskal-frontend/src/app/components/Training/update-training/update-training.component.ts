@@ -90,7 +90,7 @@ export class UpdateTrainingComponent {
           };
 
           this.snackBar.open('Training updated successfully!', 'Close', snackBarConfig);
-          this.router.navigate(['/trainingEmployee']);
+          this.router.navigate(['/dashboard']);
         },
         error: (error) => {
           this.errorMessage = 'Failed to update training.';
@@ -132,7 +132,7 @@ export class UpdateTrainingComponent {
           };
 
           this.snackBar.open('Training has been successfully deleted.', 'Close', snackBarConfig);
-          this.router.navigate(['/trainingEmployee']);
+          this.router.navigate(['/dashboard']);
         },
         error: (err) => {
           console.error('Error deleting training:', err);

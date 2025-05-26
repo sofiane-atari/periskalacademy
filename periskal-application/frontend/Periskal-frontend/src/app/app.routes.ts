@@ -1,6 +1,6 @@
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
-import { TrainingEmployeeComponent } from './components/Training/training-employee/training-employee.component';
+import { DashboardComponent } from './components/Training/dashboard/dashboard-employee.component';
 import { TrainingDetailComponent } from './components/Training/training-detail/training-detail.component';
 import { AddTrainingComponent } from './components/Training/add-training/add-training.component';
 import { UpdateTrainingComponent } from './components/Training/update-training/update-training.component';
@@ -35,7 +35,7 @@ export const routes: Routes = [
         path: '',
         canActivate: [authGuard],
         children: [
-            { path: 'trainingEmployee', component: TrainingEmployeeComponent },
+            { path: 'dashboard', component: DashboardComponent },
             { path: 'add-training', component: AddTrainingComponent },
             { path: 'add-exam', component: AddExamComponent },
             { path: 'update-exam/:id', component: UpdateExamComponent },
