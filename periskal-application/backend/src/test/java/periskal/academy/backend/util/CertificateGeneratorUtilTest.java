@@ -22,13 +22,14 @@ class CertificateGeneratorUtilTest {
         String companyName = "Valid Corp";
         String companyAddress = "1 Valid St";
         String companyPhone = "123456";
+        String ownerPassword = "validPassword123";
 
         // Act: Generate the PDF, fail test if unexpected exception occurs
         byte[] pdfData = null;
         try {
             pdfData = CertificateGeneratorUtil.generateCertificatePdf(
                     productName, productdetails, shipName, trainingDate, crewNames,
-                    signerName, signerTitle, companyName, companyAddress, companyPhone);
+                    signerName, signerTitle, companyName, companyAddress, companyPhone, ownerPassword);
         } catch (Exception e) {
             fail("PDF generation threw an unexpected exception: " + e.getMessage(), e);
         }
