@@ -12,12 +12,16 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream; 
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.encryption.AccessPermission;
+import org.apache.pdfbox.pdmodel.encryption.StandardProtectionPolicy;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public final class CertificateGeneratorUtil {
 
     private CertificateGeneratorUtil() {
@@ -109,6 +113,8 @@ public final class CertificateGeneratorUtil {
     private static final float DECO_CIRCLE_CENTER_Y = SIGNATORY_TEXT_Y - 80; 
     private static final float DECO_CIRCLE_RADIUS = 45; 
 
+    // --- PDF Security ---
+    private static final String PDF_USER_PASSWORD = ""; // Empty User password for read-only access
 
     public static byte[] generateCertificatePdf(
             String productName,
@@ -120,7 +126,8 @@ public final class CertificateGeneratorUtil {
             String signerTitle,
             String companyName,
             String companyAddress,
-            String companyPhone) throws IOException {
+            String companyPhone,
+            String OwnerPassword) throws IOException {
 
         try (PDDocument document = new PDDocument(); ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             PDPage page = new PDPage(PDRectangle.A4);
@@ -137,10 +144,10 @@ public final class CertificateGeneratorUtil {
                 if (logoStream != null) {
                     pdLogoImage = PDImageXObject.createFromByteArray(document, logoStream.readAllBytes(), "logo");
                 } else {
-                    System.err.println("Warning: Logo image not found at " + LOGO_IMAGE_PATH);
+                    log.warn("Warning: Logo image not found at " + LOGO_IMAGE_PATH);
                 }
             } catch (Exception e) {
-                System.err.println("Warning: Could not load logo image: " + e.getMessage());
+                log.warn("Warning: Could not load logo image: " + e.getMessage());
             }
 
             PDImageXObject pdSignatureImage = null;
@@ -148,10 +155,10 @@ public final class CertificateGeneratorUtil {
                 if (pdsignatureImage != null) {
                     pdSignatureImage = PDImageXObject.createFromByteArray(document, pdsignatureImage.readAllBytes(), "signature");
                 } else {
-                    System.err.println("Warning: SignatureImage image not found at " + SIGNATURE_IMAGE_PATH);
+                    log.warn("Warning: SignatureImage image not found at " + SIGNATURE_IMAGE_PATH);
                 }
             } catch (Exception e) {
-                System.err.println("Warning: Could not load logo image: " + e.getMessage());
+                log.warn("Warning: Could not load logo image: " + e.getMessage());
             }
 
 
@@ -172,7 +179,7 @@ public final class CertificateGeneratorUtil {
                 drawTitle(contentStream, fontBold); 
 
                 // 5. Draw Product Info
-                drawProductInfo(contentStream, fontBold, fontRegular, productName);
+                drawProductInfo(contentStream, fontBold, productName);
 
                 // 6. Draw Body Text
                 drawBodyText(contentStream, fontRegular, signerName, shipName, productdetails ,trainingDate);
@@ -188,6 +195,31 @@ public final class CertificateGeneratorUtil {
 
             } // contentStream closed automatically
 
+            // --- Apply Security to the PDF ---
+            AccessPermission ap = new AccessPermission();
+
+            // Disallow all modifications
+            ap.setCanModify(false);
+            ap.setCanAssembleDocument(false); // Disallow assembling (inserting, deleting, rotating pages)
+            ap.setCanFillInForm(false); // Disallow filling in interactive form fields
+            ap.setCanModifyAnnotations(false); // Disallow adding or modifying annotations and form fields
+            ap.setCanExtractContent(false); // Disallow copying or otherwise extracting text and graphics
+            
+
+            // Allow printing
+            ap.setCanPrint(true);
+
+
+            // Create the protection policy
+            StandardProtectionPolicy spp = new StandardProtectionPolicy(OwnerPassword, PDF_USER_PASSWORD, ap);
+
+
+            spp.setEncryptionKeyLength(128); 
+
+            // Protect the document
+            document.protect(spp);
+
+            // --- Save the PDF  ---
             document.save(baos);
             return baos.toByteArray();
 
@@ -319,7 +351,7 @@ public final class CertificateGeneratorUtil {
         cs.endText();
     }
 
-    private static void drawProductInfo(PDPageContentStream cs, PDFont fontBold, PDFont fontRegular, String productName) throws IOException {
+    private static void drawProductInfo(PDPageContentStream cs, PDFont fontBold, String productName) throws IOException {
         float fontSizeLabel = 14;
     float fontSizeValue = 14; 
     float labelIndent = 0; 
@@ -352,11 +384,11 @@ public final class CertificateGeneratorUtil {
     for (String word : words) {
         // Calculate width of potential new line
         String testLine = (lineBuilder.length() == 0) ? word : lineBuilder + " " + word;
-        float testWidth = 0;
+        float testWidth;
         try {
              testWidth = valueFont.getStringWidth(testLine) / 1000f * fontSizeValue;
         } catch (IOException e) {
-             System.err.println("Warning: Could not get string width. " + e.getMessage());
+             log.warn("Warning: Could not get string width. " + e.getMessage());
              testWidth = (testLine.length() * fontSizeValue * 0.6f); 
         }
 
@@ -375,7 +407,7 @@ public final class CertificateGeneratorUtil {
             }
             // Start the new line with the current word
             // Handle case where a single word is longer than availableWidth
-             float wordWidth = 0;
+             float wordWidth;
              try {
                  wordWidth = valueFont.getStringWidth(word) / 1000f * fontSizeValue;
              } catch (IOException e) {
@@ -465,7 +497,7 @@ public final class CertificateGeneratorUtil {
             try {
                 cs.drawImage(signatureImg, SIGNATURE_IMAGE_X, SIGNATURE_IMAGE_Y, SIGNATURE_IMAGE_WIDTH, SIGNATURE_IMAGE_HEIGHT);
             } catch (IOException e) {
-                System.err.println("Error drawing signature image: " + e.getMessage());
+                log.warn("Error drawing signature image: " + e.getMessage());
             }
         }
         
@@ -507,11 +539,11 @@ public final class CertificateGeneratorUtil {
                 // Embed the font subset
                 return PDType0Font.load(document, fontStream, true);
             } else {
-                System.err.println("Warning: Font file not found at " + fontPath + ", using fallback: " + fallbackFont.getName());
+                log.warn("Warning: Font file not found at " + fontPath + ", using fallback: " + fallbackFont.getName());
                 return fallbackFont;
             }
         } catch (IOException e) {
-            System.err.println("Warning: Could not load font " + fontPath + ", using fallback: " + fallbackFont.getName() + ". Error: " + e.getMessage());
+            log.warn("Warning: Could not load font " + fontPath + ", using fallback: " + fallbackFont.getName() + ". Error: " + e.getMessage());
             return fallbackFont;
         }
     }
@@ -530,6 +562,7 @@ public final class CertificateGeneratorUtil {
         String companyName = "PERISKAL bv";
         String companyAddress = "Den Isomo 11, 2990 Wuustwezel, Belgium";
         String companyPhone = "Phone +32 3 669 57 36";
+        String ownerPassword = "your_owner_password_here"; // Replace with your actual owner password
 
 
         try {
@@ -537,7 +570,7 @@ public final class CertificateGeneratorUtil {
             // Ensure logo image and font files exist at the expected classpath locations!
             byte[] pdfData = CertificateGeneratorUtil.generateCertificatePdf(
                     productName, productdetails,shipName, trainingDate, crewNames, signerName, signerTitle,
-                    companyName, companyAddress, companyPhone
+                    companyName, companyAddress, companyPhone, ownerPassword 
             );
 
             // Save the generated PDF to a file for inspection
@@ -547,7 +580,7 @@ public final class CertificateGeneratorUtil {
             System.out.println("Certificate generated successfully: " + outputFilePath);
 
         } catch (IOException e) {
-            System.err.println("Error generating certificate: " + e.getMessage());
+            log.warn("Error generating certificate: " + e.getMessage());
         }
     }
 }
