@@ -1,0 +1,71 @@
+<div class="contact-container">
+  <div class="contact-form-container">
+    <h1>{{ 'CONTACT_US' | translate }}</h1>
+
+    <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="email">{{ 'CONTACT_EMAIL' | translate }}</label>
+        <input
+          type="email"
+          id="email"
+          formControlName="email"
+          [class.error]="contactForm.get('email')?.invalid && contactForm.get('email')?.touched"
+        >
+        @if (contactForm.get('email')?.invalid && contactForm.get('email')?.touched) {
+          <div class="error-message">
+            @if (contactForm.get('email')?.errors?.['required']) {
+              <span>
+                {{ 'CONTACT_EMAIL_REQUIRED' | translate }}
+              </span>
+            }
+            @if (contactForm.get('email')?.errors?.['email']) {
+              <span>
+                {{ 'CONTACT_EMAIL_INVALID' | translate }}
+              </span>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="message">{{ 'CONTACT_MESSAGE' | translate }}</label>
+        <textarea
+          id="message"
+          formControlName="message"
+          rows="6"
+          [class.error]="contactForm.get('message')?.invalid && contactForm.get('message')?.touched"
+        ></textarea>
+        @if (contactForm.get('message')?.invalid && contactForm.get('message')?.touched) {
+          <div class="error-message">
+            @if (contactForm.get('message')?.errors?.['required']) {
+              <span>
+                {{ 'CONTACT_MESSAGE_REQUIRED' | translate }}
+              </span>
+            }
+            @if (contactForm.get('message')?.errors?.['minlength']) {
+              <span>
+                {{ 'CONTACT_MESSAGE_MIN_LENGTH' | translate }}
+              </span>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="form-actions">
+        <button
+          type="submit"
+          [disabled]="contactForm.invalid || isSubmitting"
+          class="submit-button"
+        >
+          @if (!isSubmitting) {
+            <span>{{ 'CONTACT_SUBMIT' | translate }}</span>
+          } @else {
+            <span>
+              <i class="fa fa-spinner fa-spin"></i> {{ 'Processing' | translate }}
+            </span>
+          }
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
