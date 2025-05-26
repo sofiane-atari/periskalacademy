@@ -218,5 +218,20 @@
   "TIME_REMAINING": "Temps restant :",
   "OF": "de",
   "PROCEED_TO_BILLING": "Passer à la facturation",
-  "Processing": "Traitement"
+  "Processing": "Traitement",
+  "SELECT_ALL_SKIPPERS": "Sélectionner tous les skippers avec le filtre actuel.",
+  "SEARCH_PLACEHOLDER": "Par nom, navire, produit ou ID...",
+  "SEARCH_SKIPPERS": "Rechercher des skippers :",
+  "FILTER_BY_SHIPNAME": "Filtrer par nom du navire",
+  "ALL_SHIPS": "Tous les navires",
+  "ALL_PRODUCTS": "Tous les produits",
+  "FILTER_BY_PRODUCT": "Filtrer par produit",
+  "OVERALL_PROGRESS": "Progression globale",
+  "EXAMS_ATTEMPTS": "Tentatives d'examen par formation :",
+  "REQUIRED_SCORE": "Score requis",
+  "CERTIFICATE_ID": "ID du certificat",
+  "CERTIFICATE_ISSUEDATE": "Date de délivrance",
+  "CERTIFICATE_EXPIRYDATE": "Date d’expiration",
+  "NO_CERTIFICATES_FOUND_SKIPPER": "Aucun certificat disponible pour ce skipper.",
+  "SCORE": "Score obtenu"
 }

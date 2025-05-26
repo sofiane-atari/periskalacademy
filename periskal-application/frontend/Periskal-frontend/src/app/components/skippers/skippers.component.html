@@ -1,173 +1,335 @@
 <div class="skippers-container">
-  <h1>{{'SKIPPERS' | translate}}</h1>
+    <h1>{{'SKIPPERS' | translate}}</h1>
 
-  <div class="actions">
-    <button 
-      class="assign-btn" (click)="openAssignmentDialog()" [disabled]="mainListSelectedSkipperIds.length === 0 || isProcessingAction">{{'ASSIGN_TRAINING_TO_SELECTED' | translate}} ({{ mainListSelectedSkipperIds.length }})
-    </button>
-    <button
-      class="clear-btn" (click)="clearSkipperSelections()" [disabled]="mainListSelectedSkipperIds.length === 0 || isProcessingAction">{{'CLEAR_SELECTIONS'| translate}}
-    </button>
-  </div>
-
-  @if (error && !assignmentDialogOpen && !showBillingModal) { 
-    <p class="error-message main-error">{{ error }}</p>
-  }
-
-  <div class="skippers-list">
-    @for (skipper of skippers; track skipper.id; let i = $index) {
-      <div
-          class="skipper-item"
-          [class.active]="selectedSkipperIndex === i"
-          [class.selected-for-assignment]="isSkipperSelected(skipper.id)">
-        <div class="skipper-selection">
-          <input
-            type="checkbox"
-            [id]="'select-skipper-' + skipper.id"
-            [checked]="isSkipperSelected(skipper.id)"
-            (change)="toggleSkipperSelection(skipper.id, $event)"
-            (click)="$event.stopPropagation()" /> 
-          <label [for]="'select-skipper-' + skipper.id" (click)="$event.stopPropagation()"></label> 
-        </div>
-
-        <div class="skipper-info-clickable" (click)="toggleSkipperDetails(i)">
-          <div class="skipper-basic-info">
-            <h3>{{ skipper.username }}</h3>
-            <p class="shipname">{{ skipper.shipname }}</p>
-            <div class="products">
-              @for (product of skipper.products; track product) {
-                <span class="product-badge">
-                  {{ product }}
-                </span>
-              }
-            </div>
-          </div>
-        </div>
-
-        @if (selectedSkipperIndex === i) {
-          <div class="skipper-details">
-            <div class="detail-row">
-              <span class="detail-label">ID:</span>
-              <span class="detail-value">{{ skipper.id }}</span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label">{{'NAME'|translate}}:</span>
-              <span class="detail-value">{{ skipper.firstname }} {{ skipper.lastname }}</span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label">{{'ROLE:'| translate}}</span>
-              <span class="detail-value">{{ skipper.role }}</span>
-            </div>
-
-            <!-- Trainings and Progress g -->
-            <hr class="details-divider">
-            <h4>{{'TRAININGS_AND_PROGRESS' | translate}}</h4>
-
-            @if (skipper.loadingTrainingsAndProgress) {
-              <p class="loading-indicator">{{'TRAININGS_AND_PROGRESS_LOADING'}}</p>
-            } @else if (skipper.trainingsAndProgressError) {
-              <p class="error-message">{{ skipper.trainingsAndProgressError }}</p>
-            } @else if (skipper.accessibleTrainings && skipper.accessibleTrainings.length > 0) {
-              <div class="trainings-list">
-                @for (tp of skipper.accessibleTrainings; track tp.id) {
-                  <div class="training-item">
-                    <div class="training-info">
-                      <span [class]="'training-name'">{{ tp.nameEn }}</span> 
-                      @if (tp.loadingProgress) {
-                        <span class="progress-badge loading">{{'LOADING' | translate}}</span>
-                      } @else if (tp.progressError) {
-                        <span class="progress-badge error">{{ tp.progressError }}</span>
-                      } @else if (tp.progress) {
-                        <span class="progress-badge {{ tp.progress.overallPercentComplete === 100 ? 'complete' : (tp.progress.overallPercentComplete > 0 ? 'in-progress' : 'not-started') }}">
-                          {{ tp.progress.overallPercentComplete | number:'1.0-0' }}%
-                        </span>
-                      } @else {
-                        <span class="progress-badge not-started">{{'NOT_STARTED'|translate}}</span>
-                      }
-                    </div>
-                    
-                    <!-- Optional: Display module progress if therr -->
-                    @if (tp.progress && tp.progress.moduleProgress && tp.progress.moduleProgress.length > 0) {
-                       <div class="module-progress-list">
-                         @for(mp of tp.progress.moduleProgress; track mp.moduleId) {
-                           <div class="module-progress-item">
-                             <span>{{'MODULE' | translate}} {{mp.moduleId}}: {{ mp.percentComplete | number:'1.0-0' }}%</span>
-                           </div>
-                         }
-                       </div>
-                    }
-                  </div>
+    <div class="search-bar">
+        <div>
+            <label for="product-select" class="filter-label">{{'FILTER_BY_PRODUCT' | translate}}</label>
+            <select class="product-select" [(ngModel)]="selectedProduct" (ngModelChange)="onFilterChange()">
+                <option value="">{{'ALL_PRODUCTS' | translate}}</option>
+                @for (product of getAllUniqueProducts(); track $index) {
+                <option [value]="product">{{product}}</option>
                 }
-              </div>
+            </select>
+            <label for="shipname-select" class="filter-label">{{'FILTER_BY_SHIPNAME' | translate}}</label>
+            <select class="product-select" [(ngModel)]="selectedShipname" (ngModelChange)="onFilterChange()">
+                <option value="">{{'ALL_SHIPS' | translate}}</option>
+                @for (ship of getAllUniqueShips(); track $index) {
+                <option [value]="ship">{{ship}}</option>
+                }
+            </select>
+        </div>
+        <div>
+            <label for="search-input" class="filter-label">{{'SEARCH_SKIPPERS' | translate}}</label>
+            <input id="search-input" class="search-input" type="text" [(ngModel)]="searchTerm" (ngModelChange)="onFilterChange()" placeholder="{{'SEARCH_PLACEHOLDER' | translate}}" />
+        </div>
+    </div>
+
+    <div class="actions">
+        <button
+            class="assign-btn" (click)="openAssignmentDialog()" [disabled]="mainListSelectedSkipperIds.length === 0 || isProcessingAction">{{'ASSIGN_TRAINING_TO_SELECTED' | translate}} ({{ mainListSelectedSkipperIds.length }})
+        </button>
+        <button
+            class="select-all-btn" (click)="addAllToSkipperSelection()" [disabled]="isProcessingAction || mainListSelectedSkipperIds.length === skippers.length">{{'SELECT_ALL_SKIPPERS'| translate}} ({{getFilteredSkippers().length}})
+        </button>
+        <button
+            class="clear-btn" (click)="clearSkipperSelections()" [disabled]="mainListSelectedSkipperIds.length === 0 || isProcessingAction">{{'CLEAR_SELECTIONS'| translate}}
+        </button>
+    </div>
+
+    @if (error && !assignmentDialogOpen && !showBillingModal) {
+    <p class="error-message main-error">{{ error }}</p>
+    }
+
+    <div class="skippers-list">
+        @for (skipper of getPaginatedSkippers(); track skipper.id; let i = $index) {
+        <div
+            class="skipper-item"
+            [class.active]="selectedSkipperIndex === i"
+            [class.selected-for-assignment]="isSkipperSelected(skipper.id)">
+            <div class="skipper-selection">
+                <input
+                    type="checkbox"
+                    [id]="'select-skipper-' + skipper.id"
+                    [checked]="isSkipperSelected(skipper.id)"
+                    (change)="toggleSkipperSelection(skipper.id, $event)"
+                    (click)="$event.stopPropagation()" />
+                <label [for]="'select-skipper-' + skipper.id" (click)="$event.stopPropagation()"></label>
+            </div>
+
+            <div class="skipper-info-clickable-wrapper" (click)="toggleSkipperDetails(i)">
+                <div class="skipper-basic-info">
+                    <h3>{{ skipper.username }}</h3>
+                    <p class="shipname">{{ skipper.shipname }}</p>
+                    <div class="products">
+                        @for (product of skipper.products; track product) {
+                        <span class="product-badge">
+                            {{ product }}
+                        </span>
+                        }
+                    </div>
+                </div>
+
+                <div class="skipper-overall-progress">
+                    <span class="progress-label">{{'OVERALL_PROGRESS' | translate}}:</span>
+                    <app-progress-bar [percentComplete]="skipper.overallTrainingProgress"></app-progress-bar>
+                </div>
+            </div>
+
+            @if (selectedSkipperIndex === i) {
+            <div class="skipper-details">
+                <div class="detail-row">
+                    <span class="detail-label">ID:</span>
+                    <span class="detail-value">{{ skipper.id }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">{{'NAME'|translate}}:</span>
+                    <span class="detail-value">{{ skipper.firstname }} {{ skipper.lastname }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">{{'ROLE:'| translate}}</span>
+                    <span class="detail-value">{{ skipper.role }}</span>
+                </div>
+
+                <hr class="details-divider">
+                <h4>{{'TRAININGS_AND_PROGRESS' | translate}}</h4>
+
+                @if (skipper.loadingTrainingsAndProgress) {
+                <p class="loading-indicator">{{'TRAININGS_AND_PROGRESS_LOADING'}}</p>
+                } @else if (skipper.trainingsAndProgressError) {
+                <p class="error-message">{{ skipper.trainingsAndProgressError }}</p>
+                } @else if (skipper.accessibleTrainings && skipper.accessibleTrainings.length > 0) {
+                <div class="trainings-list">
+                    @for (tp of skipper.accessibleTrainings; track tp.id) {
+                    <div class="training-item">
+                        <div class="training-info">
+                            <span [class]="'training-name'">{{ tp.nameEn }}</span>
+                            @if (tp.loadingProgress) {
+                            <span class="progress-badge loading">{{'LOADING' | translate}}</span>
+                            } @else if (tp.progressError) {
+                            <span class="progress-badge error">{{ tp.progressError }}</span>
+                            } @else if (tp.progress) {
+                            <app-progress-bar [percentComplete]="tp.progress.overallPercentComplete"></app-progress-bar>
+                            } @else {
+                            <span class="progress-badge not-started">{{'NOT_STARTED'|translate}}</span>
+                            }
+                        </div>
+
+                        @if (tp.progress && tp.progress.moduleProgress && tp.progress.moduleProgress.length > 0) {
+                        <div class="module-progress-list">
+                            @for(mp of tp.progress.moduleProgress; let i = $index; track mp.moduleId) {
+                            <div class="module-progress-item">
+                                <span>{{'MODULE' | translate}} {{ i + 1 }}: </span>
+                                <app-progress-bar [percentComplete]="mp.percentComplete"></app-progress-bar>
+                            </div>
+                            }
+                        </div>
+                        }
+                    </div>
+                    }
+                </div>
+
+                <hr class="details-divider">
+                <h4>{{ 'EXAM_ATTEMPTS' | translate }}</h4>
+
+                @if (loadingCompletedExams) {
+                <p class="loading-indicator">{{ 'LOADING_EXAMS' | translate }}</p>
+                } @else if (completedExamsError) {
+                <p class="error-message">{{ 'COMPLETED_EXAM_ERROR' | translate }}</p>
+                } @else if (selectedSkipperExams && selectedSkipperExams.length > 0) {
+                <div class="exam-list">
+                    @for (group of getExamsGroupedByTrainingName(); track group[0]) {
+                        <div class="training-group">
+                            <h4 class="training-title">{{ group[0] }}</h4>
+
+                            <div class="exam-grid">
+                                @for (exam of group[1]; track exam.examId) {
+                                    <div class="exam-item">
+                                        <div class="exam-info">
+                                            <span class="exam-label">{{ 'EXAM_NAME' | translate }}:</span>
+                                            <span class="exam-value">{{ exam.examName }}</span>
+                                        </div>
+                                        <div class="exam-info">
+                                            <span class="exam-label">{{ 'REQUIRED_SCORE' | translate }}:</span>
+                                            <span class="exam-value">{{ exam.requiredScore }}%</span>
+                                        </div>
+                                        @if (exam.passed) {
+                                        <div class="exam-info">
+                                            <span class="exam-label">{{ 'SCORE' | translate }}:</span>
+                                            <span class="exam-value-passed">{{ exam.score }}%</span>
+                                        </div>
+                                    } @else {
+                                        <div class="exam-info">
+                                            <span class="exam-label">{{ 'SCORE' | translate }}:</span>
+                                            <span class="exam-value-failed">{{ exam.score }}%</span>
+                                        </div>
+                                    }
+                                        <div class="exam-info">
+                                            <span class="exam-label">{{ 'COMPLETED_DATE' | translate }}:</span>
+                                            <span class="exam-value">{{ exam.completedDate | date:'mediumDate' }}</span>
+                                        </div>
+                                        @if (exam.passed) {
+                                            <div class="exam-info">
+                                                <span class="exam-label">{{ 'CERTIFICATE_ID' | translate }}:</span>
+                                                <span class="exam-value">{{ exam.certificateId }}</span>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+
+
+                </div>
+                <hr class="details-divider">
+                <h4>{{ 'CERTIFICATES' | translate }}:</h4>
+
+
+                @if (loadingCertificates) {
+                <p class="loading-indicator">{{ 'LOADING_EXAMS' | translate }}</p>
+                } @else if (certificatesError) {
+                <p class="error-message">{{ 'COMPLETED_EXAM_ERROR' | translate }}</p>
+                } @else if (selectedSkipperCertificates && selectedSkipperCertificates.length > 0) {
+                <div class="certificate-list">
+                    @for (group of getCertificatesGroupedByTrainingName(); track group[0]) {
+                        <div class="training-group">
+                            <h4 class="training-title">{{ group[0] }}</h4>
+
+                            <div class="certificate-grid">
+                                @for (certificate of group[1]; track certificate.id) {
+                                    <div class="certificate-item">
+                                        <div class="certificate-info">
+                                            <span class="certificate-label">{{ 'CERTIFICATE_ID' | translate }}:</span>
+                                            <span class="certificate-value">{{ certificate.id }}</span>
+                                        </div>
+                                        <div class="certificate-info">
+                                            <span class="certificate-label">{{ 'CERTIFICATE_ISSUEDATE' | translate }}:</span>
+                                            <span class="certificate-value">{{ certificate.issueDate | date:'mediumDate' }}</span>
+                                        </div>
+                                        <div class="certificate-info">
+                                            <span class="certificate-label">{{ 'CERTIFICATE_EXPIRYDATE' | translate }}:</span>
+                                            <span class="certificate-value">{{ certificate.expiryDate | date:'mediumDate' }}</span>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
             } @else {
-              <p class="no-data">{{'NO_TRAININGS_FOUND_FOR_SKIPPER'}}</p>
+                <p>{{'NO_CERTIFICATES_FOUND_SKIPPER' | translate}}</p>
             }
-          </div>
+            }
         }
-      </div>
-    } @empty {
-      <p class="no-data">{{'NO_SKIPPERS_AVAILABLE' | translate}}</p>
+            </div>
+            }
+        </div>
+        } @empty {
+        <p class="no-data">{{'NO_SKIPPERS_AVAILABLE' | translate}}</p>
+        }
+    </div>
+    <div class="pagination-wrapper">
+        <div class="pagination-main-controls">
+            <button
+                class="pagination-btn previous-button"
+                (click)="prevPage()"
+                [disabled]="currentPage === 1"
+                [attr.aria-disabled]="currentPage === 1 ? 'true' : null"
+            >
+                Previous
+            </button>
+            <span class="pagination-info">Page {{ currentPage }} of {{ totalPages }}</span>
+            <div class="pagination-pages">
+                @for (pageNumber of getPageNumbers(); track pageNumber) {
+                <button
+                    class="page-number"
+                    [class.active]="pageNumber === currentPage"
+                    (click)="goToPage(pageNumber)"
+                    [attr.aria-current]="pageNumber === currentPage ? 'page' : null"
+                >
+                    {{ pageNumber }}
+                </button>
+                }
+            </div>
+            <button
+                class="pagination-btn next-button"
+                (click)="nextPage()"
+                [disabled]="currentPage === totalPages"
+                [attr.aria-disabled]="currentPage === totalPages ? 'true' : null"
+            >
+                Next
+            </button>
+        </div>
+        <div class="pagination-page-size-selector">
+            <label for="items-per-page-input" class="pagination-label">Items per page:</label>
+            <input
+                id="items-per-page-input"
+                class="pagination-input"
+                type="number"
+                [(ngModel)]="itemsPerPage"
+                (ngModelChange)="onPageSizeChange()"
+                min="1"
+                aria-label="Number of items per page"
+            />
+        </div>
+    </div>
+
+    @if(assignmentDialogOpen) {
+    <div class="modal-overlay" >
+        <div class="assignment-modal">
+            <h2>{{'ASSIGN_TRAINING_TO_SKIPPER' | translate}}</h2>
+
+            @if (selectedSkipperIds.length > 0) {
+            <div class="selected-skippers">
+                <h3>{{'SELECTED_SKIPPERS'| translate}} ({{ selectedSkipperIds.length }})</h3>
+                <ul>
+                    @for (id of selectedSkipperIds; track id) {
+                    <li>{{ getSkipperName(id) }}</li>
+                    }
+                </ul>
+            </div>
+            }
+
+            <div class="training-selection">
+                <h3>{{'SELECT_TRAINING' | translate}}</h3>
+                <select [(ngModel)]="selectedTrainingId">
+                    <option [ngValue]="null" disabled>{{'SELECT_A_TRAINING' | translate}}</option>
+                    @for (training of availableTrainings; track training.id) {
+                    <option [value]="training.id">
+                        {{ training.nameEn }}
+                    </option>
+                    }
+                </select>
+                @if (!availableTrainings || availableTrainings.length === 0) {
+                <p class="no-data">{{'NO_TRAININGS_ABLE_TO_ASSIGN'}}</p>
+                }
+            </div>
+
+            @if (error && assignmentDialogOpen) {
+            <p class="error-message modal-error">{{ error }}</p>
+            }
+
+            <div class="actions modal-actions">
+                <button
+                    (click)="InitiateBillingAndAssignment()"
+                    [disabled]="!selectedTrainingId || selectedSkipperIds.length === 0 || isProcessingAction">
+                    {{ isProcessingAction ? ('Processing...' | translate) : ('PROCEED_TO_BILLING' | translate) }}
+                </button>
+                <button class="cancel-btn" (click)="closeAssignmentDialog()"[disabled]="isProcessingAction">{{'CANCEL' | translate}}</button>
+            </div>
+        </div>
+    </div>
     }
-  </div>
 
-  @if(assignmentDialogOpen) {
-  <div class="modal-overlay" >
-  <div class="assignment-modal">
-    <h2>{{'ASSIGN_TRAINING_TO_SKIPPER' | translate}}</h2>
-
-    @if (selectedSkipperIds.length > 0) {
-      <div class="selected-skippers">
-        <h3>{{'SELECTED_SKIPPERS'| translate}} ({{ selectedSkipperIds.length }})</h3>
-        <ul>
-          @for (id of selectedSkipperIds; track id) {
-            <li>{{ getSkipperName(id) }}</li>
-          }
-        </ul>
-      </div>
+    @if(showBillingModal && billingDataForForm) {
+    <div class="modal-overlay">
+        <app-billing-fleetmanager
+            [userIdsToBill]="billingDataForForm.userIds"
+            [examIdToBill]="billingDataForForm.examId"
+            [examAttemptsToBill]="billingDataForForm.examAttempts"
+            (billingSuccess)="saveAssignment()"
+            (billingCancel)="handleBillingCancel()">
+        </app-billing-fleetmanager>
+    </div>
     }
-
-    <div class="training-selection">
-      <h3>{{'SELECT_TRAINING' | translate}}</h3>
-      <select [(ngModel)]="selectedTrainingId">
-        <option [ngValue]="null" disabled>{{'SELECT_A_TRAINING' | translate}}</option>
-        @for (training of availableTrainings; track training.id) {
-          <option [value]="training.id">
-            {{ training.nameEn }}
-          </option>
-        }
-      </select>
-      @if (!availableTrainings || availableTrainings.length === 0) {
-            <p class="no-data">{{'NO_TRAININGS_ABLE_TO_ASSIGN'}}</p>
-        }
-    </div>
-
-    @if (error && assignmentDialogOpen) {
-        <p class="error-message modal-error">{{ error }}</p>
-      }
-
-    <div class="actions modal-actions">
-      <button 
-        (click)="InitiateBillingAndAssignment()" 
-        [disabled]="!selectedTrainingId || selectedSkipperIds.length === 0 || isProcessingAction">
-        {{ isProcessingAction ? ('Processing...' | translate) : ('PROCEED_TO_BILLING' | translate) }}
-      </button>
-      <button class="cancel-btn" (click)="closeAssignmentDialog()"[disabled]="isProcessingAction">{{'CANCEL' | translate}}</button>
-    </div>
-  </div>
 </div>
-}
-
-@if(showBillingModal && billingDataForForm) {
-    <div class="modal-overlay"> 
-      <app-billing-fleetmanager
-        [userIdsToBill]="billingDataForForm.userIds"
-        [examIdToBill]="billingDataForForm.examId"
-        [examAttemptsToBill]="billingDataForForm.examAttempts"
-        (billingSuccess)="saveAssignment()"
-        (billingCancel)="handleBillingCancel()">
-      </app-billing-fleetmanager>
-    </div>
-  }
-</div>
-
-
