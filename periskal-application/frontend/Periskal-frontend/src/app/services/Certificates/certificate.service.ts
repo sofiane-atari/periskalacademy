@@ -14,6 +14,9 @@ export class CertificateService {
     private jwtDecoder: JwtDecoderService
   ) { }
 
+  getCertificatesByUserId(userId: string) {
+    return this.http.get<Certificate[]>(`${this.certificatesUrl}/user/${userId}`);
+  }
 
   //Get all certificates for the current logged-in user
   getUserCertificates(): Observable<Certificate[]> {
@@ -21,7 +24,7 @@ export class CertificateService {
     return this.http.get<Certificate[]>(`${this.certificatesUrl}/user/${userId}`);
   }
 
-  
+
   //Get a certificate by its ID
   getCertificateById(id: number): Observable<Certificate> {
     return this.http.get<Certificate>(`${this.certificatesUrl}/${id}`);
@@ -30,19 +33,19 @@ export class CertificateService {
 
 
   downloadCertificateById(certificateId: number): Observable<Blob> {
-    
+
     // Get user information from JWT token
     const firstName = this.jwtDecoder.getFirstname() || '';
     const lastName = this.jwtDecoder.getLastname() || '';
     const shipName = this.jwtDecoder.getShipname() || '';
-    
+
     // Create query parameters with user information
     const params = {
       firstName,
       lastName,
       shipName
     };
-    
+
     return this.http.get(`${this.certificatesUrl}/generate/${certificateId}`, {
       params,
       responseType: 'blob'

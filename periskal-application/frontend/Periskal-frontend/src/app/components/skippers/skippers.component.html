@@ -183,9 +183,44 @@
                 </div>
                 <hr class="details-divider">
                 <h4>{{ 'CERTIFCATES' | translate }}:</h4>
-                <!--TODO: implement certificates section-->
+
+
+                @if (loadingCertificates) {
+                <p class="loading-indicator">{{ 'LOADING_EXAMS' | translate }}</p>
+                } @else if (certificatesError) {
+                <p class="error-message">{{ 'COMPLETED_EXAM_ERROR' | translate }}</p>
+                } @else if (selectedSkipperCertificates && selectedSkipperCertificates.length > 0) {
+                <div class="certificate-list">
+                    @for (group of getCertificatesGroupedByTrainingName(); track group[0]) {
+                        <div class="training-group">
+                            <h4 class="training-title">{{ group[0] }}</h4>
+
+                            <div class="certificate-grid">
+                                @for (certificate of group[1]; track certificate.id) {
+                                    <div class="certificate-item">
+                                        <div class="certificate-info">
+                                            <span class="certificate-label">{{ 'CERTIFICATE_ID' | translate }}:</span>
+                                            <span class="certificate-value">{{ certificate.id }}</span>
+                                        </div>
+                                        <div class="certificate-info">
+                                            <span class="certificate-label">{{ 'CERTIFICATE_ISSUEDATE' | translate }}:</span>
+                                            <span class="certificate-value">{{ certificate.issueDate | date:'mediumDate' }}</span>
+                                        </div>
+                                        <div class="certificate-info">
+                                            <span class="certificate-label">{{ 'CERTIFICATE_EXPIRYDATE' | translate }}:</span>
+                                            <span class="certificate-value">{{ certificate.expiryDate | date:'mediumDate' }}</span>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            } @else {
+                <p>{{'NO_CERTIFICATES_FOUND_SKIPPER' | translate}}</p>
             }
             }
+        }
             </div>
             }
         </div>

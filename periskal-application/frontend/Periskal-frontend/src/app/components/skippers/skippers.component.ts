@@ -18,6 +18,8 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { ProgressBarComponent } from "../progress-bar/progress-bar.component";
 import { CompletedExamService } from '../../services/CompletedExam/completed-exam.service';
 import { CompletedExam } from '../../models/completed-exam.model';
+import { CertificateService } from '../../services/Certificates/certificate.service';
+import { Certificate } from '../../models/Certificate.model';
 
 
 @Component({
@@ -40,6 +42,9 @@ export class SkippersComponent implements OnInit {
   selectedSkipperExams: CompletedExam[] = [];
   loadingCompletedExams: boolean = false;
   completedExamsError: boolean = false;
+  selectedSkipperCertificates: Certificate[] = [];
+  loadingCertificates: boolean = false;
+  certificatesError: boolean = false;
 
   mainListSelectedSkipperIds: string[] = [];
 
@@ -66,7 +71,8 @@ export class SkippersComponent implements OnInit {
     private jwtDecoder: JwtDecoderService,
     private examService: ExamService,
     private snackBar: MatSnackBar,
-    private completedExamService: CompletedExamService
+    private completedExamService: CompletedExamService,
+    private certificateService: CertificateService
   ) { }
 
   ngOnInit() {
@@ -95,6 +101,7 @@ export class SkippersComponent implements OnInit {
 
   onSkipperClick(skipperId: string) {
     this.loadingCompletedExams = true;
+    this.loadingCertificates = true;
     this.completedExamService.getUserCompletedExams(skipperId).subscribe({
       next: (exams: CompletedExam[]) => {
         this.selectedSkipperExams = exams;
@@ -107,6 +114,18 @@ export class SkippersComponent implements OnInit {
         this.loadingCompletedExams = false;
       }
     });
+
+    this.certificateService.getCertificatesByUserId(skipperId).subscribe({
+      next: (certificates: Certificate[]) => {
+        this.selectedSkipperCertificates = certificates;
+        this.loadingCertificates = false;
+      },
+      error: (err) => {
+        console.error('Failed to fetch certificates');
+        this.certificatesError = true;
+        this.loadingCertificates = false;
+      }
+    })
   }
 
   getExamsGroupedByTrainingName() {
@@ -120,6 +139,21 @@ export class SkippersComponent implements OnInit {
     }
     return Array.from(grouped.entries());
   }
+
+  getCertificatesGroupedByTrainingName(): [string, any[]][] {
+    const grouped: Record<string, any[]> = {};
+
+    for (const cert of this.selectedSkipperCertificates || []) {
+      const trainingName = cert.training || 'Unknown Training';
+      if (!grouped[trainingName]) {
+        grouped[trainingName] = [];
+      }
+      grouped[trainingName].push(cert);
+    }
+
+    return Object.entries(grouped);
+  }
+
 
 
   toggleSkipperDetails(index: number) {
