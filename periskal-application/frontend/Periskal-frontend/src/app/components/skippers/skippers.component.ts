@@ -16,6 +16,8 @@ import { MatSnackBar, MatSnackBarConfig, MatSnackBarModule } from '@angular/mate
 import { FleetManagerBillingComponent } from '../billing-fleetmanager/billing-fleetmanager.component';
 import { TranslatePipe } from '@ngx-translate/core';
 import { ProgressBarComponent } from "../progress-bar/progress-bar.component";
+import { CompletedExamService } from '../../services/CompletedExam/completed-exam.service';
+import { CompletedExam } from '../../models/completed-exam.model';
 
 
 @Component({
@@ -35,6 +37,9 @@ export class SkippersComponent implements OnInit {
   selectedSkipperIds: string[] = [];
   availableTrainings: Training[] = [];
   assignmentDialogOpen: boolean = false;
+  selectedSkipperExams: CompletedExam[] = [];
+  loadingCompletedExams: boolean = false;
+  completedExamsError: boolean = false;
 
   mainListSelectedSkipperIds: string[] = [];
 
@@ -60,7 +65,8 @@ export class SkippersComponent implements OnInit {
     private assignmentService: TrainingAssignmentService,
     private jwtDecoder: JwtDecoderService,
     private examService: ExamService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private completedExamService: CompletedExamService
   ) { }
 
   ngOnInit() {
@@ -87,12 +93,43 @@ export class SkippersComponent implements OnInit {
     });
   }
 
+  onSkipperClick(skipperId: string) {
+    this.loadingCompletedExams = true;
+    this.completedExamService.getUserCompletedExams(skipperId).subscribe({
+      next: (exams: CompletedExam[]) => {
+        this.selectedSkipperExams = exams;
+        console.log(this.selectedSkipperExams);
+        this.loadingCompletedExams = false;
+      },
+      error: (err) => {
+        console.error('Failed to fetch exams', err);
+        this.completedExamsError = true;
+        this.loadingCompletedExams = false;
+      }
+    });
+  }
+
+  getExamsGroupedByTrainingName() {
+    const grouped = new Map<string, any[]>();
+    for (const exam of this.selectedSkipperExams) {
+      const training = exam.trainingName || 'Unknown Training';
+      if (!grouped.has(training)) {
+        grouped.set(training, []);
+      }
+      grouped.get(training)!.push(exam);
+    }
+    return Array.from(grouped.entries());
+  }
+
+
   toggleSkipperDetails(index: number) {
     if (this.selectedSkipperIndex === index) {
       this.selectedSkipperIndex = null;
     } else {
       this.selectedSkipperIndex = index;
       const skipper = this.skippers[index];
+      const skipperId = this.skippers[index].id;
+      this.onSkipperClick(skipperId);
       // Load trainings and progress only if not already loaded and not currently loading
       if (skipper && skipper.accessibleTrainings.length === 0 && !skipper.loadingTrainingsAndProgress && !skipper.trainingsAndProgressError) {
         this.loadTrainingsAndProgressForSkipper(skipper);

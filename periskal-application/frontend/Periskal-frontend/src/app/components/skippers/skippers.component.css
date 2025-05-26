@@ -637,3 +637,45 @@ h1 {
     color: #777;
     padding: 8px 0;
 }
+
+.exam-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.exam-item {
+  padding: 10px 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f7f7f7;
+}
+
+.exam-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.exam-label {
+  font-weight: bold;
+  color: #555;
+}
+
+.exam-value {
+  color: #222;
+}
+.exam-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+}
+
+.exam-value-passed {
+    color:#2ecc71
+}
+
+.exam-value-failed {
+    color: #e74c3c
+}
+

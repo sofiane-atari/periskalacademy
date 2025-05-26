@@ -128,11 +128,61 @@
                     }
                 </div>
 
-                <h4>Exams & Certifications</h4>
-                <!--TODO: implement exams & certifications-->
-                } @else {
-                <p class="no-data">{{'NO_TRAININGS_FOUND_FOR_SKIPPER'}}</p>
-                }
+                <hr class="details-divider">
+                <h4>{{ 'EXAMS_AND_CERTIFICATIONS' | translate }}</h4>
+
+                @if (loadingCompletedExams) {
+                <p class="loading-indicator">{{ 'LOADING_EXAMS' | translate }}</p>
+                } @else if (completedExamsError) {
+                <p class="error-message">{{ 'COMPLETED_EXAM_ERROR' | translate }}</p>
+                } @else if (selectedSkipperExams && selectedSkipperExams.length > 0) {
+                <div class="exam-list">
+                    @for (group of getExamsGroupedByTrainingName(); track group[0]) {
+                        <div class="training-group">
+                            <h4 class="training-title">{{ group[0] }}</h4>
+
+                            <div class="exam-grid">
+                                @for (exam of group[1]; track exam.examId) {
+                                    <div class="exam-item">
+                                        <div class="exam-info">
+                                            <span class="exam-label">{{ 'EXAM_NAME' | translate }}:</span>
+                                            <span class="exam-value">{{ exam.examName }}</span>
+                                        </div>
+                                        <div class="exam-info">
+                                            <span class="exam-label">{{ 'REQUIRED_SCORE' | translate }}:</span>
+                                            <span class="exam-value">{{ exam.requiredScore }}%</span>
+                                        </div>
+                                        @if (exam.passed) {
+                                        <div class="exam-info">
+                                            <span class="exam-label">{{ 'SCORE' | translate }}:</span>
+                                            <span class="exam-value-passed">{{ exam.score }}%</span>
+                                        </div>
+                                    } @else {
+                                        <div class="exam-info">
+                                            <span class="exam-label">{{ 'SCORE' | translate }}:</span>
+                                            <span class="exam-value-failed">{{ exam.score }}%</span>
+                                        </div>
+                                    }
+                                        <div class="exam-info">
+                                            <span class="exam-label">{{ 'COMPLETED_DATE' | translate }}:</span>
+                                            <span class="exam-value">{{ exam.completedDate | date:'mediumDate' }}</span>
+                                        </div>
+                                        @if (exam.passed) {
+                                            <div class="exam-info">
+                                                <span class="exam-label">{{ 'CERTIFICATE_ID' | translate }}:</span>
+                                                <span class="exam-value">{{ exam.certificateId }}</span>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+
+
+                </div>
+            }
+            }
             </div>
             }
         </div>
