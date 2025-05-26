@@ -233,5 +233,17 @@
   "CERTIFICATE_ISSUEDATE": "Issue date",
   "CERTIFICATE_EXPIRYDATE": "Expiry date",
   "NO_CERTIFICATES_FOUND_SKIPPER": "No Certificates available for this skipper.",
-  "SCORE": "Achieved score"
+  "SCORE": "Achieved score",
+  "CONTACT_US": "Contact Us",
+  "CONTACT_EMAIL": "Your Email",
+  "CONTACT_MESSAGE": "Message",
+  "CONTACT_SUBMIT": "Send Message",
+  "CONTACT_EMAIL_REQUIRED": "Email is required",
+  "CONTACT_EMAIL_INVALID": "Please enter a valid email address",
+  "CONTACT_MESSAGE_REQUIRED": "Message is required",
+  "CONTACT_MESSAGE_MIN_LENGTH": "Message must be at least 10 characters",
+  "CONTACT_FORM_SUCCESS": "Message sent successfully!",
+  "CONTACT_FORM_ERROR": "Error sending message. Please try again.",
+  "CLOSE": "Close"
+
 }

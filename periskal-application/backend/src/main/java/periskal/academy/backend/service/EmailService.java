@@ -1,8 +1,5 @@
 package periskal.academy.backend.service;
 
-
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +8,13 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+import lombok.extern.slf4j.Slf4j;
+import periskal.academy.backend.dto.ContactRequest;
+
 @Service
+@Slf4j
 public class EmailService {
 
     private static final Logger log = LoggerFactory.getLogger(EmailService.class);
@@ -21,6 +24,31 @@ public class EmailService {
 
     @Value("${spring.mail.username}") 
     private String fromEmailAddress;
+    
+    
+    public void sendContactFormEmail(ContactRequest contactRequest) {
+
+            String userId = contactRequest.getUserId();
+            String firstName = contactRequest.getFirstName();
+            String lastName = contactRequest.getLastName();
+            String username = contactRequest.getUsername();
+            String email = contactRequest.getEmail();
+            String message = contactRequest.getMessage();
+            
+            String subject = userId + ": " + "Contact Form Submission from " + firstName + " " + lastName;
+            String htmlContent = "<html><body>" +
+                    "<h2>Contact Form Submission</h2>" +
+                    "<p><strong>From:</strong> " + email + "</p>" +
+                    "<p><strong>User ID:</strong> " + userId + "</p>" +
+                    "<p><strong>Name:</strong> " + firstName + " " + lastName + "</p>" +
+                    "<p><strong>Username:</strong> " + username + "</p>" +
+                    "<h3>Message:</h3>" +
+                    "<p>" + message + "</p>" +
+                    "</body></html>";
+            
+            sendHtmlEmail(email, fromEmailAddress, subject, htmlContent);
+           
+    }
 
     public void sendHtmlEmail(String from, String to, String subject, String htmlContent) {
         try {

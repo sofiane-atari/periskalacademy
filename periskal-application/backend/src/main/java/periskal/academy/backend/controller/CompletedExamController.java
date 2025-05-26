@@ -33,7 +33,7 @@ public class CompletedExamController {
         List<CompletedExamDTO> completedExams = completedExamService.getCompletedExamsByUserId(userId);
         if (completedExams.isEmpty()) {
             log.info("No completed exams found for user: {}", userId);
-        }
+        } // TODO : handle this in the service layer 
         return ResponseEntity.ok(completedExams);
     }
     
