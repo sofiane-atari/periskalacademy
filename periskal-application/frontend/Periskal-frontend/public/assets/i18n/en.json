@@ -227,5 +227,11 @@
   "ALL_PRODUCTS": "All products",
   "FILTER_BY_PRODUCT": "Filter by product",
   "OVERALL_PROGRESS": "Overall Progress",
-  "EXAMS_ATTEMPTS": "Exam attempts:"
+  "EXAMS_ATTEMPTS": "Exam attempts per training:",
+  "REQUIRED_SCORE": "Required Score",
+  "CERTIFICATE_ID": "Certificate ID",
+  "CERTIFICATE_ISSUEDATE": "Issue date",
+  "CERTIFICATE_EXPIRYDATE": "Expiry date",
+  "NO_CERTIFICATES_FOUND_SKIPPER": "No Certificates available for this skipper.",
+  "SCORE": "Achieved score"
 }

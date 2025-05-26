@@ -91,6 +91,10 @@ export class SkippersComponent implements OnInit {
           trainingsAndProgressError: null,
           overallTrainingProgress: 0,
         }));
+
+        this.skippers.forEach(skipper => {
+          this.loadTrainingsAndProgressForSkipper(skipper);
+        });
       },
       error: (err: unknown) => {
         console.error('Error fetching skippers:', err);

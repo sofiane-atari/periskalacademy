@@ -219,5 +219,19 @@
   "OF": "van",
   "PROCEED_TO_BILLING": "Verder naar facturatie",
   "Processing": "Bezig met verwerken",
-  "SELECT_ALL_SKIPPERS": "Selecteer alle schippers met huidige filter"
+  "SELECT_ALL_SKIPPERS": "Selecteer alle schippers met huidige filter",
+  "SEARCH_PLACEHOLDER": "Op naam, schip, product of ID...",
+  "SEARCH_SKIPPERS": "Zoek Schippers:",
+  "FILTER_BY_SHIPNAME": "Filter op scheepsnaam",
+  "ALL_SHIPS": "Alle schepen",
+  "ALL_PRODUCTS": "Alle producten",
+  "FILTER_BY_PRODUCT": "Filter op product",
+  "OVERALL_PROGRESS": "Algemene voortgang",
+  "EXAMS_ATTEMPTS": "Examens pogingen per training:",
+  "REQUIRED_SCORE": "Vereiste score",
+  "CERTIFICATE_ID": "Certificaat ID",
+  "CERTIFICATE_ISSUEDATE": "Uitgiftedatum",
+  "CERTIFICATE_EXPIRYDATE": "Vervaldatum",
+  "NO_CERTIFICATES_FOUND_SKIPPER": "Geen certificaten beschikbaar voor deze schipper.",
+  "SCORE": "Behaalde score"
 }
