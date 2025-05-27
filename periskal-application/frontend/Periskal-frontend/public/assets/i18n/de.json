@@ -56,12 +56,16 @@
   "NAME": "Name",
   "PRODUCT_CODE": "Produkt-Code",
   "MODULE_NAME_EN": "Name des Moduls (EN)",
+  "MODULE_DESCRIPTION_EN": "Modulbeschreibung (EN)",
   "DESCRIPTION_EN": "Beschreibung (EN)",
   "MODULE_NAME_NL": "Name des Moduls (NL)",
+  "MODULE_DESCRIPTION_NL": "Modulbeschreibung (NL)",
   "DESCRIPTION_NL": "Beschreibung (NL)",
   "MODULE_NAME_FR": "Name des Moduls (FR)",
+  "MODULE_DESCRIPTION_FR": "Modulbeschreibung (FR)",
   "DESCRIPTION_FR": "Beschreibung (FR)",
   "MODULE_NAME_DE": "Name des Moduls (DE)",
+  "MODULE_DESCRIPTION_DE": "Modulbeschreibung (DE)",
   "DESCRIPTION_DE": "Beschreibung (DE)",
   "LANGUAGE_EN": "Englisch",
   "LANGUAGE_NL": "Niederländisch",
@@ -234,6 +238,7 @@
   "CERTIFICATE_EXPIRYDATE": "Ablaufdatum",
   "NO_CERTIFICATES_FOUND_SKIPPER": "Keine Zertifikate für diesen Schiffer verfügbar.",
   "SCORE": "Erzielte Punktzahl",
+  "REVIEW_UPDATE": "Überprüfen und Aktualisieren",
   "CONTACT_US": "Kontaktieren Sie Uns",
   "CONTACT_EMAIL": "Ihre E-Mail",
   "CONTACT_MESSAGE": "Nachricht",
@@ -245,6 +250,4 @@
   "CONTACT_FORM_SUCCESS": "Nachricht erfolgreich gesendet!",
   "CONTACT_FORM_ERROR": "Fehler beim Senden der Nachricht. Bitte versuchen Sie es erneut.",
   "CLOSE": "Schließen"
-
-
 }

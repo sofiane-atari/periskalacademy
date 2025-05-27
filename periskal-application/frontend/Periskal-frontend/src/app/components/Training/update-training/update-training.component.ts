@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { TrainingService } from '../../../services/Training/training.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Training } from '../../../models/training.model';
 import { ConfirmPromptComponent } from '../../confirm-prompt/confirm-prompt.component';
@@ -10,10 +10,18 @@ import { MatSnackBar, MatSnackBarConfig, MatSnackBarModule } from '@angular/mate
 import { ModuleService } from '../../../services/Module/module.service';
 import { Photo } from '../../../models/photo.model';
 import { PhotoUploadComponent } from "../../photo-upload/photo-upload.component";
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatInput, MatLabel } from '@angular/material/input';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
+import { MatAccordion, MatExpansionModule, MatExpansionPanel } from '@angular/material/expansion';
+import { MatCardModule } from '@angular/material/card';
+import { MatIcon } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-update-training',
-  imports: [FormsModule, TranslatePipe, TranslatePipe, MatSnackBarModule, PhotoUploadComponent],
+  standalone: true,
+  imports: [FormsModule, TranslatePipe, TranslatePipe, MatSnackBarModule, PhotoUploadComponent, MatStepperModule, ReactiveFormsModule, MatInput, MatLabel, MatTabGroup, MatTab, MatAccordion, MatExpansionModule, MatCardModule, MatIcon, MatFormFieldModule],
   templateUrl: './update-training.component.html',
   styleUrl: './update-training.component.css'
 })
@@ -40,33 +48,33 @@ export class UpdateTrainingComponent {
     }
   }
   getTrainingDetails(id: number): void {
-  this.trainingService.getTrainingById(id).subscribe({
-    next: (training) => {
-      this.training = training;
+    this.trainingService.getTrainingById(id).subscribe({
+      next: (training) => {
+        this.training = training;
 
-      // Ensure all modules have a chapters array and initialize newPhotos
-      if (this.training?.modules) {
-        this.training.modules.forEach((module, moduleIndex) => {
-          if (!module.chapters) {
-            module.chapters = [];
-          }
-          // Initialize newPhotos for each chapter in this module
-          module.chapters.forEach((chapter, chapterIndex) => {
-            const key = `${moduleIndex}_${chapterIndex}`;
-            if (!this.newPhotos[key]) {
-              this.newPhotos[key] = [];
+        // Ensure all modules have a chapters array and initialize newPhotos
+        if (this.training?.modules) {
+          this.training.modules.forEach((module, moduleIndex) => {
+            if (!module.chapters) {
+              module.chapters = [];
             }
+            // Initialize newPhotos for each chapter in this module
+            module.chapters.forEach((chapter, chapterIndex) => {
+              const key = `${moduleIndex}_${chapterIndex}`;
+              if (!this.newPhotos[key]) {
+                this.newPhotos[key] = [];
+              }
+            });
           });
-        });
-      }
+        }
 
-      this.loading = false;
-    },
-    error: (error) => {
-      this.errorMessage = 'Failed to load training details.';
-    }
-  });
-}
+        this.loading = false;
+      },
+      error: (error) => {
+        this.errorMessage = 'Failed to load training details.';
+      }
+    });
+  }
 
   updateTraining() {
     if (this.training?.id) {
@@ -109,27 +117,27 @@ export class UpdateTrainingComponent {
   }
 
   deleteTraining() {
-  const dialogRef = this.dialog.open(ConfirmPromptComponent, {
-    width: '600px',
-    data: {
-      title: 'Delete Training',
-      message: 'Are you sure you want to delete this training? This action cannot be undone.',
-      confirmText: 'Delete',
-      cancelText: 'Cancel'
-    }
-  });
+    const dialogRef = this.dialog.open(ConfirmPromptComponent, {
+      width: '600px',
+      data: {
+        title: 'Delete Training',
+        message: 'Are you sure you want to delete this training? This action cannot be undone.',
+        confirmText: 'Delete',
+        cancelText: 'Cancel'
+      }
+    });
 
-  dialogRef.afterClosed().subscribe(result => {
-    if (result && this.training?.id) {
-      this.trainingService.deleteTraining(this.training.id).subscribe({
-        next: () => {
-          const snackBarConfig: MatSnackBarConfig = {
-            duration: 3000,
-            verticalPosition: 'bottom',
-            horizontalPosition: 'left',
-            panelClass: ['snackbar-success'],
-            politeness: 'assertive'
-          };
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && this.training?.id) {
+        this.trainingService.deleteTraining(this.training.id).subscribe({
+          next: () => {
+            const snackBarConfig: MatSnackBarConfig = {
+              duration: 3000,
+              verticalPosition: 'bottom',
+              horizontalPosition: 'left',
+              panelClass: ['snackbar-success'],
+              politeness: 'assertive'
+            };
 
           this.snackBar.open('Training has been successfully deleted.', 'Close', snackBarConfig);
           this.router.navigate(['/dashboard']);
@@ -144,8 +152,8 @@ export class UpdateTrainingComponent {
             politeness: 'assertive'
           };
 
-          this.snackBar.open('Error deleting training.', 'Close', errorSnackBarConfig);
-        }
+            this.snackBar.open('Error deleting training.', 'Close', errorSnackBarConfig);
+          }
         });
       }
     });
