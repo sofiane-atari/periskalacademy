@@ -250,5 +250,10 @@
   "CONTACT_FORM_SUCCESS": "Message sent successfully!",
   "CONTACT_FORM_ERROR": "Error sending message. Please try again.",
   "CLOSE": "Close",
+  "FILTER_BY_CATEGORY": "Filter by category",
+  "ALL_CATEGORIES": "All categories",
+  "SEARCH_FAQ": "Search questions:",
+  "SEARCH_FAQ_PLACEHOLDER": "Search by word in question or ID",
+  "FAQ": "Frequently Asked Questions",
   "ERASE_Selection": "Erase Selection"
 }

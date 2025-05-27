@@ -250,5 +250,10 @@
   "CONTACT_FORM_SUCCESS": "Nachricht erfolgreich gesendet!",
   "CONTACT_FORM_ERROR": "Fehler beim Senden der Nachricht. Bitte versuchen Sie es erneut.",
   "CLOSE": "Schließen",
+  "FILTER_BY_CATEGORY": "Nach Kategorie filtern",
+  "ALL_CATEGORIES": "Alle Kategorien",
+  "SEARCH_FAQ": "Fragen durchsuchen:",
+  "SEARCH_FAQ_PLACEHOLDER": "Nach Wort in Frage oder ID suchen",
+  "FAQ": "Häufig gestellte Fragen",
   "ERASE_Selection": "Auswahl löschen"
 }

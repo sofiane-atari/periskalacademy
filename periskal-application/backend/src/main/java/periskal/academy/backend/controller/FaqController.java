@@ -24,7 +24,7 @@ import periskal.academy.backend.service.FaqService;
 @RequestMapping("/api/faq")
 @Slf4j
 public class FaqController {
-     @Autowired
+    @Autowired
     private FaqService faqService;
 
     @GetMapping
@@ -52,6 +52,7 @@ public class FaqController {
     @PreAuthorize(SecurityRoles.ADMIN)
     public ResponseEntity<Faq> createFaq(@RequestBody Faq faq) {
         log.info("Received request to create FAQ with question: {}", faq.getQuestion());
+        log.info("Received request to create FAQ with category: {}", faq.getCategory());
         Faq createdFaq = faqService.createFaq(faq);
         log.info("Successfully created FAQ with id {}", createdFaq.getId());
         return ResponseEntity.ok(createdFaq);

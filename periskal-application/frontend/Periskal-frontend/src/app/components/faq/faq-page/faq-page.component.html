@@ -1,6 +1,22 @@
 <div class="faq-container">
   <div class="faq-content">
-    <h1 class="faq-title">Veelgestelde vragen</h1>
+    <h1 class="faq-title">{{'FAQ' | translate}}</h1>
+
+      <div class="search-bar">
+        <div>
+            <label for="category-select" class="filter-label">{{'FILTER_BY_CATEGORY' | translate}}</label>
+            <select class="category-select" [(ngModel)]="selectedCategory">
+                <option value="">{{'ALL_CATEGORIES' | translate}}</option>
+                @for (category of getAllCategories(); track $index) {
+                <option [value]="category">{{category}}</option>
+                }
+            </select>
+        </div>
+        <div>
+            <label for="search-input" class="filter-label">{{'SEARCH_FAQ' | translate}}</label>
+            <input id="search-input" class="search-input" type="text" [(ngModel)]="searchTerm" placeholder="{{'SEARCH_FAQ_PLACEHOLDER' | translate}}" />
+        </div>
+      </div>
 
     @if (faqs.length === 0) {
       <div class="empty-container" @fadeInOut>
@@ -11,7 +27,7 @@
     }
 
     <div class="faq-list" role="list">
-      @for (faq of faqs; track faq.id) {
+      @for (faq of getfilteredFaqs(); track faq.id) {
         <div class="faq-item" role="listitem">
           <div 
             class="faq-header" 
@@ -146,6 +162,27 @@
               } @else if (faqForm.get('answer')?.errors?.['minlength']) {
                 <span>Antwoord moet minimaal 10 tekens bevatten</span>
               }
+            </div>
+          }
+          <div class="form-group">
+          <div class="floating-label">
+            <select
+              id="category"
+              formControlName="category"
+              class="category-select"
+              [class.error]="faqForm.get('category')?.invalid && faqForm.get('category')?.touched"
+            >
+              <option value="" disabled selected>Kies een categorie</option>
+              @for (category of getAllCategories(); track $index) {
+                <option [value]="category">{{ category }}</option>
+              }
+            </select>
+          </div>
+          </div>
+
+          @if (faqForm.get('category')?.invalid && faqForm.get('category')?.touched) {
+            <div class="error-message" @fadeInOut>
+              <span>Categorie is verplicht</span>
             </div>
           }
         </div>
