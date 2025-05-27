@@ -88,7 +88,8 @@
 }
 
 .form-input,
-.form-textarea {
+.form-textarea,
+.category-select {
   width: 100%;
   padding: 0.75rem 1rem;
   border: 1px solid #e2e8f0;
@@ -100,8 +101,10 @@
 
 .form-input:focus,
 .form-textarea:focus,
+.category-select,
 .form-input:not(:placeholder-shown),
-.form-textarea:not(:placeholder-shown) {
+.form-textarea:not(:placeholder-shown),
+.category-select.form-input:not(:placeholder-shown) {
   outline: none;
   border-color: #f0d04b;
   box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);

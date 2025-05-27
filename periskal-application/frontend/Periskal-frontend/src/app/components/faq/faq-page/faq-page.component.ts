@@ -6,11 +6,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { Faq } from '../../../models/Faq.model';
 import { RoleAuthorizationService } from '../../../services/RoleAuthorization/role-authorization.service';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-faq-page',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HttpClientModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslatePipe],
   templateUrl: './faq-page.component.html',
   styleUrl: './faq-page.component.css',
   animations: [
@@ -45,6 +46,8 @@ export class FaqPageComponent implements OnInit {
   isSubmitting = false;
   showAddForm = false;
 
+  category: string | null = null;
+
   constructor(
     private fb: FormBuilder,
     public roleAuth: RoleAuthorizationService,
@@ -52,12 +55,17 @@ export class FaqPageComponent implements OnInit {
   ) {
     this.faqForm = this.fb.group({
       question: ['', [Validators.required, Validators.minLength(5)]],
-      answer: ['', [Validators.required, Validators.minLength(10)]]
+      answer: ['', [Validators.required, Validators.minLength(10)]],
+      category: ['', Validators.required]
     });
   }
 
   ngOnInit(): void {
     this.loadFaqs();
+  }
+
+  getAllCategories() {
+    return ['training', 'exam', 'fleetmanager', 'certificates', 'billing', 'other']
   }
 
   loadFaqs(): void {
@@ -74,12 +82,14 @@ export class FaqPageComponent implements OnInit {
 
   addFaq(): void {
     if (this.faqForm.invalid) return;
-    
+
     this.isSubmitting = true;
     this.clearMessages();
-    
+
+    console.log(this.faqForm.value);
     const newFaq: Faq = this.faqForm.value;
-    
+    console.log(newFaq);
+
     this.faqService.createFaq(newFaq).subscribe({
       next: (addedFaq) => {
         this.faqs = [...this.faqs, addedFaq];
@@ -112,7 +122,7 @@ export class FaqPageComponent implements OnInit {
     } else {
       // First click shows confirmation
       this.showDeleteConfirm = { [id]: true };
-      
+
       // Auto-hide after 3 seconds
       setTimeout(() => {
         this.showDeleteConfirm[id] = false;
