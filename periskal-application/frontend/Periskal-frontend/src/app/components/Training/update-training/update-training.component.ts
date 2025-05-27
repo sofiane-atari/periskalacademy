@@ -13,11 +13,12 @@ import { PhotoUploadComponent } from "../../photo-upload/photo-upload.component"
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatInput, MatLabel } from '@angular/material/input';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
+import { MatAccordion, MatExpansionModule, MatExpansionPanel } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-update-training',
   standalone: true,
-  imports: [FormsModule, TranslatePipe, TranslatePipe, MatSnackBarModule, PhotoUploadComponent, MatStepperModule, ReactiveFormsModule, MatInput, MatLabel, MatTabGroup, MatTab],
+  imports: [FormsModule, TranslatePipe, TranslatePipe, MatSnackBarModule, PhotoUploadComponent, MatStepperModule, ReactiveFormsModule, MatInput, MatLabel, MatTabGroup, MatTab, MatAccordion, MatExpansionModule],
   templateUrl: './update-training.component.html',
   styleUrl: './update-training.component.css'
 })

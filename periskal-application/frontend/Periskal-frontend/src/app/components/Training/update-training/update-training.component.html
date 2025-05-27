@@ -19,13 +19,102 @@
             <mat-label>Training description</mat-label>
             <input matInput [(ngModel)]="training.descriptionEn">
           </mat-tab>
-          <mat-tab label="dutch">
+          <mat-tab label="Dutch">
             <mat-label>Training Name</mat-label>
             <input matInput [(ngModel)]="training.nameNl">
             <mat-label>Training description</mat-label>
             <input matInput [(ngModel)]="training.descriptionNl">
           </mat-tab>
+          <mat-tab label="French">
+            <mat-label>Training Name</mat-label>
+            <input matInput [(ngModel)]="training.nameFr">
+            <mat-label>Training description</mat-label>
+            <input matInput [(ngModel)]="training.descriptionFr">
+          </mat-tab>
+          <mat-tab label="German">
+            <mat-label>Training Name</mat-label>
+            <input matInput [(ngModel)]="training.nameDe">
+            <mat-label>Training description</mat-label>
+            <input matInput [(ngModel)]="training.descriptionDe">
+          </mat-tab>
         </mat-tab-group>
+        <div class="modules">
+          <mat-accordion multi>
+            @for (module of training.modules; track $index) {
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <h3>Module {{$index+1}}</h3>
+                </mat-expansion-panel-header>
+                <div class="moduleContent">
+                  <mat-tab-group>
+                      <mat-tab label="English">
+                          <mat-label>Module {{$index +1}} name</mat-label>
+                          <input matInput [(ngModel)]="module.nameModuleEn" />
+                          <mat-label>Module {{$index +1}} description</mat-label>
+                          <textarea matInput [(ngModel)]="module.descriptionModuleEn"></textarea>
+                      </mat-tab>
+                      <mat-tab label="Dutch">
+                          <mat-label>Module {{$index+1}} name</mat-label>
+                          <input matInput [(ngModel)]="module.nameModuleNl" />
+                          <mat-label>Module {{$index+1}} description</mat-label>
+                          <textarea matInput [(ngModel)]="module.descriptionModuleNl"></textarea>
+                      </mat-tab>
+                      <mat-tab label="French">
+                          <mat-label>Module {{$index+1}} name</mat-label>
+                          <input matInput [(ngModel)]="module.nameModuleFr" />
+                          <mat-label>Module {{$index+1}} description</mat-label>
+                          <textarea matInput [(ngModel)]="module.descriptionModuleFr"></textarea>
+                      </mat-tab>
+                      <mat-tab label="German">
+                          <mat-label>Module {{$index+1}} name</mat-label>
+                          <input matInput [(ngModel)]="module.nameModuleDe" />
+                          <mat-label>Module {{$index+1}} description</mat-label>
+                          <textarea matInput [(ngModel)]="module.descriptionModuleDe"></textarea>
+                      </mat-tab>
+                  </mat-tab-group>
+                  <h4>Chapters</h4>
+                  <div class="chapters">
+                    <mat-accordion>
+                      @for (chapter of module.chapters; track $index) {
+                        <mat-expansion-panel>
+                          <mat-expansion-panel-header>
+                            <h5>Chapter {{$index+1}}</h5>
+                          </mat-expansion-panel-header>
+                          <mat-tab-group>
+                      <mat-tab label="English">
+                          <mat-label>Chapter {{$index +1}} name</mat-label>
+                          <input matInput [(ngModel)]="chapter.nameChapterEn" />
+                          <mat-label>Chapter {{$index +1}} description</mat-label>
+                          <textarea matInput [(ngModel)]="chapter.descriptionChapterEn"></textarea>
+                      </mat-tab>
+                      <mat-tab label="Dutch">
+                          <mat-label>Chapter {{$index+1}} name</mat-label>
+                          <input matInput [(ngModel)]="chapter.nameChapterNl" />
+                          <mat-label>Chapter {{$index+1}} description</mat-label>
+                          <textarea matInput [(ngModel)]="chapter.descriptionChapterNl"></textarea>
+                      </mat-tab>
+                      <mat-tab label="French">
+                          <mat-label>Chapter {{$index+1}} name</mat-label>
+                          <input matInput [(ngModel)]="chapter.nameChapterFr" />
+                          <mat-label>Chapter {{$index+1}} description</mat-label>
+                          <textarea matInput [(ngModel)]="chapter.descriptionChapterFr"></textarea>
+                      </mat-tab>
+                      <mat-tab label="German">
+                          <mat-label>Chapter {{$index+1}} name</mat-label>
+                          <input matInput [(ngModel)]="chapter.nameChapterDe" />
+                          <mat-label>Chapter {{$index+1}} description</mat-label>
+                          <textarea matInput [(ngModel)]="chapter.descriptionChapterDe"></textarea>
+                      </mat-tab>
+                          </mat-tab-group>
+                        </mat-expansion-panel>
+                      }
+                    </mat-accordion>
+                  </div>
+                </div>
+              </mat-expansion-panel>
+            }
+          </mat-accordion>
+        </div>
       </mat-step>
     </mat-horizontal-stepper>
     <div>
