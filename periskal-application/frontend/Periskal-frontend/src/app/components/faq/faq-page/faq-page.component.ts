@@ -67,7 +67,7 @@ export class FaqPageComponent implements OnInit {
   }
 
   getAllCategories() {
-    return ['training', 'exam', 'fleetmanager', 'certificates', 'billing', 'other']
+    return ['Training', 'Exam', 'Fleetmanager', 'Certificates', 'Billing', 'Other']
   }
 
   getfilteredFaqs() {
