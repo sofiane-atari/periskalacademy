@@ -249,5 +249,6 @@
   "CONTACT_MESSAGE_MIN_LENGTH": "Bericht moet minimaal 10 karakters bevatten",
   "CONTACT_FORM_SUCCESS": "Bericht succesvol verzonden!",
   "CONTACT_FORM_ERROR": "Fout bij het verzenden van bericht. Probeer het opnieuw.",
-  "CLOSE": "Sluiten"
+  "CLOSE": "Sluiten",
+  "ERASE_Selection": "Selectie wissen"
 }

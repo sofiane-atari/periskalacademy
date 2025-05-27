@@ -249,5 +249,6 @@
   "CONTACT_MESSAGE_MIN_LENGTH": "Le message doit contenir au moins 10 caractères",
   "CONTACT_FORM_SUCCESS": "Message envoyé avec succès!",
   "CONTACT_FORM_ERROR": "Erreur lors de l'envoi du message. Veuillez réessayer.",
-  "CLOSE": "Fermer"
+  "CLOSE": "Fermer",
+  "ERASE_Selection": "Effacer la sélection"
 }

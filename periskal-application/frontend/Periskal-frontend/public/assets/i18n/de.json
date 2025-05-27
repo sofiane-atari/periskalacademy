@@ -249,5 +249,6 @@
   "CONTACT_MESSAGE_MIN_LENGTH": "Nachricht muss mindestens 10 Zeichen lang sein",
   "CONTACT_FORM_SUCCESS": "Nachricht erfolgreich gesendet!",
   "CONTACT_FORM_ERROR": "Fehler beim Senden der Nachricht. Bitte versuchen Sie es erneut.",
-  "CLOSE": "Schließen"
+  "CLOSE": "Schließen",
+  "ERASE_Selection": "Auswahl löschen"
 }
