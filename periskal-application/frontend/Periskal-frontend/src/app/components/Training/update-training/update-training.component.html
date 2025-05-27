@@ -40,7 +40,7 @@
         </mat-tab-group>
         <div class="modules">
           <mat-accordion multi>
-            @for (module of training.modules; track $index) {
+            @for (module of training.modules; track $index; let moduleIndex = $index) {
               <mat-expansion-panel>
                 <mat-expansion-panel-header>
                   <h3>Module {{$index+1}}</h3>
@@ -75,36 +75,75 @@
                   <h4>Chapters</h4>
                   <div class="chapters">
                     <mat-accordion>
-                      @for (chapter of module.chapters; track $index) {
+                      @for (chapter of module.chapters; track $index; let chapterIndex = $index) {
                         <mat-expansion-panel>
                           <mat-expansion-panel-header>
                             <h5>Chapter {{$index+1}}</h5>
                           </mat-expansion-panel-header>
                           <mat-tab-group>
-                      <mat-tab label="English">
-                          <mat-label>Chapter {{$index +1}} name</mat-label>
-                          <input matInput [(ngModel)]="chapter.nameChapterEn" />
-                          <mat-label>Chapter {{$index +1}} description</mat-label>
-                          <textarea matInput [(ngModel)]="chapter.descriptionChapterEn"></textarea>
-                      </mat-tab>
-                      <mat-tab label="Dutch">
-                          <mat-label>Chapter {{$index+1}} name</mat-label>
-                          <input matInput [(ngModel)]="chapter.nameChapterNl" />
-                          <mat-label>Chapter {{$index+1}} description</mat-label>
-                          <textarea matInput [(ngModel)]="chapter.descriptionChapterNl"></textarea>
-                      </mat-tab>
-                      <mat-tab label="French">
-                          <mat-label>Chapter {{$index+1}} name</mat-label>
-                          <input matInput [(ngModel)]="chapter.nameChapterFr" />
-                          <mat-label>Chapter {{$index+1}} description</mat-label>
-                          <textarea matInput [(ngModel)]="chapter.descriptionChapterFr"></textarea>
-                      </mat-tab>
-                      <mat-tab label="German">
-                          <mat-label>Chapter {{$index+1}} name</mat-label>
-                          <input matInput [(ngModel)]="chapter.nameChapterDe" />
-                          <mat-label>Chapter {{$index+1}} description</mat-label>
-                          <textarea matInput [(ngModel)]="chapter.descriptionChapterDe"></textarea>
-                      </mat-tab>
+                            <mat-tab label="English">
+                              <mat-label>Chapter {{$index +1}} name</mat-label>
+                              <input matInput [(ngModel)]="chapter.nameChapterEn" />
+                              <mat-label>Chapter {{$index +1}} description</mat-label>
+                              <textarea matInput [(ngModel)]="chapter.descriptionChapterEn"></textarea>
+                              <mat-label>Chapter {{$index +1}} text</mat-label>
+                              <textarea matInput [(ngModel)]="chapter.textChapterEn"></textarea>
+                            </mat-tab>
+                            <mat-tab label="Dutch">
+                              <mat-label>Chapter {{$index+1}} name</mat-label>
+                              <input matInput [(ngModel)]="chapter.nameChapterNl" />
+                              <mat-label>Chapter {{$index+1}} description</mat-label>
+                              <textarea matInput [(ngModel)]="chapter.descriptionChapterNl"></textarea>
+                              <mat-label>Chapter {{$index +1}} text</mat-label>
+                              <textarea matInput [(ngModel)]="chapter.textChapterNl"></textarea>
+                            </mat-tab>
+                            <mat-tab label="French">
+                              <mat-label>Chapter {{$index+1}} name</mat-label>
+                              <input matInput [(ngModel)]="chapter.nameChapterFr" />
+                              <mat-label>Chapter {{$index+1}} description</mat-label>
+                              <textarea matInput [(ngModel)]="chapter.descriptionChapterFr"></textarea>
+                              <mat-label>Chapter {{$index +1}} text</mat-label>
+                              <textarea matInput [(ngModel)]="chapter.textChapterFr"></textarea>
+                            </mat-tab>
+                            <mat-tab label="German">
+                              <mat-label>Chapter {{$index+1}} name</mat-label>
+                              <input matInput [(ngModel)]="chapter.nameChapterDe" />
+                              <mat-label>Chapter {{$index+1}} description</mat-label>
+                              <textarea matInput [(ngModel)]="chapter.descriptionChapterDe"></textarea>
+                              <mat-label>Chapter {{$index +1}} text</mat-label>
+                              <textarea matInput [(ngModel)]="chapter.textChapterDe"></textarea>
+                            </mat-tab>
+                            @if (chapter.photos != null) {
+                            <mat-tab label="Photos">
+
+                                @for (photo of chapter.photos; track $index; let photoIndex = $index) {
+                                  <div class="photo-item">
+                                    <label>{{'PHOTO' |translate}} {{photoIndex+1}}</label>
+                                    <img src="{{photo.imageData}}" alt="">
+                                    <button type="button" class="btn btn-danger" (click)="removePhoto(moduleIndex, chapterIndex, photoIndex)">
+                                      {{'REMOVE_PHOTO' | translate}}
+                                    </button>
+                                  </div>
+                                }
+                              <div>
+                                <p><strong>{{'ADD_NEW_PHOTO' | translate}}</strong></p>
+                                <app-photo-upload [(ngModel)]="newPhotos[moduleIndex + '_' + chapterIndex]" 
+                                                name="photos_{{moduleIndex}}_{{chapterIndex}}">
+                                </app-photo-upload>
+                              </div>
+                                @if((newPhotos[moduleIndex + '_' + chapterIndex].length || 0) > 0) {
+                                <button
+                                        type="button" 
+                                        class="btn btn-primary" 
+                                        (click)="savePhotos(moduleIndex, chapterIndex)">
+                                  {{'ADD_PHOTOS' | translate}}
+                                </button>
+                                }
+                            </mat-tab>
+                                      <button type="button" class="btn btn-danger" (click)="removeChapter(moduleIndex, chapterIndex)">
+            {{'DELETE_CHAPTER' | translate}}
+          </button>
+                          }
                           </mat-tab-group>
                         </mat-expansion-panel>
                       }
