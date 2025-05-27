@@ -10,6 +10,7 @@
   } @if (training) {
     <mat-horizontal-stepper>
       <mat-step>
+        <ng-template matStepLabel>{{ 'TRAINING_INFORMATION' | translate }}</ng-template>
         <mat-label>Product Code</mat-label>
         <input matInput [(ngModel)]="training.productCode">
         <mat-tab-group>
@@ -140,28 +141,139 @@
                                 </button>
                                 }
                             </mat-tab>
-                                      <button type="button" class="btn btn-danger" (click)="removeChapter(moduleIndex, chapterIndex)">
-            {{'DELETE_CHAPTER' | translate}}
-          </button>
                           }
                           </mat-tab-group>
+                            <button type="button" class="btn btn-danger" (click)="removeChapter(moduleIndex, chapterIndex)">
+                              {{'DELETE_CHAPTER' | translate}}
+                            </button>
                         </mat-expansion-panel>
                       }
                     </mat-accordion>
                   </div>
                 </div>
+                  <button type="button" class="btn btn-secondary" (click)="goToChapterAddPage(moduleIndex)">
+                      {{'ADD_CHAPTER' | translate}}
+                    </button>
+                  <!-- Delete module button -->
+                  <button type="button" class="btn btn-danger" (click)="removeModule(moduleIndex)">
+                    {{'DELETE_MODULE' | translate}}
+                  </button>
               </mat-expansion-panel>
             }
           </mat-accordion>
         </div>
+          <div>
+            <button class="btn btn-primary" (click)="goToModuleAddPage()">{{"ADD_NEW_MODULE" | translate}}</button>
+          </div>
+        <div class="stepper-buttons">
+          <button mat-raised-button color="accent" class="gold-button" matStepperNext>{{ 'NEXT' | translate }}</button>
+        </div>
+        <div>
+          <button (click)="updateTraining()">Update training</button>
+        </div>
+      </mat-step>
+
+      <mat-step>
+        <ng-template matStepLabel>{{ 'REVIEW_SUBMIT' | translate }}</ng-template>
+      <mat-card>
+        <mat-card-title class="title_summary">{{ 'TRAINING_SUMMARY' | translate }}</mat-card-title>
+        <mat-card-content>
+          <p><strong>{{ 'PRODUCT_CODE' | translate }}:</strong> {{ training.productCode }}</p>
+          <mat-tab-group>
+              <mat-tab label="English">
+                <p><strong>{{ 'TRAINING_NAME_EN' | translate }}:</strong> {{ training.nameEn }}</p>
+                <p><strong>{{ 'TRAINING_DESCRIPTION_EN' | translate }}:</strong> {{ training.descriptionEn }}</p>
+              </mat-tab>
+              <mat-tab label="Dutch">
+                <p><strong>{{ 'TRAINING_NAME_NL' | translate }}:</strong> {{ training.nameNl }}</p>
+                <p><strong>{{ 'TRAINING_DESCRIPTION_NL' | translate }}:</strong> {{ training.descriptionNl }}</p>
+              </mat-tab>
+              <mat-tab label="French">
+                <p><strong>{{ 'TRAINING_NAME_FR' | translate }}:</strong> {{ training.nameFr }}</p>
+                <p><strong>{{ 'TRAINING_DESCRIPTION_FR' | translate }}:</strong> {{ training.descriptionFr }}</p>
+              </mat-tab>
+              <mat-tab label="German">
+                <p><strong>{{ 'TRAINING_NAME_DE' | translate }}:</strong> {{ training.nameDe }}</p>
+                <p><strong>{{ 'TRAINING_DESCRIPTION_DE' | translate }}:</strong> {{ training.descriptionDe }}</p>
+              </mat-tab>
+          </mat-tab-group>
+          <mat-accordion class="module-summary" multi>
+            @for (module of training.modules; track $index; let moduleIndex = $index) {
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>{{ 'MODULE' | translate }} {{ moduleIndex + 1 }}</mat-panel-title>
+                </mat-expansion-panel-header>
+                <mat-tab-group>
+                    <mat-tab label="English">
+                      <p><strong>{{ 'MODULE_NAME_EN' | translate }}:</strong> {{ module.nameModuleEn }}</p>
+                      <p><strong>{{ 'DESCRIPTION_EN' | translate }}:</strong> {{ module.descriptionModuleEn }}</p>
+                    </mat-tab>
+                    <mat-tab label="Dutch">
+                      <p><strong>{{ 'MODULE_NAME_NL' | translate }}:</strong> {{ module.nameModuleNl }}</p>
+                      <p><strong>{{ 'DESCRIPTION_NL' | translate }}:</strong> {{ module.descriptionModuleNl }}</p>
+                    </mat-tab>
+                    <mat-tab label="French">
+                      <p><strong>{{ 'MODULE_NAME_FR' | translate }}:</strong> {{ module.nameModuleFr }}</p>
+                      <p><strong>{{ 'DESCRIPTION_FR' | translate }}:</strong> {{ module.descriptionModuleFr }}</p>
+                    </mat-tab>
+                    <mat-tab label="German">
+                      <p><strong>{{ 'MODULE_NAME_DE' | translate }}:</strong> {{ module.nameModuleDe }}</p>
+                      <p><strong>{{ 'DESCRIPTION_DE' | translate }}:</strong> {{ module.descriptionModuleDe }}</p>
+                    </mat-tab>
+                </mat-tab-group>
+                <h4>{{ 'CHAPTERS' | translate }}</h4>
+                <mat-accordion>
+                  @for (chapter of module.chapters; track $index; let chapterIndex = $index) {
+                    <mat-expansion-panel>
+                      <mat-expansion-panel-header>
+                        <mat-panel-title>{{ 'CHAPTER' | translate }} {{ chapterIndex + 1 }}</mat-panel-title>
+                      </mat-expansion-panel-header>
+                      <mat-tab-group>
+                          <mat-tab label="English">
+                            <p><strong>{{ 'CHAPTER_NAME_EN' | translate }}:</strong> {{ chapter.nameChapterEn }}</p>
+                            <p><strong>{{ 'CHAPTER_DESCRIPTION_EN'| translate }}:</strong> {{ chapter.descriptionChapterEn }}</p>
+                            <p><strong>{{ 'CHAPTER_TEXT_EN' | translate }}:</strong> {{ chapter.textChapterEn }}</p>
+                          </mat-tab>
+                          <mat-tab label="Dutch">
+                            <p><strong>{{ 'CHAPTER_NAME_NL' | translate }}:</strong> {{ chapter.nameChapterNl }}</p>
+                            <p><strong>{{ 'CHAPTER_DESCRIPTION_NL'| translate }}:</strong> {{ chapter.descriptionChapterNl }}</p>
+                            <p><strong>{{ 'CHAPTER_TEXT_NL' | translate }}:</strong> {{ chapter.textChapterNl }}</p>
+                          </mat-tab>
+                          <mat-tab label="French">
+                            <p><strong>{{ 'CHAPTER_NAME_FR' | translate }}:</strong> {{ chapter.nameChapterFr }}</p>
+                            <p><strong>{{ 'CHAPTER_DESCRIPTION_FR'| translate }}:</strong> {{ chapter.descriptionChapterFr }}</p>
+                            <p><strong>{{ 'CHAPTER_TEXT_FR' | translate }}:</strong> {{ chapter.textChapterFr }}</p>
+                          </mat-tab>
+                          <mat-tab label="German">
+                            <p><strong>{{ 'CHAPTER_NAME_DE' | translate }}:</strong> {{ chapter.nameChapterDe }}</p>
+                            <p><strong>{{ 'CHAPTER_DESCRIPTION_DE'| translate }}:</strong> {{ chapter.descriptionChapterDe }}</p>
+                            <p><strong>{{ 'CHAPTER_TEXT_DE' | translate }}:</strong> {{ chapter.textChapterDe }}</p>
+                          </mat-tab>
+                        <mat-tab [label]="('IMAGES' | translate)">
+                          @for (photo of chapter.photos; track $index) {
+                            <img [src]="photo.imageData" alt="">
+                          }
+                        </mat-tab>
+                      </mat-tab-group>
+                    </mat-expansion-panel>
+                  }
+                </mat-accordion>
+              </mat-expansion-panel>
+            }
+          </mat-accordion>
+        </mat-card-content>
+      </mat-card>
+      <div class="stepper-buttons">
+        <button mat-raised-button color="accent" class="gold-button" matStepperPrevious>
+          <mat-icon>arrow_back</mat-icon> {{ 'BACK' | translate }}
+        </button>
+        <div>
+          <button (click)="updateTraining()">Update training</button>
+        </div>
+      </div>
       </mat-step>
     </mat-horizontal-stepper>
-    <div>
-      <button (click)="updateTraining()">Update training</button>
-    </div>
-  <div>
-    <button class="btn btn-primary" (click)="goToModuleAddPage()">{{"ADD_NEW_MODULE" | translate}}</button>
-  </div>
+
   <div>
     <button (click)="deleteTraining()" class="delete">{{"DELETE_TRAINING" | translate}}</button>
   </div>
