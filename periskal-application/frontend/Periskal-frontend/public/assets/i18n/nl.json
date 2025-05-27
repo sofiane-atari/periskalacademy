@@ -56,12 +56,16 @@
   "NAME": "Naam",
   "PRODUCT_CODE": "Product Code",
   "MODULE_NAME_EN": "Naam module (EN)",
+  "MODULE_DESCRIPTION_EN": "Beschrijving module (EN)",
   "DESCRIPTION_EN": "Beschrijving module (EN)",
   "MODULE_NAME_NL": "Naam module (NL)",
+  "MODULE_DESCRIPTION_NL": "Beschrijving module (NL)",
   "DESCRIPTION_NL": "Beschrijving module (NL)",
   "MODULE_NAME_FR": "Naam module (FR)",
+  "MODULE_DESCRIPTION_FR": "Beschrijving module (FR)",
   "DESCRIPTION_FR": "Beschrijving module (FR)",
   "MODULE_NAME_DE": "Naam module (DE)",
+  "MODULE_DESCRIPTION_DE": "Beschrijving module (DE)",
   "DESCRIPTION_DE": "Beschrijving module (DE)",
   "TRAINING_NAME_EN": "Training naam (EN)",
   "TRAINING_DESCRIPTION_EN": "Training Beschrijving (EN)",
@@ -233,5 +237,6 @@
   "CERTIFICATE_ISSUEDATE": "Uitgiftedatum",
   "CERTIFICATE_EXPIRYDATE": "Vervaldatum",
   "NO_CERTIFICATES_FOUND_SKIPPER": "Geen certificaten beschikbaar voor deze schipper.",
-  "SCORE": "Behaalde score"
+  "SCORE": "Behaalde score",
+  "REVIEW_UPDATE": "Beoordelen en bijwerken"
 }

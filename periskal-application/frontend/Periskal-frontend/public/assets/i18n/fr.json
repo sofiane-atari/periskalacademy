@@ -95,12 +95,16 @@
   "EXAM_QUESTIONS": "Questions d'examen",
   "DELETE_BUTTON": "Supprimer",
   "TRAINING_NAME_EN": "Nom de la formation (EN)",
+  "MODULE_DESCRIPTION_EN": "Description du module (EN)",
   "TRAINING_DESCRIPTION_EN": "Description de la formation (EN)",
   "TRAINING_NAME_NL": "Nom de la formation (NL)",
+  "MODULE_DESCRIPTION_NL": "Description du module (NL)",
   "TRAINING_DESCRIPTION_NL": "Description de la formation (NL)",
   "TRAINING_NAME_FR": "Nom de la formation (FR)",
+  "MODULE_DESCRIPTION_FR": "Description du module (FR)",
   "TRAINING_DESCRIPTION_FR": "Description de la formation (FR)",
   "TRAINING_NAME_DE": "Nom de la formation (DE)",
+  "MODULE_DESCRIPTION_DE": "Description du module (DE)",
   "TRAINING_DESCRIPTION_DE": "Description de la formation (DE)",
   "CHAPTER_NAME_EN": "Nom du chapitre (EN)",
   "CHAPTER_DESCRIPTION_EN": "Description du chapitre (EN)",
@@ -233,5 +237,6 @@
   "CERTIFICATE_ISSUEDATE": "Date de délivrance",
   "CERTIFICATE_EXPIRYDATE": "Date d’expiration",
   "NO_CERTIFICATES_FOUND_SKIPPER": "Aucun certificat disponible pour ce skipper.",
-  "SCORE": "Score obtenu"
+  "SCORE": "Score obtenu",
+  "REVIEW_UPDATE": "Revoir et mettre à jour"
 }
