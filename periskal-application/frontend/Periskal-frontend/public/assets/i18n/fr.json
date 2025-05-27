@@ -254,5 +254,6 @@
   "ALL_CATEGORIES": "Toutes les catégories",
   "SEARCH_FAQ": "Rechercher des questions:",
   "SEARCH_FAQ_PLACEHOLDER": "Rechercher par mot dans la question ou l'ID",
-  "FAQ": "Foire aux questions"
+  "FAQ": "Foire aux questions",
+  "ERASE_Selection": "Effacer la sélection"
 }

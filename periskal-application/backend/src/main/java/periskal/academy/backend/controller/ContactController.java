@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import periskal.academy.backend.dto.ContactRequest;
+import periskal.academy.backend.security.SecurityRoles;
 import periskal.academy.backend.service.EmailService;
 
 @RestController
@@ -21,7 +22,7 @@ public class ContactController {
     private final EmailService emailService;
     
     @PostMapping
-    @PreAuthorize("hasRole('SKIPPER')")
+    @PreAuthorize(SecurityRoles.FLEETMANAGER_SKIPPER)
     public ResponseEntity<ContactRequest> submitContactForm(@Valid @RequestBody ContactRequest contactRequest) {    
         emailService.sendContactFormEmail(contactRequest);
         return ResponseEntity.ok(contactRequest);
