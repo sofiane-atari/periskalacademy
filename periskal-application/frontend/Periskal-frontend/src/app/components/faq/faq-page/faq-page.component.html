@@ -2,6 +2,22 @@
   <div class="faq-content">
     <h1 class="faq-title">Veelgestelde vragen</h1>
 
+      <div class="search-bar">
+        <div>
+            <label for="product-select" class="filter-label">{{'FILTER_BY_PRODUCT' | translate}}</label>
+            <select class="product-select" [(ngModel)]="selectedCategory">
+                <option value="">{{'ALL_PRODUCTS' | translate}}</option>
+                @for (category of getAllCategories(); track $index) {
+                <option [value]="category">{{category}}</option>
+                }
+            </select>
+        </div>
+        <div>
+            <label for="search-input" class="filter-label">{{'SEARCH_SKIPPERS' | translate}}</label>
+            <input id="search-input" class="search-input" type="text" [(ngModel)]="searchTerm" placeholder="{{'SEARCH_PLACEHOLDER' | translate}}" />
+        </div>
+      </div>
+
     @if (faqs.length === 0) {
       <div class="empty-container" @fadeInOut>
         <p class="empty-message">
@@ -11,7 +27,7 @@
     }
 
     <div class="faq-list" role="list">
-      @for (faq of faqs; track faq.id) {
+      @for (faq of getfilteredFaqs(); track faq.id) {
         <div class="faq-item" role="listitem">
           <div 
             class="faq-header" 

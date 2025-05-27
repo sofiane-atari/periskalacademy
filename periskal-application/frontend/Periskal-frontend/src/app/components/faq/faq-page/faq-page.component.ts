@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, FormControl, Validators, FormBuilder, FormsModule } from '@angular/forms';
 import { FaqService } from '../../../services/Faq/faq.service';
 import { HttpClientModule } from '@angular/common/http';
 import { Faq } from '../../../models/Faq.model';
@@ -11,7 +11,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 @Component({
   selector: 'app-faq-page',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslatePipe],
+  imports: [CommonModule, ReactiveFormsModule, TranslatePipe, FormsModule],
   templateUrl: './faq-page.component.html',
   styleUrl: './faq-page.component.css',
   animations: [
@@ -47,6 +47,8 @@ export class FaqPageComponent implements OnInit {
   showAddForm = false;
 
   category: string | null = null;
+  selectedCategory: string = '';
+  searchTerm: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -66,6 +68,22 @@ export class FaqPageComponent implements OnInit {
 
   getAllCategories() {
     return ['training', 'exam', 'fleetmanager', 'certificates', 'billing', 'other']
+  }
+
+  getfilteredFaqs() {
+    const searchTerm = this.searchTerm.toLowerCase();
+    return this.faqs.filter(faq => {
+      const matchesSearch =
+        !searchTerm ||
+        faq.question.toLowerCase().includes(searchTerm) ||
+        faq.id?.toString().includes(searchTerm)
+
+      const matchesProductFilter =
+        !this.selectedCategory || faq.category == this.selectedCategory;
+
+
+      return matchesProductFilter && matchesSearch;
+    })
   }
 
   loadFaqs(): void {
