@@ -1,10 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
-import { ActivatedRoute } from '@angular/router';
-import { Router } from 'express';
 import { BillingService } from '../../services/Billing/billing.service';
-import { ExamService } from '../../services/Exam/exam.service';
 import { JwtDecoderService } from '../../services/JwtDecode/jwt-decoder.service';
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -77,12 +74,9 @@ export class FleetManagerBillingComponent implements OnInit {
         };
       });
 
-      console.log('Fleet Manager Billing Batch Payload:', billingBatchPayload);
-
       
       this.billingSvc.postBillingBatch(billingBatchPayload).subscribe({
         next: (response) => {
-          console.log('Billing Batch Success:', response);
           const snackBarConfig: MatSnackBarConfig = {
             duration: 3000,
             verticalPosition: 'bottom',
@@ -93,13 +87,10 @@ export class FleetManagerBillingComponent implements OnInit {
           this.billingSuccess.emit(response); 
         },
         error: (err) => {
-          console.error('Billing Batch Error:', err);
           let errorMessage = 'Billing failed. Unknown error.';
           if (err.error && err.error.message) {
             errorMessage = `Billing failed: ${err.error.message}`;
           } 
-
-
           const snackBarConfig: MatSnackBarConfig = {
             duration: 7000, 
             verticalPosition: 'bottom',

@@ -1,7 +1,6 @@
 package periskal.academy.backend.service.certificate;
 
 import java.io.IOException;
-import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 

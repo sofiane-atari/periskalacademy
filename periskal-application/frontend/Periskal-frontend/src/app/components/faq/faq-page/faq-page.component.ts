@@ -64,10 +64,6 @@ export class FaqPageComponent implements OnInit {
     this.faqService.getFaqs().subscribe({
       next: (faqs) => {
         this.faqs = faqs;
-      },
-      error: (error) => {
-        this.showError('Er is een fout opgetreden bij het laden van de FAQ-items.');
-        console.error('Error loading FAQs:', error);
       }
     });
   }
@@ -88,8 +84,6 @@ export class FaqPageComponent implements OnInit {
         this.isSubmitting = false;
       },
       error: (error) => {
-        this.showError('Er is een fout opgetreden bij het toevoegen van de FAQ.');
-        console.error('Error adding FAQ:', error);
         this.isSubmitting = false;
       }
     });
@@ -104,8 +98,6 @@ export class FaqPageComponent implements OnInit {
           this.showDeleteConfirm[id] = false;
         },
         error: (error) => {
-          this.showError('Er is een fout opgetreden bij het verwijderen van de FAQ.');
-          console.error('Error deleting FAQ:', error);
           this.showDeleteConfirm[id] = false;
         }
       });

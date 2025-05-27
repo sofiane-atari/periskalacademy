@@ -69,11 +69,6 @@ export class AddModuleComponent implements OnInit {
         .subscribe({
           next: (response) => {
             this.router.navigate(['edit', this.trainingId]);
-          },
-          error: (error) => {
-            console.error('Error adding module', error.error);
-            console.error('Error status', error.status);
-            console.error('Error message', error.message);
           }
         });
 

@@ -37,7 +37,6 @@ export class UpdateExamComponent implements OnInit {
   loadExam(): void {
     this.examService.getExamById(this.examId).subscribe({
       next: (data) => (this.exam = data),
-      error: (err) => console.error('Examen ophalen mislukt', err)
     });
   }
 
@@ -51,7 +50,6 @@ export class UpdateExamComponent implements OnInit {
         });
       },
       error: (error) => {
-        console.error('Delete failed:', error);
         alert('Verwijderen mislukt: ' + error.message);
       }
     });
@@ -68,9 +66,7 @@ export class UpdateExamComponent implements OnInit {
       next: () => {
         alert('Examen succesvol aangepast!');
         this.router.navigate(['/trainingEmployee']);
-      },
-      error: (err) => console.error('Examen updaten mislukt', err)
-    });
+      }});
   }
 
   addQuestion(): void {

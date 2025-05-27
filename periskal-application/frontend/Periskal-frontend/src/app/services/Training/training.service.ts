@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Training } from '../../models/training.model';
 import { Photo } from '../../models/photo.model';
 import { Video } from '../../models/video.model';

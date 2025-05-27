@@ -5,9 +5,7 @@ import { JwtDecoderService } from '../../services/JwtDecode/jwt-decoder.service'
 import { AuthenticationService } from '../../services/Authentication/authentication.service';
 import { AuthenticateResponse } from '../../models/authenticate-response.model';
 import { TranslatePipe } from '@ngx-translate/core';
-import { finalize } from 'rxjs';
 import { CertificateService } from '../../services/Certificates/certificate.service';
-import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-profile',

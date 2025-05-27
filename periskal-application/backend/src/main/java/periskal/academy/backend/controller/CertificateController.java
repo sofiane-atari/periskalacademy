@@ -19,7 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 import periskal.academy.backend.dto.CertificateDTO;
 import periskal.academy.backend.jpa.Certificate;
 import periskal.academy.backend.security.exceptions.general.ResourceNotFoundException;
-import periskal.academy.backend.security.exceptions.general.ValidationException;
 import periskal.academy.backend.service.CertificateService;
 import periskal.academy.backend.service.certificate.PdfGeneratorService;
 

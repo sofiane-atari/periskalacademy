@@ -56,7 +56,6 @@ export class TrainingEmployeeComponent implements OnInit {
     const skipperId = this.jwtDecoderService.getId();
 
     if (!skipperId) {
-      console.error("Skipper ID not found. Cannot load assignments.");
       this.loadingError = "User ID not found, cannot load assignments.";
       this.loadAllAvailableTrainings();
       return;
@@ -64,7 +63,6 @@ export class TrainingEmployeeComponent implements OnInit {
 
     this.assignmentService.getSkipperAssignments(skipperId).pipe(
       catchError(err => {
-        console.error('Error fetching user assignments', err);
         this.loadingError = "Failed to load your assignments.";
         return of([] as TrainingAssignment[]);
       })
@@ -86,9 +84,6 @@ export class TrainingEmployeeComponent implements OnInit {
         this.processLoadedData(this.trainingsData, this.userRawAssignments);
         this.loadExamsForTrainings();
         this.isLoadingData = false;
-      },
-      error: (error) => {
-        console.error('Error fetching trainings', error);
       }
     });
   }
@@ -111,10 +106,6 @@ export class TrainingEmployeeComponent implements OnInit {
           isAssigned: true,
           assignedDate: assignment.assignedDate
         });
-      } else {
-        // This assignment refers to a training not in the current user's 'availableTrainings', got assigned a training he doesn't have access to, how to handle this?
-        // For now, just log a warning
-        console.warn(`Assigned training ID ${assignment.trainingId} details not found in available trainings list.`);
       }
     });
     // Populate allTrainingsData (for the main grid)
@@ -145,11 +136,6 @@ export class TrainingEmployeeComponent implements OnInit {
         next: (exam) => {
           if (exam) {
             this.examsMap.set(training.id, exam);
-          }
-        },
-        error: (error) => {
-          if (error.status !== 404) { // Only log non-404 errors
-            console.error(`Error loading exam for training ${training.id}`, error);
           }
         },
         complete: () => {
@@ -196,7 +182,6 @@ export class TrainingEmployeeComponent implements OnInit {
     const training = this.trainingsData.find(t => t.id === trainingId);
 
     if (!training) {
-      console.warn(`Training with ID ${trainingId} not found.`);
       return "Training Not Found";
     }
 

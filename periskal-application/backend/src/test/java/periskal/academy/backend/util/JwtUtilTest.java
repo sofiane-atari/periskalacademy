@@ -7,19 +7,14 @@ import static org.mockito.Mockito.when;
 
 import java.util.Collection;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Answers;
-import org.mockito.Mock;
 import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 import org.springframework.security.core.GrantedAuthority;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import periskal.academy.backend.model.AuthenticateResponse;
-import periskal.academy.backend.util.JwtUtil;
 
 public class JwtUtilTest {
 

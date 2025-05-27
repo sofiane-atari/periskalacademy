@@ -29,10 +29,7 @@ import periskal.academy.backend.service.FtpService;
 import periskal.academy.backend.service.TrainingService;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URI;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 
 @ExtendWith(MockitoExtension.class)
 class TrainingControllerTest {

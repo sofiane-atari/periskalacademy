@@ -1,16 +1,10 @@
 package periskal.academy.backend.controller;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URI;
 import org.springframework.http.HttpHeaders;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -38,7 +32,6 @@ import periskal.academy.backend.dto.TrainingDTO;
 import periskal.academy.backend.jpa.Module;
 import periskal.academy.backend.jpa.Training;
 import periskal.academy.backend.jpa.video.Video;
-import periskal.academy.backend.service.FtpService;
 import periskal.academy.backend.service.TrainingService;
 
 @Slf4j
@@ -48,11 +41,9 @@ public class TrainingController {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private final TrainingService trainingService;
-    private final FtpService ftpService;
 
-    public TrainingController(TrainingService trainingService, FtpService ftpService) {
+    public TrainingController(TrainingService trainingService) {
         this.trainingService = trainingService;
-        this.ftpService = ftpService;
     }
 
     @GetMapping

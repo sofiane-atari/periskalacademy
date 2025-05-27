@@ -97,7 +97,6 @@ export class SkippersComponent implements OnInit {
         });
       },
       error: (err: unknown) => {
-        console.error('Error fetching skippers:', err);
         this.error = 'Failed to load skippers. Please try again later.';
       }
     });
@@ -109,11 +108,9 @@ export class SkippersComponent implements OnInit {
     this.completedExamService.getUserCompletedExams(skipperId).subscribe({
       next: (exams: CompletedExam[]) => {
         this.selectedSkipperExams = exams;
-        console.log(this.selectedSkipperExams);
         this.loadingCompletedExams = false;
       },
       error: (err) => {
-        console.error('Failed to fetch exams', err);
         this.completedExamsError = true;
         this.loadingCompletedExams = false;
       }
@@ -125,7 +122,6 @@ export class SkippersComponent implements OnInit {
         this.loadingCertificates = false;
       },
       error: (err) => {
-        console.error('Failed to fetch certificates');
         this.certificatesError = true;
         this.loadingCertificates = false;
       }
@@ -219,7 +215,6 @@ export class SkippersComponent implements OnInit {
               return trainingItem;
             }),
             catchError(err => {
-              console.error(`Error fetching progress for training ${training.id} (Skipper: ${userIdForProgress}):`, err);
               trainingItem.progressError = 'Progress unavailable';
               trainingItem.loadingProgress = false;
               trainingItem.progress = null;
@@ -230,7 +225,6 @@ export class SkippersComponent implements OnInit {
         return forkJoin(progressObservables);
       }),
       catchError(err => {
-        console.error(`Error fetching trainings for skipper ${skipper.username}:`, err);
         skipper.trainingsAndProgressError = 'Failed to load trainings information.';
         skipper.accessibleTrainings = [];
         skipper.overallTrainingProgress = 0;
@@ -266,13 +260,11 @@ export class SkippersComponent implements OnInit {
     const fleetmanagerId = this.jwtDecoder.getId();
 
     if (fleetmanagerId === null) {
-      console.error('Fleetmanager ID is null');
       this.error = 'Failed to retrieve fleetmanager ID.';
       return;
     }
 
     if (this.selectedTrainingId === null) {
-      console.error('No training selected');
       this.error = 'Please select a training to assign.';
       return;
     }
@@ -297,13 +289,11 @@ export class SkippersComponent implements OnInit {
           this.isProcessingAction = false;
 
         } else {
-          console.warn('No exam found for this training. Proceeding without billing details.');
           this.saveAssignment(); // Directly save assignment without billing modal
           this.isProcessingAction = false;
         }
       },
       error: (error) => {
-        console.error('Error fetching exam:', error);
         this.error = 'Failed to fetch exam information';
         this.isProcessingAction = false;
       }
@@ -327,7 +317,6 @@ export class SkippersComponent implements OnInit {
       fleetmanagerId
     ).subscribe({
       next: (response) => {
-        console.log('Assignment successful:', response);
         this.assignmentDialogOpen = false;
         this.clearSkipperSelections();
         this.snackBar.open('Training successfully assigned!', 'Close', { duration: 3000, panelClass: ['snackbar-success'] });
@@ -336,7 +325,6 @@ export class SkippersComponent implements OnInit {
         this.selectedSkipperIndex = null;
       },
       error: (error) => {
-        console.error('Error during assignment after Billing:', error);
         this.error = 'Failed to assign training. Please try again later.';
         this.snackBar.open('CRITICAL: Billing was successful, but training assignment failed. Please contact support.', 'Close', {
           duration: 7000,
@@ -353,9 +341,6 @@ export class SkippersComponent implements OnInit {
     this.trainingService.getTrainingData().subscribe({
       next: (trainings) => {
         this.availableTrainings = trainings;
-      },
-      error: (err) => {
-        console.error('Error loading trainings:', err);
       }
     });
   }

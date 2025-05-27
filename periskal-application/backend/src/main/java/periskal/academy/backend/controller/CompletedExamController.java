@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
 import periskal.academy.backend.dto.CompletedExamDTO;
-import periskal.academy.backend.security.exceptions.general.ValidationException;
 import periskal.academy.backend.service.CompletedExamService;
 
 @RestController

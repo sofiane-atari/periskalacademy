@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http'; 
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http'; 
+import { Observable } from 'rxjs';
 import { CompletedExam } from '../../models/completed-exam.model'; 
 
 @Injectable({

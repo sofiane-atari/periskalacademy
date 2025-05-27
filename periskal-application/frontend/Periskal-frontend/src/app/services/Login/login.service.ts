@@ -30,7 +30,6 @@ export class LoginService {
     this.authService.authenticate(username, password).subscribe({
       next: (response) => {
         if (response.token) {
-          console.log('Authentication successful'); // debug
           onSuccess(response.token); 
 
         } else {
@@ -45,7 +44,6 @@ export class LoginService {
         } else {
           alert('An error occurred. Please try again later.');
         }
-        console.error('Login error:', error);
       }
     });
 
