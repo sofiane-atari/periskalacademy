@@ -56,12 +56,16 @@
   "NAME": "Name",
   "PRODUCT_CODE": "Product Code",
   "MODULE_NAME_EN": "Module name (EN)",
+  "MODULE_DESCRIPTION_EN": "Module description (EN)",
   "DESCRIPTION_EN": "Description (EN)",
   "MODULE_NAME_NL": "Module name (NL)",
+  "MODULE_DESCRIPTION_NL": "Module description (NL)",
   "DESCRIPTION_NL": "Description (NL)",
   "MODULE_NAME_FR": "Module name (FR)",
+  "MODULE_DESCRIPTION_FR": "Module description (FR)",
   "DESCRIPTION_FR": "Description (FR)",
   "MODULE_NAME_DE": "Module name (DE)",
+  "MODULE_DESCRIPTION_DE": "Module description (DE)",
   "DESCRIPTION_DE": "Description (DE)",
   "LANGUAGE_EN": "English",
   "LANGUAGE_NL": "Dutch",
@@ -233,5 +237,6 @@
   "CERTIFICATE_ISSUEDATE": "Issue date",
   "CERTIFICATE_EXPIRYDATE": "Expiry date",
   "NO_CERTIFICATES_FOUND_SKIPPER": "No Certificates available for this skipper.",
-  "SCORE": "Achieved score"
+  "SCORE": "Achieved score",
+  "REVIEW_UPDATE": "Review and Update"
 }
