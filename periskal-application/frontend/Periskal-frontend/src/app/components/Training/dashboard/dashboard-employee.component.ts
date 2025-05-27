@@ -15,13 +15,13 @@ import { DatePipe } from '@angular/common';
 
 
 @Component({
-  selector: 'app-training-employee',
+  selector: 'app-dashboard',
   imports: [TranslatePipe, DatePipe],
-  templateUrl: './training-employee.component.html',
-  styleUrl: './training-employee.component.css'
+  templateUrl: './dashboard-employee.component.html',
+  styleUrl: './dashboard-employee.component.css'
 })
 
-export class TrainingEmployeeComponent implements OnInit {
+export class DashboardComponent implements OnInit {
   public trainingsData: Training[] = [];
   public lang: string | null = "";
   public openMenus: { [key: number]: boolean } = {};

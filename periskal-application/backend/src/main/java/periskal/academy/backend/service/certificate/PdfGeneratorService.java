@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
@@ -15,12 +16,17 @@ import periskal.academy.backend.util.CertificateGeneratorUtil;
 public class PdfGeneratorService {
 
 
+    // --- PDF Security ---
+    @Value("${pdf.certificate.ownerPassword}") 
+    private static String PDF_OWNER_PASSWORD; // Owner password for full access
+
     public byte[] createCertificate(Certificate certificate, String firstName, String lastName, String shipName) throws IOException {
        
         // Format the user's full name
         String crewName = firstName + " " + lastName;
+
+        String OwnerPassword = PDF_OWNER_PASSWORD; 
         
-       
         String trainingDate = java.time.LocalDate.now().toString();
         
         // expiry date (valid until date)
@@ -58,6 +64,7 @@ public class PdfGeneratorService {
                 signerTitle,
                 companyName,
                 companyAddress,
-                companyPhone);
+                companyPhone,
+                OwnerPassword);
     }
 }

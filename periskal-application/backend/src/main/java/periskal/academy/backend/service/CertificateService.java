@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import periskal.academy.backend.dto.CertificateDTO;
 import periskal.academy.backend.jpa.Certificate;
 import periskal.academy.backend.jpa.CertificateRepository;
+import periskal.academy.backend.security.exceptions.general.ResourceNotFoundException;
+
 
 @Service
 public class CertificateService {
@@ -39,8 +41,9 @@ public class CertificateService {
     public CertificateDTO getCertificateById(Long id) {
         return certificateRepository.findById(id)
                 .map(this::convertToDTO)
-                .orElse(null);
+                .orElseThrow(() -> new ResourceNotFoundException("Certificate not found with id: " + id));
     }
+    
     
  
     private CertificateDTO convertToDTO(Certificate certificate) {

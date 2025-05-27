@@ -78,6 +78,6 @@ export class BillingComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['/trainingEmployee'])
+    this.router.navigate(['/dashboard'])
   }
 }

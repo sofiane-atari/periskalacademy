@@ -57,7 +57,7 @@ export class TrainingDetailComponent {
   }
 
   goBack() {
-    this.router.navigate(['trainingEmployee'])
+    this.router.navigate(['/dashboard'])
   }
 
   startExam() {

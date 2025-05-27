@@ -65,8 +65,9 @@ export class UpdateExamComponent implements OnInit {
     this.examService.updateExam(this.examId, this.exam).subscribe({
       next: () => {
         alert('Examen succesvol aangepast!');
-        this.router.navigate(['/trainingEmployee']);
-      }});
+        this.router.navigate(['/dashboard']);
+      }
+    });
   }
 
   addQuestion(): void {

@@ -1,13 +1,14 @@
 package periskal.academy.backend.jpa.faq;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-
 
 @Entity
 @Getter
 @Setter
+@Data
 public class Faq {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,10 +20,5 @@ public class Faq {
     @Column(nullable = false)
     private String answer;
 
-    public Faq() {}
-
-    public Faq(String question, String answer) {
-        this.question = question;
-        this.answer = answer;
-    }
+    private String category;
 }

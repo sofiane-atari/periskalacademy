@@ -182,7 +182,7 @@ export class AddTrainingComponent implements OnInit { // Implement OnInit
           this.trainingService.postTraining(trainingData).subscribe({
             next: (response) => {
               // this.resetForm();
-              this.router.navigate(['/trainingEmployee']);
+              this.router.navigate(['/dashboard']);
             }
           });
         });
@@ -190,7 +190,7 @@ export class AddTrainingComponent implements OnInit { // Implement OnInit
         this.trainingService.postTraining(trainingData).subscribe({
           next: (response) => {
             // this.resetForm();
-            this.router.navigate(['/trainingEmployee']);
+            this.router.navigate(['/dashboard']);
           },
           error: (error) => {
           }

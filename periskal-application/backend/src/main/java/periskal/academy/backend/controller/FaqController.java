@@ -4,22 +4,31 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
 import periskal.academy.backend.jpa.faq.Faq;
-import periskal.academy.backend.service.FaqService;
-
+import periskal.academy.backend.security.SecurityRoles;
 import periskal.academy.backend.security.exceptions.general.ResourceNotFoundException;
+import periskal.academy.backend.service.FaqService;
 
 @RestController
 @RequestMapping("/api/faq")
 @Slf4j
 public class FaqController {
-     @Autowired
+    @Autowired
     private FaqService faqService;
 
     @GetMapping
+    @PreAuthorize(SecurityRoles.ALL_ROLES)
     public ResponseEntity<List<Faq>> getAllFaqs() {
         log.info("Received request to retrieve all FAQs");
         List<Faq> faqs = faqService.getAllFaqs();
@@ -28,6 +37,7 @@ public class FaqController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize(SecurityRoles.ALL_ROLES)
     public ResponseEntity<Faq> getFaqById(@PathVariable Long id) {
         log.info("Received request to retrieve FAQ with id {}", id);
         Faq faq = faqService.getFaqById(id).orElseThrow(() -> {
@@ -39,14 +49,17 @@ public class FaqController {
     }
 
     @PostMapping
+    @PreAuthorize(SecurityRoles.ADMIN)
     public ResponseEntity<Faq> createFaq(@RequestBody Faq faq) {
         log.info("Received request to create FAQ with question: {}", faq.getQuestion());
+        log.info("Received request to create FAQ with category: {}", faq.getCategory());
         Faq createdFaq = faqService.createFaq(faq);
         log.info("Successfully created FAQ with id {}", createdFaq.getId());
         return ResponseEntity.ok(createdFaq);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize(SecurityRoles.ADMIN)
     public ResponseEntity<Faq> updateFaq(@PathVariable Long id, @RequestBody Faq faq) {
         log.info("Received request to update FAQ with id {}", id);
         Faq updatedFaq = faqService.updateFaq(id, faq);
@@ -55,6 +68,7 @@ public class FaqController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize(SecurityRoles.ADMIN)
     public ResponseEntity<Void> deleteFaq(@PathVariable Long id) {
         log.info("Received request to delete FAQ with id {}", id);
         faqService.deleteFaq(id);
