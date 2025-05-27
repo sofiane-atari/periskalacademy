@@ -55,10 +55,8 @@ export class BillingComponent implements OnInit {
     this.billingForm.patchValue({ examAttempts: this.examAttempts });
     if (this.billingForm.valid) {
       const billingFormData = this.billingForm.value;
-      console.log(billingFormData);
       this.billingSvc.postBilling(billingFormData).subscribe({
         next: (response) => {
-          console.log('Success:', response);
           const snackBarConfig: MatSnackBarConfig = {
             duration: 3000,
             verticalPosition: 'bottom',
@@ -71,7 +69,6 @@ export class BillingComponent implements OnInit {
           this.router.navigate(['/take-exam', this.examId]);
         },
         error: (err) => {
-          console.error('Error:', err);
           // Show error feedback
         }
       });

@@ -19,13 +19,11 @@ import org.springframework.web.multipart.MultipartFile;
 import io.jsonwebtoken.io.IOException;
 
 import org.springframework.core.io.Resource;
-import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import periskal.academy.backend.dto.ModuleDTO;
 import periskal.academy.backend.dto.TrainingDTO;
 import periskal.academy.backend.jpa.Chapter;
-import periskal.academy.backend.jpa.ChapterRepository;
 import periskal.academy.backend.jpa.Module;
 import periskal.academy.backend.jpa.ModuleRepository;
 import periskal.academy.backend.jpa.Photo;
@@ -43,22 +41,17 @@ public class TrainingService {
 
     private TrainingRepository trainingRepository;
     private ModuleRepository moduleRepository;
-    private ChapterRepository chapterRepository;
     private PhotoRepository photoRepository;
     private final VideoRepository videoRepository;
     private final FtpService ftpService;
-    private final EntityManager entityManager;
 
     public TrainingService(TrainingRepository trainingRepository, ModuleRepository moduleRepository,
-            PhotoRepository photoRepository, VideoRepository videoRepository, FtpService ftpService,
-            EntityManager entityManager, ChapterRepository chapterRepository) {
+            PhotoRepository photoRepository, VideoRepository videoRepository, FtpService ftpService) {
         this.trainingRepository = trainingRepository;
         this.moduleRepository = moduleRepository;
         this.photoRepository = photoRepository;
         this.videoRepository = videoRepository;
         this.ftpService = ftpService;
-        this.entityManager = entityManager;
-        this.chapterRepository = chapterRepository;
     }
 
     private TrainingDTO convertToDto(Training training) {

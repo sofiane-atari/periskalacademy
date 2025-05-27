@@ -7,7 +7,6 @@ import { Training } from '../../../models/training.model';
 import { ConfirmPromptComponent } from '../../confirm-prompt/confirm-prompt.component';
 import { MatDialog } from '@angular/material/dialog'
 import { MatSnackBar, MatSnackBarConfig, MatSnackBarModule } from '@angular/material/snack-bar'
-import { ModuleService } from '../../../services/Module/module.service';
 import { Photo } from '../../../models/photo.model';
 import { PhotoUploadComponent } from "../../photo-upload/photo-upload.component";
 import { MatStepperModule } from '@angular/material/stepper';
@@ -143,7 +142,6 @@ export class UpdateTrainingComponent {
           this.router.navigate(['/dashboard']);
         },
         error: (err) => {
-          console.error('Error deleting training:', err);
           const errorSnackBarConfig: MatSnackBarConfig = {
             duration: 5000,
             verticalPosition: 'bottom',
@@ -169,9 +167,6 @@ export class UpdateTrainingComponent {
       this.trainingService.addPhotos(chapterId, photos).subscribe({
         next: () => {
           this.getTrainingDetails(this.trainingId);
-        },
-        error: (err) => {
-          console.error("error by adding photos", err);
         }
       });
     }

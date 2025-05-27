@@ -9,8 +9,7 @@ import { TrainingProgress } from '../../../models/progress.model';
 import { ProgressBarComponent } from '../../progress-bar/progress-bar.component';
 import { JwtDecoderService } from '../../../services/JwtDecode/jwt-decoder.service';
 import { UserAttemptService } from '../../../services/UserExamAttempts/user-attempt.service';
-import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
-import { HttpStatusCode } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-training-detail',
@@ -51,9 +50,6 @@ export class TrainingDetailComponent {
       next: (data) => {
         this.training = data;
         this.modules = data.modules;
-      },
-      error: (error) => {
-        console.error('Error fetching training products', error);
       }
     });
 
@@ -71,8 +67,6 @@ export class TrainingDetailComponent {
           this.router.navigate(['/take-exam', this.training?.exam?.id]);
         },
         error: (err) => {
-          console.error('Error starting exam:', err);
-
           // If 400 response, route to billing
           if (err.status === 400) {
             this.goToBilling();
@@ -180,9 +174,6 @@ export class TrainingDetailComponent {
     this.ProgressService.getTrainingProgress(this.userId, this.trainingId).subscribe({
       next: (progressData) => {
         this.trainingProgress = progressData;
-      },
-      error: (error) => {
-        console.error('Error fetching training progress', error);
       }
     });
   }

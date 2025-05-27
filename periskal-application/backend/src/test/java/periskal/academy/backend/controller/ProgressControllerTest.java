@@ -9,7 +9,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import periskal.academy.backend.controller.ProgressController;
 import periskal.academy.backend.dto.progress.ChapterCompletion;
 import periskal.academy.backend.dto.progress.ModuleProgressDTO;
 import periskal.academy.backend.dto.progress.TrainingProgressDTO;
@@ -22,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, of, tap, throwError } from 'rxjs';
 import { Exam } from '../../models/exam.model';
 
@@ -19,7 +19,6 @@ export class ExamService {
     return this.client.get<Exam>(`${this.baseUrl}/${id}`).pipe(
       tap(exam => {
         if (!exam.questions) {
-          console.warn('No questions found in exam response');
           exam.questions = [];
         }
       })

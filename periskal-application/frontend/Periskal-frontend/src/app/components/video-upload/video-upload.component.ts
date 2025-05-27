@@ -62,7 +62,6 @@ export class VideoUploadComponent {
     };
     reader.readAsDataURL(file);
 
-    console.log('Emitting video:', { moduleIndex: this.moduleIndex, chapterIndex: this.chapterIndex, lang: this.lang, file });
         this.videoSelected.emit({
           moduleIndex: this.moduleIndex,
           chapterIndex: this.chapterIndex,

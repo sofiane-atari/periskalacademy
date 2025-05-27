@@ -57,7 +57,6 @@ export class ExamsListComponent implements OnInit, AfterViewInit {
         this.isLoading = false;
       },
       error: (err: { message: any; }) => {
-        console.error('Error fetching completed exams:', err);
         this.error = `Failed to load exams: ${err.message || 'Server error'}`;
         this.isLoading = false;
         this.dataSource.data = [];

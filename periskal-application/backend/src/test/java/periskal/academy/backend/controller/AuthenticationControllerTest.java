@@ -18,7 +18,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import periskal.academy.backend.controller.AuthenticationController;
 import periskal.academy.backend.dto.ErrorResponse;
 import periskal.academy.backend.jpa.TrainingRepository;
 import periskal.academy.backend.model.AuthenticateResponse;

@@ -56,11 +56,8 @@ export class TakeExamComponent implements OnInit, OnDestroy {
         filter(finished => finished)
       ).subscribe(() => {
         if (!this.isSubmitting) {
-          console.log('Exam timer ran out. Initiating automatic submission.');
           this.submissionInitiatedByTimer = true;
           this.submitExam();
-        } else {
-          console.warn('Timer expired, but submission is already in progress.');
         }
       })
     );
@@ -76,7 +73,6 @@ export class TakeExamComponent implements OnInit, OnDestroy {
 
     this.examService.getExamById(examId).subscribe({
       next: (exam) => {
-        console.log('Full exam data:', exam);
         exam.questions = exam.questions || [];
         const shuffledQuestions = exam.questions.sort(() => 0.5 - Math.random());
         const selectedQuestions = shuffledQuestions.slice(0, exam.totalQuestions);
@@ -91,7 +87,6 @@ export class TakeExamComponent implements OnInit, OnDestroy {
 
       },
       error: (err) => {
-        console.error('Failed to load exam:', err);
         this.error = 'Failed to load exam questions';
         this.loading = false;
         this.examStateService.resetTimerState(true);
@@ -136,15 +131,12 @@ export class TakeExamComponent implements OnInit, OnDestroy {
     }
 
     if (this.isSubmitting) {
-      console.warn('Exam submission is already in progress or completed. Preventing re-submission.');
       return;
     }
 
     this.isSubmitting = true;
 
-    console.log('Current exam object before submission:', JSON.stringify(this.exam, null, 2));
     if (this.exam.trainingId === undefined || this.exam.trainingId === null) {
-      console.error('CRITICAL: this.exam.trainingId IS UNDEFINED OR NULL!');
       alert('Error: Cannot submit exam. Training ID is missing from exam data. Please contact support.');
       this.isSubmitting = false;
       return;
@@ -179,7 +171,6 @@ export class TakeExamComponent implements OnInit, OnDestroy {
 
     this.completedExamService.saveCompletedExam(completedExamData as CompletedExam).subscribe({
       next: (savedExam) => {
-        console.log('Exam submitted and results saved:', savedExam);
         this.isSubmitting = false;
 
         const passedMessage = savedExam.passed
@@ -201,7 +192,6 @@ export class TakeExamComponent implements OnInit, OnDestroy {
         }
       },
       error: (err) => {
-        console.error('Failed to save completed exam:', err);
         alert('Failed to save your results. Please try again later.');
         this.isSubmitting = false;
       }

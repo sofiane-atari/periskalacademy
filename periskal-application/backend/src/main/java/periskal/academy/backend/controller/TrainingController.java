@@ -43,11 +43,9 @@ public class TrainingController {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private final TrainingService trainingService;
-    private final FtpService ftpService;
 
-    public TrainingController(TrainingService trainingService, FtpService ftpService) {
+    public TrainingController(TrainingService trainingService) {
         this.trainingService = trainingService;
-        this.ftpService = ftpService;
     }
 
     @GetMapping

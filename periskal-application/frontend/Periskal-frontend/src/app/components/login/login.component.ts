@@ -32,7 +32,6 @@ export class LoginComponent {
   ngOnInit() {
     if (this.authService.isAuthenticated()) {
       const userRole = this.jwtDecoder.getUserRole(); // debug
-      console.log('User already authenticated. Role:', userRole); // debug
       this.router.navigate(['/dashboard']); 
     }
   }

@@ -6,19 +6,16 @@ import { Training } from '../../../models/training.model';
 import { Chapter } from '../../../models/chapter.model';
 import { Module } from '../../../models/module.model';
 import { CommonModule } from '@angular/common';
-import { CheckboxRequiredValidator } from '@angular/forms';
 import { Video } from '../../../models/video.model';
 import { ModuleProgress, TrainingProgress } from '../../../models/progress.model';
 import { JwtDecoderService } from '../../../services/JwtDecode/jwt-decoder.service';
 import { ProgressService } from '../../../services/Progress/progress.service';
-import { AddChapterComponent } from "../add-chapter/add-chapter.component";
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
-import { interval } from 'rxjs/internal/observable/interval';
 import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-training-detail',
-  imports: [TranslatePipe, CommonModule, AddChapterComponent],
+  imports: [TranslatePipe, CommonModule],
   templateUrl: './module-detail.component.html',
   styleUrl: './module-detail.component.css'
 })
@@ -64,12 +61,10 @@ export class ModuleDetailComponent {
   }
 
   ngOnInit(): void {
-  console.log('Route params:', this.route.snapshot.paramMap);
   this.lang = localStorage.getItem('lang')?.toLowerCase() || 'en';
   const idParam = this.route.snapshot.paramMap.get('id');
   this.trainingId = idParam ? Number(idParam) : 0;
   if (this.trainingId === 0) {
-    console.error('Invalid training ID:', idParam);
     this.errorMessage = 'Invalid training ID. Please check the URL.';
     return;
   }
@@ -77,7 +72,6 @@ export class ModuleDetailComponent {
   const moduleIdParam = this.route.snapshot.paramMap.get('moduleid');
   this.moduleId = moduleIdParam ? Number(moduleIdParam) : 0;
   if (this.moduleId === 0) {
-    console.error('Invalid module ID:', moduleIdParam);
     this.errorMessage = 'Invalid module ID. Please check the URL.';
     return;
   }
@@ -106,10 +100,6 @@ export class ModuleDetailComponent {
         this.chapters = currentModule?.chapters || [];
         this.updatedChapters = [...this.chapters];
 
-        console.log('Training data:', this.training); // Log the entire training
-        console.log('Current module:', currentModule); // Log the current module
-        console.log('Chapters:', this.chapters); // Log the chapters
-
         if (this.chapters.length > 0) {
           this.activeChapterId = this.chapters[0].id; // Initialize activeChapterId with the ID of the first chapter
           this.cdr.detectChanges();
@@ -117,7 +107,6 @@ export class ModuleDetailComponent {
         this.loadVideo();
       },
       error: (error) => {
-        console.error('Error loading training data', error);
         this.cdr.detectChanges();
       }
     });
@@ -250,7 +239,6 @@ export class ModuleDetailComponent {
         this.isCompletingChapter = false;
       },
       error: (error) => {
-        console.error('Error completing chapter', error);
         this.isCompletingChapter = false;
       }
     });
@@ -265,9 +253,6 @@ export class ModuleDetailComponent {
             mp => mp.moduleId === this.moduleId
           );
         }
-      },
-      error: (error) => {
-        console.error('Error loading progress data', error);
       }
     });
   }
@@ -283,16 +268,12 @@ export class ModuleDetailComponent {
 
     const langCapitalized = this.lang ? this.lang.charAt(0).toUpperCase() + this.lang.slice(1).toLowerCase() : 'En';
     const videoKey = `video${langCapitalized}` as keyof Chapter;
-    console.log('Current chapter:', currentChapter); // Log the entire chapter
-    console.log('Video key:', videoKey); // Log the computed key
     let video = currentChapter[videoKey] as Video | undefined;
 
-    console.log(`Loading video for lang ${this.lang}, video:`, video); // Debug log
     
     // Fallback to videoEn if the language-specific video is not available
     if (!video || !video.filePath) {
       video = currentChapter.videoEn;
-      console.log('Falling back to videoEn:', video);
     }
 
     if (video?.filePath) {
@@ -306,7 +287,6 @@ export class ModuleDetailComponent {
           this.cdr.detectChanges();
         },
         error: (error) => {
-          console.error('Error loading video:', error);
           this.loading = false;
           this.errorMessage = 'Failed to load video.';
           this.videoUrl = null;

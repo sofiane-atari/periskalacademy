@@ -32,7 +32,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import periskal.academy.backend.dto.CompletedExamDTO;
 import periskal.academy.backend.service.CompletedExamService;
-import periskal.academy.backend.controller.CompletedExamController;
 import periskal.academy.backend.jpa.TrainingRepository;
 
 @WebMvcTest(controllers = CompletedExamController.class, excludeAutoConfiguration = {SecurityAutoConfiguration.class}) 

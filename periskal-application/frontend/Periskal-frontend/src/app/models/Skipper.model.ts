@@ -1,4 +1,3 @@
-
 export interface Skipper {
   id: string;
   username: string;
