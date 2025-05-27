@@ -16,11 +16,12 @@ import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import { MatAccordion, MatExpansionModule, MatExpansionPanel } from '@angular/material/expansion';
 import { MatCardModule } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-update-training',
   standalone: true,
-  imports: [FormsModule, TranslatePipe, TranslatePipe, MatSnackBarModule, PhotoUploadComponent, MatStepperModule, ReactiveFormsModule, MatInput, MatLabel, MatTabGroup, MatTab, MatAccordion, MatExpansionModule, MatCardModule, MatIcon],
+  imports: [FormsModule, TranslatePipe, TranslatePipe, MatSnackBarModule, PhotoUploadComponent, MatStepperModule, ReactiveFormsModule, MatInput, MatLabel, MatTabGroup, MatTab, MatAccordion, MatExpansionModule, MatCardModule, MatIcon, MatFormFieldModule],
   templateUrl: './update-training.component.html',
   styleUrl: './update-training.component.css'
 })

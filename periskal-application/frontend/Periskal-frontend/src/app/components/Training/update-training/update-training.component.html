@@ -8,35 +8,53 @@
     {{ errorMessage }}
   </div>
   } @if (training) {
-    <mat-horizontal-stepper>
+  <mat-horizontal-stepper linear #stepper class="custom-stepper">
       <mat-step>
         <ng-template matStepLabel>{{ 'TRAINING_INFORMATION' | translate }}</ng-template>
-        <mat-label>Product Code</mat-label>
-        <input matInput [(ngModel)]="training.productCode">
+        <mat-form-field>
+          <mat-label>Product Code</mat-label>
+          <input matInput [(ngModel)]="training.productCode">
+        </mat-form-field>
         <mat-tab-group>
           <mat-tab label="English">
-            <mat-label>Training Name</mat-label>
-            <input matInput [(ngModel)]="training.nameEn">
-            <mat-label>Training description</mat-label>
-            <input matInput [(ngModel)]="training.descriptionEn">
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>Training Name</mat-label>
+              <input matInput [(ngModel)]="training.nameEn">
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Training description</mat-label>
+              <input matInput [(ngModel)]="training.descriptionEn">
+            </mat-form-field>
           </mat-tab>
           <mat-tab label="Dutch">
-            <mat-label>Training Name</mat-label>
-            <input matInput [(ngModel)]="training.nameNl">
-            <mat-label>Training description</mat-label>
-            <input matInput [(ngModel)]="training.descriptionNl">
+            <mat-form-field>
+              <mat-label>Training Name</mat-label>
+              <input matInput [(ngModel)]="training.nameNl">
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Training description</mat-label>
+              <input matInput [(ngModel)]="training.descriptionNl">
+            </mat-form-field>
           </mat-tab>
           <mat-tab label="French">
-            <mat-label>Training Name</mat-label>
-            <input matInput [(ngModel)]="training.nameFr">
-            <mat-label>Training description</mat-label>
-            <input matInput [(ngModel)]="training.descriptionFr">
+            <mat-form-field>
+              <mat-label>Training Name</mat-label>
+              <input matInput [(ngModel)]="training.nameFr">
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Training description</mat-label>
+              <input matInput [(ngModel)]="training.descriptionFr">
+            </mat-form-field>
           </mat-tab>
           <mat-tab label="German">
+            <mat-form-field>
             <mat-label>Training Name</mat-label>
             <input matInput [(ngModel)]="training.nameDe">
+            </mat-form-field>
+            <mat-form-field>
             <mat-label>Training description</mat-label>
             <input matInput [(ngModel)]="training.descriptionDe">
+            </mat-form-field>
           </mat-tab>
         </mat-tab-group>
         <div class="modules">
@@ -49,28 +67,44 @@
                 <div class="moduleContent">
                   <mat-tab-group>
                       <mat-tab label="English">
+                        <mat-form-field>
                           <mat-label>Module {{$index +1}} name</mat-label>
                           <input matInput [(ngModel)]="module.nameModuleEn" />
+                        </mat-form-field>
+                        <mat-form-field>
                           <mat-label>Module {{$index +1}} description</mat-label>
                           <textarea matInput [(ngModel)]="module.descriptionModuleEn"></textarea>
+                        </mat-form-field>
                       </mat-tab>
                       <mat-tab label="Dutch">
+                        <mat-form-field>
                           <mat-label>Module {{$index+1}} name</mat-label>
                           <input matInput [(ngModel)]="module.nameModuleNl" />
-                          <mat-label>Module {{$index+1}} description</mat-label>
+                        </mat-form-field>
+                        <mat-form-field>
+                        <mat-label>Module {{$index+1}} description</mat-label>
                           <textarea matInput [(ngModel)]="module.descriptionModuleNl"></textarea>
+                        </mat-form-field>
                       </mat-tab>
                       <mat-tab label="French">
+                        <mat-form-field>
                           <mat-label>Module {{$index+1}} name</mat-label>
                           <input matInput [(ngModel)]="module.nameModuleFr" />
+                          </mat-form-field>
+                        <mat-form-field>
                           <mat-label>Module {{$index+1}} description</mat-label>
                           <textarea matInput [(ngModel)]="module.descriptionModuleFr"></textarea>
+                          </mat-form-field>
                       </mat-tab>
                       <mat-tab label="German">
+                        <mat-form-field>
                           <mat-label>Module {{$index+1}} name</mat-label>
                           <input matInput [(ngModel)]="module.nameModuleDe" />
+                          </mat-form-field>
+                        <mat-form-field>
                           <mat-label>Module {{$index+1}} description</mat-label>
                           <textarea matInput [(ngModel)]="module.descriptionModuleDe"></textarea>
+                        </mat-form-field>
                       </mat-tab>
                   </mat-tab-group>
                   <h4>Chapters</h4>
@@ -83,36 +117,60 @@
                           </mat-expansion-panel-header>
                           <mat-tab-group>
                             <mat-tab label="English">
+                              <mat-form-field>
                               <mat-label>Chapter {{$index +1}} name</mat-label>
                               <input matInput [(ngModel)]="chapter.nameChapterEn" />
+                              </mat-form-field>
+                              <mat-form-field>
                               <mat-label>Chapter {{$index +1}} description</mat-label>
                               <textarea matInput [(ngModel)]="chapter.descriptionChapterEn"></textarea>
+                              </mat-form-field>
+                              <mat-form-field>
                               <mat-label>Chapter {{$index +1}} text</mat-label>
                               <textarea matInput [(ngModel)]="chapter.textChapterEn"></textarea>
+                              </mat-form-field>
                             </mat-tab>
                             <mat-tab label="Dutch">
+                              <mat-form-field>
                               <mat-label>Chapter {{$index+1}} name</mat-label>
                               <input matInput [(ngModel)]="chapter.nameChapterNl" />
+                              </mat-form-field>
+                              <mat-form-field>
                               <mat-label>Chapter {{$index+1}} description</mat-label>
                               <textarea matInput [(ngModel)]="chapter.descriptionChapterNl"></textarea>
+                              </mat-form-field>
+                              <mat-form-field>
                               <mat-label>Chapter {{$index +1}} text</mat-label>
                               <textarea matInput [(ngModel)]="chapter.textChapterNl"></textarea>
+                              </mat-form-field>
                             </mat-tab>
                             <mat-tab label="French">
+                              <mat-form-field>
                               <mat-label>Chapter {{$index+1}} name</mat-label>
                               <input matInput [(ngModel)]="chapter.nameChapterFr" />
+                              </mat-form-field>
+                              <mat-form-field>
                               <mat-label>Chapter {{$index+1}} description</mat-label>
                               <textarea matInput [(ngModel)]="chapter.descriptionChapterFr"></textarea>
+                              </mat-form-field>
+                              <mat-form-field>
                               <mat-label>Chapter {{$index +1}} text</mat-label>
                               <textarea matInput [(ngModel)]="chapter.textChapterFr"></textarea>
+                              </mat-form-field>
                             </mat-tab>
                             <mat-tab label="German">
+                              <mat-form-field>
                               <mat-label>Chapter {{$index+1}} name</mat-label>
                               <input matInput [(ngModel)]="chapter.nameChapterDe" />
+                              </mat-form-field>
+                              <mat-form-field>
                               <mat-label>Chapter {{$index+1}} description</mat-label>
                               <textarea matInput [(ngModel)]="chapter.descriptionChapterDe"></textarea>
+                              </mat-form-field>
+                              <mat-form-field>
                               <mat-label>Chapter {{$index +1}} text</mat-label>
                               <textarea matInput [(ngModel)]="chapter.textChapterDe"></textarea>
+                              </mat-form-field>
                             </mat-tab>
                             @if (chapter.photos != null) {
                             <mat-tab label="Photos">
@@ -143,7 +201,7 @@
                             </mat-tab>
                           }
                           </mat-tab-group>
-                            <button type="button" class="btn btn-danger" (click)="removeChapter(moduleIndex, chapterIndex)">
+                            <button type="button" class="delete-button" (click)="removeChapter(moduleIndex, chapterIndex)">
                               {{'DELETE_CHAPTER' | translate}}
                             </button>
                         </mat-expansion-panel>
@@ -151,30 +209,34 @@
                     </mat-accordion>
                   </div>
                 </div>
-                  <button type="button" class="btn btn-secondary" (click)="goToChapterAddPage(moduleIndex)">
+                <div class="buttondiv">
+                  <button type="button" class="gold-small-button" (click)="goToChapterAddPage(moduleIndex)">
                       {{'ADD_CHAPTER' | translate}}
                     </button>
-                  <!-- Delete module button -->
-                  <button type="button" class="btn btn-danger" (click)="removeModule(moduleIndex)">
-                    {{'DELETE_MODULE' | translate}}
-                  </button>
+                    </div>
+                    <div class="buttondiv">
+                      <!-- Delete module button -->
+                      <button type="button" class="delete-button" (click)="removeModule(moduleIndex)">
+                        {{'DELETE_MODULE' | translate}}
+                      </button>
+                   </div>
               </mat-expansion-panel>
             }
           </mat-accordion>
         </div>
-          <div>
-            <button class="btn btn-primary" (click)="goToModuleAddPage()">{{"ADD_NEW_MODULE" | translate}}</button>
+          <div class="buttondiv">
+            <button class="gold-button" (click)="goToModuleAddPage()">{{"ADD_NEW_MODULE" | translate}}</button>
           </div>
         <div class="stepper-buttons">
           <button mat-raised-button color="accent" class="gold-button" matStepperNext>{{ 'NEXT' | translate }}</button>
         </div>
         <div>
-          <button (click)="updateTraining()">Update training</button>
+          <button (click)="deleteTraining()" class="delete-button">{{"DELETE_TRAINING" | translate}}</button>
         </div>
       </mat-step>
 
       <mat-step>
-        <ng-template matStepLabel>{{ 'REVIEW_SUBMIT' | translate }}</ng-template>
+        <ng-template matStepLabel>{{ 'REVIEW_UPDATE' | translate }}</ng-template>
       <mat-card>
         <mat-card-title class="title_summary">{{ 'TRAINING_SUMMARY' | translate }}</mat-card-title>
         <mat-card-content>
@@ -265,18 +327,14 @@
       </mat-card>
       <div class="stepper-buttons">
         <button mat-raised-button color="accent" class="gold-button" matStepperPrevious>
-          <mat-icon>arrow_back</mat-icon> {{ 'BACK' | translate }}
+         {{ 'BACK' | translate }}
         </button>
         <div>
-          <button (click)="updateTraining()">Update training</button>
+          <button class="gold-button" (click)="updateTraining()">Update training</button>
         </div>
       </div>
       </mat-step>
     </mat-horizontal-stepper>
-
-  <div>
-    <button (click)="deleteTraining()" class="delete">{{"DELETE_TRAINING" | translate}}</button>
-  </div>
   } @if (!training) {
   <div>{{'TRAINING_NOT_FOUND' | translate}}</div>
   }
