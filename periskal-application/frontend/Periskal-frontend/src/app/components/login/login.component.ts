@@ -33,7 +33,7 @@ export class LoginComponent {
     if (this.authService.isAuthenticated()) {
       const userRole = this.jwtDecoder.getUserRole(); // debug
       console.log('User already authenticated. Role:', userRole); // debug
-      this.router.navigate(['/trainingEmployee']); // change to /dashboard when we have a Single Dashboard with Conditional Rendering
+      this.router.navigate(['/dashboard']); 
     }
   }
 
@@ -58,7 +58,7 @@ export class LoginComponent {
 
     this.loginhandler.LoginUser(this.username, this.password, () => {
       this.isLoading = false;
-      this.router.navigate(['/trainingEmployee']); // change to /dashboard when we have a Single Dashboard with Conditional Rendering
+      this.router.navigate(['/dashboard']); 
     },
 
     );

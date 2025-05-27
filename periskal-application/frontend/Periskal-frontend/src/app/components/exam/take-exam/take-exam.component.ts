@@ -24,14 +24,13 @@ export class TakeExamComponent implements OnInit, OnDestroy {
   loading = true;
   error: string | null = null;
   isAssigned: boolean = false;
+  selectedAnswers: (number | undefined)[] = [];
 
   remainingTime: number = 0;
   private submissionInitiatedByTimer: boolean = false;
   private isSubmitting: boolean = false;
 
   private timerSubscriptions: Subscription = new Subscription();
-
-  selectedAnswers: number[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -66,7 +65,7 @@ export class TakeExamComponent implements OnInit, OnDestroy {
       })
     );
   }
-
+  
   ngOnDestroy(): void {
     this.timerSubscriptions.unsubscribe();
   }
@@ -103,6 +102,10 @@ export class TakeExamComponent implements OnInit, OnDestroy {
   get currentQuestion(): Question | null {
     if (!this.exam || !this.exam.questions || !this.exam.questions.length) return null;
     return this.exam.questions[this.currentQuestionIndex];
+  }
+
+  clearSelection() {
+    this.selectedAnswers[this.currentQuestionIndex] = undefined;
   }
 
   nextQuestion(): void {

@@ -55,9 +55,6 @@ public class CertificateController {
     @GetMapping("/{id}")
     public ResponseEntity<CertificateDTO> getCertificate(@PathVariable Long id) {
         CertificateDTO certificate = certificateService.getCertificateById(id);
-        if (certificate == null) {
-            throw new ResourceNotFoundException("Certificate not found with id: " + id);
-        }
         return ResponseEntity.ok(certificate);
     }
     

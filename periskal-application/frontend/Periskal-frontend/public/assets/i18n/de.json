@@ -238,5 +238,16 @@
   "CERTIFICATE_EXPIRYDATE": "Ablaufdatum",
   "NO_CERTIFICATES_FOUND_SKIPPER": "Keine Zertifikate für diesen Schiffer verfügbar.",
   "SCORE": "Erzielte Punktzahl",
-  "REVIEW_UPDATE": "Überprüfen und Aktualisieren"
+  "REVIEW_UPDATE": "Überprüfen und Aktualisieren",
+  "CONTACT_US": "Kontaktieren Sie Uns",
+  "CONTACT_EMAIL": "Ihre E-Mail",
+  "CONTACT_MESSAGE": "Nachricht",
+  "CONTACT_SUBMIT": "Nachricht Senden",
+  "CONTACT_EMAIL_REQUIRED": "E-Mail ist erforderlich",
+  "CONTACT_EMAIL_INVALID": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+  "CONTACT_MESSAGE_REQUIRED": "Nachricht ist erforderlich",
+  "CONTACT_MESSAGE_MIN_LENGTH": "Nachricht muss mindestens 10 Zeichen lang sein",
+  "CONTACT_FORM_SUCCESS": "Nachricht erfolgreich gesendet!",
+  "CONTACT_FORM_ERROR": "Fehler beim Senden der Nachricht. Bitte versuchen Sie es erneut.",
+  "CLOSE": "Schließen"
 }

@@ -238,5 +238,16 @@
   "CERTIFICATE_EXPIRYDATE": "Vervaldatum",
   "NO_CERTIFICATES_FOUND_SKIPPER": "Geen certificaten beschikbaar voor deze schipper.",
   "SCORE": "Behaalde score",
-  "REVIEW_UPDATE": "Beoordelen en bijwerken"
+  "REVIEW_UPDATE": "Beoordelen en bijwerken",
+  "CONTACT_US": "Neem Contact Op",
+  "CONTACT_EMAIL": "Uw E-mail",
+  "CONTACT_MESSAGE": "Bericht",
+  "CONTACT_SUBMIT": "Bericht Versturen",
+  "CONTACT_EMAIL_REQUIRED": "E-mail is verplicht",
+  "CONTACT_EMAIL_INVALID": "Vul alstublieft een geldig e-mailadres in",
+  "CONTACT_MESSAGE_REQUIRED": "Bericht is verplicht",
+  "CONTACT_MESSAGE_MIN_LENGTH": "Bericht moet minimaal 10 karakters bevatten",
+  "CONTACT_FORM_SUCCESS": "Bericht succesvol verzonden!",
+  "CONTACT_FORM_ERROR": "Fout bij het verzenden van bericht. Probeer het opnieuw.",
+  "CLOSE": "Sluiten"
 }
