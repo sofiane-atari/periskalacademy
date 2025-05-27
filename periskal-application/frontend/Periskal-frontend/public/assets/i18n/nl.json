@@ -249,5 +249,10 @@
   "CONTACT_MESSAGE_MIN_LENGTH": "Bericht moet minimaal 10 karakters bevatten",
   "CONTACT_FORM_SUCCESS": "Bericht succesvol verzonden!",
   "CONTACT_FORM_ERROR": "Fout bij het verzenden van bericht. Probeer het opnieuw.",
-  "CLOSE": "Sluiten"
+  "CLOSE": "Sluiten",
+  "FILTER_BY_CATEGORY": "Filter op categorie",
+  "ALL_CATEGORIES": "Alle categorieën",
+  "SEARCH_FAQ": "Zoek vragen:",
+  "SEARCH_FAQ_PLACEHOLDER": "Zoek op een woord in een vraag of op ID",
+  "FAQ": "Veelgestelde vragen"
 }
