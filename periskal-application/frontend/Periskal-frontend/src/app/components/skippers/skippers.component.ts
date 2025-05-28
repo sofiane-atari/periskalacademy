@@ -340,7 +340,7 @@ export class SkippersComponent implements OnInit {
 
     this.trainingService.getTrainingData().subscribe({
       next: (trainings) => {
-        this.availableTrainings = trainings;
+        this.availableTrainings = trainings.filter(training => training.exam !== null);
       }
     });
   }
