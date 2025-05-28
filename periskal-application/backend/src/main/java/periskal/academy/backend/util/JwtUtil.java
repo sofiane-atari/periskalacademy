@@ -7,8 +7,10 @@ import java.util.List;
 
 import javax.crypto.SecretKey;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -17,15 +19,27 @@ import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.MacAlgorithm;
 import periskal.academy.backend.model.AuthenticateResponse;
 
+@Component
 public final class JwtUtil {
 
     private JwtUtil() {
     } // Private constructor to prevent instantiation
 
-    private static final String SECRET_KEY = "qX12L3J8RkMbX9n5z2k7nA3j8yPw9DAbF2LtR3m+5Fw="; // TODO: Move to application.properties or environment variable
+
+    
+    private static String SECRET_KEY; 
     private static final MacAlgorithm ALGORITHM = Jwts.SIG.HS256;
     private static final long JWT_TOKEN_VALIDITY = 10 * 60 * 60 * 1000; //10 hours in milliseconds
 
+    @Value("${jwt.secret}")
+    public void setSecretKey(String secretKey) {
+        JwtUtil.SECRET_KEY = secretKey;
+    }
+
+    // Setter for testing purposes only!
+    public static void setSecretKeyForTesting(String secretKey) {
+        JwtUtil.SECRET_KEY = secretKey;
+    }
 
     // Generate the SecretKey instance from the base64-encoded secret key
     private static SecretKey getSigningKey() {
@@ -49,7 +63,7 @@ public final class JwtUtil {
                 .compact();
     }
 
-    public static String extractUsername(String token) { // probably also redundant, but check where it is used in the codebase.
+    public static String extractUsername(String token) { 
         return extractClaims(token).getSubject();
     }
 
@@ -62,12 +76,10 @@ public final class JwtUtil {
                 .getPayload();
     }
 
-    public static boolean isTokenExpired(String token) { // redundant
+    public static boolean isTokenExpired(String token) { // redundant sinsce extractClaims should already checks expiry, but keep it for safety
         return extractClaims(token).getExpiration().before(new Date());
     }
 
-    // Validate token and check if username matches, must be a better way of validationn check later.
-    // TODO: Checked and extractclaims validate/checkExpiry so why do I call those other 2 methods, I'm dumb. Even dumber that I check the username against itself in the filter. Make an issue for this!
     public static boolean validateToken(String token, String username) {
         return (username.equals(extractUsername(token)) && !isTokenExpired(token));
     }
