@@ -87,6 +87,11 @@ export class DashboardComponent implements OnInit {
       }
     });
   }
+    private sortByDate(a: DisplayTraining, b: DisplayTraining): number {
+    const dateA = a.assignedDate ? new Date(a.assignedDate).getTime() : 0;
+    const dateB = b.assignedDate ? new Date(b.assignedDate).getTime() : 0;
+    return dateB - dateA; // Newest date comes first
+  }
 
   // Step 3: Process and combine the data
   processLoadedData(availableTrainings: Training[], assignments: TrainingAssignment[]): void {
@@ -118,14 +123,14 @@ export class DashboardComponent implements OnInit {
       };
     });
 
-
-
-    // sort the assigned trainings by date
-    this.fleetManagerAssignedTrainings.sort((a, b) => {
-      const dateA = a.assignedDate ? new Date(a.assignedDate).getTime() : 0;
-      const dateB = b.assignedDate ? new Date(b.assignedDate).getTime() : 0;
-      return dateB - dateA;
+    this.allTrainingsData.sort((a, b) => {
+      if (a.isAssigned && !b.isAssigned) return -1; // a comes first
+      if (!a.isAssigned && b.isAssigned) return 1; // b comes first
+      return this.sortByDate(a, b); // Sort by date within assigned/unassigned groups
     });
+
+    // Sort fleetManagerAssignedTrainings by date
+    this.fleetManagerAssignedTrainings.sort(this.sortByDate);
   }
 
   loadExamsForTrainings(): void {

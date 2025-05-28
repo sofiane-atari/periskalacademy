@@ -1,7 +1,6 @@
 <div class="training-container">
 
   <header class="content-header">
-
     <div class="header-left">
       @if(roleAuth.isSkipper()) {
         <h1>{{ 'ASSIGNED_BY_FLEETMANAGER' | translate }}</h1>
@@ -24,7 +23,6 @@
         </div>
       </div>
     }
-
   </header>
 
   @if (isLoadingData) {
@@ -33,7 +31,6 @@
     </div>
   } @else {
     @if (fleetManagerAssignedTrainings.length > 0) {
-      <!-- Assigned by Fleet Manager Section -->
       <section class="assigned-by-fleet-manager">
         <h2>{{ 'ASSIGNED_BY_FLEETMANAGER_SECTION_TITLE' | translate }}</h2>
         <div class="assigned-list">
@@ -63,7 +60,6 @@
       </section>
     }
 
-    <!-- All Available Modules Section -->
     <section class="all-available-modules">
       <h2>{{ 'ALL_AVAILABLE_TRAININGS' | translate }}</h2>
 
@@ -73,11 +69,14 @@
             <div class="training-card" (click)="goToTrainingDetails(training.id)">
               <div class="card-header">
                 <h2>{{ getTrainingName($index) }}</h2>
-
-                @if (training.isAssigned) {
-                  <span class="assigned-badge">{{ 'ASSIGNED_BADGE' | translate }}</span>
-                }
-
+                <div class="card-badges">
+                  @if (training.isAssigned) {
+                    <span class="assigned-badge">{{ 'ASSIGNED_BADGE' | translate }}</span>
+                  }
+                  @if(hasExam(training.id)){
+                    <span class="certificate-badge">{{ 'CERTIFICATE_BADGE' | translate }}</span>
+                  }
+                </div>
                 @if (roleAuth.canEditContent()) {
                   <div class="card-actions">
                     <div class="dropdown-container">
@@ -87,13 +86,11 @@
                           <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
                         </svg>
                       </button>
-
                       @if (openMenus[training.id]) {
                         <div class="edit-dropdown" (click)="$event.stopPropagation()">
                           <button (click)="goToEditTrainingPage(training.id); $event.stopPropagation()">
                             {{ 'EDIT_TRAINING' | translate }}
                           </button>
-
                           @if (hasExam(training.id)) {
                             <button (click)="goToEditExamPage(training.id); $event.stopPropagation()">
                               {{ 'EDIT_EXAM' | translate }}
@@ -105,9 +102,7 @@
                   </div>
                 }
               </div>
-
               <p class="card-description">{{ getTrainingDescription($index) }}</p>
-
               <div class="card-footer">
                 <span class="training-count">
                   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -116,7 +111,6 @@
                   {{ getCountModules(training.id) }} {{ 'MODULES' | translate }}
                 </span>
               </div>
-
               <div class="language-tags">
                 <span class="language-tag nl">NL</span>
                 <span class="language-tag fr">FR</span>
