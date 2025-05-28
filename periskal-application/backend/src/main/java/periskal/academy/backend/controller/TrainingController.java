@@ -1,13 +1,16 @@
 package periskal.academy.backend.controller;
 
 import java.io.IOException;
-import org.springframework.http.HttpHeaders;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.validation.Valid;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpServletRequest;
-
-import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import periskal.academy.backend.dto.ModuleDTO;
 import periskal.academy.backend.dto.TrainingDTO;
@@ -33,7 +34,6 @@ import periskal.academy.backend.jpa.Module;
 import periskal.academy.backend.jpa.Training;
 import periskal.academy.backend.jpa.video.Video;
 import periskal.academy.backend.security.SecurityRoles;
-import periskal.academy.backend.service.FtpService;
 import periskal.academy.backend.service.TrainingService;
 
 @Slf4j

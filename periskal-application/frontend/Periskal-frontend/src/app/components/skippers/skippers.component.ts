@@ -335,15 +335,29 @@ export class SkippersComponent implements OnInit {
     });
   }
 
-  loadAvailableTrainings() { // TODO add a way to only load trainings that are ready, Add a Active button to the training that admins can click to set the training to active or inactive
-    // Create a new endpoint in the backend to get all trainings that are active and then use that here.
-
+  loadAvailableTrainings() {
     this.trainingService.getTrainingData().subscribe({
       next: (trainings) => {
-        this.availableTrainings = trainings;
+        const observables = trainings.map(training => 
+          this.examService.getExamByTrainingId(training.id).pipe(
+            map(exam => {
+              return { training, hasExam: !!exam };
+            }),
+            catchError(error => {
+              return of({ training, hasExam: false });
+            })
+          )
+        );
+        
+        forkJoin(observables).subscribe(results => {
+          this.availableTrainings = results
+            .filter(result => result.hasExam)
+            .map(result => result.training);
+        });
       }
     });
   }
+
 
   openAssignmentDialog() {
     this.selectedSkipperIds = [...this.mainListSelectedSkipperIds];
