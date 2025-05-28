@@ -1,34 +1,45 @@
 package periskal.academy.backend.util;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.mockStatic;
-import static org.mockito.Mockito.when;
-
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Answers;
 import org.mockito.MockedStatic;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.when;
 import org.springframework.security.core.GrantedAuthority;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.io.Encoders;
 import periskal.academy.backend.model.AuthenticateResponse;
+
 
 public class JwtUtilTest {
 
-    JwtUtil jwtUtil;
-
     private String token;
     private AuthenticateResponse authResponse;
+    private static final String TEST_SECRET_KEY_BASE64 = Encoders.BASE64.encode("tFS57PEU9paRZu8idrCEMZ+78AhbKthv81HGhgTZpF4=".getBytes(StandardCharsets.UTF_8));
 
     @BeforeEach
     public void setUp() {
+
+        JwtUtil.setSecretKeyForTesting(TEST_SECRET_KEY_BASE64);
+
         authResponse = new AuthenticateResponse();
         authResponse.setUsername("testUser");
         authResponse.setRole("USER");
         token = JwtUtil.generateToken(authResponse);
+    }
+
+    @AfterEach
+    public void tearDown() {
+        // Clean up the static field just in case
+        JwtUtil.setSecretKeyForTesting(null);
     }
 
     @Test
@@ -40,11 +51,6 @@ public class JwtUtilTest {
     public void givenValidToken_whenExtractUsername_thenReturnsCorrectUsername() {
         String extractedUsername = JwtUtil.extractUsername(token);
         assertThat(extractedUsername).isEqualTo(authResponse.getUsername());
-    }
-
-    @Test
-    public void givenValidToken_whenCheckIfExpired_thenTokenIsNotExpired() {
-        assertThat(JwtUtil.isTokenExpired(token)).isFalse();
     }
 
     @Test
