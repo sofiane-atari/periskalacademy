@@ -11,9 +11,6 @@ export class ExamService {
 
   constructor(private client: HttpClient) { }
 
-  getExams(): Observable<Exam[]> {
-    return this.client.get<Exam[]>(this.baseUrl);
-  }
 
   getExamById(id: number): Observable<Exam> {
     return this.client.get<Exam>(`${this.baseUrl}/${id}`).pipe(
