@@ -5,7 +5,6 @@ import java.net.SocketTimeoutException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -22,6 +21,7 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
+
 import periskal.academy.backend.model.AuthenticateResponse;
 import periskal.academy.backend.security.exceptions.authentication.AuthenticationCommunicationException;
 import periskal.academy.backend.security.exceptions.authentication.AuthenticationInvalidCredentialsException;

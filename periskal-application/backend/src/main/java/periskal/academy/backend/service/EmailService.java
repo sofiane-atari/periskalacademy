@@ -1,7 +1,5 @@
 package periskal.academy.backend.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -16,8 +14,6 @@ import periskal.academy.backend.dto.ContactRequest;
 @Service
 @Slf4j
 public class EmailService {
-
-    private static final Logger log = LoggerFactory.getLogger(EmailService.class);
 
     @Autowired
     private JavaMailSender mailSender;
