@@ -255,5 +255,6 @@
   "SEARCH_FAQ": "Search questions:",
   "SEARCH_FAQ_PLACEHOLDER": "Search by word in question or ID",
   "FAQ": "Frequently Asked Questions",
-  "ERASE_Selection": "Erase Selection"
+  "ERASE_Selection": "Erase Selection",
+  "CERTIFICATE_BADGE": "Certificate"
 }

@@ -70,11 +70,13 @@
               <div class="card-header">
                 <h2>{{ getTrainingName($index) }}</h2>
                 <div class="card-badges">
-                  @if (training.isAssigned) {
-                    <span class="assigned-badge">{{ 'ASSIGNED_BADGE' | translate }}</span>
-                  }
-                  @if(hasExam(training.id)){
-                    <span class="certificate-badge">{{ 'CERTIFICATE_BADGE' | translate }}</span>
+                  @if(roleAuth.isSkipper()){
+                    @if (training.isAssigned) {
+                      <span class="assigned-badge">{{ 'ASSIGNED_BADGE' | translate }}</span>
+                    }
+                    @if(hasExam(training.id)){
+                      <span class="certificate-badge">{{ 'CERTIFICATE_BADGE' | translate }}</span>
+                    }
                   }
                 </div>
                 @if (roleAuth.canEditContent()) {

@@ -255,5 +255,6 @@
   "SEARCH_FAQ": "Rechercher des questions:",
   "SEARCH_FAQ_PLACEHOLDER": "Rechercher par mot dans la question ou l'ID",
   "FAQ": "Foire aux questions",
-  "ERASE_Selection": "Effacer la sélection"
+  "ERASE_Selection": "Effacer la sélection",
+  "CERTIFICATE_BADGE": "Certificat"
 }
