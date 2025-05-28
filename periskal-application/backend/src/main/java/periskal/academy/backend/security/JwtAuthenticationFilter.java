@@ -39,7 +39,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         try {
             final String jwt = authHeader.substring(7);
-            final String username = JwtUtil.extractUsername(jwt); //TODO remove this it and change Util class as well this just compares it's own username against itself so dumb. See Util class for more info.
+            final String username = JwtUtil.extractUsername(jwt); 
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 if (JwtUtil.validateToken(jwt, username)) {

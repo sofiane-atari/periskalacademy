@@ -33,9 +33,6 @@ public class CompletedExamController {
     @PreAuthorize(SecurityRoles.ALL_ROLES)
     public ResponseEntity<List<CompletedExamDTO>> getUserCompletedExams(@PathVariable("userId") String userId) {
         List<CompletedExamDTO> completedExams = completedExamService.getCompletedExamsByUserId(userId);
-        if (completedExams.isEmpty()) {
-            log.info("No completed exams found for user: {}", userId);
-        } // TODO : handle this in the service layer 
         return ResponseEntity.ok(completedExams);
     }
     
