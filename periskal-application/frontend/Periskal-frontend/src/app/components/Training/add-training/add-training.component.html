@@ -155,8 +155,7 @@
                             <p><strong>{{ ('CHAPTER_NAME_' + lang.toUpperCase()) | translate }}:</strong> {{ chapter['nameChapter' + lang.charAt(0).toUpperCase() + lang.slice(1)] }}</p>
                             <p><strong>{{ ('CHAPTER_DESCRIPTION_' + lang.toUpperCase()) | translate }}:</strong> {{ chapter['descriptionChapter' + lang.charAt(0).toUpperCase() + lang.slice(1)] }}</p>
                             <p><strong>{{ ('CHAPTER_TEXT_' + lang.toUpperCase()) | translate }}:</strong> {{ chapter['textChapter' + lang.charAt(0).toUpperCase() + lang.slice(1)] }}</p>
-                            <p><strong>{{ ('VIDEO_' + lang.toUpperCase()) | translate }}:</strong> {{ chapter['video' + lang.charAt(0).toUpperCase() + lang.slice(1)] || 'No video uploaded' }}</p>
-                          </mat-tab>
+                            <p><strong>{{ ('VIDEO_' + lang.toUpperCase()) | translate }}:</strong> {{ chapter['video' + lang.charAt(0).toUpperCase() + lang.slice(1)] ? ('VIDEO_UPLOADED' | translate) : ('NO_VIDEO_UPLOADED' | translate) }}</p>                          </mat-tab>
                         }
                         <mat-tab [label]="('IMAGES' | translate)">
                           @for (photo of chapter.photos; track $index) {
