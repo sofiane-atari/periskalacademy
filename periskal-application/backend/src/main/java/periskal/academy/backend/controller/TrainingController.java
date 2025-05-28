@@ -1,23 +1,17 @@
 package periskal.academy.backend.controller;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URI;
 import org.springframework.http.HttpHeaders;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,6 +32,7 @@ import periskal.academy.backend.dto.TrainingDTO;
 import periskal.academy.backend.jpa.Module;
 import periskal.academy.backend.jpa.Training;
 import periskal.academy.backend.jpa.video.Video;
+import periskal.academy.backend.security.SecurityRoles;
 import periskal.academy.backend.service.FtpService;
 import periskal.academy.backend.service.TrainingService;
 
@@ -56,12 +51,14 @@ public class TrainingController {
     }
 
     @GetMapping
+    @PreAuthorize(SecurityRoles.ALL_ROLES)
     public ResponseEntity<List<TrainingDTO>> getAllTrainings() {
         List<TrainingDTO> trainings = trainingService.getAllTrainings();
         return ResponseEntity.ok(trainings);
     }
 
     @GetMapping("/filtered")
+    @PreAuthorize(SecurityRoles.ALL_ROLES)
     public ResponseEntity<List<TrainingDTO>> getFilteredTrainings(
             @RequestParam String role,
             @RequestParam(required = false) List<String> products) {
@@ -70,6 +67,7 @@ public class TrainingController {
     }
 
     @GetMapping("/{trainingId}")
+    @PreAuthorize(SecurityRoles.ALL_ROLES)
     public ResponseEntity<Training> getProductsForTraining(@PathVariable Long trainingId) {
 
         Training training = trainingService.getTrainingById(trainingId);
@@ -77,6 +75,7 @@ public class TrainingController {
     }
 
     @GetMapping("/{trainingId}/chapters")
+    @PreAuthorize(SecurityRoles.ALL_ROLES)
     public ResponseEntity<List<Module>> getModuleWithChapters(@PathVariable Long trainingId) {
 
         Training training = trainingService.getTrainingById(trainingId);
@@ -84,6 +83,7 @@ public class TrainingController {
     }
 
     @PostMapping
+    @PreAuthorize(SecurityRoles.ADMIN)
     public ResponseEntity<Training> postTrainingWithModules(@RequestBody Training entity) {
 
         Training savedTraining = trainingService.createTraining(entity);
@@ -91,6 +91,7 @@ public class TrainingController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize(SecurityRoles.ADMIN)
     public ResponseEntity<Training> updateTraining(@PathVariable Long id,
             @Valid @RequestBody Training updatedTraining) {
 
@@ -100,6 +101,7 @@ public class TrainingController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize(SecurityRoles.ADMIN)
     public ResponseEntity<Map<String, String>> deleteTraining(@PathVariable Long id) {
 
         trainingService.deleteTraining(id);
@@ -110,6 +112,7 @@ public class TrainingController {
     }
 
     @DeleteMapping("/{trainingId}/modules/{moduleId}")
+    @PreAuthorize(SecurityRoles.ADMIN)
     public ResponseEntity<Training> deleteModule(@PathVariable Long trainingId, @PathVariable Long moduleId) {
 
         Training updatedTraining = trainingService.deleteModule(trainingId, moduleId);
@@ -117,6 +120,7 @@ public class TrainingController {
     }
 
     @PutMapping("/{id}/modules")
+    @PreAuthorize(SecurityRoles.ADMIN)
     public ResponseEntity<Training> updateModules(@PathVariable Long id, @RequestBody List<Module> modules) {
 
         Training updatedTraining = trainingService.updateModules(id, modules);
@@ -124,6 +128,7 @@ public class TrainingController {
     }
 
     @PostMapping("/{trainingId}/modules")
+    @PreAuthorize(SecurityRoles.ADMIN)
     public ResponseEntity<Module> addModuleToTraining(@PathVariable Long trainingId,
             @Valid @RequestBody ModuleDTO moduleDto) {
 
@@ -133,6 +138,7 @@ public class TrainingController {
     }
 
     @PostMapping("/video")
+    @PreAuthorize(SecurityRoles.ADMIN)
     public ResponseEntity<Video> uploadVideo(@RequestParam("video") MultipartFile video) {
         try {
             if (video == null || video.isEmpty()) {
@@ -149,6 +155,7 @@ public class TrainingController {
     }
 
     @GetMapping("/video/stream")
+    @PreAuthorize(SecurityRoles.ALL_ROLES)
     public ResponseEntity<Resource> streamVideo(@RequestParam String videoPath, HttpServletRequest request) {
         try {
             Resource videoResource = trainingService.streamVideoResource(videoPath);

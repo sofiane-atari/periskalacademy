@@ -4,12 +4,14 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
+import periskal.academy.backend.security.SecurityRoles;
 import periskal.academy.backend.service.UserExamAttemptService;
 
 @RestController
@@ -24,6 +26,7 @@ public class UserExamAttemptController {
     }
 
     @PostMapping("/{userId}/{examId}/start")
+    @PreAuthorize(SecurityRoles.ADMIN_SUPPORT_SKIPPER)
     public ResponseEntity<Map<String, String>> startExam(
             @PathVariable String userId,
             @PathVariable String examId) {
