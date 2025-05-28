@@ -1,10 +1,8 @@
 package periskal.academy.backend.util;
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -548,39 +546,4 @@ public final class CertificateGeneratorUtil {
         }
     }
 
-    // --- Example Usage --- TODO: remove this in production
-     public static void main(String[] args) { 
-
-        // --- Test Data ---
-        String productName = "DEMO PRODUCT";
-        String productdetails = "DEMO PRODUCT DETAILS";
-        String shipName = "DEMO SHIPNAME";
-        String trainingDate = java.time.LocalDate.now().toString();
-        List<String> crewNames = List.of("DEMO CREW", "DEMO CREW2", "DEMO CREW3", "DEMO CREW4");
-        String signerName = "Marc Persoons";
-        String signerTitle = "Managing Director, Periskal bv";
-        String companyName = "PERISKAL bv";
-        String companyAddress = "Den Isomo 11, 2990 Wuustwezel, Belgium";
-        String companyPhone = "Phone +32 3 669 57 36";
-        String ownerPassword = "your_owner_password_here"; // Replace with your actual owner password
-
-
-        try {
-            System.out.println("Generating certificate (V2)...");
-            // Ensure logo image and font files exist at the expected classpath locations!
-            byte[] pdfData = CertificateGeneratorUtil.generateCertificatePdf(
-                    productName, productdetails,shipName, trainingDate, crewNames, signerName, signerTitle,
-                    companyName, companyAddress, companyPhone, ownerPassword 
-            );
-
-            // Save the generated PDF to a file for inspection
-            String outputFilePath = "generated_certificate_v2.pdf";
-            Files.write(new File(outputFilePath).toPath(), pdfData);
-
-            System.out.println("Certificate generated successfully: " + outputFilePath);
-
-        } catch (IOException e) {
-            log.warn("Error generating certificate: " + e.getMessage());
-        }
-    }
 }
