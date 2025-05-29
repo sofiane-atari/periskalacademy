@@ -15,10 +15,28 @@ public class Faq {
     private Long id;
 
     @Column(nullable = false)
-    private String question;
+    private String questionEn;
 
     @Column(nullable = false)
-    private String answer;
+    private String answerEn;
+
+    @Column(nullable = false)
+    private String questionNl;
+
+    @Column(nullable = false)
+    private String answerNl;
+
+    @Column(nullable = false)
+    private String questionFr;
+
+    @Column(nullable = false)
+    private String answerFr;
+
+    @Column(nullable = false)
+    private String questionDe;
+
+    @Column(nullable = false)
+    private String answerDe;
 
     private String category;
 }
