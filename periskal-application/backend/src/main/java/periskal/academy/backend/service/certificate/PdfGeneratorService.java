@@ -18,19 +18,19 @@ public class PdfGeneratorService {
 
     // --- PDF Security ---
     @Value("${pdf.certificate.ownerPassword}") 
-    private static String PDF_OWNER_PASSWORD; // Owner password for full access
+    private String pdfOwnerPassword; // Owner password for full access
 
     public byte[] createCertificate(Certificate certificate, String firstName, String lastName, String shipName) throws IOException {
        
         // Format the user's full name
         String crewName = firstName + " " + lastName;
 
-        String OwnerPassword = PDF_OWNER_PASSWORD; 
+        String ownerPassword = pdfOwnerPassword; 
         
         String trainingDate = java.time.LocalDate.now().toString();
         
         // expiry date (valid until date)
-        String validUntilDate = null;
+        String validUntilDate;
         if (certificate.getExpiryDate() != null) {
             validUntilDate = "Valid until: " + certificate.getExpiryDate();
         } else {
@@ -65,6 +65,6 @@ public class PdfGeneratorService {
                 companyName,
                 companyAddress,
                 companyPhone,
-                OwnerPassword);
+                ownerPassword);
     }
 }
