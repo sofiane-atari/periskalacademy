@@ -17,38 +17,32 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.MacAlgorithm;
+import lombok.extern.slf4j.Slf4j;
 import periskal.academy.backend.model.AuthenticateResponse;
 
 @Component
-public final class JwtUtil {
+@Slf4j
+public class JwtUtil {
 
-    private JwtUtil() {
-    } // Private constructor to prevent instantiation
-
-
-    
-    private static String SECRET_KEY; 
+    private final String secretKey; 
+    private final long jwtTokenValidity;
     private static final MacAlgorithm ALGORITHM = Jwts.SIG.HS256;
-    private static final long JWT_TOKEN_VALIDITY = 10 * 60 * 60 * 1000; //10 hours in milliseconds
 
-    @Value("${jwt.secret}")
-    public void setSecretKey(String secretKey) {
-        JwtUtil.SECRET_KEY = secretKey;
+    public JwtUtil(@Value("${jwt.secret}") String secretKey,@Value("${jwt.token-validity-ms}") long jwtTokenValidity) { 
+        this.secretKey = secretKey;
+        this.jwtTokenValidity = jwtTokenValidity;
+        log.info("JwtUtil initialized with token validity {} ms", jwtTokenValidity);
     }
 
-    // Setter for testing purposes only!
-    public static void setSecretKeyForTesting(String secretKey) {
-        JwtUtil.SECRET_KEY = secretKey;
-    }
 
     // Generate the SecretKey instance from the base64-encoded secret key
-    private static SecretKey getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
+    private SecretKey getSigningKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
     // Generate JWT Token
-    public static String generateToken(AuthenticateResponse authResponse) {
+    public String generateToken(AuthenticateResponse authResponse) {
         return Jwts.builder()
                 .subject(authResponse.getUsername())
                 .claim("role", authResponse.getRole())
@@ -58,17 +52,17 @@ public final class JwtUtil {
                 .claim("shipname", authResponse.getShipname())
                 .claim("products", authResponse.getProducts())
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY))
+                .expiration(new Date(System.currentTimeMillis() + jwtTokenValidity))
                 .signWith(getSigningKey(), ALGORITHM)
                 .compact();
     }
 
-    public static String extractUsername(String token) { 
+    public String extractUsername(String token) { 
         return extractClaims(token).getSubject();
     }
 
     // Extract claims from the token (e.g., expiration, subject, etc.)
-    public static Claims extractClaims(String token) {
+    public Claims extractClaims(String token) {
         return Jwts.parser()
                 .verifyWith(getSigningKey())
                 .build()
@@ -76,15 +70,15 @@ public final class JwtUtil {
                 .getPayload();
     }
 
-    public static boolean isTokenExpired(String token) { // redundant sinsce extractClaims should already checks expiry, but keep it for safety
+    public boolean isTokenExpired(String token) { // redundant sinsce extractClaims should already checks expiry, but keep it for safety
         return extractClaims(token).getExpiration().before(new Date());
     }
 
-    public static boolean validateToken(String token, String username) {
+    public boolean validateToken(String token, String username) {
         return (username.equals(extractUsername(token)) && !isTokenExpired(token));
     }
 
-    public static Collection<? extends GrantedAuthority> extractAuthorities(String token) {
+    public Collection<GrantedAuthority> extractAuthorities(String token) {
         Claims claims = extractClaims(token);
         String role = claims.get("role", String.class);
 

@@ -120,14 +120,12 @@ class TrainingServiceTest {
     }
 
     @Test
-    public void givenTrainingWithModules_whenCreateTraining_thenTrainingIsCreated() {
+    void givenTrainingWithModules_whenCreateTraining_thenTrainingIsCreated() {
         // Arrange
-        Training training = new Training();
         training.setNameEn("Sample Training");
         training.setDescriptionEn("Sample Description");
 
         // Create a module and associate it with the training
-        Module module = new Module();
         module.setNameModuleEn("Module 1");
 
         // Create chapters and associate them with the module
@@ -242,9 +240,10 @@ class TrainingServiceTest {
         Training result = trainingService.updateTraining(1L, updatedTraining);
 
         // Use AssertJ assertions
-        assertThat(result).isNotNull();
-        assertThat(result.getNameEn()).isEqualTo("Updated Name");
-        assertThat(result.getDescriptionEn()).isEqualTo("Updated Description");
+        assertThat(result)
+            .isNotNull()
+            .extracting(Training::getNameEn, Training::getDescriptionEn)
+            .containsExactly("Updated Name", "Updated Description");
         assertThat(result.getModules()).hasSize(2);
         assertThat(result.getModules().get(0).getNameModuleEn()).isEqualTo("Module 1");
         assertThat(result.getModules().get(1).getNameModuleEn()).isEqualTo("Module 2");
@@ -275,9 +274,11 @@ class TrainingServiceTest {
 
         List<TrainingDTO> result = trainingService.getAllTrainings();
 
-        assertThat(result).isNotNull();
-        assertThat(result).hasSize(1);
-        assertThat(result.get(0).getNameEn()).isEqualTo("Test Training");
+        assertThat(result)
+            .isNotNull()
+            .hasSize(1);
+        assertThat(result.get(0).getNameEn())
+            .isEqualTo("Test Training");
 
         verify(trainingRepository, times(1)).findAllAsList();
     }
@@ -404,7 +405,6 @@ class TrainingServiceTest {
     @Test
     void givenDatabaseError_whenUpdateModules_thenThrowRuntimeException() {
         Long trainingId = 1L;
-        Training training = new Training();
         training.setId(trainingId);
         training.setModules(new ArrayList<>());
         List<Module> modules = List.of(new Module());

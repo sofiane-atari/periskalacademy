@@ -1,6 +1,7 @@
 package periskal.academy.backend;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import java.io.PrintWriter;
@@ -10,9 +11,7 @@ import java.lang.reflect.Method;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
-import org.mockito.Mockito;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
 
@@ -40,13 +39,16 @@ class JwtAuthenticationFilterTest {
     private Method doFilterInternalMethod;
     private Method shouldNotFilterMethod;
 
+    @Mock
+    private JwtUtil jwtUtil;
+
     private StringWriter stringWriter;
     private PrintWriter printWriter;
 
     @BeforeEach
     void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
-        filter = new JwtAuthenticationFilter();
+        filter = new JwtAuthenticationFilter(jwtUtil);
         SecurityContextHolder.clearContext();
         SecurityContextHolder.setContext(new SecurityContextImpl());
 
@@ -93,25 +95,25 @@ class JwtAuthenticationFilterTest {
         String token = "invalid.jwt.token";
         String username = "testuser";
 
-        try (MockedStatic<JwtUtil> mockedJwtUtil = Mockito.mockStatic(JwtUtil.class)) {
+       
             when(request.getHeader("Authorization")).thenReturn("Bearer " + token);
-            mockedJwtUtil.when(() -> JwtUtil.extractUsername(token)).thenReturn(username);
-            mockedJwtUtil.when(() -> JwtUtil.validateToken(eq(token), eq(username))).thenReturn(false);
+            when(jwtUtil.extractUsername(token)).thenReturn(username);
+            when(jwtUtil.validateToken(token, username)).thenReturn(false);
 
             doFilterInternalMethod.invoke(filter, request, response, filterChain);
 
             verify(filterChain).doFilter(request, response);
             assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();
-        }
+        
     }
 
     @Test
     void givenExpiredJwtToken_whenDoFilterInternal_thenReturnsUnauthorizedError() throws Exception {
         String token = "expired.jwt.token";
 
-        try (MockedStatic<JwtUtil> mockedJwtUtil = Mockito.mockStatic(JwtUtil.class)) {
+        
             when(request.getHeader("Authorization")).thenReturn("Bearer " + token);
-            mockedJwtUtil.when(() -> JwtUtil.extractUsername(token)).thenThrow(
+            when(jwtUtil.extractUsername(token)).thenThrow(
                     new ExpiredJwtException(null, null, "JWT token has expired"));
 
             doFilterInternalMethod.invoke(filter, request, response, filterChain);
@@ -121,19 +123,22 @@ class JwtAuthenticationFilterTest {
             printWriter.flush();
 
             String responseBody = stringWriter.toString();
-            assertThat(responseBody).contains("\"error\":\"token_expired\"");
-            assertThat(responseBody).contains("\"message\":\"JWT token has expired\"");
+            assertThat(responseBody)
+                .satisfies(body -> {
+                    assertThat(body).contains("\"error\":\"token_expired\"");
+                    assertThat(body).contains("\"message\":\"JWT token has expired\"");
+                });
             verify(filterChain, never()).doFilter(any(), any());
-        }
+        
     }
 
     @Test
     void givenMalformedJwtToken_whenDoFilterInternal_thenReturnsUnauthorizedError() throws Exception {
         String token = "malformed.jwt.token";
 
-        try (MockedStatic<JwtUtil> mockedJwtUtil = Mockito.mockStatic(JwtUtil.class)) {
+       
             when(request.getHeader("Authorization")).thenReturn("Bearer " + token);
-            mockedJwtUtil.when(() -> JwtUtil.extractUsername(token)).thenThrow(
+            when(  jwtUtil.extractUsername(token)).thenThrow(
                     new MalformedJwtException("Invalid JWT token"));
 
             doFilterInternalMethod.invoke(filter, request, response, filterChain);
@@ -143,19 +148,22 @@ class JwtAuthenticationFilterTest {
             printWriter.flush();
 
             String responseBody = stringWriter.toString();
-            assertThat(responseBody).contains("\"error\":\"invalid_token\"");
-            assertThat(responseBody).contains("\"message\":\"Invalid JWT token\"");
+            assertThat(responseBody)
+                .satisfies(body -> {
+                    assertThat(body).contains("\"error\":\"invalid_token\"");
+                    assertThat(body).contains("\"message\":\"Invalid JWT token\"");
+                });
             verify(filterChain, never()).doFilter(any(), any());
-        }
+        
     }
 
     @Test
     void testSignatureException() throws Exception {
         String token = "invalid_signature.jwt.token";
 
-        try (MockedStatic<JwtUtil> mockedJwtUtil = Mockito.mockStatic(JwtUtil.class)) {
+        
             when(request.getHeader("Authorization")).thenReturn("Bearer " + token);
-            mockedJwtUtil.when(() -> JwtUtil.extractUsername(token)).thenThrow(
+            when( jwtUtil.extractUsername(token)).thenThrow(
                     new SignatureException("Invalid JWT signature"));
 
             doFilterInternalMethod.invoke(filter, request, response, filterChain);
@@ -165,9 +173,12 @@ class JwtAuthenticationFilterTest {
             printWriter.flush();
 
             String responseBody = stringWriter.toString();
-            assertThat(responseBody).contains("\"error\":\"invalid_signature\"");
-            assertThat(responseBody).contains("\"message\":\"Invalid JWT signature\"");
+            assertThat(responseBody)
+                .satisfies(body -> {
+                    assertThat(body).contains("\"error\":\"invalid_signature\"");
+                    assertThat(body).contains("\"message\":\"Invalid JWT signature\"");
+                });
             verify(filterChain, never()).doFilter(any(), any());
-        }
+        
     }
 }

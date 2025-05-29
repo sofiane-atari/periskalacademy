@@ -7,10 +7,10 @@ import { CompletedExam } from '../../models/completed-exam.model';
   providedIn: 'root'
 })
 export class CompletedExamService {
-  private baseUrl = 'http://localhost:8080/api/completed-exams';
+  private readonly baseUrl = 'http://localhost:8080/api/completed-exams';
 
   constructor(
-    private http: HttpClient
+    private readonly http: HttpClient
   ) {}
 
   getUserCompletedExams(userId: string): Observable<CompletedExam[]> {

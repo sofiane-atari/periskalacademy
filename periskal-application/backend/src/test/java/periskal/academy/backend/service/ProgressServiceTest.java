@@ -28,7 +28,7 @@ import periskal.academy.backend.jpa.progress.TrainingProgress;
 import periskal.academy.backend.jpa.progress.TrainingProgressRepository;
 
 @ExtendWith(MockitoExtension.class)
-public class ProgressServiceTest {
+class ProgressServiceTest {
 
     @Mock
     private TrainingProgressRepository trainingProgressRepository;

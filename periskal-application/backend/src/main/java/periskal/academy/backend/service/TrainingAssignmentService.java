@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
-import periskal.academy.backend.jpa.Assignment.TrainingAssignment;
-import periskal.academy.backend.jpa.Assignment.TrainingAssignmentRepository;
+import periskal.academy.backend.jpa.assignment.TrainingAssignment;
+import periskal.academy.backend.jpa.assignment.TrainingAssignmentRepository;
 import periskal.academy.backend.security.exceptions.general.ResourceNotFoundException;
 import periskal.academy.backend.security.exceptions.general.ValidationException;
 

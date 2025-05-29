@@ -1,4 +1,4 @@
-package periskal.academy.backend.jpa.Assignment;
+package periskal.academy.backend.jpa.assignment;
 
 import java.util.List;
 import java.util.Optional;

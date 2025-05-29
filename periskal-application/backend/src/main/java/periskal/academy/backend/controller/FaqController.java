@@ -2,7 +2,6 @@ package periskal.academy.backend.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,8 +23,12 @@ import periskal.academy.backend.service.FaqService;
 @RequestMapping("/api/faq")
 @Slf4j
 public class FaqController {
-    @Autowired
-    private FaqService faqService;
+    
+    private final FaqService faqService;
+
+    public FaqController(FaqService faqService) {
+        this.faqService = faqService;
+    }
 
     @GetMapping
     @PreAuthorize(SecurityRoles.ALL_ROLES)

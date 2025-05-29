@@ -30,7 +30,7 @@ import periskal.academy.backend.security.exceptions.authentication.Authenticatio
 import periskal.academy.backend.service.authentication.AuthenticationService;
 import periskal.academy.backend.util.EncryptionUtil;
 
-public class AuthenticationServiceTest {
+class AuthenticationServiceTest {
 
         private AuthenticationService authenticationService;
         private MockRestServiceServer mockServer;
@@ -54,7 +54,7 @@ public class AuthenticationServiceTest {
         }
 
         @Test
-        void givenValidSoapResponse_whenAuthenticate_thenReturnsParsedAuthResponse() throws Exception {
+        void givenValidSoapResponse_whenAuthenticate_thenReturnsParsedAuthResponse() {
                 String sampleResponseXml = """
                                 <?xml version="1.0" encoding="utf-8"?>
                                 <soap12:Envelope xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
@@ -105,8 +105,7 @@ public class AuthenticationServiceTest {
         }
 
         @Test
-        void givenInvalidCredentialsSoapResponse_whenAuthenticate_thenThrowsAuthenticationInvalidCredentialsException()
-                        throws Exception {
+        void givenInvalidCredentialsSoapResponse_whenAuthenticate_thenThrowsAuthenticationInvalidCredentialsException() {
                 String invalidCredsXml = """
                                 <?xml version="1.0" encoding="utf-8"?>
                                 <soap12:Envelope xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
@@ -138,7 +137,7 @@ public class AuthenticationServiceTest {
         }
 
         @Test
-        void givenHttpError_whenAuthenticate_thenThrowsAuthenticationServerErrorException() throws Exception {
+        void givenHttpError_whenAuthenticate_thenThrowsAuthenticationServerErrorException() {
                 try (MockedStatic<EncryptionUtil> mockedStatic = Mockito.mockStatic(EncryptionUtil.class)) {
                         mockedStatic.when(() -> EncryptionUtil.encode(anyString(), anyString()))
                                         .thenReturn("encoded_token");
@@ -146,7 +145,7 @@ public class AuthenticationServiceTest {
                         mockServer.expect(requestTo(authenticateEndpointUrl))
                                         .andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR));
 
-                        AuthenticationCommunicationException exception = assertThrows(
+                        assertThrows(
                                         AuthenticationCommunicationException.class,
                                         () -> authenticationService.authenticate("user", "pass"));
 
@@ -156,7 +155,7 @@ public class AuthenticationServiceTest {
         }
 
         @Test
-        void givenMalformedXmlResponse_whenAuthenticate_thenThrowsAuthenticationParsingException() throws Exception {
+        void givenMalformedXmlResponse_whenAuthenticate_thenThrowsAuthenticationParsingException() {
                 String malformedXml = "<MalformedXml><Oops></MalformedXml>"; // Missing closing tag
 
                 try (MockedStatic<EncryptionUtil> mockedStatic = Mockito.mockStatic(EncryptionUtil.class)) {
@@ -167,7 +166,7 @@ public class AuthenticationServiceTest {
                                         .andRespond(withSuccess(malformedXml, MediaType.APPLICATION_XML));
 
                         // Act & Assert
-                        AuthenticationParsingException exception = assertThrows(
+                        assertThrows(
                                         AuthenticationParsingException.class,
                                         () -> authenticationService.authenticate("user", "pass"));
 
@@ -176,20 +175,19 @@ public class AuthenticationServiceTest {
         }
 
         @Test
-        void givenRestTemplateThrowsRestClientException_whenAuthenticate_thenThrowsAuthenticationCommunicationException()
-                        throws Exception {
+        void givenRestTemplateThrowsRestClientException_whenAuthenticate_thenThrowsAuthenticationCommunicationException() {
                 try (MockedStatic<EncryptionUtil> mockedStatic = Mockito.mockStatic(EncryptionUtil.class)) {
                         mockedStatic.when(() -> EncryptionUtil.encode(anyString(), anyString()))
                                         .thenReturn("encoded_token");
 
                         mockServer.expect(requestTo(authenticateEndpointUrl))
-                                        .andRespond((request) -> {
+                                        .andRespond(request -> {
                                                 throw new ResourceAccessException("I/O error",
                                                                 new SocketTimeoutException("Timeout!"));
                                         });
 
                         // Act & assert
-                        AuthenticationCommunicationException exception = assertThrows(
+                        assertThrows(
                                         AuthenticationCommunicationException.class,
                                         () -> authenticationService.authenticate("user", "pass"));
 
@@ -198,8 +196,7 @@ public class AuthenticationServiceTest {
         }
 
         @Test
-        void givenEncryptionUtilThrowsException_whenAuthenticate_thenThrowsAuthenticationServiceException()
-                        throws Exception {
+        void givenEncryptionUtilThrowsException_whenAuthenticate_thenThrowsAuthenticationServiceException() {
                 RuntimeException encryptionException = new RuntimeException("Encryption failed");
 
                 try (MockedStatic<EncryptionUtil> mockedStatic = Mockito.mockStatic(EncryptionUtil.class)) {
@@ -207,7 +204,7 @@ public class AuthenticationServiceTest {
                                         .thenThrow(encryptionException); // Mock EncryptionUtil to throw
 
                         // Act & Assert
-                        AuthenticationServiceException exception = assertThrows(
+                        assertThrows(
                                         AuthenticationServiceException.class,
                                         () -> authenticationService.authenticate("user", "pass"));
 
@@ -215,45 +212,46 @@ public class AuthenticationServiceTest {
         }
 
         @Test
-        void givenSoapResponseWithSkippers_whenAuthenticate_thenParsesSkippersCorrectly() throws Exception {
-                String soapResponseWithSkippers = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-                                "<soap12:Envelope xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\">\n" +
-                                "  <soap12:Body>\n" +
-                                "    <AuthenticateResponse>\n" +
-                                "      <AuthenticateResult>\n" +
-                                "        <ID>12345</ID>\n" +
-                                "        <Username>testUser</Username>\n" +
-                                "        <LoginResult>Success</LoginResult>\n" +
-                                "        <Skippers>\n" +
-                                "          <Client>\n" +
-                                "            <ID>1</ID>\n" +
-                                "            <Username>skipper1</Username>\n" +
-                                "            <Firstname>Anne</Firstname>\n" +
-                                "            <Lastname>Belle</Lastname>\n" +
-                                "            <Shipname>Neptunus</Shipname>\n" +
-                                "            <Role>Captain</Role>\n" +
-                                "            <Products>\n" +
-                                "              <string>Product1</string>\n" +
-                                "              <string>Product2</string>\n" +
-                                "            </Products>\n" +
-                                "          </Client>\n" +
-                                "          <Client>\n" +
-                                "            <ID>2</ID>\n" +
-                                "            <Username>skipper2</Username>\n" +
-                                "            <Firstname>Jos</Firstname>\n" +
-                                "            <Lastname>VanHoof</Lastname>\n" +
-                                "            <Shipname>Neptunus</Shipname>\n" +
-                                "            <Role>Matroos</Role>\n" +
-                                "            <Products>\n" +
-                                "              <string>Product1</string>\n" +
-                                "              <string>Product2</string>\n" +
-                                "            </Products>\n" +
-                                "          </Client>\n" +
-                                "        </Skippers>\n" +
-                                "      </AuthenticateResult>\n" +
-                                "    </AuthenticateResponse>\n" +
-                                "  </soap12:Body>\n" +
-                                "</soap12:Envelope>";
+        void givenSoapResponseWithSkippers_whenAuthenticate_thenParsesSkippersCorrectly() {
+                String soapResponseWithSkippers = """
+                                <?xml version="1.0" encoding="utf-8"?>
+                                <soap12:Envelope xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
+                                  <soap12:Body>
+                                    <AuthenticateResponse xmlns="http://tempuri.org/">
+                                      <AuthenticateResult>
+                                        <ID>12345</ID>
+                                        <Username>testUser</Username>
+                                        <LoginResult>Success</LoginResult>
+                                        <Skippers>
+                                          <Client>
+                                            <ID>1</ID>
+                                            <Username>skipper1</Username>
+                                            <Firstname>Anne</Firstname>
+                                            <Lastname>Belle</Lastname>
+                                            <Shipname>Neptunus</Shipname>
+                                            <Role>Captain</Role>
+                                            <Products>
+                                              <string>Product1</string>
+                                              <string>Product2</string>
+                                            </Products>
+                                          </Client>
+                                          <Client>
+                                            <ID>2</ID>
+                                            <Username>skipper2</Username>
+                                            <Firstname>Jos</Firstname>
+                                            <Lastname>VanHoof</Lastname>
+                                            <Shipname>Neptunus</Shipname>
+                                            <Role>Matroos</Role>
+                                            <Products>
+                                              <string>Product1</string>
+                                              <string>Product2</string>
+                                            </Products>
+                                          </Client>
+                                        </Skippers>
+                                      </AuthenticateResult>
+                                    </AuthenticateResponse>
+                                  </soap12:Body>
+                                </soap12:Envelope>""";
 
                 try (MockedStatic<EncryptionUtil> mockedStatic = Mockito.mockStatic(EncryptionUtil.class)) {
                         mockedStatic.when(() -> EncryptionUtil.encode(anyString(), anyString()))

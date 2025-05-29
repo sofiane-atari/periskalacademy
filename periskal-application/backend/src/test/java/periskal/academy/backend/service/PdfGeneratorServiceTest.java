@@ -1,16 +1,18 @@
 package periskal.academy.backend.service;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import org.mockito.MockedStatic;
 import static org.mockito.Mockito.mockStatic;
 
+import periskal.academy.backend.dto.CertificatePdfDTO;
 import periskal.academy.backend.jpa.Certificate;
 import periskal.academy.backend.service.certificate.PdfGeneratorService;
 import periskal.academy.backend.util.CertificateGeneratorUtil;
@@ -41,16 +43,21 @@ class PdfGeneratorServiceTest {
     }
 
     @Test
-    void createCertificate_callsUtil_andReturnsBytes() throws IOException {
+    void createCertificate_callsUtil_andReturnsBytes() throws IOException, NoSuchFieldException, IllegalAccessException {
         // arrange
         PdfGeneratorService service = new PdfGeneratorService();
+
+        // Inject the owner password manually
+        Field field = PdfGeneratorService.class.getDeclaredField("pdfOwnerPassword");
+        field.setAccessible(true);
+        field.set(service, "testPassword");
+
+
         byte[] fakePdfBytes = new byte[] { 1, 2, 3 };
 
         try (MockedStatic<CertificateGeneratorUtil> mockedUtil = mockStatic(CertificateGeneratorUtil.class)) {
             mockedUtil.when(() -> CertificateGeneratorUtil.generateCertificatePdf(
-                    anyString(), anyString(), anyString(), anyString(),
-                    anyList(), anyString(), anyString(), anyString(),
-                    anyString(), anyString(), anyString())).thenReturn(fakePdfBytes);
+                    any(CertificatePdfDTO.class), anyString())).thenReturn(fakePdfBytes);
 
             // Act
             byte[] result = service.createCertificate(mockCertificate, testFirstName, testLastName, testShipName);
@@ -60,9 +67,7 @@ class PdfGeneratorServiceTest {
 
             // Verify
             mockedUtil.verify(() -> CertificateGeneratorUtil.generateCertificatePdf(
-                    anyString(), anyString(), anyString(), anyString(),
-                    anyList(), anyString(), anyString(), anyString(),
-                    anyString(), anyString(), anyString()));
+                    any(CertificatePdfDTO.class), anyString()));
         }
     }
 }

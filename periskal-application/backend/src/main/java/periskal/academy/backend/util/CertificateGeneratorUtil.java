@@ -18,6 +18,7 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import lombok.extern.slf4j.Slf4j;
+import periskal.academy.backend.dto.CertificatePdfDTO;
 
 @Slf4j
 public final class CertificateGeneratorUtil {
@@ -114,18 +115,7 @@ public final class CertificateGeneratorUtil {
     // --- PDF Security ---
     private static final String PDF_USER_PASSWORD = ""; // Empty User password for read-only access
 
-    public static byte[] generateCertificatePdf(
-            String productName,
-            String productdetails,
-            String shipName,
-            String trainingDate,
-            List<String> crewNames,
-            String signerName,
-            String signerTitle,
-            String companyName,
-            String companyAddress,
-            String companyPhone,
-            String OwnerPassword) throws IOException {
+    public static byte[] generateCertificatePdf(CertificatePdfDTO dto, String ownerPassword) throws IOException {
 
         try (PDDocument document = new PDDocument(); ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             PDPage page = new PDPage(PDRectangle.A4);
@@ -177,19 +167,19 @@ public final class CertificateGeneratorUtil {
                 drawTitle(contentStream, fontBold); 
 
                 // 5. Draw Product Info
-                drawProductInfo(contentStream, fontBold, productName);
+                drawProductInfo(contentStream, fontBold, dto.getProductName());
 
                 // 6. Draw Body Text
-                drawBodyText(contentStream, fontRegular, signerName, shipName, productdetails ,trainingDate);
+                drawBodyText(contentStream, fontRegular, dto.getSignerName(), dto.getShipName(), dto.getProductDetails(), dto.getDateInfo());
 
                 // 7. Draw Crew Names
-                drawCrewNames(contentStream, fontScript, crewNames); 
+                drawCrewNames(contentStream, fontScript, dto.getCrewNames()); 
 
                 // 8. Draw Signatory
-                drawSignatory(contentStream, fontRegular, signerName, signerTitle, pdSignatureImage);
+                drawSignatory(contentStream, fontRegular, dto.getSignerName(), dto.getSignerTitle(), pdSignatureImage);
 
                 // 9. Draw Footer
-                drawFooter(contentStream, fontRegular, companyName, companyAddress, companyPhone);
+                drawFooter(contentStream, fontRegular, dto.getCompanyName(), dto.getCompanyAddress(), dto.getCompanyPhone());
 
             } // contentStream closed automatically
 
@@ -209,7 +199,7 @@ public final class CertificateGeneratorUtil {
 
 
             // Create the protection policy
-            StandardProtectionPolicy spp = new StandardProtectionPolicy(OwnerPassword, PDF_USER_PASSWORD, ap);
+            StandardProtectionPolicy spp = new StandardProtectionPolicy(ownerPassword, PDF_USER_PASSWORD, ap);
 
 
             spp.setEncryptionKeyLength(128); 
@@ -350,7 +340,7 @@ public final class CertificateGeneratorUtil {
     }
 
     private static void drawProductInfo(PDPageContentStream cs, PDFont fontBold, String productName) throws IOException {
-        float fontSizeLabel = 14;
+    float fontSizeLabel = 14;
     float fontSizeValue = 14; 
     float labelIndent = 0; 
     float valueIndent = 10; 
@@ -370,78 +360,14 @@ public final class CertificateGeneratorUtil {
     // Set X for the indented product name value
     currentX = PRODUCT_X + valueIndent;
 
-
-    float availableWidth = PAGE_WIDTH - MARGIN_RIGHT - currentX - 5; // Added 5pt safety margin
-
-    // --- 3. Prepare and Wrap the Product Name Text ---
-    PDFont valueFont = fontBold; 
-    List<String> lines = new ArrayList<>();
-    String[] words = productName.trim().split("\\s+"); 
-    StringBuilder lineBuilder = new StringBuilder();
-
-    for (String word : words) {
-        // Calculate width of potential new line
-        String testLine = (lineBuilder.length() == 0) ? word : lineBuilder + " " + word;
-        float testWidth;
-        try {
-             testWidth = valueFont.getStringWidth(testLine) / 1000f * fontSizeValue;
-        } catch (IOException e) {
-             log.warn("Warning: Could not get string width. " + e.getMessage());
-             testWidth = (testLine.length() * fontSizeValue * 0.6f); 
-        }
-
-
-        if (testWidth < availableWidth) {
-            // Word fits, add it to the current line
-            if (lineBuilder.length() > 0) {
-                lineBuilder.append(" ");
-            }
-            lineBuilder.append(word);
-        } else {
-            // Word doesn't fit, finalize the previous line (if any)
-            if (lineBuilder.length() > 0) {
-                lines.add(lineBuilder.toString());
-                lineBuilder.setLength(0); // Reset builder
-            }
-            // Start the new line with the current word
-            // Handle case where a single word is longer than availableWidth
-             float wordWidth;
-             try {
-                 wordWidth = valueFont.getStringWidth(word) / 1000f * fontSizeValue;
-             } catch (IOException e) {
-                 wordWidth = (word.length() * fontSizeValue * 0.6f);
-             }
-
-            if (wordWidth >= availableWidth) {
-                 // Single word is too long, add it on its own line (will overflow)
-                 lines.add(word);
-            } else {
-                 // Start new line with this word
-                 lineBuilder.append(word);
-            }
-        }
-    }
-    // Add the last remaining line
-    if (lineBuilder.length() > 0) {
-        lines.add(lineBuilder.toString());
-    }
-
-    // --- 4. Draw the Wrapped Product Name Lines ---
+    // --- 2. Draw the Product Name Line ---
     cs.beginText();
-    cs.setFont(valueFont, fontSizeValue); 
+    cs.setFont(fontBold, fontSizeValue); 
     cs.setNonStrokingColor(COLOR_PRODUCT_RED); 
-    // Set initial position for the first line of the value
     cs.newLineAtOffset(currentX, currentY);
-
-    for (int i = 0; i < lines.size(); i++) {
-        if (i > 0) {
-            // Move down for subsequent lines relative to the previous one
-            // Use negative offset because Y=0 is bottom in PDFBox
-            cs.newLineAtOffset(0, -PRODUCT_LINE_HEIGHT);
-        }
-        cs.showText(lines.get(i));
-    }
+    cs.showText(productName.trim());
     cs.endText();
+
 }
 
     private static void drawBodyText(PDPageContentStream cs, PDFont font, String signerName, String shipName,String productDetails, String trainingDate) throws IOException {
@@ -480,7 +406,7 @@ public final class CertificateGeneratorUtil {
 
         for (int i = 0; i < crewNames.size(); i++) {
             float currentX = (i % 2 == 0) ? CREW_COL1_X : CREW_COL2_X;
-            float currentY = CREW_START_Y - ((i / 2) * CREW_SPACING_Y);
+            float currentY = CREW_START_Y - (float)((i / 2.0) * CREW_SPACING_Y);
 
             cs.beginText();
             cs.newLineAtOffset(currentX, currentY);
@@ -545,5 +471,7 @@ public final class CertificateGeneratorUtil {
             return fallbackFont;
         }
     }
+
+    
 
 }

@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,7 +47,6 @@ public class CompletedExamService {
         
         // Check if the exam was passed
         boolean passed = completedExamDTO.isPassed();
-        result.setPassed(passed);
         
         // Generate certificate if passed
         if (passed) {
@@ -70,7 +69,7 @@ public class CompletedExamService {
                 
                 // Update completed exam with certificate reference
                 saved.setCertificateId(savedCertificate.getId());
-                saved = completedExamRepository.save(saved);
+                completedExamRepository.save(saved);
                 
                 // Update result DTO
                 result.setCertificateId(savedCertificate.getId());
@@ -91,7 +90,7 @@ public class CompletedExamService {
 
         return exams.stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     // Method to retrieve all completed exams for a specific user and training
@@ -99,7 +98,7 @@ public class CompletedExamService {
         List<CompletedExam> exams = completedExamRepository.findByUserIdAndTrainingId(userId, trainingId);
         return exams.stream()
                     .map(this::convertToDTO)
-                    .collect(Collectors.toList());
+                    .toList();
     }
 
     private CompletedExamDTO convertToDTO(CompletedExam completedExam) {
@@ -112,13 +111,12 @@ public class CompletedExamService {
         dto.setScore(completedExam.getScore());
         dto.setCompletedDate(completedExam.getCompletedDate());
         dto.setCertificateId(completedExam.getCertificateId());
-        dto.setPassed(completedExam.isPassed());
 
         dto.setExamName(examRepository.findById(completedExam.getExamId())
-        .map(exam -> exam.getExamTitle())
+        .map(Exam::getExamTitle)
         .orElse("N/A")); 
         dto.setTrainingName(trainingRepository.findById(completedExam.getTrainingId())
-        .map(training -> training.getNameEn())
+        .map(Training::getNameEn)
         .orElse("N/A"));
         return dto;
     }

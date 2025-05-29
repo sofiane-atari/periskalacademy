@@ -14,7 +14,7 @@ import periskal.academy.backend.security.exceptions.authentication.*;
 import periskal.academy.backend.security.exceptions.general.*;
 import periskal.academy.backend.dto.ErrorResponse;
 
-public class GlobalExceptionHandlerTest {
+class GlobalExceptionHandlerTest {
 
         private GlobalExceptionHandler globalExceptionHandler;
 
@@ -22,7 +22,7 @@ public class GlobalExceptionHandlerTest {
         private WebRequest webRequest;
 
         @BeforeEach
-        public void setUp() {
+        void setUp() {
                 MockitoAnnotations.openMocks(this);
                 globalExceptionHandler = new GlobalExceptionHandler();
         }

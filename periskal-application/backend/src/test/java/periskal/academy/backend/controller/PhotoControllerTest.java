@@ -1,16 +1,18 @@
 package periskal.academy.backend.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
-
-import java.util.*;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 
@@ -49,8 +51,7 @@ class PhotoControllerTest {
 
         // Assert
         assertThat(response.getStatusCode().value()).isEqualTo(200);
-        assertThat(response.getBody()).containsKey("message");
-        assertThat(response.getBody().get("message")).isEqualTo("Photo deleted successfully");
+        assertThat(response.getBody()).containsEntry("message", "Photo deleted successfully");
         verify(photoService, times(1)).deletePhoto(photoId);
     }
 
@@ -65,8 +66,7 @@ class PhotoControllerTest {
 
         // Assert
         assertThat(response.getStatusCode().value()).isEqualTo(200);
-        assertThat(response.getBody()).containsKey("message");
-        assertThat(response.getBody().get("message")).isEqualTo("Photo(s) addedsuccessfully");
+        assertThat(response.getBody()).containsEntry("message", "Photo(s) addedsuccessfully");
         verify(photoService, times(1)).addPhotos(chapterId, photos);
     }
 }

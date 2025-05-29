@@ -3,7 +3,6 @@ package periskal.academy.backend.controller;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.when;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
@@ -46,6 +45,9 @@ class AuthenticationControllerTest {
 
         private LoginRequest loginRequest;
 
+        @MockitoBean
+        private JwtUtil jwtUtil;
+
         @BeforeEach
         void setUp() {
                 loginRequest = new LoginRequest();
@@ -66,8 +68,8 @@ class AuthenticationControllerTest {
 
                 when(authenticationService.authenticate("testUser", "testPass")).thenReturn(mockResponse);
 
-                try (var jwtUtilMocked = mockStatic(JwtUtil.class)) {
-                        jwtUtilMocked.when(() -> JwtUtil.generateToken(mockResponse)).thenReturn(mockToken);
+
+                        when( jwtUtil.generateToken(mockResponse)).thenReturn(mockToken);
 
                         // Act
                         MvcResult mvcResult = mockMvc
@@ -89,7 +91,7 @@ class AuthenticationControllerTest {
                         assertThat(actualResponse.getToken()).isEqualTo(mockToken);
                         assertThat(actualResponse.getLoginResult()).isEqualTo("SuccesByToken");
 
-                }
+                
         }
 
         @Test
@@ -182,8 +184,8 @@ class AuthenticationControllerTest {
 
                 when(dongleAuthenticationService.authenticateDongle(dongleToken)).thenReturn(mockResponse);
 
-                try (var jwtUtilMocked = mockStatic(JwtUtil.class)) {
-                        jwtUtilMocked.when(() -> JwtUtil.generateToken(mockResponse)).thenReturn(mockJwtToken);
+
+                when( jwtUtil.generateToken(mockResponse)).thenReturn(mockJwtToken);
 
                         // Act
                         MvcResult mvcResult = mockMvc
@@ -204,7 +206,6 @@ class AuthenticationControllerTest {
                         assertThat(actualResponse.getUsername()).isEqualTo("dongleUser");
                         assertThat(actualResponse.getToken()).isEqualTo(mockJwtToken);
                         assertThat(actualResponse.getLoginResult()).isEqualTo("SuccesByToken");
-                }
         }
 
 }

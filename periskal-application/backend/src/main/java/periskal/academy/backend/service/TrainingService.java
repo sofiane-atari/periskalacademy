@@ -11,14 +11,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
+import org.springframework.core.io.Resource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import io.jsonwebtoken.io.IOException;
-
-import org.springframework.core.io.Resource;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import periskal.academy.backend.dto.ModuleDTO;
@@ -39,11 +38,14 @@ import periskal.academy.backend.security.exceptions.general.ValidationException;
 @Service
 public class TrainingService {
 
-    private TrainingRepository trainingRepository;
-    private ModuleRepository moduleRepository;
-    private PhotoRepository photoRepository;
+    private final TrainingRepository trainingRepository;
+    private final ModuleRepository moduleRepository;
+    private final PhotoRepository photoRepository;
     private final VideoRepository videoRepository;
     private final FtpService ftpService;
+
+    private static final String TRAINING_NOT_FOUND_MSG = "Training not found with id: ";
+
 
     public TrainingService(TrainingRepository trainingRepository, ModuleRepository moduleRepository,
             PhotoRepository photoRepository, VideoRepository videoRepository, FtpService ftpService) {
@@ -57,7 +59,7 @@ public class TrainingService {
     private TrainingDTO convertToDto(Training training) {
         TrainingDTO dto = new TrainingDTO();
         dto.setId(training.getId());
-        dto.setProduct_code(training.getProductCode());
+        dto.setProductCode(training.getProductCode());
         dto.setNameEn(training.getNameEn());
         dto.setNameNl(training.getNameNl());
         dto.setNameDe(training.getNameDe());
@@ -90,13 +92,13 @@ public class TrainingService {
         return trainingRepository.findAllAsList()
                 .stream()
                 .map(this::convertToDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Transactional
     public Training getTrainingById(Long id) {
         return trainingRepository.findByIdWithDetails(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Training not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException(TRAINING_NOT_FOUND_MSG + id));
     }
 
     public List<TrainingDTO> getFilteredTrainings(String role, List<String> products) {
@@ -109,7 +111,7 @@ public class TrainingService {
         if ("Administrator".equals(role) || "Support".equals(role)) {
             return trainings.stream()
                     .map(this::convertToDto)
-                    .collect(Collectors.toList());
+                    .toList();
         }
 
         // For Skipper/Fleetmanager with products
@@ -117,59 +119,18 @@ public class TrainingService {
                 .filter(training -> products.stream()
                         .anyMatch(product -> training.getProductCode().toLowerCase().contains(product.toLowerCase())))
                 .map(this::convertToDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
+    // #region Create training method and it's helper methods
     @Transactional
     public Training createTraining(Training entity) {
-        System.out.println(entity);
-        if (entity == null) {
-            throw new ValidationException("Training data cannot be null.");
-        }
-        if (entity.getNameEn() == null || entity.getNameEn().isBlank()) {
-            throw new ValidationException("Training name (English) cannot be empty.");
-        }
+        
+        validateTraining(entity);
+        processModules(entity);
 
-        if (entity.getModules() != null) {
-            for (Module module : entity.getModules()) {
-                module.setTraining(entity);
-                if (module.getChapters() != null) {
-                    for (Chapter chapter : module.getChapters()) {
-                        chapter.setModule(module);
-                        if (chapter.getVideoEn() != null) {
-                            chapter.setVideoEn(videoRepository.findById(chapter.getVideoEn().getId())
-                                    .orElseThrow(() -> new RuntimeException(
-                                            "Video EN not found: " + chapter.getVideoEn().getId())));
-                        }
-                        if (chapter.getVideoDe() != null) {
-                            chapter.setVideoDe(videoRepository.findById(chapter.getVideoDe().getId())
-                                    .orElseThrow(() -> new RuntimeException(
-                                            "Video DE not found: " + chapter.getVideoDe().getId())));
-                        }
-                        if (chapter.getVideoFr() != null) {
-                            chapter.setVideoFr(videoRepository.findById(chapter.getVideoFr().getId())
-                                    .orElseThrow(() -> new RuntimeException(
-                                            "Video FR not found: " + chapter.getVideoFr().getId())));
-                        }
-                        if (chapter.getVideoNl() != null) {
-                            chapter.setVideoNl(videoRepository.findById(chapter.getVideoNl().getId())
-                                    .orElseThrow(() -> new RuntimeException(
-                                            "Video NL not found: " + chapter.getVideoNl().getId())));
-                        }
-                        if (chapter.getPhotos() != null) {
-                            for (Photo photo : chapter.getPhotos()) {
-                                photo.setChapter(chapter);
-                                photoRepository.save(photo);
-                            }
-                        }
-                    }
-                }
-            }
-        }
         try {
-
-            Training savedTraining = trainingRepository.save(entity);
-            return savedTraining;
+        return trainingRepository.save(entity);
         } catch (DataIntegrityViolationException e) {
             log.error("Failed to create training due to data integrity violation: {}", e.getMessage());
             throw e;
@@ -177,7 +138,59 @@ public class TrainingService {
             log.error("Failed to create training due to database error: {}", e.getMessage(), e);
             throw new RuntimeException("Failed to save training to the database.", e);
         }
+        
     }
+
+    private void validateTraining(Training entity) {
+        if (entity == null) {
+            throw new ValidationException("Training data cannot be null.");
+        }
+        if (entity.getNameEn() == null || entity.getNameEn().isBlank()) {
+            throw new ValidationException("Training name (English) cannot be empty.");
+        }
+    }
+
+    private void processModules(Training entity) {
+        if (entity.getModules() == null) return;
+
+        for (Module module : entity.getModules()) {
+            module.setTraining(entity);
+            processChapters(module);
+        }
+    }
+
+    private void processChapters(Module module) {
+        if (module.getChapters() == null) return;
+
+        for (Chapter chapter : module.getChapters()) {
+            chapter.setModule(module);
+            loadChapterVideos(chapter);
+            linkPhotos(chapter);
+        }
+    }
+
+    private void loadChapterVideos(Chapter chapter) {
+        chapter.setVideoEn(resolveVideo(chapter.getVideoEn(), "EN"));
+        chapter.setVideoDe(resolveVideo(chapter.getVideoDe(), "DE"));
+        chapter.setVideoFr(resolveVideo(chapter.getVideoFr(), "FR"));
+        chapter.setVideoNl(resolveVideo(chapter.getVideoNl(), "NL"));
+    }
+
+    private Video resolveVideo(Video video, String langCode) {
+        if (video == null) return null;
+        return videoRepository.findById(video.getId())
+            .orElseThrow(() -> new RuntimeException("Video " + langCode + " not found: " + video.getId()));
+    }
+
+    private void linkPhotos(Chapter chapter) {
+        if (chapter.getPhotos() == null) return;
+        for (Photo photo : chapter.getPhotos()) {
+            photo.setChapter(chapter);
+            photoRepository.save(photo);
+        }
+    }
+    // #endregion
+
 
     @Transactional
     public Training updateTraining(Long id, Training updatedTraining) {
@@ -225,7 +238,7 @@ public class TrainingService {
     public void deleteTraining(Long id) {
 
         if (!trainingRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Cannot delete. Training not found with id: " + id);
+            throw new ResourceNotFoundException("Cannot delete. " + TRAINING_NOT_FOUND_MSG  + id);
         }
         try {
             trainingRepository.deleteById(id);
@@ -244,7 +257,7 @@ public class TrainingService {
     public Training deleteModule(Long trainingId, Long moduleId) {
 
         Training training = trainingRepository.findById(trainingId)
-                .orElseThrow(() -> new ResourceNotFoundException("Training not found with id: " + trainingId));
+                .orElseThrow(() -> new ResourceNotFoundException(TRAINING_NOT_FOUND_MSG + trainingId));
 
         Module moduleToRemove = training.getModules().stream()
                 .filter(module -> module.getId().equals(moduleId))
@@ -266,7 +279,7 @@ public class TrainingService {
 
     public Training updateModules(Long trainingId, List<Module> modules) {
         Training training = trainingRepository.findById(trainingId)
-                .orElseThrow(() -> new ResourceNotFoundException("Training not found with id: " + trainingId));
+                .orElseThrow(() -> new ResourceNotFoundException(TRAINING_NOT_FOUND_MSG + trainingId));
 
         training.getModules().clear();
         modules.forEach(module -> {

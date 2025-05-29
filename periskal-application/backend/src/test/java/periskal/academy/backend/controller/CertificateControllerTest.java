@@ -22,12 +22,16 @@ import periskal.academy.backend.jpa.Certificate;
 import periskal.academy.backend.jpa.TrainingRepository;
 import periskal.academy.backend.service.CertificateService;
 import periskal.academy.backend.service.certificate.PdfGeneratorService;
+import periskal.academy.backend.util.JwtUtil;
 
 @WebMvcTest(controllers = CertificateController.class, excludeAutoConfiguration = { SecurityAutoConfiguration.class })
 class CertificateControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @MockitoBean
+    private JwtUtil jwtUtil;
 
     @MockitoBean
     private PdfGeneratorService pdfGeneratorService;

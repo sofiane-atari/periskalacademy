@@ -1,42 +1,48 @@
 package periskal.academy.backend.service;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatchers;
+import static org.mockito.ArgumentMatchers.any;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import periskal.academy.backend.jpa.Billing;
 import periskal.academy.backend.jpa.BillingRepository;
+import periskal.academy.backend.jpa.Exam;
 import periskal.academy.backend.jpa.UserExamAttempt;
 import periskal.academy.backend.jpa.UserExamAttemptRepository;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 @ExtendWith(MockitoExtension.class)
-public class BillingServiceTest {
+class BillingServiceTest {
 
     @Mock
     private BillingRepository billingRepository;
+
+    @Mock
+    private EmailService emailService;
 
     @InjectMocks
     private BillingService billingService;
 
     @Mock
     private UserExamAttemptRepository userExamAttemptRepository;
+
+    @Mock
+    private ExamService examService;
 
     private Billing testBillingEntity;
 
@@ -69,6 +75,13 @@ public class BillingServiceTest {
         // Arrange: Configure the mock repository to return the same entity when save is
         // called
         when(billingRepository.save(any(Billing.class))).thenReturn(testBillingEntity);
+
+        Exam mockExam = new Exam();
+        mockExam.setId(1L);
+        mockExam.setExamTitle("Sample Exam Title");
+
+        when(examService.findById(1L)).thenReturn(Optional.of(mockExam));
+
 
         // Act: Call the saveOrder method on the service
         Billing savedBilling = billingService.saveOrder(testBillingEntity);
@@ -131,7 +144,7 @@ public class BillingServiceTest {
         // Arrange: A null Billing entity
         Billing nullBilling = null;
 
-        when(billingRepository.save(nullBilling))
+        when(billingRepository.save(ArgumentMatchers.isNull()))
                 .thenThrow(new IllegalArgumentException("Entity to save must not be null"));
 
         // Act: Use AssertJ's assertThatThrownBy for asserting exceptions
@@ -140,7 +153,7 @@ public class BillingServiceTest {
                 .hasMessage("Entity to save must not be null");
 
         // Assert that the save method on the repository was called once with null
-        verify(billingRepository, times(1)).save(nullBilling);
+        verify(billingRepository, times(1)).save(ArgumentMatchers.isNull());
     }
 
     @Test
@@ -195,13 +208,13 @@ public class BillingServiceTest {
     assertThat(attempt1.getExamId()).isEqualTo("EXAM001");
     assertThat(attempt1.getUserId()).isEqualTo("USER001");
     assertThat(attempt1.getTotalAttempts()).isEqualTo(3);
-    assertThat(attempt1.getUsedAttempts()).isEqualTo(0);
+    assertThat(attempt1.getUsedAttempts()).isZero();
 
     // Verify second UserExamAttempt
     UserExamAttempt attempt2 = capturedAttempts.get(1); 
     assertThat(attempt2.getExamId()).isEqualTo("EXAM002");
     assertThat(attempt2.getUserId()).isEqualTo("USER002");
     assertThat(attempt2.getTotalAttempts()).isEqualTo(5);
-    assertThat(attempt2.getUsedAttempts()).isEqualTo(0);
+    assertThat(attempt2.getUsedAttempts()).isZero();
 }
 }
