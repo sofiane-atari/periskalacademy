@@ -21,8 +21,9 @@ export class DongleLoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-
-      if (!params['login']) {
+    const login = params['login'];
+      if (!login) {
+        this.errorMessage = '❌ No login code provided';
         return;
       }
       try {
@@ -31,6 +32,8 @@ export class DongleLoginComponent implements OnInit {
         this.errorMessage = '';
         this.authenticateUser(decodedLogin);
       } catch (error) {
+        this.isLoading = false;
+        this.errorMessage = '❌ Invalid login code format';
       }
     });
   }
@@ -50,8 +53,11 @@ export class DongleLoginComponent implements OnInit {
         }, 300);
       },
       error: (error) => {
-        this.isLoading = false;
-      }
+              this.isLoading = false;
+              this.errorMessage = error.status === 401 
+                ? '❌ Invalid or expired login code'
+                : '❌ Authentication failed. Please try again.';
+            }
     });
   }
 }
