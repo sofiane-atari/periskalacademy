@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import periskal.academy.backend.jpa.Billing;
 import periskal.academy.backend.jpa.TrainingRepository;
 import periskal.academy.backend.service.BillingService;
+import periskal.academy.backend.util.JwtUtil;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
@@ -28,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(BillingController.class)
 @AutoConfigureMockMvc(addFilters = false)
-public class BillingControllerTest {
+class BillingControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -41,6 +42,9 @@ public class BillingControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @MockitoBean
+    private JwtUtil jwtUtil;
 
     private Billing testBilling;
 

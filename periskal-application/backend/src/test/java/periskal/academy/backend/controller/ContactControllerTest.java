@@ -18,12 +18,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import periskal.academy.backend.dto.ContactRequest;
 import periskal.academy.backend.jpa.TrainingRepository;
 import periskal.academy.backend.service.EmailService;
+import periskal.academy.backend.util.JwtUtil;
+
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 
 @WebMvcTest(ContactController.class)
 class ContactControllerTest {
 
+    @MockitoBean
+    private JwtUtil jwtUtil;
 
     @MockitoBean
     private TrainingRepository trainingRepository;

@@ -46,6 +46,9 @@ class AuthenticationControllerTest {
 
         private LoginRequest loginRequest;
 
+        @MockitoBean
+        private JwtUtil jwtUtil;
+
         @BeforeEach
         void setUp() {
                 loginRequest = new LoginRequest();
@@ -66,8 +69,8 @@ class AuthenticationControllerTest {
 
                 when(authenticationService.authenticate("testUser", "testPass")).thenReturn(mockResponse);
 
-                try (var jwtUtilMocked = mockStatic(JwtUtil.class)) {
-                        jwtUtilMocked.when(() -> JwtUtil.generateToken(mockResponse)).thenReturn(mockToken);
+
+                        when( jwtUtil.generateToken(mockResponse)).thenReturn(mockToken);
 
                         // Act
                         MvcResult mvcResult = mockMvc
@@ -89,7 +92,7 @@ class AuthenticationControllerTest {
                         assertThat(actualResponse.getToken()).isEqualTo(mockToken);
                         assertThat(actualResponse.getLoginResult()).isEqualTo("SuccesByToken");
 
-                }
+                
         }
 
         @Test
@@ -182,8 +185,8 @@ class AuthenticationControllerTest {
 
                 when(dongleAuthenticationService.authenticateDongle(dongleToken)).thenReturn(mockResponse);
 
-                try (var jwtUtilMocked = mockStatic(JwtUtil.class)) {
-                        jwtUtilMocked.when(() -> JwtUtil.generateToken(mockResponse)).thenReturn(mockJwtToken);
+
+                when( jwtUtil.generateToken(mockResponse)).thenReturn(mockJwtToken);
 
                         // Act
                         MvcResult mvcResult = mockMvc
@@ -204,7 +207,6 @@ class AuthenticationControllerTest {
                         assertThat(actualResponse.getUsername()).isEqualTo("dongleUser");
                         assertThat(actualResponse.getToken()).isEqualTo(mockJwtToken);
                         assertThat(actualResponse.getLoginResult()).isEqualTo("SuccesByToken");
-                }
         }
 
 }

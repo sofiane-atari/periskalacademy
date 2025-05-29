@@ -30,12 +30,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import periskal.academy.backend.dto.CompletedExamDTO;
 import periskal.academy.backend.service.CompletedExamService;
+import periskal.academy.backend.util.JwtUtil;
 
 @WebMvcTest(controllers = CompletedExamController.class, excludeAutoConfiguration = {SecurityAutoConfiguration.class}) 
 class CompletedExamControllerTest {
 
     @Autowired
     private MockMvc mockMvc; 
+
+    @MockitoBean
+    private JwtUtil jwtUtil;
 
     @MockitoBean
     private CompletedExamService completedExamService;

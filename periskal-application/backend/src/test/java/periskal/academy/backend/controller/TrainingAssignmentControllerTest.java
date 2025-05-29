@@ -28,6 +28,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import periskal.academy.backend.jpa.Assignment.TrainingAssignment;
 import periskal.academy.backend.service.TrainingAssignmentService;
+import periskal.academy.backend.util.JwtUtil;
 
 @WebMvcTest(controllers = TrainingAssignmentController.class, excludeAutoConfiguration = {
         SecurityAutoConfiguration.class })
@@ -35,6 +36,9 @@ class TrainingAssignmentControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @MockitoBean
+    private JwtUtil jwtUtil;
 
     @Autowired
     private ObjectMapper objectMapper;

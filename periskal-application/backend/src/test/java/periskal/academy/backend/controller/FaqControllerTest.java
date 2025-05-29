@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import periskal.academy.backend.jpa.TrainingRepository;
 import periskal.academy.backend.jpa.faq.Faq;
 import periskal.academy.backend.service.FaqService;
+import periskal.academy.backend.util.JwtUtil;
 import periskal.academy.backend.security.exceptions.general.ResourceNotFoundException;
 
 import java.util.Arrays;
@@ -48,6 +49,9 @@ class FaqControllerTest {
 
         @Autowired
         private ObjectMapper objectMapper;
+
+        @MockitoBean
+        private JwtUtil jwtUtil;
 
         private Faq sampleFaq;
         private List<Faq> sampleFaqs;
