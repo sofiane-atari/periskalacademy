@@ -125,9 +125,7 @@ public class BillingService {
         }
         if (examId == null || examId.isEmpty()) {
             log.warn("Not sending fleet manager email: Exam ID is missing for the batch order.");
-            // You might still want to send an email with a generic message if examId is critical
-            // examId = "Not specified"; // Or handle as an error
-            return; // Or proceed with a modified message
+            return; 
         }
 
         String fromAddress = companyEmail; // Email is from the system
@@ -139,8 +137,8 @@ public class BillingService {
         contentBuilder.append("<h2>Fleet Manager Batch Order Notification</h2>");
         contentBuilder.append("<p>A batch order has been successfully processed.</p>");
         contentBuilder.append("<ul>");
-        contentBuilder.append("<li><strong>Exam ID:</strong> ").append(examId).append("</li>");
-        contentBuilder.append("<li><strong>Number of Users/Billings Processed:</strong> ").append(numberOfBillings).append("</li>");
+        contentBuilder.append(listItem("Exam ID", examId));
+        contentBuilder.append(listItem("Number of Users/Billings Processed", String.valueOf(numberOfBillings)));
         contentBuilder.append("</ul>");
         contentBuilder.append("<p>User exam attempts have been created accordingly.</p>");
         contentBuilder.append("<p>Thank you.</p>");
