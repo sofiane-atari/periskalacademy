@@ -23,9 +23,6 @@ import periskal.academy.backend.util.JwtUtil;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    public JwtAuthenticationFilter() {
-    }
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
@@ -41,15 +38,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             final String jwt = authHeader.substring(7);
             final String username = JwtUtil.extractUsername(jwt); 
 
-            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                if (JwtUtil.validateToken(jwt, username)) {
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null && JwtUtil.validateToken(jwt, username)) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             username,
                             null,
                             JwtUtil.extractAuthorities(jwt));
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
-                }
             }
             filterChain.doFilter(request, response);
         } catch (ExpiredJwtException e) {
