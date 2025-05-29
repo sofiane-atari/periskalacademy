@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class TrainingDTO {
     private Long id;
-    private String product_code;
+    private String productCode;
     private String nameEn;
     private String nameNl;
     private String nameFr;
