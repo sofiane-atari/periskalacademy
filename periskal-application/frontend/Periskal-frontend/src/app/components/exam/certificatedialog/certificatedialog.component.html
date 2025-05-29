@@ -1,0 +1,26 @@
+<div class="dialog-container">
+  <div class="icon-circle">
+    <mat-icon class="success-icon">check_circle</mat-icon>
+  </div>
+
+  <h2 class="title">Congratulations!</h2>
+  <p class="subtitle">
+    You have successfully passed the {{ data.examName }}.
+  </p>
+
+  <div class="certificate-details">
+    <h3>Certificate Details</h3>
+    <p><mat-icon>calendar_today</mat-icon> Issue Date: {{ data.issueDate }}</p>
+    <p><mat-icon>schedule</mat-icon> Valid for: {{ data.validity }}</p>
+  </div>
+
+  <div class="actions">
+    <button mat-flat-button color="accent" (click)="downloadCertificate()">
+      <mat-icon>download</mat-icon> Download Certificate
+    </button>
+
+    <button mat-stroked-button color="primary" (click)="dialogRef.close()">
+      <mat-icon>arrow_back</mat-icon> Back to Modules
+    </button>
+  </div>
+</div>
