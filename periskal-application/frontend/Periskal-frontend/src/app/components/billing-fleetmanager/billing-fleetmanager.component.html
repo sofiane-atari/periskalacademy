@@ -4,8 +4,10 @@
           <h1>{{'BILLING_INFORMATION' | translate}}</h1>
           <p>{{'ENTER_BILLING_DETAILS' | translate}}</p>
         </div>
-
-        <form (ngSubmit)="onSubmit()" [formGroup]="billingForm">
+        <mat-horizontal-stepper [linear]="true" #stepper>
+        <mat-step [stepControl]="billingForm">
+        <form [formGroup]="billingForm">
+          <ng-template matStepLabel>{{'BILLING_INFORMATION' | translate}}</ng-template>
           <!-- Personal Information -->
           <div class="form-card">
             <div class="card-header">
@@ -108,9 +110,37 @@
           
           <div class="form-actions">
             <button type="button" (click)="goBack()" class="button-secondary">{{'CANCEL' | translate}}</button>
-            <button type="submit" class="button-primary">{{'ORDER_EXAM' | translate}}</button>
+            <button mat-button matStepperNext [disabled]="billingForm.invalid" class="button-primary">
+              {{'NEXT' | translate}}
+            </button>
           </div>
           <input type="hidden" formControlName="examId">
         </form>
+        </mat-step>
+          <!-- Step 2: Order Overview -->
+          <mat-step>
+            <ng-template matStepLabel>{{'ORDER_OVERVIEW' | translate}}</ng-template>
+            <div class="overview-container">
+              <h2>{{'CONFIRM_DETAILS' | translate}}</h2>
+              <ul>
+                <li><strong>{{'FULL_NAME' | translate}}:</strong> {{ billingForm.value.fullName }}</li>
+                <li><strong>{{'COMPANY_NAME' | translate}}:</strong> {{ billingForm.value.companyName }}</li>
+                <li><strong>{{'EMAIL_ADDRESS' | translate}}:</strong> {{ billingForm.value.email }}</li>
+                <li><strong>{{'TAX_NUMBER' | translate}}:</strong> {{ billingForm.value.tax }}</li>
+                <li><strong>{{'STREET_ADDRESS' | translate}}:</strong> {{ billingForm.value.address }}</li>
+                <li><strong>{{'CITY' | translate}}:</strong> {{ billingForm.value.city }}</li>
+                <li><strong>{{'STATE_PROVINCE' | translate}}:</strong> {{ billingForm.value.state }}</li>
+                <li><strong>{{'POSTAL_CODE' | translate}}:</strong> {{ billingForm.value.zipCode }}</li>
+                <li><strong>{{'COUNTRY' | translate}}:</strong> {{ billingForm.value.countryCode }}</li>
+              </ul>
+              <div class="form-actions">
+                <button mat-button matStepperPrevious>{{'BACK' | translate}}</button>
+                <button mat-button (click)="onSubmit()" class="button-primary">
+                  {{'ORDER_EXAM' | translate}}
+                </button>
+              </div>
+            </div>
+          </mat-step>
+        </mat-horizontal-stepper>
       </div>
     </div>
