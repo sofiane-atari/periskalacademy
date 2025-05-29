@@ -7,7 +7,7 @@
       class="submit-button"
       (click)="showAddForm = !showAddForm"
     >
-      <span>{{ showAddForm ? 'Annuleer' : '+ Vraag toevoegen' }}</span>
+      <span>{{ showAddForm ? ('CANCEL' | translate) : ('ADD_QUESTION' | translate) }}</span>
     </button>
 
     @if (showAddForm) {

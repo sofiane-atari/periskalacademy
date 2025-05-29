@@ -288,5 +288,6 @@
   "CATEGORY_REQUIRED": "Category is required",
   "ADDING": "Adding...",
   "ADD_A_FAQ": "Add a new FAQ",
-  "NO_FAQ_ITEMS": "No FAQ items found."
+  "NO_FAQ_ITEMS": "No FAQ items found.",
+  "ADD_QUESTION": "+ Add a new question"
 }
