@@ -255,6 +255,20 @@
   "SEARCH_FAQ": "Fragen durchsuchen:",
   "SEARCH_FAQ_PLACEHOLDER": "Nach Wort in Frage oder ID suchen",
   "FAQ": "Häufig gestellte Fragen",
-  "ERASE_Selection": "Auswahl löschen",
-  "CERTIFICATE_BADGE": "Zertifikat"
+  "ERASE_SELECTION": "Auswahl löschen",
+  "CERTIFICATE_BADGE": "Zertifikat",
+  "CONGRATULATIONS": "Herzlichen Glückwunsch",
+  "SKIPPER_AMOUNT": "Anzahl der Skipper",
+  "EXAM_PRICE_PER_UNIT": "Prüfungspreis pro Einheit",
+  "ORDER_OVERVIEW": "Bestellübersicht",
+  "TOTAL_PRICE": "Gesamtpreis",
+  "PASSED_MESSAGE": "Sie haben die Prüfung erfolgreich bestanden",
+  "VALID_FOR": "Gültig für",
+  "DOWNLOAD_CERTIFICATE": "Zertifikat herunterladen",
+  "BACK_TO_MODULES": "Zurück zu den Modulen",
+  "EXAM_FAILED": "Prüfung nicht bestanden",
+  "EXAM_FAILED_MESSAGE_1": "Leider haben Sie die Prüfung",
+  "EXAM_FAILED_MESSAGE_2": " nicht bestanden. Bitte überprüfen Sie das Material und versuchen Sie es erneut.",
+  "CERTIFICATE_DETAILS": "Zertifikatsdetails",
+  "YEAR": "Jahre(n)"
 }

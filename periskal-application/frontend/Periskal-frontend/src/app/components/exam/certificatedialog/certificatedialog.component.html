@@ -9,12 +9,12 @@
     </p>
 
     <div class="certificate-details">
-      <h3>Certificate Details</h3>
+      <h3>{{'CERTIFICATE_DETAILS' |translate}}</h3>
       @if (data.issueDate) {
-        <p><mat-icon>calendar_today</mat-icon> {{'ISSUE_DATE' | translate}} {{ data.issueDate }}</p>
+        <p><mat-icon>calendar_today</mat-icon> {{'ISSUE_DATE' | translate}}: {{ data.issueDate }}</p>
       }
       @if (data.validity) {
-        <p><mat-icon>schedule</mat-icon> {{'VALID_FOR' | translate}} {{ data.validity }}</p>
+        <p><mat-icon>schedule</mat-icon> {{'VALID_FOR' | translate}}: {{ data.validity }} {{'YEAR' | translate}}</p>
       }
     </div>
 

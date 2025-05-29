@@ -255,6 +255,20 @@
   "SEARCH_FAQ": "Zoek vragen:",
   "SEARCH_FAQ_PLACEHOLDER": "Zoek op een woord in een vraag of op ID",
   "FAQ": "Veelgestelde vragen",
-  "ERASE_Selection": "Selectie wissen",
-  "CERTIFICATE_BADGE": "Certificaat"
+  "ERASE_SELECTION": "Selectie wissen",
+  "CERTIFICATE_BADGE": "Certificaat",
+  "SKIPPER_AMOUNT": "Aantal schippers",
+  "EXAM_PRICE_PER_UNIT": "Examenprijs per eenheid",
+  "ORDER_OVERVIEW": "Besteloverzicht",
+  "TOTAL_PRICE": "Totaalprijs",
+  "CONGRATULATIONS": "Gefeliciteerd",
+  "PASSED_MESSAGE": "Je bent geslaagd voor de",
+  "VALID_FOR": "Geldig voor",
+  "DOWNLOAD_CERTIFICATE": "Certificaat downloaden",
+  "BACK_TO_MODULES": "Terug naar modules",
+  "EXAM_FAILED": "Examen niet gehaald",
+  "EXAM_FAILED_MESSAGE_1": "Helaas, je hebt de",
+  "EXAM_FAILED_MESSAGE_2": " niet gehaald. Gelieve het materiaal te herzien en opnieuw te proberen.",
+  "CERTIFICATE_DETAILS": "Certificaat details",
+  "YEAR": "Jaar"
 }

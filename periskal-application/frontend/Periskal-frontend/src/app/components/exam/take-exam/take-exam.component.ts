@@ -193,7 +193,7 @@ export class TakeExamComponent implements OnInit, OnDestroy {
             data: {
               examName: this.exam?.examTitle || 'exam',
               issueDate: new Date().toLocaleDateString(),
-              validity: '1 year',
+              validity: '1',
               status: 'passed'
             }
           }).afterClosed().subscribe(() => {

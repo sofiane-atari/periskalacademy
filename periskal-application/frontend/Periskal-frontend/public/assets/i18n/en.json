@@ -255,7 +255,7 @@
   "SEARCH_FAQ": "Search questions:",
   "SEARCH_FAQ_PLACEHOLDER": "Search by word in question or ID",
   "FAQ": "Frequently Asked Questions",
-  "ERASE_Selection": "Erase Selection",
+  "ERASE_SELECTION": "Erase Selection",
   "CERTIFICATE_BADGE": "Certificate",
   "SKIPPER_AMOUNT": "Amount of skippers",
   "EXAM_PRICE_PER_UNIT": "Exam price per unit",
@@ -268,5 +268,7 @@
   "BACK_TO_MODULES": "Back to modules",
   "EXAM_FAILED": "Exam failed",
   "EXAM_FAILED_MESSAGE_1": "Unfortunately, you did not pass the",
-  "EXAM_FAILED_MESSAGE_2": ". Please review the material and try again."
+  "EXAM_FAILED_MESSAGE_2": ". Please review the material and try again.",
+  "CERTIFICATE_DETAILS": "Certificate details",
+  "YEAR": "Year(s)"
 }
