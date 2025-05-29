@@ -360,78 +360,14 @@ public final class CertificateGeneratorUtil {
     // Set X for the indented product name value
     currentX = PRODUCT_X + valueIndent;
 
-
-    float availableWidth = PAGE_WIDTH - MARGIN_RIGHT - currentX - 5; // Added 5pt safety margin
-
-    // --- 3. Prepare and Wrap the Product Name Text ---
-    PDFont valueFont = fontBold; 
-    List<String> lines = new ArrayList<>();
-    String[] words = productName.trim().split("\\s+"); 
-    StringBuilder lineBuilder = new StringBuilder();
-
-    for (String word : words) {
-        // Calculate width of potential new line
-        String testLine = (lineBuilder.length() == 0) ? word : lineBuilder + " " + word;
-        float testWidth;
-        try {
-             testWidth = valueFont.getStringWidth(testLine) / 1000f * fontSizeValue;
-        } catch (IOException e) {
-             log.warn("Warning: Could not get string width. " + e.getMessage());
-             testWidth = (testLine.length() * fontSizeValue * 0.6f); 
-        }
-
-
-        if (testWidth < availableWidth) {
-            // Word fits, add it to the current line
-            if (lineBuilder.length() > 0) {
-                lineBuilder.append(" ");
-            }
-            lineBuilder.append(word);
-        } else {
-            // Word doesn't fit, finalize the previous line (if any)
-            if (lineBuilder.length() > 0) {
-                lines.add(lineBuilder.toString());
-                lineBuilder.setLength(0); // Reset builder
-            }
-            // Start the new line with the current word
-            // Handle case where a single word is longer than availableWidth
-             float wordWidth;
-             try {
-                 wordWidth = valueFont.getStringWidth(word) / 1000f * fontSizeValue;
-             } catch (IOException e) {
-                 wordWidth = (word.length() * fontSizeValue * 0.6f);
-             }
-
-            if (wordWidth >= availableWidth) {
-                 // Single word is too long, add it on its own line (will overflow)
-                 lines.add(word);
-            } else {
-                 // Start new line with this word
-                 lineBuilder.append(word);
-            }
-        }
-    }
-    // Add the last remaining line
-    if (lineBuilder.length() > 0) {
-        lines.add(lineBuilder.toString());
-    }
-
-    // --- 4. Draw the Wrapped Product Name Lines ---
+    // --- 2. Draw the Product Name Line ---
     cs.beginText();
-    cs.setFont(valueFont, fontSizeValue); 
+    cs.setFont(fontBold, fontSizeValue); 
     cs.setNonStrokingColor(COLOR_PRODUCT_RED); 
-    // Set initial position for the first line of the value
     cs.newLineAtOffset(currentX, currentY);
-
-    for (int i = 0; i < lines.size(); i++) {
-        if (i > 0) {
-            // Move down for subsequent lines relative to the previous one
-            // Use negative offset because Y=0 is bottom in PDFBox
-            cs.newLineAtOffset(0, -PRODUCT_LINE_HEIGHT);
-        }
-        cs.showText(lines.get(i));
-    }
+    cs.showText(productName.trim());
     cs.endText();
+
 }
 
     private static void drawBodyText(PDPageContentStream cs, PDFont font, String signerName, String shipName,String productDetails, String trainingDate) throws IOException {
@@ -535,5 +471,7 @@ public final class CertificateGeneratorUtil {
             return fallbackFont;
         }
     }
+
+    
 
 }
