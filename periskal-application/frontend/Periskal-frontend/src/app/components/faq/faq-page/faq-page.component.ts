@@ -2,16 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators, FormBuilder, FormsModule } from '@angular/forms';
 import { FaqService } from '../../../services/Faq/faq.service';
-import { HttpClientModule } from '@angular/common/http';
 import { Faq } from '../../../models/Faq.model';
 import { RoleAuthorizationService } from '../../../services/RoleAuthorization/role-authorization.service';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { TranslatePipe } from '@ngx-translate/core';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-faq-page',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslatePipe, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslatePipe, FormsModule, MatTabsModule],
   templateUrl: './faq-page.component.html',
   styleUrl: './faq-page.component.css',
   animations: [
@@ -38,7 +38,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 })
 export class FaqPageComponent implements OnInit {
   faqs: Faq[] = [];
-  faqForm: FormGroup;
+  faqForm!: FormGroup;
   expandedFaqId: number | null = null;
   errorMessage: string | null = null;
   successMessage: string | null = null;
@@ -54,16 +54,37 @@ export class FaqPageComponent implements OnInit {
     private fb: FormBuilder,
     public roleAuth: RoleAuthorizationService,
     private faqService: FaqService
-  ) {
+  ) { }
+
+  ngOnInit(): void {
+    this.initForm();
+    this.loadFaqs();
+  }
+
+  initForm(): void {
     this.faqForm = this.fb.group({
-      question: ['', [Validators.required, Validators.minLength(5)]],
-      answer: ['', [Validators.required, Validators.minLength(10)]],
+      nl: this.fb.group({
+        question: ['', [Validators.required, Validators.minLength(5)]],
+        answer: ['', [Validators.required, Validators.minLength(10)]]
+      }),
+      fr: this.fb.group({
+        question: ['', [Validators.required, Validators.minLength(5)]],
+        answer: ['', [Validators.required, Validators.minLength(10)]]
+      }),
+      de: this.fb.group({
+        question: ['', [Validators.required, Validators.minLength(5)]],
+        answer: ['', [Validators.required, Validators.minLength(10)]]
+      }),
+      en: this.fb.group({
+        question: ['', [Validators.required, Validators.minLength(5)]],
+        answer: ['', [Validators.required, Validators.minLength(10)]]
+      }),
       category: ['', Validators.required]
     });
   }
 
-  ngOnInit(): void {
-    this.loadFaqs();
+  getControl(lang: string, field: string) {
+    return this.faqForm.get(lang)?.get(field);
   }
 
   getAllCategories() {
