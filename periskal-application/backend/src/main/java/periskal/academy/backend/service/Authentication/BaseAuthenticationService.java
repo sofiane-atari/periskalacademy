@@ -21,6 +21,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
 import lombok.extern.slf4j.Slf4j;
 import periskal.academy.backend.model.AuthenticateResponse;
 import periskal.academy.backend.model.Client;
@@ -125,7 +128,7 @@ public abstract class BaseAuthenticationService {
                         "Authentication failed: Invalid username or password.");
             }
 
-        } catch (ParserConfigurationException | SAXException | IOException e) {
+        } catch (ParserConfigurationException | SAXException | IOException | JAXBException e) {
             String errorMsg = "Failed to parse SOAP response XML";
             log.error(errorMsg + ". XML content: {}", responseXml, e);
             throw new AuthenticationParsingException(errorMsg, e, responseXml);
@@ -144,62 +147,12 @@ public abstract class BaseAuthenticationService {
         return null;
     }
 
-    // Helper method to parse Client node from XML. , replace this with a library
-    // like jaxb
-
-    private Client parseClientNode(Node clientNode) {
-        Client client = new Client();
-        NodeList childNodes = clientNode.getChildNodes();
-
-        for (int i = 0; i < childNodes.getLength(); i++) {
-            Node node = childNodes.item(i);
-
-            if (node.getNodeType() == Node.ELEMENT_NODE) {
-                String nodeName = node.getNodeName();
-                String nodeValue = node.getTextContent();
-
-                switch (nodeName) {
-                    case "ID":
-                        client.setId(nodeValue);
-                        break;
-                    case "Username":
-                        client.setUsername(nodeValue);
-                        break;
-                    case "Password":
-                        client.setPassword(nodeValue);
-                        break;
-                    case "Firstname":
-                        client.setFirstname(nodeValue);
-                        break;
-                    case "Lastname":
-                        client.setLastname(nodeValue);
-                        break;
-                    case "Shipname":
-                        client.setShipname(nodeValue);
-                        break;
-                    case "Role":
-                        client.setRole(nodeValue);
-                        break;
-                }
-
-                if (nodeName.equals("Products")) {
-                    List<String> products = new ArrayList<>();
-                    NodeList productNodes = node.getChildNodes();
-
-                    for (int j = 0; j < productNodes.getLength(); j++) {
-                        Node productNode = productNodes.item(j);
-
-                        if (productNode.getNodeType() == Node.ELEMENT_NODE) {
-                            products.add(productNode.getTextContent());
-                        }
-                    }
-
-                    client.setProducts(products);
-                }
-            }
-        }
-
-        return client;
+    private Client parseClientNode(Node clientNode) throws JAXBException {
+        
+        JAXBContext context = JAXBContext.newInstance(Client.class);
+        Unmarshaller unmarshaller = context.createUnmarshaller();
+        return (Client) unmarshaller.unmarshal(clientNode);
+        
     }
 
 }
