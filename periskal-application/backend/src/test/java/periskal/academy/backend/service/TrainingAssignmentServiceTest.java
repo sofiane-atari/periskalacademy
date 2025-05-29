@@ -21,8 +21,8 @@ import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataIntegrityViolationException;
 
-import periskal.academy.backend.jpa.Assignment.TrainingAssignment;
-import periskal.academy.backend.jpa.Assignment.TrainingAssignmentRepository;
+import periskal.academy.backend.jpa.assignment.TrainingAssignment;
+import periskal.academy.backend.jpa.assignment.TrainingAssignmentRepository;
 import periskal.academy.backend.security.exceptions.general.ResourceNotFoundException;
 import periskal.academy.backend.security.exceptions.general.ValidationException;
 

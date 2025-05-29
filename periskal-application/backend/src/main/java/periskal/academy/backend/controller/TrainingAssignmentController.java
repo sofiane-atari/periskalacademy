@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import periskal.academy.backend.jpa.Assignment.TrainingAssignment;
+import periskal.academy.backend.jpa.assignment.TrainingAssignment;
 import periskal.academy.backend.security.SecurityRoles;
 import periskal.academy.backend.service.TrainingAssignmentService;
 
