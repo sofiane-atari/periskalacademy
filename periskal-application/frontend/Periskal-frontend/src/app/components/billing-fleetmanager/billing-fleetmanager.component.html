@@ -121,7 +121,7 @@
           <mat-step>
             <ng-template matStepLabel>{{'ORDER_OVERVIEW' | translate}}</ng-template>
             <div class="overview-container">
-              <h2>{{'CONFIRM_DETAILS' | translate}}</h2>
+              <h2>{{'ORDER_OVERVIEW' | translate}}</h2>
               <ul>
                 <li><strong>{{'FULL_NAME' | translate}}:</strong> {{ billingForm.value.fullName }}</li>
                 <li><strong>{{'COMPANY_NAME' | translate}}:</strong> {{ billingForm.value.companyName }}</li>
@@ -134,8 +134,8 @@
                 <li><strong>{{'COUNTRY' | translate}}:</strong> {{ billingForm.value.countryCode }}</li>
               </ul>
               <div>
-                <h4>Total price</h4>
-                <p>{{userIdsToBill.length}} (Skipperamount) * {{examPrice}} (Exam Price per unit) = {{userIdsToBill.length*examPrice}} EUR</p>
+                <h4>{{'TOTAL_PRICE'| translate}}</h4>
+                <p>{{userIdsToBill.length}} ({{'SKIPPER_AMOUNT' | translate}}) * {{examPrice}} ({{'EXAM_PRICE_PER_UNIT' | translate}}) = {{userIdsToBill.length*examPrice}} EUR</p>
               </div>
               <div class="form-actions">
                 <button mat-button matStepperPrevious class="button-secondary">{{'BACK' | translate}}</button>

@@ -256,5 +256,9 @@
   "SEARCH_FAQ_PLACEHOLDER": "Search by word in question or ID",
   "FAQ": "Frequently Asked Questions",
   "ERASE_Selection": "Erase Selection",
-  "CERTIFICATE_BADGE": "Certificate"
+  "CERTIFICATE_BADGE": "Certificate",
+  "SKIPPER_AMOUNT": "Amount of skippers",
+  "EXAM_PRICE_PER_UNIT": "Exam price per unit",
+  "ORDER_OVERVIEW": "Order overview",
+  "TOTAL_PRICE": "Total price"
 }

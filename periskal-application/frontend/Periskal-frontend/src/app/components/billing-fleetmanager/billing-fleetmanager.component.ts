@@ -53,6 +53,7 @@ export class FleetManagerBillingComponent implements OnInit {
       state: ['', Validators.required],
       zipCode: ['', Validators.required],
       countryCode: ['', Validators.required],
+      examId: ['']
 
     });
   }
