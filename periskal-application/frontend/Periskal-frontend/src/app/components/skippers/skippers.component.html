@@ -152,7 +152,7 @@
                                             <span class="exam-label">{{ 'REQUIRED_SCORE' | translate }}:</span>
                                             <span class="exam-value">{{ exam.requiredScore }}%</span>
                                         </div>
-                                        @if (exam.passed) {
+                                        @if (exam.score >= exam.requiredScore) {
                                         <div class="exam-info">
                                             <span class="exam-label">{{ 'SCORE' | translate }}:</span>
                                             <span class="exam-value-passed">{{ exam.score }}%</span>
@@ -167,7 +167,7 @@
                                             <span class="exam-label">{{ 'COMPLETED_DATE' | translate }}:</span>
                                             <span class="exam-value">{{ exam.completedDate | date:'mediumDate' }}</span>
                                         </div>
-                                        @if (exam.passed) {
+                                        @if (exam.score >= exam.requiredScore) {
                                             <div class="exam-info">
                                                 <span class="exam-label">{{ 'CERTIFICATE_ID' | translate }}:</span>
                                                 <span class="exam-value">{{ exam.certificateId }}</span>
