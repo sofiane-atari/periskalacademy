@@ -1,21 +1,27 @@
 package periskal.academy.backend.service;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import periskal.academy.backend.jpa.UserExamAttempt;
-import periskal.academy.backend.jpa.UserExamAttemptRepository;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import periskal.academy.backend.jpa.UserExamAttempt;
+import periskal.academy.backend.jpa.UserExamAttemptRepository;
 
 @ExtendWith(MockitoExtension.class)
 class UserExamAttemptServiceTest {
@@ -121,7 +127,7 @@ class UserExamAttemptServiceTest {
 
                 assertThat(result).isTrue();
                 assertThat(activeAttempt.getUsedAttempts()).isEqualTo(1);
-                assertThat(activeAttempt.getRemainingAttempts()).isEqualTo(0);
+                assertThat(activeAttempt.getRemainingAttempts()).isZero();
                 assertThat(inactiveAttempt.getUsedAttempts()).isEqualTo(1);
                 verify(userExamAttemptRepository, times(1)).save(activeAttempt);
         }

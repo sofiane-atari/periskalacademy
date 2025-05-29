@@ -35,8 +35,8 @@ import periskal.academy.backend.security.exceptions.authentication.Authenticatio
 @Slf4j
 public abstract class BaseAuthenticationService {
 
-    protected final static RestTemplate restTemplate = new RestTemplate();
-    protected final static String AUTHENTICATE_ENDPOINT_URL = "https://academyws.periskal.com/Academy.asmx";
+    protected static final  RestTemplate restTemplate = new RestTemplate();
+    protected static final  String AUTHENTICATE_ENDPOINT_URL = "https://academyws.periskal.com/Academy.asmx";
 
     public AuthenticateResponse authenticate(String token) {
         String soapRequest = buildSoapRequest(token);
@@ -106,10 +106,10 @@ public abstract class BaseAuthenticationService {
             authResponse.setProducts(products);
 
             // Extract Skippers/Clients
-            NodeList SkippersNodeList = doc.getElementsByTagName("Skippers");
+            NodeList skippersNodeList = doc.getElementsByTagName("Skippers");
             List<Client> skippersList = new ArrayList<>();
-            if (SkippersNodeList.getLength() > 0) {
-                NodeList clientNodes = SkippersNodeList.item(0).getChildNodes();
+            if (skippersNodeList.getLength() > 0) {
+                NodeList clientNodes = skippersNodeList.item(0).getChildNodes();
                 for (int i = 0; i < clientNodes.getLength(); i++) {
                     Node clientNode = clientNodes.item(i);
                     if (clientNode.getNodeName().equals("Client")) {
