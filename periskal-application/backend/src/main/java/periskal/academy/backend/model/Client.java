@@ -14,33 +14,33 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@XmlRootElement(name = "Client")
+@XmlRootElement(name = "Client", namespace = "http://tempuri.org/")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Client {
     
-    @XmlElement(name = "ID")
+    @XmlElement(name = "ID", namespace = "http://tempuri.org/")
     private String id;
 
-    @XmlElement(name = "Username")
+    @XmlElement(name = "Username", namespace = "http://tempuri.org/")
     private String username;
 
-    @XmlElement(name = "Password")
+    @XmlElement(name = "Password", namespace = "http://tempuri.org/")
     private String password;
 
-    @XmlElement(name = "Firstname")
+    @XmlElement(name = "Firstname", namespace = "http://tempuri.org/")
     private String firstname;
 
-    @XmlElement(name = "Lastname")
+    @XmlElement(name = "Lastname", namespace = "http://tempuri.org/")
     private String lastname;
 
-    @XmlElement(name = "Shipname")
+    @XmlElement(name = "Shipname", namespace = "http://tempuri.org/")
     private String shipname;
 
-    @XmlElement(name = "Role")
+    @XmlElement(name = "Role", namespace = "http://tempuri.org/")
     private String role;
 
     @XmlElementWrapper(name = "Products") 
-    @XmlElement(name = "Product")         
+    @XmlElement(name = "Product", namespace = "http://tempuri.org/")         
     private List<String> products;
 
 }
