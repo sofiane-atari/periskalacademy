@@ -1,6 +1,5 @@
 package periskal.academy.backend.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -15,11 +14,13 @@ import periskal.academy.backend.dto.ContactRequest;
 @Slf4j
 public class EmailService {
 
-    @Autowired
-    private JavaMailSender mailSender;
+    private final JavaMailSender mailSender;
+    private final String fromEmailAddress;
 
-    @Value("${spring.mail.username}") 
-    private String fromEmailAddress;
+    public EmailService(JavaMailSender mailSender, @Value("${spring.mail.username}") String fromEmailAddress) {
+        this.mailSender = mailSender;
+        this.fromEmailAddress = fromEmailAddress;
+    }
     
     
     public void sendContactFormEmail(ContactRequest contactRequest) {

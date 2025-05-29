@@ -4,21 +4,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
-import periskal.academy.backend.jpa.faq.*;
+import periskal.academy.backend.jpa.faq.Faq;
+import periskal.academy.backend.jpa.faq.FaqRepository;
 import periskal.academy.backend.security.exceptions.general.ResourceNotFoundException;
 import periskal.academy.backend.security.exceptions.general.ValidationException;
 
 @Slf4j
 @Service
 public class FaqService {
-    @Autowired
-    private FaqRepository faqRepository;
+
+    
+    private final FaqRepository faqRepository;
+
+    public FaqService(FaqRepository faqRepository) {
+        this.faqRepository = faqRepository;
+    }
 
     public List<Faq> getAllFaqs() {
         try {
