@@ -11,10 +11,10 @@
     </button>
 
     @if (showAddForm) {
-    <h2 class="form-title">Nieuwe FAQ toevoegen</h2>
+    <h2 class="form-title">{{'ADD_NEW_FAQ' | translate}}</h2>
     <form [formGroup]="faqForm" (ngSubmit)="addFaq()" class="faq-form" @fadeInOut>
       <mat-tab-group animationDuration="0ms">
-        <mat-tab label="Nederlands">
+        <mat-tab [label]="('LANGUAGE_NL' | translate)">
           <div class="tab-content-spacing">
             <div class="form-group">
               <div class="floating-label">
@@ -25,16 +25,16 @@
                   [class.error]="faqForm.get('questionNl')?.invalid && faqForm.get('questionNl')?.touched"
                 >
                 <label for="question-nl" class="form-label">
-                  Vraag (Nederlands)
+                  {{'QUESTION_NL' | translate}}
                 </label>
               </div>
 
               @if (faqForm.get('questionNl')?.invalid && faqForm.get('questionNl')?.touched) {
               <div class="error-message">
                 @if (faqForm.get('questionNl')?.errors?.['required']) {
-                <span>Vraag is verplicht</span>
+                <span>{{'QUESTION_REQUIRED' | translate}}</span>
                 } @else if (faqForm.get('questionNl')?.errors?.['minlength']) {
-                <span>Vraag moet minimaal 5 tekens bevatten</span>
+                <span>{{'QUESTION_MINLENGTH' | translate}}</span>
                 }
               </div>
               }
@@ -50,16 +50,16 @@
                   [class.error]="faqForm.get('answerNl')?.invalid && faqForm.get('answerNl')?.touched"
                 ></textarea>
                 <label for="answer-nl" class="form-label">
-                  Antwoord (Nederlands)
+                  {{'ANSWER_NL' | translate}}
                 </label>
               </div>
 
               @if (faqForm.get('answerNl')?.invalid && faqForm.get('answerNl')?.touched) {
               <div class="error-message">
                 @if (faqForm.get('answerNl')?.errors?.['required']) {
-                <span>Antwoord is verplicht</span>
+                <span>{{'ANSWER_REQUIRED' | translate}}</span>
                 } @else if (faqForm.get('answerNl')?.errors?.['minlength']) {
-                <span>Antwoord moet minimaal 10 tekens bevatten</span>
+                <span>{{'ANSWER_MINLENGTH' | translate}}</span>
                 }
               </div>
               }
@@ -67,7 +67,7 @@
           </div>
         </mat-tab>
 
-        <mat-tab label="Français">
+        <mat-tab [label]="('LANGUAGE_FR' | translate)">
           <div class="tab-content-spacing">
             <div class="form-group">
               <div class="floating-label">
@@ -78,15 +78,15 @@
                   [class.error]="faqForm.get('questionFr')?.invalid && faqForm.get('questionFr')?.touched"
                 >
                 <label for="question-fr" class="form-label">
-                  Vraag (Frans)
+                  {{'QUESTION_FR' | translate}}
                 </label>
               </div>
               @if (faqForm.get('questionFr')?.invalid && faqForm.get('questionFr')?.touched) {
               <div class="error-message">
                 @if (faqForm.get('questionFr')?.errors?.['required']) {
-                <span>Vraag is verplicht</span>
+                <span>{{'QUESTION_REQUIRED' | translate}}</span>
                 } @else if (faqForm.get('questionFr')?.errors?.['minlength']) {
-                <span>Vraag moet minimaal 5 tekens bevatten</span>
+                <span>{{'QUESTION_MINLENGTH' | translate}}</span>
                 }
               </div>
               }
@@ -102,15 +102,15 @@
                   [class.error]="faqForm.get('answerFr')?.invalid && faqForm.get('answerFr')?.touched"
                 ></textarea>
                 <label for="answer-fr" class="form-label">
-                  Antwoord (Frans)
+                  {{'ANSWER_FR' | translate}}
                 </label>
               </div>
               @if (faqForm.get('answerFr')?.invalid && faqForm.get('answerFr')?.touched) {
               <div class="error-message" @fadeInOut>
                 @if (faqForm.get('answerFr')?.errors?.['required']) {
-                <span>Antwoord is verplicht</span>
+                <span>{{'ANSWER_REQUIRED' | translate}}</span>
                 } @else if (faqForm.get('answerFr')?.errors?.['minlength']) {
-                <span>Antwoord moet minimaal 10 tekens bevatten</span>
+                <span>{{'ANSWER_MINLENGTH' | translate}}</span>
                 }
               </div>
               }
@@ -118,7 +118,7 @@
           </div>
         </mat-tab>
 
-        <mat-tab label="Deutsch">
+        <mat-tab [label]="('LANGUAGE_DE' | translate)">
           <div class="tab-content-spacing">
             <div class="form-group">
               <div class="floating-label">
@@ -129,15 +129,15 @@
                   [class.error]="faqForm.get('questionDe')?.invalid && faqForm.get('questionDe')?.touched"
                 >
                 <label for="question-de" class="form-label">
-                  Vraag (Duits)
+                  {{'QUESTION_DE' | translate}}
                 </label>
               </div>
               @if (faqForm.get('questionDe')?.invalid && faqForm.get('questionDe')?.touched) {
               <div class="error-message">
                 @if (faqForm.get('questionDe')?.errors?.['required']) {
-                <span>Vraag is verplicht</span>
+                <span>{{'QUESTION_REQUIRED' | translate}}</span>
                 } @else if (faqForm.get('questionDe')?.errors?.['minlength']) {
-                <span>Vraag moet minimaal 5 tekens bevatten</span>
+                <span>{{'QUESTION_MINLENGTH' | translate}}</span>
                 }
               </div>
               }
@@ -153,15 +153,15 @@
                   [class.error]="faqForm.get('answerDe')?.invalid && faqForm.get('answerDe')?.touched"
                 ></textarea>
                 <label for="answer-de" class="form-label">
-                  Antwoord (Duits)
+                  {{'ANSWER_DE'| translate}}
                 </label>
               </div>
               @if (faqForm.get('answerDe')?.invalid && faqForm.get('answerDe')?.touched) {
               <div class="error-message" @fadeInOut>
                 @if (faqForm.get('answerDe')?.errors?.['required']) {
-                <span>Antwoord is verplicht</span>
+                <span>{{'ANSWER_REQUIRED' | translate}}</span>
                 } @else if (faqForm.get('answerDe')?.errors?.['minlength']) {
-                <span>Antwoord moet minimaal 10 tekens bevatten</span>
+                <span>{{'ANSWER_MINLENGTH' | translate}}</span>
                 }
               </div>
               }
@@ -169,7 +169,7 @@
           </div>
         </mat-tab>
 
-        <mat-tab label="English">
+        <mat-tab [label]="('LANGUAGE_EN' | translate)">
           <div class="tab-content-spacing">
             <div class="form-group">
               <div class="floating-label">
@@ -180,15 +180,15 @@
                   [class.error]="faqForm.get('questionEn')?.invalid && faqForm.get('questionEn')?.touched"
                 >
                 <label for="question-en" class="form-label">
-                  Vraag (Engels)
+                  {{'ANSWER_EN' |translate}}
                 </label>
               </div>
               @if (faqForm.get('questionEn')?.invalid && faqForm.get('questionEn')?.touched) {
               <div class="error-message" @fadeInOut>
                 @if (faqForm.get('questionEn')?.errors?.['required']) {
-                <span>Vraag is verplicht</span>
+                <span>{{'QUESTION_REQUIRED' | translate}}</span>
                 } @else if (faqForm.get('questionEn')?.errors?.['minlength']) {
-                <span>Vraag moet minimaal 5 tekens bevatten</span>
+                <span>{{'QUESTION_MINLENGTH' | translate}}</span>
                 }
               </div>
               }
@@ -204,15 +204,15 @@
                   [class.error]="faqForm.get('answerEn')?.invalid && faqForm.get('answerEn')?.touched"
                 ></textarea>
                 <label for="answer-en" class="form-label">
-                  Antwoord (Engels)
+                  {{'ANSWER_EN' | translate}}
                 </label>
               </div>
               @if (faqForm.get('answerEn')?.invalid && faqForm.get('answerEn')?.touched) {
               <div class="error-message" @fadeInOut>
                 @if (faqForm.get('answerEn')?.errors?.['required']) {
-                <span>Antwoord is verplicht</span>
+                <span>{{'ANSWER_REQUIRED' | translate}}</span>
                 } @else if (faqForm.get('answerEn')?.errors?.['minlength']) {
-                <span>Antwoord moet minimaal 10 tekens bevatten</span>
+                <span>{{'ANSWER_MINLENGTH' | translate}}</span>
                 }
               </div>
               }
@@ -229,7 +229,7 @@
             class="category-select"
             [class.error]="faqForm.get('category')?.invalid && faqForm.get('category')?.touched"
           >
-            <option value="" disabled selected>Kies een categorie</option>
+            <option value="" disabled selected>{{'CHOOSE_CATEGORY' | translate}}</option>
             @for (category of getAllCategories(); track $index) {
             <option [value]="category">{{ category }}</option>
             }
@@ -237,7 +237,7 @@
         </div>
         @if (faqForm.get('category')?.invalid && faqForm.get('category')?.touched) {
         <div class="error-message" @fadeInOut>
-          <span>Categorie is verplicht</span>
+          <span>{{'CATEGORY_REQUIRED' | translate}}</span>
         </div>
         }
       </div>
@@ -247,7 +247,7 @@
         [disabled]="faqForm.invalid || isSubmitting"
         class="submit-button"
       >
-        <span class="button-text">{{ isSubmitting ? 'Bezig met toevoegen...' : 'Voeg FAQ toe' }}</span>
+        <span class="button-text">{{ isSubmitting ? ('ADDING' | translate) : ('ADD_A_FAQ' | translate) }}</span>
       </button>
 
       @if (errorMessage) {
@@ -292,7 +292,7 @@
     @if (faqs.length === 0) {
     <div class="empty-container" @fadeInOut>
       <p class="empty-message">
-        Er zijn nog geen FAQ-items.
+        {{'NO_FAQ_ITEMS' | translate}}
       </p>
     </div>
     }
