@@ -2,12 +2,13 @@ import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
 import { Router } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-certificate-dialog',
   templateUrl: './certificatedialog.component.html',
   standalone: true,
-  imports: [MatIcon],
+  imports: [MatIcon, TranslatePipe],
   styleUrls: ['./certificatedialog.component.css']
 })
 export class CertificateDialogComponent {
