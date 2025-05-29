@@ -39,7 +39,7 @@ public class Client {
     @XmlElement(name = "Role", namespace = "http://tempuri.org/")
     private String role;
 
-    @XmlElementWrapper(name = "Products") 
+    @XmlElementWrapper(name = "Products", namespace = "http://tempuri.org/") 
     @XmlElement(name = "string", namespace = "http://tempuri.org/")         
     private List<String> products;
 
