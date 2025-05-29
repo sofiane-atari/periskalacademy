@@ -172,7 +172,7 @@ export class TakeExamComponent implements OnInit, OnDestroy {
     };
 
     this.examStateService.finishExam();
-
+    console.log(completedExamData);
     this.completedExamService.saveCompletedExam(completedExamData as CompletedExam).subscribe({
       next: (savedExam) => {
         this.isSubmitting = false;
@@ -185,18 +185,28 @@ export class TakeExamComponent implements OnInit, OnDestroy {
           ? `\n\nA certificate has been generated and is available in your certificates list.`
           : '';
 
-        const dialogRef = this.dialog.open(CertificateDialogComponent, {
-          width: '600px',
-          height: '1000px',
-          data: {
-            examName: this.exam?.examTitle || 'exam',
-            issueDate: new Date().toLocaleDateString(),
-            validity: '1 year',
-            certificateUrl: `/api/certificates/download/${savedExam.certificateId}`
-          }
-        }).afterClosed().subscribe(() => {
-          this.router.navigate(['/modules']);
-        });;
+        if (savedExam.passed) {
+          const dialogRef = this.dialog.open(CertificateDialogComponent, {
+            width: '600px',
+            maxHeight: 'auto',
+            panelClass: 'compact-dialog',
+            data: {
+              examName: this.exam?.examTitle || 'exam',
+              issueDate: new Date().toLocaleDateString(),
+              validity: '1 year',
+              status: 'passed'
+            }
+          }).afterClosed().subscribe(() => {
+            this.router.navigate(['/modules']);
+          });;
+        } else {
+          this.dialog.open(CertificateDialogComponent, {
+            data: {
+              examName: this.exam?.examTitle,
+              status: 'failed'
+            }
+          });
+        }
 
         if (savedExam.certificateId) {
           this.router.navigate(['/certificates'], {
