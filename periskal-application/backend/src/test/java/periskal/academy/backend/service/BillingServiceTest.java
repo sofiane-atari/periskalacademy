@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ExtendWith(MockitoExtension.class)
-public class BillingServiceTest {
+class BillingServiceTest {
 
     @Mock
     private BillingRepository billingRepository;
@@ -131,7 +131,7 @@ public class BillingServiceTest {
         // Arrange: A null Billing entity
         Billing nullBilling = null;
 
-        when(billingRepository.save(nullBilling))
+        when(billingRepository.save(ArgumentMatchers.isNull()))
                 .thenThrow(new IllegalArgumentException("Entity to save must not be null"));
 
         // Act: Use AssertJ's assertThatThrownBy for asserting exceptions
@@ -140,7 +140,7 @@ public class BillingServiceTest {
                 .hasMessage("Entity to save must not be null");
 
         // Assert that the save method on the repository was called once with null
-        verify(billingRepository, times(1)).save(nullBilling);
+        verify(billingRepository, times(1)).save(ArgumentMatchers.isNull());
     }
 
     @Test
@@ -195,13 +195,13 @@ public class BillingServiceTest {
     assertThat(attempt1.getExamId()).isEqualTo("EXAM001");
     assertThat(attempt1.getUserId()).isEqualTo("USER001");
     assertThat(attempt1.getTotalAttempts()).isEqualTo(3);
-    assertThat(attempt1.getUsedAttempts()).isEqualTo(0);
+    assertThat(attempt1.getUsedAttempts()).isZero();
 
     // Verify second UserExamAttempt
     UserExamAttempt attempt2 = capturedAttempts.get(1); 
     assertThat(attempt2.getExamId()).isEqualTo("EXAM002");
     assertThat(attempt2.getUserId()).isEqualTo("USER002");
     assertThat(attempt2.getTotalAttempts()).isEqualTo(5);
-    assertThat(attempt2.getUsedAttempts()).isEqualTo(0);
+    assertThat(attempt2.getUsedAttempts()).isZero();
 }
 }
