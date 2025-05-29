@@ -1,6 +1,7 @@
 package periskal.academy.backend.service;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import java.util.*;
@@ -31,8 +32,8 @@ class FaqServiceTest {
 
         sampleFaq = new Faq();
         sampleFaq.setId(1L);
-        sampleFaq.setQuestion("What is Java?");
-        sampleFaq.setAnswer("A programming language.");
+        sampleFaq.setQuestionEn("What is Java?");
+        sampleFaq.setAnswerEn("A programming language.");
     }
 
     @Test
@@ -42,7 +43,7 @@ class FaqServiceTest {
         List<Faq> faqs = faqService.getAllFaqs();
 
         assertThat(faqs).hasSize(1);
-        assertThat(faqs.get(0).getQuestion()).isEqualTo("What is Java?");
+        assertThat(faqs.get(0).getQuestionEn()).isEqualTo("What is Java?");
     }
 
     @Test
@@ -103,8 +104,8 @@ class FaqServiceTest {
     @Test
     void updateFaq_whenExists_shouldUpdateAndReturn() {
         Faq updatedFaq = new Faq();
-        updatedFaq.setQuestion("Updated?");
-        updatedFaq.setAnswer("Yes.");
+        updatedFaq.setQuestionEn("Updated?");
+        updatedFaq.setAnswerEn("Yes.");
 
         when(faqRepository.findById(1L)).thenReturn(Optional.of(sampleFaq));
         when(faqRepository.save(any())).thenReturn(sampleFaq);

@@ -56,14 +56,14 @@ class FaqControllerTest {
         void setUp() {
                 sampleFaq = new Faq();
                 sampleFaq.setId(1L);
-                sampleFaq.setQuestion("What does it mean when a training is assigned by fleetmanager?");
-                sampleFaq.setAnswer("This training has already been paid for by your fleetmanager");
+                sampleFaq.setQuestionEn("What does it mean when a training is assigned by fleetmanager?");
+                sampleFaq.setAnswerEn("This training has already been paid for by your fleetmanager");
                 sampleFaq.setCategory("Training");
 
                 Faq faq2 = new Faq();
                 faq2.setId(2L);
-                faq2.setQuestion("How can i achieve a certificate?");
-                faq2.setAnswer("You can achieve a certificate by completing an exam with the required score");
+                faq2.setQuestionEn("How can i achieve a certificate?");
+                faq2.setAnswerEn("You can achieve a certificate by completing an exam with the required score");
                 faq2.setCategory("Certification");
 
                 sampleFaqs = Arrays.asList(sampleFaq, faq2);
@@ -135,9 +135,9 @@ class FaqControllerTest {
                                 .isNotNull()
                                 .satisfies(faq -> {
                                         assertThat(faq.getId()).isEqualTo(faqId);
-                                        assertThat(faq.getQuestion()).isEqualTo(
+                                        assertThat(faq.getQuestionEn()).isEqualTo(
                                                         "What does it mean when a training is assigned by fleetmanager?");
-                                        assertThat(faq.getAnswer()).isEqualTo(
+                                        assertThat(faq.getAnswerEn()).isEqualTo(
                                                         "This training has already been paid for by your fleetmanager");
                                         assertThat(faq.getCategory()).isEqualTo("Training");
                                 });
@@ -162,14 +162,14 @@ class FaqControllerTest {
         void givenValidFaqData_whenCreateFaq_thenReturnCreatedFaq() throws Exception {
                 // Given
                 Faq newFaq = new Faq();
-                newFaq.setQuestion("What is JUnit?");
-                newFaq.setAnswer("JUnit is a testing framework");
+                newFaq.setQuestionEn("What is JUnit?");
+                newFaq.setAnswerEn("JUnit is a testing framework");
                 newFaq.setCategory("Testing");
 
                 Faq createdFaq = new Faq();
                 createdFaq.setId(3L);
-                createdFaq.setQuestion(newFaq.getQuestion());
-                createdFaq.setAnswer(newFaq.getAnswer());
+                createdFaq.setQuestionEn(newFaq.getQuestionEn());
+                createdFaq.setAnswerEn(newFaq.getAnswerEn());
                 createdFaq.setCategory(newFaq.getCategory());
 
                 given(faqService.createFaq(any(Faq.class))).willReturn(createdFaq);
@@ -190,8 +190,8 @@ class FaqControllerTest {
                                 .isNotNull()
                                 .satisfies(faq -> {
                                         assertThat(faq.getId()).isEqualTo(3L);
-                                        assertThat(faq.getQuestion()).isEqualTo("What is JUnit?");
-                                        assertThat(faq.getAnswer()).isEqualTo("JUnit is a testing framework");
+                                        assertThat(faq.getQuestionEn()).isEqualTo("What is JUnit?");
+                                        assertThat(faq.getAnswerEn()).isEqualTo("JUnit is a testing framework");
                                         assertThat(faq.getCategory()).isEqualTo("Testing");
                                 });
         }
@@ -215,14 +215,14 @@ class FaqControllerTest {
                 // Given
                 Long faqId = 1L;
                 Faq updateData = new Faq();
-                updateData.setQuestion("Updated Question");
-                updateData.setAnswer("Updated Answer");
+                updateData.setQuestionEn("Updated Question");
+                updateData.setAnswerEn("Updated Answer");
                 updateData.setCategory("Updated Category");
 
                 Faq updatedFaq = new Faq();
                 updatedFaq.setId(faqId);
-                updatedFaq.setQuestion(updateData.getQuestion());
-                updatedFaq.setAnswer(updateData.getAnswer());
+                updatedFaq.setQuestionEn(updateData.getQuestionEn());
+                updatedFaq.setAnswerEn(updateData.getAnswerEn());
                 updatedFaq.setCategory(updateData.getCategory());
 
                 given(faqService.updateFaq(eq(faqId), any(Faq.class))).willReturn(updatedFaq);
@@ -243,8 +243,8 @@ class FaqControllerTest {
                                 .isNotNull()
                                 .satisfies(faq -> {
                                         assertThat(faq.getId()).isEqualTo(faqId);
-                                        assertThat(faq.getQuestion()).isEqualTo("Updated Question");
-                                        assertThat(faq.getAnswer()).isEqualTo("Updated Answer");
+                                        assertThat(faq.getQuestionEn()).isEqualTo("Updated Question");
+                                        assertThat(faq.getAnswerEn()).isEqualTo("Updated Answer");
                                         assertThat(faq.getCategory()).isEqualTo("Updated Category");
                                 });
         }
@@ -254,7 +254,7 @@ class FaqControllerTest {
                 // Given
                 Long nonExistingId = 999L;
                 Faq updateData = new Faq();
-                updateData.setQuestion("Updated Question");
+                updateData.setQuestionEn("Updated Question");
 
                 given(faqService.updateFaq(eq(nonExistingId), any(Faq.class)))
                                 .willThrow(new ResourceNotFoundException("FAQ not found with id " + nonExistingId));

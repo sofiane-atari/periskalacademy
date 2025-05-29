@@ -1,23 +1,6 @@
 <div class="faq-container">
   <div class="faq-content">
     <h1 class="faq-title">{{'FAQ' | translate}}</h1>
-
-    <div class="search-bar">
-      <div>
-        <label for="category-select" class="filter-label">{{'FILTER_BY_CATEGORY' | translate}}</label>
-        <select class="category-select" [(ngModel)]="selectedCategory">
-          <option value="">{{'ALL_CATEGORIES' | translate}}</option>
-          @for (category of getAllCategories(); track $index) {
-          <option [value]="category">{{category}}</option>
-          }
-        </select>
-      </div>
-      <div>
-        <label for="search-input" class="filter-label">{{'SEARCH_FAQ' | translate}}</label>
-        <input id="search-input" class="search-input" type="text" [(ngModel)]="searchTerm" placeholder="{{'SEARCH_FAQ_PLACEHOLDER' | translate}}" />
-      </div>
-    </div>
-
     @if (roleAuth.canEditContent() || roleAuth.hasPermission(['Support'])) {
     <button
       type="button"
@@ -33,222 +16,206 @@
       <mat-tab-group animationDuration="0ms">
         <mat-tab label="Nederlands">
           <div class="tab-content-spacing">
-            <div formGroupName="nl">
-              <div class="form-group">
-                <div class="floating-label">
-                  <input
-                    id="question-nl"
-                    formControlName="question"
-                    placeholder=" "
-                    class="form-input"
-                    [class.error]="getControl('nl', 'question')?.invalid && getControl('nl', 'question')?.touched"
-                  >
-                  <label for="question-nl" class="form-label">
-                    Vraag (Nederlands)
-                  </label>
-                </div>
-
-                @if (getControl('nl', 'question')?.invalid && getControl('nl', 'question')?.touched) {
-                <div class="error-message">
-                  @if (getControl('nl', 'question')?.errors?.['required']) {
-                  <span>Vraag is verplicht</span>
-                  } @else if (getControl('nl', 'question')?.errors?.['minlength']) {
-                  <span>Vraag moet minimaal 5 tekens bevatten</span>
-                  }
-                </div>
-                }
+            <div class="form-group">
+              <div class="floating-label">
+                <input
+                  id="question-nl"
+                  formControlName="questionNl" placeholder=" "
+                  class="form-input"
+                  [class.error]="faqForm.get('questionNl')?.invalid && faqForm.get('questionNl')?.touched"
+                >
+                <label for="question-nl" class="form-label">
+                  Vraag (Nederlands)
+                </label>
               </div>
 
-              <div class="form-group">
-                <div class="floating-label">
-                  <textarea
-                    id="answer-nl"
-                    formControlName="answer"
-                    placeholder=" "
-                    rows="4"
-                    class="form-textarea"
-                    [class.error]="getControl('nl', 'answer')?.invalid && getControl('nl', 'answer')?.touched"
-                  ></textarea>
-                  <label for="answer-nl" class="form-label">
-                    Antwoord (Nederlands)
-                  </label>
-                </div>
-
-                @if (getControl('nl', 'answer')?.invalid && getControl('nl', 'answer')?.touched) {
-                <div class="error-message">
-                  @if (getControl('nl', 'answer')?.errors?.['required']) {
-                  <span>Antwoord is verplicht</span>
-                  } @else if (getControl('nl', 'answer')?.errors?.['minlength']) {
-                  <span>Antwoord moet minimaal 10 tekens bevatten</span>
-                  }
-                </div>
+              @if (faqForm.get('questionNl')?.invalid && faqForm.get('questionNl')?.touched) {
+              <div class="error-message">
+                @if (faqForm.get('questionNl')?.errors?.['required']) {
+                <span>Vraag is verplicht</span>
+                } @else if (faqForm.get('questionNl')?.errors?.['minlength']) {
+                <span>Vraag moet minimaal 5 tekens bevatten</span>
                 }
               </div>
+              }
+            </div>
+
+            <div class="form-group">
+              <div class="floating-label">
+                <textarea
+                  id="answer-nl"
+                  formControlName="answerNl" placeholder=" "
+                  rows="4"
+                  class="form-textarea"
+                  [class.error]="faqForm.get('answerNl')?.invalid && faqForm.get('answerNl')?.touched"
+                ></textarea>
+                <label for="answer-nl" class="form-label">
+                  Antwoord (Nederlands)
+                </label>
+              </div>
+
+              @if (faqForm.get('answerNl')?.invalid && faqForm.get('answerNl')?.touched) {
+              <div class="error-message">
+                @if (faqForm.get('answerNl')?.errors?.['required']) {
+                <span>Antwoord is verplicht</span>
+                } @else if (faqForm.get('answerNl')?.errors?.['minlength']) {
+                <span>Antwoord moet minimaal 10 tekens bevatten</span>
+                }
+              </div>
+              }
             </div>
           </div>
         </mat-tab>
 
         <mat-tab label="Français">
           <div class="tab-content-spacing">
-            <div formGroupName="fr">
-              <div class="form-group">
-                <div class="floating-label">
-                  <input
-                    id="question-fr"
-                    formControlName="question"
-                    placeholder=" "
-                    class="form-input"
-                    [class.error]="getControl('fr', 'question')?.invalid && getControl('fr', 'question')?.touched"
-                  >
-                  <label for="question-fr" class="form-label">
-                    Vraag (Frans)
-                  </label>
-                </div>
-                @if (getControl('fr', 'question')?.invalid && getControl('fr', 'question')?.touched) {
-                <div class="error-message">
-                  @if (getControl('fr', 'question')?.errors?.['required']) {
-                  <span>Vraag is verplicht</span>
-                  } @else if (getControl('fr', 'question')?.errors?.['minlength']) {
-                  <span>Vraag moet minimaal 5 tekens bevatten</span>
-                  }
-                </div>
+            <div class="form-group">
+              <div class="floating-label">
+                <input
+                  id="question-fr"
+                  formControlName="questionFr" placeholder=" "
+                  class="form-input"
+                  [class.error]="faqForm.get('questionFr')?.invalid && faqForm.get('questionFr')?.touched"
+                >
+                <label for="question-fr" class="form-label">
+                  Vraag (Frans)
+                </label>
+              </div>
+              @if (faqForm.get('questionFr')?.invalid && faqForm.get('questionFr')?.touched) {
+              <div class="error-message">
+                @if (faqForm.get('questionFr')?.errors?.['required']) {
+                <span>Vraag is verplicht</span>
+                } @else if (faqForm.get('questionFr')?.errors?.['minlength']) {
+                <span>Vraag moet minimaal 5 tekens bevatten</span>
                 }
               </div>
+              }
+            </div>
 
-              <div class="form-group">
-                <div class="floating-label">
-                  <textarea
-                    id="answer-fr"
-                    formControlName="answer"
-                    placeholder=" "
-                    rows="4"
-                    class="form-textarea"
-                    [class.error]="getControl('fr', 'answer')?.invalid && getControl('fr', 'answer')?.touched"
-                  ></textarea>
-                  <label for="answer-fr" class="form-label">
-                    Antwoord (Frans)
-                  </label>
-                </div>
-                @if (getControl('fr', 'answer')?.invalid && getControl('fr', 'answer')?.touched) {
-                <div class="error-message" @fadeInOut>
-                  @if (getControl('fr', 'answer')?.errors?.['required']) {
-                  <span>Antwoord is verplicht</span>
-                  } @else if (getControl('fr', 'answer')?.errors?.['minlength']) {
-                  <span>Antwoord moet minimaal 10 tekens bevatten</span>
-                  }
-                </div>
+            <div class="form-group">
+              <div class="floating-label">
+                <textarea
+                  id="answer-fr"
+                  formControlName="answerFr" placeholder=" "
+                  rows="4"
+                  class="form-textarea"
+                  [class.error]="faqForm.get('answerFr')?.invalid && faqForm.get('answerFr')?.touched"
+                ></textarea>
+                <label for="answer-fr" class="form-label">
+                  Antwoord (Frans)
+                </label>
+              </div>
+              @if (faqForm.get('answerFr')?.invalid && faqForm.get('answerFr')?.touched) {
+              <div class="error-message" @fadeInOut>
+                @if (faqForm.get('answerFr')?.errors?.['required']) {
+                <span>Antwoord is verplicht</span>
+                } @else if (faqForm.get('answerFr')?.errors?.['minlength']) {
+                <span>Antwoord moet minimaal 10 tekens bevatten</span>
                 }
               </div>
+              }
             </div>
           </div>
         </mat-tab>
 
         <mat-tab label="Deutsch">
           <div class="tab-content-spacing">
-            <div formGroupName="de">
-              <div class="form-group">
-                <div class="floating-label">
-                  <input
-                    id="question-de"
-                    formControlName="question"
-                    placeholder=" "
-                    class="form-input"
-                    [class.error]="getControl('de', 'question')?.invalid && getControl('de', 'question')?.touched"
-                  >
-                  <label for="question-de" class="form-label">
-                    Vraag (Duits)
-                  </label>
-                </div>
-                @if (getControl('de', 'question')?.invalid && getControl('de', 'question')?.touched) {
-                <div class="error-message">
-                  @if (getControl('de', 'question')?.errors?.['required']) {
-                  <span>Vraag is verplicht</span>
-                  } @else if (getControl('de', 'question')?.errors?.['minlength']) {
-                  <span>Vraag moet minimaal 5 tekens bevatten</span>
-                  }
-                </div>
+            <div class="form-group">
+              <div class="floating-label">
+                <input
+                  id="question-de"
+                  formControlName="questionDe" placeholder=" "
+                  class="form-input"
+                  [class.error]="faqForm.get('questionDe')?.invalid && faqForm.get('questionDe')?.touched"
+                >
+                <label for="question-de" class="form-label">
+                  Vraag (Duits)
+                </label>
+              </div>
+              @if (faqForm.get('questionDe')?.invalid && faqForm.get('questionDe')?.touched) {
+              <div class="error-message">
+                @if (faqForm.get('questionDe')?.errors?.['required']) {
+                <span>Vraag is verplicht</span>
+                } @else if (faqForm.get('questionDe')?.errors?.['minlength']) {
+                <span>Vraag moet minimaal 5 tekens bevatten</span>
                 }
               </div>
+              }
+            </div>
 
-              <div class="form-group">
-                <div class="floating-label">
-                  <textarea
-                    id="answer-de"
-                    formControlName="answer"
-                    placeholder=" "
-                    rows="4"
-                    class="form-textarea"
-                    [class.error]="getControl('de', 'answer')?.invalid && getControl('de', 'answer')?.touched"
-                  ></textarea>
-                  <label for="answer-de" class="form-label">
-                    Antwoord (Duits)
-                  </label>
-                </div>
-                @if (getControl('de', 'answer')?.invalid && getControl('de', 'answer')?.touched) {
-                <div class="error-message" @fadeInOut>
-                  @if (getControl('de', 'answer')?.errors?.['required']) {
-                  <span>Antwoord is verplicht</span>
-                  } @else if (getControl('de', 'answer')?.errors?.['minlength']) {
-                  <span>Antwoord moet minimaal 10 tekens bevatten</span>
-                  }
-                </div>
+            <div class="form-group">
+              <div class="floating-label">
+                <textarea
+                  id="answer-de"
+                  formControlName="answerDe" placeholder=" "
+                  rows="4"
+                  class="form-textarea"
+                  [class.error]="faqForm.get('answerDe')?.invalid && faqForm.get('answerDe')?.touched"
+                ></textarea>
+                <label for="answer-de" class="form-label">
+                  Antwoord (Duits)
+                </label>
+              </div>
+              @if (faqForm.get('answerDe')?.invalid && faqForm.get('answerDe')?.touched) {
+              <div class="error-message" @fadeInOut>
+                @if (faqForm.get('answerDe')?.errors?.['required']) {
+                <span>Antwoord is verplicht</span>
+                } @else if (faqForm.get('answerDe')?.errors?.['minlength']) {
+                <span>Antwoord moet minimaal 10 tekens bevatten</span>
                 }
               </div>
+              }
             </div>
           </div>
         </mat-tab>
 
         <mat-tab label="English">
           <div class="tab-content-spacing">
-            <div formGroupName="en">
-              <div class="form-group">
-                <div class="floating-label">
-                  <input
-                    id="question-en"
-                    formControlName="question"
-                    placeholder=" "
-                    class="form-input"
-                    [class.error]="getControl('en', 'question')?.invalid && getControl('en', 'question')?.touched"
-                  >
-                  <label for="question-en" class="form-label">
-                    Vraag (Engels)
-                  </label>
-                </div>
-                @if (getControl('en', 'question')?.invalid && getControl('en', 'question')?.touched) {
-                <div class="error-message" @fadeInOut>
-                  @if (getControl('en', 'question')?.errors?.['required']) {
-                  <span>Vraag is verplicht</span>
-                  } @else if (getControl('en', 'question')?.errors?.['minlength']) {
-                  <span>Vraag moet minimaal 5 tekens bevatten</span>
-                  }
-                </div>
+            <div class="form-group">
+              <div class="floating-label">
+                <input
+                  id="question-en"
+                  formControlName="questionEn" placeholder=" "
+                  class="form-input"
+                  [class.error]="faqForm.get('questionEn')?.invalid && faqForm.get('questionEn')?.touched"
+                >
+                <label for="question-en" class="form-label">
+                  Vraag (Engels)
+                </label>
+              </div>
+              @if (faqForm.get('questionEn')?.invalid && faqForm.get('questionEn')?.touched) {
+              <div class="error-message" @fadeInOut>
+                @if (faqForm.get('questionEn')?.errors?.['required']) {
+                <span>Vraag is verplicht</span>
+                } @else if (faqForm.get('questionEn')?.errors?.['minlength']) {
+                <span>Vraag moet minimaal 5 tekens bevatten</span>
                 }
               </div>
+              }
+            </div>
 
-              <div class="form-group">
-                <div class="floating-label">
-                  <textarea
-                    id="answer-en"
-                    formControlName="answer"
-                    placeholder=" "
-                    rows="4"
-                    class="form-textarea"
-                    [class.error]="getControl('en', 'answer')?.invalid && getControl('en', 'answer')?.touched"
-                  ></textarea>
-                  <label for="answer-en" class="form-label">
-                    Antwoord (Engels)
-                  </label>
-                </div>
-                @if (getControl('en', 'answer')?.invalid && getControl('en', 'answer')?.touched) {
-                <div class="error-message" @fadeInOut>
-                  @if (getControl('en', 'answer')?.errors?.['required']) {
-                  <span>Antwoord is verplicht</span>
-                  } @else if (getControl('en', 'answer')?.errors?.['minlength']) {
-                  <span>Antwoord moet minimaal 10 tekens bevatten</span>
-                  }
-                </div>
+            <div class="form-group">
+              <div class="floating-label">
+                <textarea
+                  id="answer-en"
+                  formControlName="answerEn" placeholder=" "
+                  rows="4"
+                  class="form-textarea"
+                  [class.error]="faqForm.get('answerEn')?.invalid && faqForm.get('answerEn')?.touched"
+                ></textarea>
+                <label for="answer-en" class="form-label">
+                  Antwoord (Engels)
+                </label>
+              </div>
+              @if (faqForm.get('answerEn')?.invalid && faqForm.get('answerEn')?.touched) {
+              <div class="error-message" @fadeInOut>
+                @if (faqForm.get('answerEn')?.errors?.['required']) {
+                <span>Antwoord is verplicht</span>
+                } @else if (faqForm.get('answerEn')?.errors?.['minlength']) {
+                <span>Antwoord moet minimaal 10 tekens bevatten</span>
                 }
               </div>
+              }
             </div>
           </div>
         </mat-tab>
@@ -306,6 +273,21 @@
     </form>
     }
     }
+    <div class="search-bar">
+      <div>
+        <label for="category-select" class="filter-label">{{'FILTER_BY_CATEGORY' | translate}}</label>
+        <select class="category-select" [(ngModel)]="selectedCategory">
+          <option value="">{{'ALL_CATEGORIES' | translate}}</option>
+          @for (category of getAllCategories(); track $index) {
+          <option [value]="category">{{category}}</option>
+          }
+        </select>
+      </div>
+      <div>
+        <label for="search-input" class="filter-label">{{'SEARCH_FAQ' | translate}}</label>
+        <input id="search-input" class="search-input" type="text" [(ngModel)]="searchTerm" placeholder="{{'SEARCH_FAQ_PLACEHOLDER' | translate}}" />
+      </div>
+    </div>
 
     @if (faqs.length === 0) {
     <div class="empty-container" @fadeInOut>
@@ -328,7 +310,7 @@
           (keydown.enter)="toggleFaq(faq.id!)"
           (keydown.space)="toggleFaq(faq.id!); $event.preventDefault()"
         >
-          <h3 class="faq-question">{{ faq.question }}</h3>
+          <h3 class="faq-question">{{ getFaqQuestion(faq.id!) }}</h3>
           <div class="faq-icons">
             <svg class="chevron" [class.rotated]="expandedFaqId === faq.id" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M6 9l6 6 6-6"/>
@@ -383,7 +365,7 @@
           id="faq-answer-{{ faq.id }}"
           @expandCollapse
         >
-          <p class="faq-answer">{{ faq.answer }}</p>
+          <p class="faq-answer">{{ getFaqAnswer(faq.id) }}</p>
         </div>
         }
       </div>

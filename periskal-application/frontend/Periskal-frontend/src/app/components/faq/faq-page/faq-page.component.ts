@@ -46,6 +46,8 @@ export class FaqPageComponent implements OnInit {
   isSubmitting = false;
   showAddForm = false;
 
+  lang: string = '';
+
   category: string | null = null;
   selectedCategory: string = '';
   searchTerm: string = '';
@@ -57,28 +59,21 @@ export class FaqPageComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.lang = localStorage.getItem('lang')!;
     this.initForm();
     this.loadFaqs();
   }
 
   initForm(): void {
     this.faqForm = this.fb.group({
-      nl: this.fb.group({
-        question: ['', [Validators.required, Validators.minLength(5)]],
-        answer: ['', [Validators.required, Validators.minLength(10)]]
-      }),
-      fr: this.fb.group({
-        question: ['', [Validators.required, Validators.minLength(5)]],
-        answer: ['', [Validators.required, Validators.minLength(10)]]
-      }),
-      de: this.fb.group({
-        question: ['', [Validators.required, Validators.minLength(5)]],
-        answer: ['', [Validators.required, Validators.minLength(10)]]
-      }),
-      en: this.fb.group({
-        question: ['', [Validators.required, Validators.minLength(5)]],
-        answer: ['', [Validators.required, Validators.minLength(10)]]
-      }),
+      questionEn: ['', [Validators.required, Validators.minLength(5)]],
+      answerEn: ['', [Validators.required, Validators.minLength(10)]],
+      questionNl: ['', [Validators.required, Validators.minLength(5)]],
+      answerNl: ['', [Validators.required, Validators.minLength(10)]],
+      questionFr: ['', [Validators.required, Validators.minLength(5)]],
+      answerFr: ['', [Validators.required, Validators.minLength(10)]],
+      questionDe: ['', [Validators.required, Validators.minLength(5)]],
+      answerDe: ['', [Validators.required, Validators.minLength(10)]],
       category: ['', Validators.required]
     });
   }
@@ -96,7 +91,10 @@ export class FaqPageComponent implements OnInit {
     return this.faqs.filter(faq => {
       const matchesSearch =
         !searchTerm ||
-        faq.question.toLowerCase().includes(searchTerm) ||
+        faq.questionEn.toLowerCase().includes(searchTerm) ||
+        faq.questionNl.toLowerCase().includes(searchTerm) ||
+        faq.questionFr.toLowerCase().includes(searchTerm) ||
+        faq.questionDe.toLowerCase().includes(searchTerm) ||
         faq.id?.toString().includes(searchTerm)
 
       const matchesProductFilter =
@@ -185,5 +183,51 @@ export class FaqPageComponent implements OnInit {
   private clearMessages(): void {
     this.errorMessage = null;
     this.successMessage = null;
+  }
+
+  getFaqQuestion(faqId: number) {
+
+    const faq = this.faqs.find(f => f.id === faqId);
+
+    if (!faq) {
+      console.warn(`FAQ with ID ${faqId} not found.`);
+      return 'FAQ not found';
+    }
+    if (this.lang == 'en') {
+      return faq.questionEn;
+    }
+    if (this.lang == 'nl') {
+      return faq.questionNl;
+    }
+    if (this.lang == 'fr') {
+      return faq.questionFr;
+    }
+    if (this.lang == 'de') {
+      return faq.questionDe;
+    }
+    return 'Unknown language'
+  }
+
+  getFaqAnswer(faqId: number) {
+
+    const faq = this.faqs.find(f => f.id === faqId);
+
+    if (!faq) {
+      console.warn(`FAQ with ID ${faqId} not found.`);
+      return 'FAQ not found';
+    }
+    if (this.lang == 'en') {
+      return faq.answerEn;
+    }
+    if (this.lang == 'nl') {
+      return faq.answerNl;
+    }
+    if (this.lang == 'fr') {
+      return faq.answerFr;
+    }
+    if (this.lang == 'de') {
+      return faq.answerDe;
+    }
+    return 'Unknown language'
   }
 }

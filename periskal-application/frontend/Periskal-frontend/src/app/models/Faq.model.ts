@@ -1,6 +1,12 @@
 export interface Faq {
   id?: number;
-  question: string;
-  answer: string;
+  questionEn: string;
+  answerEn: string;
+  questionNl: string;
+  answerNl: string;
+  questionFr: string;
+  answerFr: string;
+  questionDe: string;
+  answerDe: string;
   category: string;
 }
