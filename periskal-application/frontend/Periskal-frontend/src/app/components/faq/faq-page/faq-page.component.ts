@@ -2,16 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators, FormBuilder, FormsModule } from '@angular/forms';
 import { FaqService } from '../../../services/Faq/faq.service';
-import { HttpClientModule } from '@angular/common/http';
 import { Faq } from '../../../models/Faq.model';
 import { RoleAuthorizationService } from '../../../services/RoleAuthorization/role-authorization.service';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { TranslatePipe } from '@ngx-translate/core';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-faq-page',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslatePipe, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslatePipe, FormsModule, MatTabsModule],
   templateUrl: './faq-page.component.html',
   styleUrl: './faq-page.component.css',
   animations: [
@@ -38,13 +38,15 @@ import { TranslatePipe } from '@ngx-translate/core';
 })
 export class FaqPageComponent implements OnInit {
   faqs: Faq[] = [];
-  faqForm: FormGroup;
+  faqForm!: FormGroup;
   expandedFaqId: number | null = null;
   errorMessage: string | null = null;
   successMessage: string | null = null;
   showDeleteConfirm: { [key: string]: boolean } = {};
   isSubmitting = false;
   showAddForm = false;
+
+  lang: string = '';
 
   category: string | null = null;
   selectedCategory: string = '';
@@ -54,16 +56,30 @@ export class FaqPageComponent implements OnInit {
     private fb: FormBuilder,
     public roleAuth: RoleAuthorizationService,
     private faqService: FaqService
-  ) {
+  ) { }
+
+  ngOnInit(): void {
+    this.lang = localStorage.getItem('lang')!;
+    this.initForm();
+    this.loadFaqs();
+  }
+
+  initForm(): void {
     this.faqForm = this.fb.group({
-      question: ['', [Validators.required, Validators.minLength(5)]],
-      answer: ['', [Validators.required, Validators.minLength(10)]],
+      questionEn: ['', [Validators.required, Validators.minLength(5)]],
+      answerEn: ['', [Validators.required, Validators.minLength(10)]],
+      questionNl: ['', [Validators.required, Validators.minLength(5)]],
+      answerNl: ['', [Validators.required, Validators.minLength(10)]],
+      questionFr: ['', [Validators.required, Validators.minLength(5)]],
+      answerFr: ['', [Validators.required, Validators.minLength(10)]],
+      questionDe: ['', [Validators.required, Validators.minLength(5)]],
+      answerDe: ['', [Validators.required, Validators.minLength(10)]],
       category: ['', Validators.required]
     });
   }
 
-  ngOnInit(): void {
-    this.loadFaqs();
+  getControl(lang: string, field: string) {
+    return this.faqForm.get(lang)?.get(field);
   }
 
   getAllCategories() {
@@ -75,7 +91,10 @@ export class FaqPageComponent implements OnInit {
     return this.faqs.filter(faq => {
       const matchesSearch =
         !searchTerm ||
-        faq.question.toLowerCase().includes(searchTerm) ||
+        faq.questionEn.toLowerCase().includes(searchTerm) ||
+        faq.questionNl.toLowerCase().includes(searchTerm) ||
+        faq.questionFr.toLowerCase().includes(searchTerm) ||
+        faq.questionDe.toLowerCase().includes(searchTerm) ||
         faq.id?.toString().includes(searchTerm)
 
       const matchesProductFilter =
@@ -164,5 +183,51 @@ export class FaqPageComponent implements OnInit {
   private clearMessages(): void {
     this.errorMessage = null;
     this.successMessage = null;
+  }
+
+  getFaqQuestion(faqId: number) {
+
+    const faq = this.faqs.find(f => f.id === faqId);
+
+    if (!faq) {
+      console.warn(`FAQ with ID ${faqId} not found.`);
+      return 'FAQ not found';
+    }
+    if (this.lang == 'en') {
+      return faq.questionEn;
+    }
+    if (this.lang == 'nl') {
+      return faq.questionNl;
+    }
+    if (this.lang == 'fr') {
+      return faq.questionFr;
+    }
+    if (this.lang == 'de') {
+      return faq.questionDe;
+    }
+    return 'Unknown language'
+  }
+
+  getFaqAnswer(faqId: number) {
+
+    const faq = this.faqs.find(f => f.id === faqId);
+
+    if (!faq) {
+      console.warn(`FAQ with ID ${faqId} not found.`);
+      return 'FAQ not found';
+    }
+    if (this.lang == 'en') {
+      return faq.answerEn;
+    }
+    if (this.lang == 'nl') {
+      return faq.answerNl;
+    }
+    if (this.lang == 'fr') {
+      return faq.answerFr;
+    }
+    if (this.lang == 'de') {
+      return faq.answerDe;
+    }
+    return 'Unknown language'
   }
 }

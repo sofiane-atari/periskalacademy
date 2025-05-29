@@ -51,7 +51,7 @@ public class FaqController {
     @PostMapping
     @PreAuthorize(SecurityRoles.ADMIN)
     public ResponseEntity<Faq> createFaq(@RequestBody Faq faq) {
-        log.info("Received request to create FAQ with question: {}", faq.getQuestion());
+        log.info("Received request to create FAQ with question: {}", faq.getQuestionEn());
         log.info("Received request to create FAQ with category: {}", faq.getCategory());
         Faq createdFaq = faqService.createFaq(faq);
         log.info("Successfully created FAQ with id {}", createdFaq.getId());
