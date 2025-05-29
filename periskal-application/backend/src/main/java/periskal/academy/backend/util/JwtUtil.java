@@ -23,7 +23,8 @@ import periskal.academy.backend.model.AuthenticateResponse;
 public final class JwtUtil {
 
     private JwtUtil() {
-    } // Private constructor to prevent instantiation
+        // Private constructor to prevent instantiation
+    } 
 
 
     
