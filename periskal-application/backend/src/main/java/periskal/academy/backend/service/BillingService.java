@@ -7,7 +7,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-
 import lombok.extern.slf4j.Slf4j;
 import periskal.academy.backend.jpa.Billing;
 import periskal.academy.backend.jpa.BillingRepository;
@@ -25,7 +24,7 @@ public class BillingService {
     private final ExamService examService;
 
     @Value("${spring.mail.username}")
-    private String CompanyEmail;
+    private String companyEmail;
 
     public BillingService(BillingRepository billingRepository, UserExamAttemptRepository userExamAttemptRepository, EmailService emailService, ExamService examService) {
         this.billingRepository = billingRepository;
@@ -36,7 +35,7 @@ public class BillingService {
 
     public Billing saveOrder(Billing entity) {
         Billing saved = billingRepository.save(entity);
-        SaveAttempts(entity);
+        saveAttempts(entity);
 
         sendBillingConfirmationEmail(saved);
             
@@ -44,7 +43,7 @@ public class BillingService {
         return saved;
     }
 
-    public String SaveAttempts(Billing entity) {
+    public String saveAttempts(Billing entity) {
         UserExamAttempt newUserExamAttempt = new UserExamAttempt();
         newUserExamAttempt.setExamId(entity.getExamId());
         newUserExamAttempt.setTotalAttempts(entity.getExamAttempts());
@@ -55,8 +54,7 @@ public class BillingService {
     }
 
      public List<Billing> saveAttemptsBatch(List<Billing> entity) {
-        List<Billing> savedBillingEntities = new ArrayList<>();
-        savedBillingEntities = (List<Billing>) billingRepository.saveAll(entity);
+        List<Billing> savedBillingEntities = (List<Billing>) billingRepository.saveAll(entity);
 
         List<UserExamAttempt> attemptsToSave = new ArrayList<>();
         for (Billing billing : entity) {
@@ -81,10 +79,10 @@ public class BillingService {
             return;
         }
 
-        String to = CompanyEmail;
+        String to = companyEmail;
         String subject = "Billing Information - Order #" + billing.getId();
 
-        Optional<Exam> examOptional = examService.findById(Long.parseLong(billing.getExamId()));
+        Optional<Exam> examOptional = examService.findById(Long.valueOf(billing.getExamId()));
         Exam exam = examOptional.get();
         String examName;
         examName = exam.getExamTitle();
@@ -95,13 +93,13 @@ public class BillingService {
         contentBuilder.append("<h2>Order From, ").append(billing.getFullName()).append("!</h2>");
         contentBuilder.append("<p>Here is a summary of the billing information:</p>");
         contentBuilder.append("<ul>");
-        contentBuilder.append("<li><strong>Full Name:</strong> ").append(billing.getFullName()).append("</li>");
-        contentBuilder.append("<li><strong>Company Name:</strong> ").append(billing.getCompanyName() != null ? billing.getCompanyName() : "N/A").append("</li>");
-        contentBuilder.append("<li><strong>Address:</strong> ").append(billing.getAddress()).append("</li>");
-        contentBuilder.append("<li><strong>City:</strong> ").append(billing.getCity()).append("</li>");
-        contentBuilder.append("<li><strong>State:</strong> ").append(billing.getState()).append("</li>");
-        contentBuilder.append("<li><strong>Zip Code:</strong> ").append(billing.getZipCode()).append("</li>");
-        contentBuilder.append("<li><strong>Country:</strong> ").append(billing.getCountryCode()).append("</li>");
+        contentBuilder.append(listItem("Full Name", billing.getFullName()));
+        contentBuilder.append(listItem("Company Name", billing.getCompanyName()));
+        contentBuilder.append(listItem("Address", billing.getAddress()));
+        contentBuilder.append(listItem("City", billing.getCity()));
+        contentBuilder.append(listItem("State", billing.getState()));
+        contentBuilder.append(listItem("Zip Code", billing.getZipCode()));
+        contentBuilder.append(listItem("Country", billing.getCountryCode()));
         contentBuilder.append("</ul>");
         contentBuilder.append("<p><strong>Tax Information:</strong> ").append(billing.getTax() != null ? billing.getTax() : "N/A").append("</p>");
         contentBuilder.append("<p>1 Exam of ").append(examName).append("</p>");
@@ -113,6 +111,11 @@ public class BillingService {
         emailService.sendHtmlEmail(billing.getEmail(), to, subject, content);
         log.info("Billing confirmation email sent to {} for order ID {}", to, billing.getId());
     }
+
+    private String listItem(String label, String value) {
+        return "<li><strong>" + label + ":</strong> " + (value != null ? value : "N/A") + "</li>";
+    }
+
 
 
     private void sendFleetManagerBatchOrderEmail(int numberOfBillings, String examId) {
@@ -127,8 +130,8 @@ public class BillingService {
             return; // Or proceed with a modified message
         }
 
-        String fromAddress = CompanyEmail; // Email is from the system
-        String toAddress = CompanyEmail;   // Email is to the fleet manager (using CompanyEmail as placeholder)
+        String fromAddress = companyEmail; // Email is from the system
+        String toAddress = companyEmail;   // Email is to the fleet manager (using companyEmail as placeholder)
         String subject = "Fleet Manager Batch Order Processed - Exam: " + examId;
 
         StringBuilder contentBuilder = new StringBuilder();
