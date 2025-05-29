@@ -255,6 +255,20 @@
   "SEARCH_FAQ": "Rechercher des questions:",
   "SEARCH_FAQ_PLACEHOLDER": "Rechercher par mot dans la question ou l'ID",
   "FAQ": "Foire aux questions",
-  "ERASE_Selection": "Effacer la sélection",
-  "CERTIFICATE_BADGE": "Certificat"
+  "ERASE_SELECTION": "Effacer la sélection",
+  "CERTIFICATE_BADGE": "Certificat",
+  "CONGRATULATIONS": "Félicitations",
+  "SKIPPER_AMOUNT": "Nombre de skippers",
+  "EXAM_PRICE_PER_UNIT": "Prix de l'examen par unité",
+  "ORDER_OVERVIEW": "Récapitulatif de la commande",
+  "TOTAL_PRICE": "Prix total",
+  "PASSED_MESSAGE": "Vous avez réussi le",
+  "VALID_FOR": "Valable pour",
+  "DOWNLOAD_CERTIFICATE": "Télécharger le certificat",
+  "BACK_TO_MODULES": "Retour aux modules",
+  "EXAM_FAILED": "Examen échoué",
+  "EXAM_FAILED_MESSAGE_1": "Malheureusement, vous n'avez pas réussi le",
+  "EXAM_FAILED_MESSAGE_2": ". Veuillez revoir le matériel et réessayer.",
+  "CERTIFICATE_DETAILS": "Détails du certificat",
+  "YEAR": "An(s)"
 }

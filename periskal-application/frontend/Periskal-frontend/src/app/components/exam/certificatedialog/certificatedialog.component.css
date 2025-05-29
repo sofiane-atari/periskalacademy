@@ -1,0 +1,89 @@
+.dialog-container {
+  text-align: center;
+  padding: 24px;
+}
+
+.icon-circle {
+  background-color: #e6f9e6;
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px auto;
+}
+
+.success-icon {
+  transform: scale(3);
+  color: #4caf50;
+}
+
+.icon-circle.fail {
+  background-color: #ffebee;
+}
+
+.fail-icon {
+  transform: scale(3);
+  color: #f44336; 
+}
+
+.title {
+  margin: 16px 0 8px;
+  font-weight: bold;
+  color: #1f2937;
+}
+
+.title.fail-title {
+  color: #f44336; 
+}
+
+.subtitle {
+  color: #555;
+  margin-bottom: 24px;
+}
+
+.subtitle.fail-subtitle {
+  color: #333; 
+}
+
+.certificate-details {
+  background-color: #f5fff5;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  color: #333;
+}
+
+.certificate-details mat-icon {
+  vertical-align: middle;
+  margin-right: 4px;
+  color: #4caf50;
+}
+
+.actions button {
+  margin: 8px;
+}
+
+:host {
+  display: block;
+  max-width: 400px;
+  margin: auto;
+}
+
+button.gold-button {
+  background-color: #f0d04b !important;
+  color: #212529 !important;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+.secondary-button {
+    width: 100%;
+    background-color: #cccbcb;
+    color:212529;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+}

@@ -10,6 +10,9 @@ import { CompletedExamService } from '../../../services/CompletedExam/completed-
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { ExamStateService } from '../../../services/ExamState/exam-state.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmPromptComponent } from '../../confirm-prompt/confirm-prompt.component';
+import { CertificateDialogComponent } from '../certificatedialog/certificatedialog.component';
 
 @Component({
   selector: 'app-take-exam',
@@ -39,6 +42,7 @@ export class TakeExamComponent implements OnInit, OnDestroy {
     private jwtDecoderService: JwtDecoderService,
     private completedExamService: CompletedExamService,
     private examStateService: ExamStateService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -62,7 +66,7 @@ export class TakeExamComponent implements OnInit, OnDestroy {
       })
     );
   }
-  
+
   ngOnDestroy(): void {
     this.timerSubscriptions.unsubscribe();
   }
@@ -168,7 +172,7 @@ export class TakeExamComponent implements OnInit, OnDestroy {
     };
 
     this.examStateService.finishExam();
-
+    console.log(completedExamData);
     this.completedExamService.saveCompletedExam(completedExamData as CompletedExam).subscribe({
       next: (savedExam) => {
         this.isSubmitting = false;
@@ -181,7 +185,28 @@ export class TakeExamComponent implements OnInit, OnDestroy {
           ? `\n\nA certificate has been generated and is available in your certificates list.`
           : '';
 
-        alert(`${passedMessage}${certificateMessage}`);
+        if (savedExam.passed) {
+          const dialogRef = this.dialog.open(CertificateDialogComponent, {
+            width: '600px',
+            maxHeight: 'auto',
+            panelClass: 'compact-dialog',
+            data: {
+              examName: this.exam?.examTitle || 'exam',
+              issueDate: new Date().toLocaleDateString(),
+              validity: '1',
+              status: 'passed'
+            }
+          }).afterClosed().subscribe(() => {
+            this.router.navigate(['/modules']);
+          });;
+        } else {
+          this.dialog.open(CertificateDialogComponent, {
+            data: {
+              examName: this.exam?.examTitle,
+              status: 'failed'
+            }
+          });
+        }
 
         if (savedExam.certificateId) {
           this.router.navigate(['/certificates'], {
