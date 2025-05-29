@@ -1,7 +1,7 @@
 package periskal.academy.backend.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 import org.springframework.stereotype.Service;
 
@@ -27,7 +27,7 @@ public class CertificateService {
         List<Certificate> certificates = certificateRepository.findByUserId(userId);
         return certificates.stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
     
     // Save a new certificate or update an existing one

@@ -2,7 +2,7 @@ package periskal.academy.backend.service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 import org.springframework.stereotype.Service;
 
@@ -27,7 +27,6 @@ public class ProgressService {
     public ProgressService(TrainingProgressRepository trainingProgressRepository,
             ModuleProgressRepository moduleProgressRepository,
             CompletedChapterRepository completedChapterRepository,
-            TrainingService trainingService,
             ModuleService moduleService) {
         this.trainingProgressRepository = trainingProgressRepository;
         this.moduleProgressRepository = moduleProgressRepository;
@@ -39,7 +38,7 @@ public class ProgressService {
         List<TrainingProgress> progressEntities = trainingProgressRepository.findByUserId(userId);
         return progressEntities.stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public TrainingProgressDTO getTrainingProgress(String userId, Long trainingId) {
@@ -133,7 +132,7 @@ public class ProgressService {
         // Convert module progress
         List<ModuleProgressDTO> moduleDTOs = entity.getModuleProgress().stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
         dto.setModuleProgress(moduleDTOs);
 
         return dto;
@@ -147,7 +146,7 @@ public class ProgressService {
         // Get chapter IDs from completedChapters
         List<Long> chapterIds = entity.getCompletedChapters().stream()
                 .map(CompletedChapter::getChapterId)
-                .collect(Collectors.toList());
+                .toList();
         dto.setCompletedChapters(chapterIds);
 
         return dto;

@@ -41,7 +41,7 @@ class ModuleControllerTest {
         // Assert
         assertThat(response)
                 .isNotNull()
-                .extracting(ResponseEntity::getStatusCodeValue)
+                .extracting(r -> r.getStatusCode().value())
                 .isEqualTo(201);
 
         assertThat(response.getBody())

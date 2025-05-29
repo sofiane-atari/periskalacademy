@@ -57,8 +57,6 @@ public class Chapter {
     @JsonManagedReference
     private List<Photo> photos = new ArrayList<>();
 
-    // private String videoRemoteFilePath;
-
     @OneToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH })
     @JoinColumn(name = "video_en_id")
     @JsonManagedReference
