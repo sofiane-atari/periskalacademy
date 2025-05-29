@@ -6,11 +6,12 @@ import java.time.LocalDate;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import org.mockito.MockedStatic;
 import static org.mockito.Mockito.mockStatic;
 
+import periskal.academy.backend.dto.CertificatePdfDTO;
 import periskal.academy.backend.jpa.Certificate;
 import periskal.academy.backend.service.certificate.PdfGeneratorService;
 import periskal.academy.backend.util.CertificateGeneratorUtil;
@@ -48,9 +49,7 @@ class PdfGeneratorServiceTest {
 
         try (MockedStatic<CertificateGeneratorUtil> mockedUtil = mockStatic(CertificateGeneratorUtil.class)) {
             mockedUtil.when(() -> CertificateGeneratorUtil.generateCertificatePdf(
-                    anyString(), anyString(), anyString(), anyString(),
-                    anyList(), anyString(), anyString(), anyString(),
-                    anyString(), anyString(), anyString())).thenReturn(fakePdfBytes);
+                    any(CertificatePdfDTO.class), anyString())).thenReturn(fakePdfBytes);
 
             // Act
             byte[] result = service.createCertificate(mockCertificate, testFirstName, testLastName, testShipName);
@@ -60,9 +59,7 @@ class PdfGeneratorServiceTest {
 
             // Verify
             mockedUtil.verify(() -> CertificateGeneratorUtil.generateCertificatePdf(
-                    anyString(), anyString(), anyString(), anyString(),
-                    anyList(), anyString(), anyString(), anyString(),
-                    anyString(), anyString(), anyString()));
+                    any(CertificatePdfDTO.class), anyString()));
         }
     }
 }
