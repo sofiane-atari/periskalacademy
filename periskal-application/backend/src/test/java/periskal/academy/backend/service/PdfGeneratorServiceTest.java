@@ -1,6 +1,7 @@
 package periskal.academy.backend.service;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -42,9 +43,16 @@ class PdfGeneratorServiceTest {
     }
 
     @Test
-    void createCertificate_callsUtil_andReturnsBytes() throws IOException {
+    void createCertificate_callsUtil_andReturnsBytes() throws IOException, NoSuchFieldException, IllegalAccessException {
         // arrange
         PdfGeneratorService service = new PdfGeneratorService();
+
+        // Inject the owner password manually
+        Field field = PdfGeneratorService.class.getDeclaredField("pdfOwnerPassword");
+        field.setAccessible(true);
+        field.set(service, "testPassword");
+
+
         byte[] fakePdfBytes = new byte[] { 1, 2, 3 };
 
         try (MockedStatic<CertificateGeneratorUtil> mockedUtil = mockStatic(CertificateGeneratorUtil.class)) {
