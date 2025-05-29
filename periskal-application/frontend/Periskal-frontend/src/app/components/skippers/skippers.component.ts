@@ -59,6 +59,7 @@ export class SkippersComponent implements OnInit {
     userIds: string[];
     examId: number;
     examAttempts: number;
+    examPrice: number;
   } | null = null;
 
   isProcessingAction: boolean = false;
@@ -272,8 +273,10 @@ export class SkippersComponent implements OnInit {
     this.isProcessingAction = true;
 
     // Step 1: Fetch examAttempts for the selected trainingId
+    console.log(this.selectedTrainingId)
     this.examService.getExamByTrainingId(this.selectedTrainingId).subscribe({
       next: (exam) => {
+        console.log(exam);
         if (exam) {
           if (!exam.id) {
             throw new Error('Exam ID is undefined');
@@ -281,6 +284,7 @@ export class SkippersComponent implements OnInit {
           this.billingDataForForm = {
             userIds: this.selectedSkipperIds,
             examId: exam.id,
+            examPrice: exam.price,
             examAttempts: exam.examAttempts
           };
 
@@ -338,7 +342,7 @@ export class SkippersComponent implements OnInit {
   loadAvailableTrainings() {
     this.trainingService.getTrainingData().subscribe({
       next: (trainings) => {
-        const observables = trainings.map(training => 
+        const observables = trainings.map(training =>
           this.examService.getExamByTrainingId(training.id).pipe(
             map(exam => {
               return { training, hasExam: !!exam };
@@ -348,7 +352,7 @@ export class SkippersComponent implements OnInit {
             })
           )
         );
-        
+
         forkJoin(observables).subscribe(results => {
           this.availableTrainings = results
             .filter(result => result.hasExam)

@@ -4,17 +4,20 @@ import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { BillingService } from '../../services/Billing/billing.service';
 import { JwtDecoderService } from '../../services/JwtDecode/jwt-decoder.service';
 import { TranslatePipe } from '@ngx-translate/core';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
+import { MatStep, MatStepperModule } from '@angular/material/stepper';
 
 @Component({
   selector: 'app-billing-fleetmanager',
-  imports: [ReactiveFormsModule, TranslatePipe],
+  imports: [ReactiveFormsModule, TranslatePipe, MatStepperModule],
   templateUrl: './billing-fleetmanager.component.html',
   styleUrl: './billing-fleetmanager.component.css'
 })
 export class FleetManagerBillingComponent implements OnInit {
   @Input() userIdsToBill: string[] = [];
-  @Input() examIdToBill!: number;
+  @Input() examId!: number;
   @Input() examAttemptsToBill!: number;
+  @Input() examPrice!: number;
 
   @Output() billingSuccess = new EventEmitter<any>();
   @Output() billingCancel = new EventEmitter<void>();
@@ -24,13 +27,20 @@ export class FleetManagerBillingComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private billingSvc: BillingService, 
+    private billingSvc: BillingService,
     private snackBar: MatSnackBar,
     private jwtDecoderService: JwtDecoderService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.fleetManagerId = this.jwtDecoderService.getId();
+
+    console.log('Billing component inputs:', {
+      userIdsToBill: this.userIdsToBill,
+      examId: this.examId,
+      examAttemptsToBill: this.examAttemptsToBill,
+      examPrice: this.examPrice
+    });
 
     // Get fleetmanager info and use it later to pre-fill the form
     this.billingForm = this.fb.group({
@@ -43,6 +53,7 @@ export class FleetManagerBillingComponent implements OnInit {
       state: ['', Validators.required],
       zipCode: ['', Validators.required],
       countryCode: ['', Validators.required],
+      examId: ['']
 
     });
   }
@@ -66,15 +77,15 @@ export class FleetManagerBillingComponent implements OnInit {
           countryCode: payerBillingDetails.countryCode,
 
           // Exam and specific user details
-          examId: this.examIdToBill,
-          userId: userId, 
+          examId: this.examId,
+          userId: userId,
           examAttempts: this.examAttemptsToBill,
-          
+
 
         };
       });
 
-      
+
       this.billingSvc.postBillingBatch(billingBatchPayload).subscribe({
         next: (response) => {
           const snackBarConfig: MatSnackBarConfig = {
@@ -84,15 +95,15 @@ export class FleetManagerBillingComponent implements OnInit {
             panelClass: ['snackbar-success'],
           };
           this.snackBar.open('Billing processed successfully for selected users!', 'Close', snackBarConfig);
-          this.billingSuccess.emit(response); 
+          this.billingSuccess.emit(response);
         },
         error: (err) => {
           let errorMessage = 'Billing failed. Unknown error.';
           if (err.error && err.error.message) {
             errorMessage = `Billing failed: ${err.error.message}`;
-          } 
+          }
           const snackBarConfig: MatSnackBarConfig = {
-            duration: 7000, 
+            duration: 7000,
             verticalPosition: 'bottom',
             horizontalPosition: 'center',
             panelClass: ['snackbar-error'],
