@@ -17,34 +17,35 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.MacAlgorithm;
+import lombok.extern.slf4j.Slf4j;
 import periskal.academy.backend.model.AuthenticateResponse;
 
 @Component
+@Slf4j
 public final class JwtUtil {
 
     private JwtUtil() {
         // Private constructor to prevent instantiation
     } 
 
-
-    
-    private static String SECRET_KEY; 
+    private static String secretKey; 
     private static final MacAlgorithm ALGORITHM = Jwts.SIG.HS256;
-    private static final long JWT_TOKEN_VALIDITY = 10 * 60 * 60 * 1000; //10 hours in milliseconds
+    private static final long JWT_TOKEN_VALIDITY = 10L * 60 * 60 * 1000; //10 hours in milliseconds
 
-    @Value("${jwt.secret}")
-    public void setSecretKey(String secretKey) {
-        JwtUtil.SECRET_KEY = secretKey;
+    @Value("${jwt.secret}") // probably better to just make this a full bean and just inject with the constructor, tdo:
+    public void setSecretKey(String secretKeySetter) {
+        JwtUtil.secretKey = secretKeySetter;
     }
 
     // Setter for testing purposes only!
-    public static void setSecretKeyForTesting(String secretKey) {
-        JwtUtil.SECRET_KEY = secretKey;
+    public static void setSecretKeyForTesting(String secretKeySetter) {
+        JwtUtil.secretKey = secretKeySetter;
+        log.info("Secret key set for testing: {}", secretKeySetter);
     }
 
     // Generate the SecretKey instance from the base64-encoded secret key
     private static SecretKey getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
@@ -85,7 +86,7 @@ public final class JwtUtil {
         return (username.equals(extractUsername(token)) && !isTokenExpired(token));
     }
 
-    public static Collection<? extends GrantedAuthority> extractAuthorities(String token) {
+    public static Collection<GrantedAuthority> extractAuthorities(String token) {
         Claims claims = extractClaims(token);
         String role = claims.get("role", String.class);
 
