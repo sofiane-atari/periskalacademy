@@ -15,8 +15,9 @@ import { MatStep, MatStepperModule } from '@angular/material/stepper';
 })
 export class FleetManagerBillingComponent implements OnInit {
   @Input() userIdsToBill: string[] = [];
-  @Input() examIdToBill!: number;
+  @Input() examId!: number;
   @Input() examAttemptsToBill!: number;
+  @Input() examPrice!: number;
 
   @Output() billingSuccess = new EventEmitter<any>();
   @Output() billingCancel = new EventEmitter<void>();
@@ -33,6 +34,13 @@ export class FleetManagerBillingComponent implements OnInit {
 
   ngOnInit() {
     this.fleetManagerId = this.jwtDecoderService.getId();
+
+    console.log('Billing component inputs:', {
+      userIdsToBill: this.userIdsToBill,
+      examId: this.examId,
+      examAttemptsToBill: this.examAttemptsToBill,
+      examPrice: this.examPrice
+    });
 
     // Get fleetmanager info and use it later to pre-fill the form
     this.billingForm = this.fb.group({
@@ -68,7 +76,7 @@ export class FleetManagerBillingComponent implements OnInit {
           countryCode: payerBillingDetails.countryCode,
 
           // Exam and specific user details
-          examId: this.examIdToBill,
+          examId: this.examId,
           userId: userId,
           examAttempts: this.examAttemptsToBill,
 

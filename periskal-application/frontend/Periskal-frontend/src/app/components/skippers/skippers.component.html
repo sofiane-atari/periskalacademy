@@ -325,7 +325,8 @@
     <div class="modal-overlay">
         <app-billing-fleetmanager
             [userIdsToBill]="billingDataForForm.userIds"
-            [examIdToBill]="billingDataForForm.examId"
+            [examId]="billingDataForForm.examId"
+            [examPrice]="billingDataForForm.examPrice"
             [examAttemptsToBill]="billingDataForForm.examAttempts"
             (billingSuccess)="saveAssignment()"
             (billingCancel)="handleBillingCancel()">
