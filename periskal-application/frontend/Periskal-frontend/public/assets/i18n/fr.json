@@ -292,5 +292,9 @@
   "ADD_QUESTION": "+ Ajouter une nouvelle question",
   "AUTHENTICATING": "Authentification en cours...",
   "AUTHENTICATION_FAILED": "Échec de l'authentification.",
-  "PROCESSING": "Traitement en cours..."
+  "PROCESSING": "Traitement en cours...",
+  "deleteSuccess": "FAQ supprimée avec succès !",
+  "deleteError": "Une erreur s'est produite lors de la suppression de la FAQ.",
+  "createSuccess": "FAQ ajoutée avec succès !",
+  "createError": "Une erreur s'est produite lors de l'ajout de la FAQ."
 }
