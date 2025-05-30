@@ -113,7 +113,7 @@ public class CompletedExamService {
         dto.setCertificateId(completedExam.getCertificateId());
 
         dto.setExamName(examRepository.findById(completedExam.getExamId())
-        .map(Exam::getExamTitle)
+        .map(Exam::getExamTitleEn)
         .orElse("N/A")); 
         dto.setTrainingName(trainingRepository.findById(completedExam.getTrainingId())
         .map(Training::getNameEn)

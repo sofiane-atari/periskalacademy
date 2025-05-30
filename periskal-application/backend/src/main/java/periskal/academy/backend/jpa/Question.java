@@ -18,7 +18,10 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String text;
+    private String textEn;
+    private String textNl;
+    private String textFr;
+    private String textDe;
 
     @ManyToOne
     @JoinColumn(name = "exam_id", nullable = false)

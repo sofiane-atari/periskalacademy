@@ -85,7 +85,7 @@ public class BillingService {
         Optional<Exam> examOptional = examService.findById(Long.valueOf(billing.getExamId()));
         Exam exam = examOptional.get();
         String examName;
-        examName = exam.getExamTitle();
+        examName = exam.getExamTitleEn();
 
         // Constructing a simple HTML email content
         StringBuilder contentBuilder = new StringBuilder();

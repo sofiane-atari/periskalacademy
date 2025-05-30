@@ -6,8 +6,14 @@ import lombok.Data;
 
 @Data
 public class ExamRequest {
-    private String examTitle;
-    private String examDescription;
+    private String examTitleEn;
+    private String examTitleNl;
+    private String examTitleFr;
+    private String examTitleDe;
+    private String examDescriptionEn;
+    private String examDescriptionNl;
+    private String examDescriptionFr;
+    private String examDescriptionDe;
     private Long trainingId;
     private int totalQuestions;
     private int passingScore = 100; // Default to 100% if not specified

@@ -1,112 +1,173 @@
 <div class="container">
-  <h2>{{'ADD_EXAM' | translate}}</h2>
+  <h2>{{ "ADD_EXAM" | translate }}</h2>
   @if (isLoading) {
-    <p>{{'LOADING_TRAININGS'|translate}}</p>
+  <p>{{ "LOADING_TRAININGS" | translate }}</p>
   } @else {
-    <form [formGroup]="examForm" (ngSubmit)="submitExam()">
-      <!-- Training dropdown (onveranderd) -->
-      <label for="training">{{'SELECT_TRAINING' |translate}}</label>
-      <select id="training" formControlName="trainingId">
-        <option value="" disabled selected class="placeholder-option">{{'PLACEHOLDER_OPTION_TRAINING' | translate}}</option>
-        @for (training of trainingsData; track $index) {
-          <option 
-            [value]="training.id" 
-            [disabled]="hasExam(training.id)"
-            [class.disabled-option]="hasExam(training.id)">
-            {{ getTrainingName(training) }}
-            @if (hasExam(training.id)) {
-              <span class="exam-exists">{{"EXAM_EXISTS" | translate}}</span>
-            }
-          </option>
+  <form [formGroup]="examForm" (ngSubmit)="submitExam()">
+    <!-- Training dropdown (onveranderd) -->
+    <label for="training">{{ "SELECT_TRAINING" | translate }}</label>
+    <select id="training" formControlName="trainingId">
+      <option value="" disabled selected class="placeholder-option">
+        {{ "PLACEHOLDER_OPTION_TRAINING" | translate }}
+      </option>
+      @for (training of trainingsData; track $index) {
+      <option
+        [value]="training.id"
+        [disabled]="hasExam(training.id)"
+        [class.disabled-option]="hasExam(training.id)"
+      >
+        {{ getTrainingName(training) }}
+        @if (hasExam(training.id)) {
+        <span class="exam-exists">{{ "EXAM_EXISTS" | translate }}</span>
         }
-      </select>
-      @if(examForm.get('trainingId')?.invalid && examForm.get('trainingId')?.touched){
-        <p class="error">{{'SELECTION_TRAINING_ERROR' |translate }}</p>   
+      </option>
       }
+    </select>
+    @if(examForm.get('trainingId')?.invalid &&
+    examForm.get('trainingId')?.touched){
+    <p class="error">{{ "SELECTION_TRAINING_ERROR" | translate }}</p>
+    }
 
-      <!-- Exam title en description (onveranderd) -->
-      <label for="title">{{'EXAM_TITLE' | translate}}</label>
-      <input id="title" formControlName="examTitle" type="text" placeholder="{{'PLACEHOLDER_EXAM_TITLE'|translate}}">
-      @if(examForm.get('examTitle')?.invalid && examForm.get('examTitle')?.touched){
-        <p class="error">{{'EXAM_TITLE_REQUIRED' | translate }}</p>
-      }
+    <!-- Exam title en description (onveranderd) -->
+    <label for="title">{{ "EXAM_TITLE" | translate }}</label>
+    <input
+      id="title"
+      formControlName="examTitle"
+      type="text"
+      placeholder="{{ 'PLACEHOLDER_EXAM_TITLE' | translate }}"
+    />
+    @if(examForm.get('examTitle')?.invalid &&
+    examForm.get('examTitle')?.touched){
+    <p class="error">{{ "EXAM_TITLE_REQUIRED" | translate }}</p>
+    }
 
-      <label for="description">{{'EXAM_DESCRIPTION' | translate}}</label>
-      <textarea id="description" formControlName="examDescription" placeholder="{{'PLACEHOLDER_EXAM_DESCRIPTION'|translate}}"></textarea>
-      @if(examForm.get('examDescription')?.invalid && examForm.get('examDescription')?.touched){
-        <p class="error">{{'EXAM_DESCRIPTION_REQUIRED' | translate }}</p>
-      }
+    <label for="description">{{ "EXAM_DESCRIPTION" | translate }}</label>
+    <textarea
+      id="description"
+      formControlName="examDescription"
+      placeholder="{{ 'PLACEHOLDER_EXAM_DESCRIPTION' | translate }}"
+    ></textarea>
+    @if(examForm.get('examDescription')?.invalid &&
+    examForm.get('examDescription')?.touched){
+    <p class="error">{{ "EXAM_DESCRIPTION_REQUIRED" | translate }}</p>
+    }
 
-      <label for="totalQuestions">{{'QUESTION_AMOUNT' | translate}}</label>
-      <input id="totalQuestions" formControlName="totalQuestions" type="number" min="1" placeholder="{{'PLACEHOLDER_TOTAL_QUESTIONS'|translate}}">
-      @if(examForm.get('totalQuestions')?.invalid && examForm.get('totalQuestions')?.touched){
-        <p class="error">{{'TOTAL_QUESTIONS_REQUIRED' | translate}}</p>
-      }
+    <label for="totalQuestions">{{ "QUESTION_AMOUNT" | translate }}</label>
+    <input
+      id="totalQuestions"
+      formControlName="totalQuestions"
+      type="number"
+      min="1"
+      placeholder="{{ 'PLACEHOLDER_TOTAL_QUESTIONS' | translate }}"
+    />
+    @if(examForm.get('totalQuestions')?.invalid &&
+    examForm.get('totalQuestions')?.touched){
+    <p class="error">{{ "TOTAL_QUESTIONS_REQUIRED" | translate }}</p>
+    }
 
-      <label for="price">{{'PRICE' | translate}}</label>
-      <input id="price" formControlName="price" type="number" min="1" placeholder="{{'PLACEHOLDER_PRICE'|translate}}">
-      @if(examForm.get('price')?.invalid && examForm.get('price')?.touched){
-        <p class="error">{{'PRICE_REQUIRED' | translate}}</p>
-      }
+    <label for="price">{{ "PRICE" | translate }}</label>
+    <input
+      id="price"
+      formControlName="price"
+      type="number"
+      min="1"
+      placeholder="{{ 'PLACEHOLDER_PRICE' | translate }}"
+    />
+    @if(examForm.get('price')?.invalid && examForm.get('price')?.touched){
+    <p class="error">{{ "PRICE_REQUIRED" | translate }}</p>
+    }
 
-      <label for="examAttempts">{{'EXAM_ATTEMPTS' | translate}}</label>
-      <input id="examAttempts" formControlName="examAttempts" type="number" min="1" placeholder="{{'PLACEHOLDER_EXAM_ATTEMPTS'|translate}}">
-      @if(examForm.get('examAttempts')?.invalid && examForm.get('examAttempts')?.touched){
-        <p class="error">{{'EXAM_ATTEMPTS_REQUIRED' | translate}}</p>
-      }
+    <label for="examAttempts">{{ "EXAM_ATTEMPTS" | translate }}</label>
+    <input
+      id="examAttempts"
+      formControlName="examAttempts"
+      type="number"
+      min="1"
+      placeholder="{{ 'PLACEHOLDER_EXAM_ATTEMPTS' | translate }}"
+    />
+    @if(examForm.get('examAttempts')?.invalid &&
+    examForm.get('examAttempts')?.touched){
+    <p class="error">{{ "EXAM_ATTEMPTS_REQUIRED" | translate }}</p>
+    }
 
-      <label for="duration">{{'EXAM_DURATION' | translate}}</label>
-      <input id="duration" formControlName="duration" type="number" min="1" placeholder="{{'PLACEHOLDER_DURATION'|translate}}">
+    <label for="duration">{{ "EXAM_DURATION" | translate }}</label>
+    <input
+      id="duration"
+      formControlName="duration"
+      type="number"
+      min="1"
+      placeholder="{{ 'PLACEHOLDER_DURATION' | translate }}"
+    />
 
-      @if (examForm.get('questions')) {
-        <div class="questions-section">
-          <h3>{{'QUESTIONS' | translate}}</h3>
-        
-          <mat-tab-group>
-            <!-- Tab voor vragen -->
-            <mat-tab label="Vragen">
-              <div formArrayName="questions">
-                @for (question of questions.controls; track $index) {
-                  <div [formGroupName]="$index" class="question-block">
-                    <h4>{{'QUESTION' | translate}} {{ $index + 1 }}</h4>
-                    <textarea formControlName="text" placeholder="{{'QUESTION_TEXT_PLACEHOLDER' | translate}}"></textarea>
-                    <label>{{'IMAGES_QUESTIONS'}} {{ $index + 1 }}</label>
-                    <app-photo-upload formControlName="photos"></app-photo-upload>
-                    <button type="button" (click)="removeQuestion($index)">
-                      {{'REMOVE_BUTTON' | translate}}
-                    </button>
-                  </div>
+    @if (examForm.get('questions')) {
+    <div class="questions-section">
+      <h3>{{ "QUESTIONS" | translate }}</h3>
+
+      <mat-tab-group>
+        <!-- Tab voor vragen -->
+        <mat-tab label="Vragen">
+          <div formArrayName="questions">
+            @for (question of questions.controls; track $index) {
+            <div [formGroupName]="$index" class="question-block">
+              <h4>{{ "QUESTION" | translate }} {{ $index + 1 }}</h4>
+              <textarea
+                formControlName="text"
+                placeholder="{{ 'QUESTION_TEXT_PLACEHOLDER' | translate }}"
+              ></textarea>
+              <label
+                >{{ "IMAGES_QUESTIONS" | translate }} {{ $index + 1 }}</label
+              >
+              <app-photo-upload formControlName="photos"></app-photo-upload>
+              <button type="button" (click)="removeQuestion($index)">
+                {{ "REMOVE_BUTTON" | translate }}
+              </button>
+            </div>
+            }
+          </div>
+          <button type="button" (click)="addQuestion()">
+            {{ "ADD_QUESTION_BUTTON" | translate }}
+          </button>
+        </mat-tab>
+
+        <!-- Tab voor antwoorden -->
+        <mat-tab label="Antwoorden">
+          <div formArrayName="questions">
+            @for (question of questions.controls; track $index) {
+            <div [formGroupName]="$index" class="question-block">
+              <h4>{{ "ANSWERS_QUESTION" | translate }} {{ $index + 1 }}</h4>
+              <div formArrayName="answers">
+                @for (answer of getAnswers($index).controls; let i = $index;
+                track i) {
+                <div [formGroupName]="i" class="mb-2">
+                  <input
+                    type="text"
+                    formControlName="text"
+                    placeholder="{{ 'ANSWER' | translate }} {{ i + 1 }}"
+                  />
+                </div>
                 }
               </div>
-              <button type="button" (click)="addQuestion()">{{'ADD_QUESTION_BUTTON' | translate}}</button>
-            </mat-tab>
-        
-            <!-- Tab voor antwoorden -->
-            <mat-tab label="Antwoorden">
-              <div formArrayName="questions">
-                @for (question of questions.controls; track $index) {
-                  <div [formGroupName]="$index" class="question-block">
-                    <h4>{{'ANSWERS_QUESTION' | translate}} {{ $index + 1 }}</h4>
-                    <div formArrayName="answers">
-                      @for (answer of getAnswers($index).controls; let i = $index; track i) {
-                        <div [formGroupName]="i" class="mb-2">
-                          <input type="text" formControlName="text" placeholder="{{'ANSWER'| translate}} {{i + 1}}">
-                        </div>
-                      }
-                    </div>
-                    <label>{{'CORRECT_ANSWER'}} (1-4):</label>
-                    <input type="number" formControlName="correctAnswer" min="1" max="4">
-                  </div>
-                }
-              </div>
-            </mat-tab>
-          </mat-tab-group>
-        </div>
-      }
+              <label>{{ "CORRECT_ANSWER" | translate }} (1-4):</label>
+              <input
+                type="number"
+                formControlName="correctAnswer"
+                min="1"
+                max="4"
+              />
+            </div>
+            }
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+    }
 
-      <button type="submit" [disabled]="examForm.invalid || questions.length === 0">
-        {{'SAVE_EXAM_BUTTON' |translate }}
-      </button>
-    </form>
+    <button
+      type="submit"
+      [disabled]="examForm.invalid || questions.length === 0"
+    >
+      {{ "SAVE_EXAM_BUTTON" | translate }}
+    </button>
+  </form>
   }
 </div>
