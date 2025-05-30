@@ -35,6 +35,7 @@ export class SkippersComponent implements OnInit {
   skippers: SkipperDisplay[] = [];
   selectedSkipperIndex: number | null = null;
   error: string | null = null;
+  skippersWithActiveTraining: string[] = [];
 
   selectedTrainingId: number | null = null;
   selectedSkipperIds: string[] = [];
@@ -344,51 +345,53 @@ export class SkippersComponent implements OnInit {
   loadAvailableTrainings() {
     this.trainingService.getTrainingData().subscribe({
       next: (trainings) => {
-        const observables = trainings.map(training =>
-          this.examService.getExamByTrainingId(training.id).pipe(
-            switchMap(exam => {
-              if (!exam || !exam.id) {
-                return of({ training, hasExam: false, canAssign: false });
-              }
-              const examId = exam.id.toString(); // Converts number to string
-              // Check remaining attempts for all selected skippers
-              const attemptObservables = this.selectedSkipperIds.map(userId =>
-                this.userAttemptService.getRemainingAttempts(userId, examId).pipe(
-                  map(response => ({ userId, remainingAttempts: response.remainingAttempts })),
-                  catchError(() => of({ userId, remainingAttempts: 0 }))
-                )
-              );
-              return forkJoin(attemptObservables).pipe(
-                map(attempts => {
-                  // Training is assignable if ALL selected skippers have 0 remaining attempts
-                  const canAssign = attempts.every(attempt => attempt.remainingAttempts === 0);
-                  return { training, hasExam: true, canAssign };
-                }),
-                // Handle errors in the inner forkJoin
-                catchError(() => of({ training, hasExam: true, canAssign: false }))
-              );
-            }),
-            // Handle errors from getExamByTrainingId
-            catchError(() => of({ training, hasExam: false, canAssign: false }))
-          )
-        );
-
-        forkJoin(observables).subscribe(results => {
-          this.availableTrainings = results
-            .filter(result => result.hasExam && result.canAssign)
-            .map(result => result.training);
-          if (this.availableTrainings.length === 0) {
-            this.snackBar.open('No trainings available to assign. Some skippers may have active attempts.', 'Close', {
-              duration: 5000,
-              panelClass: ['snackbar-info']
-            });
-          }
-        });
+        // Load all trainings without filtering based on remaining attempts
+        this.availableTrainings = trainings;
+        if (this.availableTrainings.length === 0) {
+          this.snackBar.open('No trainings available to assign.', 'Close', {
+            duration: 5000,
+            panelClass: ['snackbar-info']
+          });
+        }
       },
       error: (err) => {
         this.error = 'Failed to load available trainings.';
-        this.snackBar.open('Failed to load trainings.', 'Close', { duration: 5000, panelClass: ['snackbar-error'] });
+        this.snackBar.open('Failed to load trainings.', 'Close', {
+          duration: 5000,
+          panelClass: ['snackbar-error']
+        });
       }
+    });
+  }
+  checkSkippersWithActiveTraining(trainingId: number | null) {
+    if (!trainingId || this.selectedSkipperIds.length === 0) {
+      this.skippersWithActiveTraining = [];
+      return;
+    }
+
+    this.examService.getExamByTrainingId(trainingId).pipe(
+      switchMap(exam => {
+        if (!exam || !exam.id) {
+          this.skippersWithActiveTraining = [];
+          return of([]);
+        }
+        const examId = exam.id.toString();
+        const attemptObservables = this.selectedSkipperIds.map(userId =>
+          this.userAttemptService.getRemainingAttempts(userId, examId).pipe(
+            map(response => ({ userId, hasAttempts: response.remainingAttempts > 0 })),
+            catchError(() => of({ userId, hasAttempts: false }))
+          )
+        );
+        return forkJoin(attemptObservables);
+      }),
+      catchError(() => {
+        this.skippersWithActiveTraining = [];
+        return of([]);
+      })
+    ).subscribe(results => {
+      this.skippersWithActiveTraining = results
+        .filter(result => result.hasAttempts)
+        .map(result => result.userId);
     });
   }
 
