@@ -289,5 +289,8 @@
   "ADDING": "Adding...",
   "ADD_A_FAQ": "Add a new FAQ",
   "NO_FAQ_ITEMS": "No FAQ items found.",
-  "ADD_QUESTION": "+ Add a new question"
+  "ADD_QUESTION": "+ Add a new question",
+  "AUTHENTICATING": "Authenticating...",
+  "AUTHENTICATION_FAILED": "Authentication failed.",
+  "PROCESSING": "Processing..."
 }

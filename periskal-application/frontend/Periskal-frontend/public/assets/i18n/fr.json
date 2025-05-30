@@ -289,5 +289,8 @@
   "ADDING": "Ajout en cours...",
   "ADD_A_FAQ": "Ajouter une nouvelle FAQ",
   "NO_FAQ_ITEMS": "Aucun élément de FAQ trouvé.",
-  "ADD_QUESTION": "+ Ajouter une nouvelle question"
+  "ADD_QUESTION": "+ Ajouter une nouvelle question",
+  "AUTHENTICATING": "Authentification en cours...",
+  "AUTHENTICATION_FAILED": "Échec de l'authentification.",
+  "PROCESSING": "Traitement en cours..."
 }

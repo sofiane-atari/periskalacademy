@@ -10,29 +10,52 @@
 
   <div [ngSwitch]="activeTab">
     <div *ngSwitchCase="'info'" class="profile-info">
+      <div class="profile-picture">
+        <svg class="avatar-img" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" fill="#888">
+          <path d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S397.4 0 256 0zm0 96a80 80 0 1 1 0 160 80 80 0 0 1 0-160zm0 352c-52.9 0-100.6-20.3-134.3-55.7 8.5-38.1 45.1-65.3 93.1-65.3h82.3c48 0 84.6 27.2 93.1 65.3-33.7 35.4-81.4 55.7-134.2 55.7z"/>
+        </svg>
+      </div>
       <div class="info-row">
         <span class="label">{{"ID" | translate}}</span>
         <span class="value">{{userProfile.id}}</span>
+        <svg class="copy-icon" (click)="copyToClipboard(userProfile.id!)" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z"/>
+        </svg>
       </div>
       <div class="info-row">
         <span class="label">{{"USERNAME" | translate}}:</span>
         <span class="value">{{userProfile.username}}</span>
+        <svg class="copy-icon" (click)="copyToClipboard(userProfile.username!)" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z"/>
+        </svg>
       </div>
       <div class="info-row">
         <span class="label">{{"FIRST_NAME" | translate}}:</span>
         <span class="value">{{userProfile.firstname}}</span>
+        <svg class="copy-icon" (click)="copyToClipboard(userProfile.firstname!)" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z"/>
+        </svg>
       </div>
       <div class="info-row">
         <span class="label">{{"LAST_NAME" | translate}}:</span>
         <span class="value">{{userProfile.lastname}}</span>
+        <svg class="copy-icon" (click)="copyToClipboard(userProfile.lastname!)" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z"/>
+        </svg>
       </div>
       <div class="info-row">
         <span class="label">{{"SHIP_NAME" | translate}}:</span>
         <span class="value">{{userProfile.shipname}}</span>
+        <svg class="copy-icon" (click)="copyToClipboard(userProfile.shipname!)" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z"/>
+        </svg>
       </div>
       <div class="info-row">
         <span class="label">{{"ROLE" | translate}}:</span>
         <span class="value">{{userProfile.role}}</span>
+        <svg class="copy-icon" (click)="copyToClipboard(userProfile.role!)" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z"/>
+        </svg>
       </div>
     </div>
 
@@ -53,5 +76,8 @@
     <div *ngSwitchCase="'settings'" class="settings-section">
       <p class="settings-placeholder">Settings will be available in a future update.</p>
     </div>
-  </div>
+  
+  <div class="copy-confirmation" #copyConfirmation>Copied to clipboard!</div>
+
+</div>
 
