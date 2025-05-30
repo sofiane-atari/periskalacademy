@@ -289,5 +289,8 @@
   "ADDING": "Toevoegen...",
   "ADD_A_FAQ": "Een nieuwe FAQ toevoegen",
   "NO_FAQ_ITEMS": "Geen FAQ-items gevonden.",
-  "ADD_QUESTION": "+ Vraag toevoegen"
+  "ADD_QUESTION": "+ Vraag toevoegen",
+  "AUTHENTICATING": "Bezig met verifiëren...",
+  "AUTHENTICATION_FAILED": "Authenticatie mislukt.",
+  "PROCESSING": "Bezig met verwerken..."
 }

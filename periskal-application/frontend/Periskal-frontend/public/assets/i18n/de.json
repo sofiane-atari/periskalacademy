@@ -289,5 +289,8 @@
   "ADDING": "Wird hinzugefügt...",
   "ADD_A_FAQ": "Neue FAQ hinzufügen",
   "NO_FAQ_ITEMS": "Keine FAQ-Einträge gefunden.",
-  "ADD_QUESTION": "+ Neue Frage hinzufügen"
+  "ADD_QUESTION": "+ Neue Frage hinzufügen",
+  "AUTHENTICATING": "Authentifizierung läuft...",
+  "AUTHENTICATION_FAILED": "Authentifizierung fehlgeschlagen.",
+  "PROCESSING": "Verarbeitung läuft..."
 }

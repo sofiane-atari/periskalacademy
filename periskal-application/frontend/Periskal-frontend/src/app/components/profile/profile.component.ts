@@ -26,6 +26,10 @@ export class ProfileComponent implements OnInit {
     private certificateService: CertificateService
   ) {}
 
+  copyToClipboard(text: string) {
+  navigator.clipboard.writeText(text).then(() => alert('Copied to clipboard!'));
+  }
+
   ngOnInit() {
     
     const username = this.jwtDecoderService.getUsername();

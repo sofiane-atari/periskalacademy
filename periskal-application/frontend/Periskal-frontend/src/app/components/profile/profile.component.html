@@ -10,29 +10,42 @@
 
   <div [ngSwitch]="activeTab">
     <div *ngSwitchCase="'info'" class="profile-info">
+      <div class="profile-picture">
+        <svg class="avatar-img" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="48" fill="#e0e0e0" stroke="#b0b0b0" stroke-width="2"/>
+          <circle cx="50" cy="35" r="15" fill="#ffffff"/>
+          <path d="M30,75 Q50,55 70,75" fill="#ffffff"/>
+        </svg>
+      </div>
       <div class="info-row">
         <span class="label">{{"ID" | translate}}</span>
         <span class="value">{{userProfile.id}}</span>
+        <button class="copy-btn" (click)="copyToClipboard(userProfile.id!)">{{"COPY" | translate}}</button>
       </div>
       <div class="info-row">
         <span class="label">{{"USERNAME" | translate}}:</span>
         <span class="value">{{userProfile.username}}</span>
+        <button class="copy-btn" (click)="copyToClipboard(userProfile.username!)">{{"COPY" | translate}}</button>
       </div>
       <div class="info-row">
         <span class="label">{{"FIRST_NAME" | translate}}:</span>
         <span class="value">{{userProfile.firstname}}</span>
+        <button class="copy-btn" (click)="copyToClipboard(userProfile.firstname!)">{{"COPY" | translate}}</button>
       </div>
       <div class="info-row">
         <span class="label">{{"LAST_NAME" | translate}}:</span>
         <span class="value">{{userProfile.lastname}}</span>
+        <button class="copy-btn" (click)="copyToClipboard(userProfile.lastname!)">{{"COPY" | translate}}</button>
       </div>
       <div class="info-row">
         <span class="label">{{"SHIP_NAME" | translate}}:</span>
         <span class="value">{{userProfile.shipname}}</span>
+        <button class="copy-btn" (click)="copyToClipboard(userProfile.shipname!)">{{"COPY" | translate}}</button>
       </div>
       <div class="info-row">
         <span class="label">{{"ROLE" | translate}}:</span>
         <span class="value">{{userProfile.role}}</span>
+        <button class="copy-btn" (click)="copyToClipboard(userProfile.role!)">{{"COPY" | translate}}</button>
       </div>
     </div>
 
