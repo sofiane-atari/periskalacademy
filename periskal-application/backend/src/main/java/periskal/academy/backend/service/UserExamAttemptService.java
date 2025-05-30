@@ -45,4 +45,13 @@ public class UserExamAttemptService {
         }
     }
 
+    public int getRemainingAttempts(String userId, String examId) {
+        List<UserExamAttempt> attempts = userExamAttemptRepository.findAllByUserIdAndExamId(userId, examId);
+        return attempts.stream()
+                .filter(UserExamAttempt::hasAttemptsLeft)
+                .mapToInt(UserExamAttempt::getRemainingAttempts)
+                .findFirst()
+                .orElse(0);
+    }
+
 }

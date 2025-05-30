@@ -301,7 +301,7 @@
                     }
                 </select>
                 @if (!availableTrainings || availableTrainings.length === 0) {
-                <p class="no-data">{{'NO_TRAININGS_ABLE_TO_ASSIGN'}}</p>
+                <p class="no-data">{{'NO_TRAININGS_ABLE_TO_ASSIGN' | translate}} {{"SOME_SKIPPERS_HAVE_ACTIVE_ATTEMPTS" | translate}} </p>
                 }
             </div>
 
