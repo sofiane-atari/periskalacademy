@@ -292,5 +292,6 @@
   "ADD_QUESTION": "+ Ajouter une nouvelle question",
   "AUTHENTICATING": "Authentification en cours...",
   "AUTHENTICATION_FAILED": "Échec de l'authentification.",
-  "PROCESSING": "Traitement en cours..."
+  "PROCESSING": "Traitement en cours...",
+  "SOME_SKIPPERS_HAVE_ACTIVE_ATTEMPTS": "Certains capitaines ont peut-être des tentatives en cours."
 }
