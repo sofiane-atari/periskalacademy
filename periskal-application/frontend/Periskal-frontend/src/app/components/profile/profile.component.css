@@ -85,14 +85,36 @@
 /* Profile Info Section */
 .profile-info {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: 1fr 1fr; /* 2 kolommen */
   gap: 1.25rem;
   padding: 1rem;
+  width: 100%;
+}
+
+.profile-picture {
+  grid-column: 1 / span 2; /* Neemt beide kolommen in beslag */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.avatar-img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+}
+
+.info-cards {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 kolommen */
+  gap: 1.25rem;
 }
 
 .info-row {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   padding: 1.25rem;
   border-radius: 12px;
   background: #fff9e6;
@@ -100,6 +122,8 @@
   border: 1px solid rgba(255, 177, 0, 0.1);
   position: relative;
   overflow: hidden;
+  min-height: 80px; /* Vaste hoogte voor alle rijen */
+  box-sizing: border-box;
 }
 
 .info-row::before {
@@ -121,16 +145,64 @@
 .label {
   font-weight: 500;
   color: #996a00;
-  margin-bottom: 0.5rem;
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  min-width: 120px; /* Vaste breedte voor labels */
 }
 
 .value {
   color: #1a1a1a;
   font-weight: 600;
   font-size: 1.1rem;
+  flex: 1;
+  margin: 0 1rem;
+}
+
+.copy-icon {
+  width: 20px; /* Smaller size */
+  height: 20px;
+  fill: #996a00;
+  cursor: pointer;
+  transition: fill 0.2s ease;
+}
+
+.copy-icon:hover {
+  fill: #ffb100;
+}
+
+/* Copy Popup */
+.copy-popup {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1a1a1a;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  opacity: 0;
+  animation: popupFade 2s ease-in-out forwards;
+}
+
+@keyframes popupFade {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px);
+  }
+  20% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  80% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px);
+  }
 }
 
 /* Products Section */
@@ -178,18 +250,6 @@
   color: #1a1a1a;
   font-weight: 600;
   font-size: 1.1rem;
-}
-
-.avatar-img {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-}
-.profile-picture {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 1rem;
 }
 
 .no-products {
@@ -243,6 +303,18 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  .info-cards {
+    grid-template-columns: 1fr; /* 1 kolom op mobiel */
+  }
+
+  .profile-info {
+    grid-template-columns: 1fr; /* 1 kolom op mobiel */
+  }
+
+  .profile-picture {
+    grid-column: 1; /* Neemt slechts 1 kolom in beslag op mobiel */
+  }
+
   .profile-container {
     margin: 1rem;
     border-radius: 12px;
@@ -274,5 +346,10 @@
 
   .products-grid {
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+
+  .avatar-img {
+    width: 100px;
+    height: 100px;
   }
 }

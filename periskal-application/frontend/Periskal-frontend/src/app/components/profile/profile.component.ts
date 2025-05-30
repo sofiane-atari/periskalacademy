@@ -27,7 +27,7 @@ export class ProfileComponent implements OnInit {
   ) {}
 
   copyToClipboard(text: string) {
-  navigator.clipboard.writeText(text).then(() => alert('Copied to clipboard!'));
+    navigator.clipboard.writeText(text).then(() => alert('Copied to clipboard!'));
   }
 
   ngOnInit() {
