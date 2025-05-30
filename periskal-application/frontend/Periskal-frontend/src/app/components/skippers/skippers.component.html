@@ -302,7 +302,7 @@
                 </select>
                     @if (skippersWithActiveTraining.length > 0) {
                         <p class="warning-message">
-                            {{'FOLLOWING_SKIPPERS_ALREADY_ASSIGNED' | translate}}:
+                            {{'SKIPPERS_ALREADY_ASSIGNED' | translate}}
                             <ul>
                                 @for (skipperId of skippersWithActiveTraining; track skipperId) {
                                 <li>{{ getSkipperName(skipperId) }}</li>
