@@ -734,3 +734,13 @@ h1 {
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1rem;
 }
+.warning-message {
+  color: #f39c12;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.warning-message ul {
+  list-style-type: disc;
+  margin-left: 20px;
+}

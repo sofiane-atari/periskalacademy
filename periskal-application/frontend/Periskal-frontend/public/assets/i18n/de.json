@@ -297,5 +297,6 @@
   "deleteSuccess": "FAQ erfolgreich gelöscht!",
   "deleteError": "Beim Löschen der FAQ ist ein Fehler aufgetreten.",
   "createSuccess": "FAQ erfolgreich hinzugefügt!",
-  "createError": "Beim Hinzufügen der FAQ ist ein Fehler aufgetreten."
+  "createError": "Beim Hinzufügen der FAQ ist ein Fehler aufgetreten.",
+  "SKIPPERS_ALREADY_ASSIGNED": "Die folgenden Schiffer haben dieses Training bereits zugewiesen bekommen und werden übersprungen"
 }

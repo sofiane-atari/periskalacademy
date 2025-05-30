@@ -297,5 +297,7 @@
   "deleteSuccess": "FAQ succesvol verwijderd!",
   "deleteError": "Er is een fout opgetreden bij het verwijderen van de FAQ.",
   "createSuccess": "FAQ succesvol toegevoegd!",
-  "createError": "Er is een fout opgetreden bij het toevoegen van de FAQ."
+  "createError": "Er is een fout opgetreden bij het toevoegen van de FAQ.",
+  "SKIPPERS_ALREADY_ASSIGNED": "De volgende schippers hebben deze training al toegewezen gekregen en worden overgeslagen"
+
 }

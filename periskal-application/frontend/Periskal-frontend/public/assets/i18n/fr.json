@@ -297,5 +297,6 @@
   "deleteSuccess": "FAQ supprimée avec succès !",
   "deleteError": "Une erreur s'est produite lors de la suppression de la FAQ.",
   "createSuccess": "FAQ ajoutée avec succès !",
-  "createError": "Une erreur s'est produite lors de l'ajout de la FAQ."
+  "createError": "Une erreur s'est produite lors de l'ajout de la FAQ.",
+  "SKIPPERS_ALREADY_ASSIGNED": "Les capitaines suivants ont déjà cette formation attribuée et seront ignorés"
 }
