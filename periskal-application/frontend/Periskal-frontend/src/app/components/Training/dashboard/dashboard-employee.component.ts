@@ -15,13 +15,13 @@ import { DatePipe } from '@angular/common';
 
 
 @Component({
-  selector: 'app-training-employee',
+  selector: 'app-dashboard',
   imports: [TranslatePipe, DatePipe],
-  templateUrl: './training-employee.component.html',
-  styleUrl: './training-employee.component.css'
+  templateUrl: './dashboard-employee.component.html',
+  styleUrl: './dashboard-employee.component.css'
 })
 
-export class TrainingEmployeeComponent implements OnInit {
+export class DashboardComponent implements OnInit {
   public trainingsData: Training[] = [];
   public lang: string | null = "";
   public openMenus: { [key: number]: boolean } = {};
@@ -56,7 +56,6 @@ export class TrainingEmployeeComponent implements OnInit {
     const skipperId = this.jwtDecoderService.getId();
 
     if (!skipperId) {
-      console.error("Skipper ID not found. Cannot load assignments.");
       this.loadingError = "User ID not found, cannot load assignments.";
       this.loadAllAvailableTrainings();
       return;
@@ -64,7 +63,6 @@ export class TrainingEmployeeComponent implements OnInit {
 
     this.assignmentService.getSkipperAssignments(skipperId).pipe(
       catchError(err => {
-        console.error('Error fetching user assignments', err);
         this.loadingError = "Failed to load your assignments.";
         return of([] as TrainingAssignment[]);
       })
@@ -86,11 +84,13 @@ export class TrainingEmployeeComponent implements OnInit {
         this.processLoadedData(this.trainingsData, this.userRawAssignments);
         this.loadExamsForTrainings();
         this.isLoadingData = false;
-      },
-      error: (error) => {
-        console.error('Error fetching trainings', error);
       }
     });
+  }
+    private sortByDate(a: DisplayTraining, b: DisplayTraining): number {
+    const dateA = a.assignedDate ? new Date(a.assignedDate).getTime() : 0;
+    const dateB = b.assignedDate ? new Date(b.assignedDate).getTime() : 0;
+    return dateB - dateA; // Newest date comes first
   }
 
   // Step 3: Process and combine the data
@@ -111,10 +111,6 @@ export class TrainingEmployeeComponent implements OnInit {
           isAssigned: true,
           assignedDate: assignment.assignedDate
         });
-      } else {
-        // This assignment refers to a training not in the current user's 'availableTrainings', got assigned a training he doesn't have access to, how to handle this?
-        // For now, just log a warning
-        console.warn(`Assigned training ID ${assignment.trainingId} details not found in available trainings list.`);
       }
     });
     // Populate allTrainingsData (for the main grid)
@@ -127,14 +123,14 @@ export class TrainingEmployeeComponent implements OnInit {
       };
     });
 
-
-
-    // sort the assigned trainings by date
-    this.fleetManagerAssignedTrainings.sort((a, b) => {
-      const dateA = a.assignedDate ? new Date(a.assignedDate).getTime() : 0;
-      const dateB = b.assignedDate ? new Date(b.assignedDate).getTime() : 0;
-      return dateB - dateA;
+    this.allTrainingsData.sort((a, b) => {
+      if (a.isAssigned && !b.isAssigned) return -1; // a comes first
+      if (!a.isAssigned && b.isAssigned) return 1; // b comes first
+      return this.sortByDate(a, b); // Sort by date within assigned/unassigned groups
     });
+
+    // Sort fleetManagerAssignedTrainings by date
+    this.fleetManagerAssignedTrainings.sort(this.sortByDate);
   }
 
   loadExamsForTrainings(): void {
@@ -145,11 +141,6 @@ export class TrainingEmployeeComponent implements OnInit {
         next: (exam) => {
           if (exam) {
             this.examsMap.set(training.id, exam);
-          }
-        },
-        error: (error) => {
-          if (error.status !== 404) { // Only log non-404 errors
-            console.error(`Error loading exam for training ${training.id}`, error);
           }
         },
         complete: () => {
@@ -196,7 +187,6 @@ export class TrainingEmployeeComponent implements OnInit {
     const training = this.trainingsData.find(t => t.id === trainingId);
 
     if (!training) {
-      console.warn(`Training with ID ${trainingId} not found.`);
       return "Training Not Found";
     }
 

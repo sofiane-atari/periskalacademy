@@ -1,13 +1,15 @@
 package periskal.academy.backend.service;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import lombok.extern.slf4j.Slf4j;
 import periskal.academy.backend.dto.CertificateDTO;
 import periskal.academy.backend.dto.CompletedExamDTO;
 import periskal.academy.backend.jpa.CompletedExam;
@@ -18,6 +20,7 @@ import periskal.academy.backend.jpa.Training;
 import periskal.academy.backend.jpa.TrainingRepository;
 
 @Service
+@Slf4j
 public class CompletedExamService {
     
     private final CompletedExamRepository completedExamRepository;
@@ -44,7 +47,6 @@ public class CompletedExamService {
         
         // Check if the exam was passed
         boolean passed = completedExamDTO.isPassed();
-        result.setPassed(passed);
         
         // Generate certificate if passed
         if (passed) {
@@ -58,16 +60,16 @@ public class CompletedExamService {
                 certificateDTO.setUserId(completedExamDTO.getUserId());
                 certificateDTO.setName(training.get().getNameEn() + " Certificate");  
                 certificateDTO.setIssueDate(LocalDate.now());
-                certificateDTO.setExpiryDate(LocalDate.now().plusYears(5));  // get from exam later TODO
+                certificateDTO.setExpiryDate(LocalDate.now().plusYears(5));  //TODO: get from exam later , make a seperate issue for this
                 certificateDTO.setTraining(training.get().getNameEn());
-                certificateDTO.setReadyForDownload(true); // allow periskal to decide this, TODO
+                certificateDTO.setReadyForDownload(true); 
                 
                 // Save the certificate
                 CertificateDTO savedCertificate = certificateService.saveCertificate(certificateDTO);
                 
                 // Update completed exam with certificate reference
                 saved.setCertificateId(savedCertificate.getId());
-                saved = completedExamRepository.save(saved);
+                completedExamRepository.save(saved);
                 
                 // Update result DTO
                 result.setCertificateId(savedCertificate.getId());
@@ -80,9 +82,15 @@ public class CompletedExamService {
     // Method to retrieve all completed exams for a specific user
     public List<CompletedExamDTO> getCompletedExamsByUserId(String userId) {
         List<CompletedExam> exams = completedExamRepository.findByUserId(userId);
+
+        if (exams.isEmpty()) {
+            log.info("No completed exams found for user: {}", userId);
+            return Collections.emptyList();
+        }
+
         return exams.stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     // Method to retrieve all completed exams for a specific user and training
@@ -90,7 +98,7 @@ public class CompletedExamService {
         List<CompletedExam> exams = completedExamRepository.findByUserIdAndTrainingId(userId, trainingId);
         return exams.stream()
                     .map(this::convertToDTO)
-                    .collect(Collectors.toList());
+                    .toList();
     }
 
     private CompletedExamDTO convertToDTO(CompletedExam completedExam) {
@@ -103,13 +111,12 @@ public class CompletedExamService {
         dto.setScore(completedExam.getScore());
         dto.setCompletedDate(completedExam.getCompletedDate());
         dto.setCertificateId(completedExam.getCertificateId());
-        dto.setPassed(completedExam.isPassed());
 
         dto.setExamName(examRepository.findById(completedExam.getExamId())
-        .map(exam -> exam.getExamTitle())
+        .map(Exam::getExamTitle)
         .orElse("N/A")); 
         dto.setTrainingName(trainingRepository.findById(completedExam.getTrainingId())
-        .map(training -> training.getNameEn())
+        .map(Training::getNameEn)
         .orElse("N/A"));
         return dto;
     }

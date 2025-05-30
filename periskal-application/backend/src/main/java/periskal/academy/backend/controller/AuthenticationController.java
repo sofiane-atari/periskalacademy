@@ -14,11 +14,14 @@ public class AuthenticationController {
 
     private final DongleAuthenticationService dongleAuthenticationService;
     private final AuthenticationService authenticationService;
+    private final JwtUtil jwtUtil;
 
     public AuthenticationController(DongleAuthenticationService dongleAuthenticationService,
-            AuthenticationService authenticationService) {
+            AuthenticationService authenticationService
+            , JwtUtil jwtUtil) {
         this.dongleAuthenticationService = dongleAuthenticationService;
         this.authenticationService = authenticationService;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/authenticate")
@@ -29,7 +32,7 @@ public class AuthenticationController {
                 loginRequest.getPassword());
 
         // 2. If successful, generate a JWT token and return it in the response
-        String token = JwtUtil.generateToken(response);
+        String token = jwtUtil.generateToken(response);
         response.setToken(token);
         return ResponseEntity.ok(response);
 
@@ -40,7 +43,7 @@ public class AuthenticationController {
 
         AuthenticateResponse responseD = dongleAuthenticationService.authenticateDongle(login);
 
-        String token = JwtUtil.generateToken(responseD);
+        String token = jwtUtil.generateToken(responseD);
         responseD.setToken(token);
         return ResponseEntity.ok(responseD);
 

@@ -4,7 +4,6 @@ import { TrainingService } from '../../../services/Training/training.service';
 import { Router } from '@angular/router';
 import { Training } from '../../../models/training.model';
 import { ExamService } from '../../../services/Exam/exam.service';
-import { Exam } from '../../../models/exam.model';
 import { TranslatePipe } from '@ngx-translate/core';
 import { PhotoUploadComponent } from '../../photo-upload/photo-upload.component';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -91,14 +90,11 @@ export class AddExamComponent implements OnInit {
     this.isLoading = true;
     this.trainingService.getTrainingData().subscribe({
       next: (data: any[]) => {
-        console.log('Ontvangen trainingsdata:', data); // Debug log
         this.trainingsData = data;
-        console.log('TrainingsData na toewijzing:', this.trainingsData); // Debug log
         this.checkExistingExams();
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Fout bij ophalen trainingen', error);
         this.isLoading = false;
       }
     });
@@ -145,13 +141,11 @@ export class AddExamComponent implements OnInit {
         duration: Number(this.examForm.value.duration)
       };
 
-      console.log('Submitting exam data:', examData);
       this.examService.createExam(examData).subscribe({
         next: (response) => {
           this.router.navigate(['/training-employee']);
         },
         error: (error) => {
-          console.error('Error:', error);
         }
       });
     }

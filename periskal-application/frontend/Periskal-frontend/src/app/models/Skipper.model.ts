@@ -1,4 +1,3 @@
-
 export interface Skipper {
   id: string;
   username: string;
@@ -7,4 +6,5 @@ export interface Skipper {
   shipname: string;
   role: string;
   products: string[];
+  overallTrainingProgress: number;
 }

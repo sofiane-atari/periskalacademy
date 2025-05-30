@@ -13,7 +13,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import periskal.academy.backend.controller.ExamController;
 import periskal.academy.backend.dto.ExamRequest;
 import periskal.academy.backend.jpa.Exam;
 import periskal.academy.backend.security.exceptions.general.ResourceNotFoundException;

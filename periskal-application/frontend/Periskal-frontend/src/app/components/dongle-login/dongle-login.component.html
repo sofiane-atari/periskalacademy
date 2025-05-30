@@ -1,20 +1,21 @@
-<div class="container">
-    <div class="message-container">
-        <div class="success-message"> @if (errorMessage)
-          {
-            {{errorMessage}}
-          }@else {
-            {{"SUCCESFULL_LOGIN" | translate}}
-          }
-        </div>
-        <div class="redirect-message">
-            <div class="loading-circle"></div>
-            @if (errorMessage)
-            {
-              {{"REDIRECTING" | translate}}
-            }@else {
-              {{"REDIRECTING_TO_DASHBOARD" | translate}}
-            }
-        </div>
+<div class="message-container">
+    <div class="success-message"> 
+    @if (errorMessage) {
+      {{ errorMessage }}
+    } @else if (isLoading) {
+      {{ "AUTHENTICATING" | translate }}
+    } @else {
+      {{ "SUCCESFULL_LOGIN" | translate }}
+    }
+    </div>
+    <div class="redirect-message">
+        <div class="loading-circle"></div>
+        @if (errorMessage) {
+          {{ "AUTHENTICATION_FAILED" | translate }}
+        } @else if (isLoading) {
+          {{ "PROCESSING" | translate }}
+        } @else {
+          {{ "REDIRECTING_TO_DASHBOARD" | translate }}
+        }
     </div>
 </div>

@@ -1,15 +1,11 @@
 package periskal.academy.backend.service;
 
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
-import periskal.academy.backend.model.AuthenticateResponse;
-import periskal.academy.backend.security.exceptions.authentication.AuthenticationCommunicationException;
 import periskal.academy.backend.service.authentication.BaseAuthenticationService;
 import periskal.academy.backend.service.authentication.DongleAuthenticationService;
 

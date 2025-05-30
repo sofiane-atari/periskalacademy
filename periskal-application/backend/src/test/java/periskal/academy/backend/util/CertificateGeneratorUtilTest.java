@@ -1,35 +1,38 @@
 package periskal.academy.backend.util;
 
+import java.io.IOException;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 import org.junit.jupiter.api.Test;
 
+import periskal.academy.backend.dto.CertificatePdfDTO;
+
 
 class CertificateGeneratorUtilTest {
 
     @Test
     void givenValidCertificateData_whenGenerateCertificatePdf_thenReturnsNonEmptyLoadablePdf() {
-        // Arrange: Prepare valid test data
-        String productName = "Valid Product Test";
-        String productdetails = "Valid Details";
-        String shipName = "Test Vessel Valid";
-        String trainingDate = "2024-03-15";
-        List<String> crewNames = List.of("Crew One", "Crew Two");
-        String signerName = "Valid Signer";
-        String signerTitle = "Valid Title";
-        String companyName = "Valid Corp";
-        String companyAddress = "1 Valid St";
-        String companyPhone = "123456";
+        CertificatePdfDTO dto = new CertificatePdfDTO(
+            "Valid Product Test",
+            "Valid Details",
+            "Test Vessel Valid",
+            "2024-03-15",
+            List.of("Crew One", "Crew Two"),
+            "Valid Signer",
+            "Valid Title",
+            "Valid Corp",
+            "1 Valid St",
+            "123456"   );
+
+            String ownerPassword = "validPassword123";
 
         // Act: Generate the PDF, fail test if unexpected exception occurs
         byte[] pdfData = null;
         try {
-            pdfData = CertificateGeneratorUtil.generateCertificatePdf(
-                    productName, productdetails, shipName, trainingDate, crewNames,
-                    signerName, signerTitle, companyName, companyAddress, companyPhone);
-        } catch (Exception e) {
+            pdfData = CertificateGeneratorUtil.generateCertificatePdf(dto, ownerPassword);
+        } catch (IOException e) {
             fail("PDF generation threw an unexpected exception: " + e.getMessage(), e);
         }
 

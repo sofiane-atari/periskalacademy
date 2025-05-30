@@ -6,10 +6,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { JwtDecoderService } from '../../services/JwtDecode/jwt-decoder.service';
 import { ExamService } from '../../services/Exam/exam.service';
 import { TranslatePipe } from '@ngx-translate/core';
+import { MatStepperModule } from '@angular/material/stepper';
 
 @Component({
   selector: 'app-order',
-  imports: [ReactiveFormsModule, TranslatePipe],
+  imports: [ReactiveFormsModule, TranslatePipe, MatStepperModule],
   templateUrl: './billing.component.html',
   styleUrl: './billing.component.css'
 })
@@ -18,6 +19,7 @@ export class BillingComponent implements OnInit {
   examId!: number;
   userId!: string | null;
   examAttempts!: number;
+  examPrice!: number;
 
   constructor(private fb: FormBuilder, private billingSvc: BillingService, private snackBar: MatSnackBar, private router: Router, private route: ActivatedRoute, private jwtDecoderService: JwtDecoderService, private examService: ExamService) { }
 
@@ -28,6 +30,7 @@ export class BillingComponent implements OnInit {
     this.userId = this.jwtDecoderService.getId();
     this.examService.getExamById(this.examId).subscribe({
       next: (data) => {
+        this.examPrice = data.price
         this.examAttempts = data.examAttempts;
       }
     })
@@ -55,10 +58,8 @@ export class BillingComponent implements OnInit {
     this.billingForm.patchValue({ examAttempts: this.examAttempts });
     if (this.billingForm.valid) {
       const billingFormData = this.billingForm.value;
-      console.log(billingFormData);
       this.billingSvc.postBilling(billingFormData).subscribe({
         next: (response) => {
-          console.log('Success:', response);
           const snackBarConfig: MatSnackBarConfig = {
             duration: 3000,
             verticalPosition: 'bottom',
@@ -71,7 +72,6 @@ export class BillingComponent implements OnInit {
           this.router.navigate(['/take-exam', this.examId]);
         },
         error: (err) => {
-          console.error('Error:', err);
           // Show error feedback
         }
       });
@@ -81,6 +81,6 @@ export class BillingComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['/trainingEmployee'])
+    this.router.navigate(['/dashboard'])
   }
 }

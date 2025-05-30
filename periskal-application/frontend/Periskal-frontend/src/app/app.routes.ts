@@ -1,6 +1,6 @@
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
-import { TrainingEmployeeComponent } from './components/Training/training-employee/training-employee.component';
+import { DashboardComponent } from './components/Training/dashboard/dashboard-employee.component';
 import { TrainingDetailComponent } from './components/Training/training-detail/training-detail.component';
 import { AddTrainingComponent } from './components/Training/add-training/add-training.component';
 import { UpdateTrainingComponent } from './components/Training/update-training/update-training.component';
@@ -18,6 +18,7 @@ import { CertificatesComponent } from './components/certificates/certificates.co
 import { ExamsListComponent } from './components/exams-list/exams-list.component';
 import { BillingComponent } from './components/billing/billing.component';
 import { FaqPageComponent } from './components/faq/faq-page/faq-page.component';
+import { ContactPageComponent } from './components/contact/contact-page.component';
 
 export const routes: Routes = [
 
@@ -35,7 +36,7 @@ export const routes: Routes = [
         path: '',
         canActivate: [authGuard],
         children: [
-            { path: 'trainingEmployee', component: TrainingEmployeeComponent },
+            { path: 'dashboard', component: DashboardComponent },
             { path: 'add-training', component: AddTrainingComponent },
             { path: 'add-exam', component: AddExamComponent },
             { path: 'update-exam/:id', component: UpdateExamComponent },
@@ -50,7 +51,8 @@ export const routes: Routes = [
             { path: 'certificates', component: CertificatesComponent },
             { path: 'exams', component: ExamsListComponent },
             { path: 'billing/:examid', component: BillingComponent },
-            { path: 'faq-page', component: FaqPageComponent}
+            { path: 'faq-page', component: FaqPageComponent},
+            { path: 'contact', component: ContactPageComponent}
         ]
     },
 
@@ -58,7 +60,5 @@ export const routes: Routes = [
     { path: '**', redirectTo: 'login' }
 ];
 
-RouterModule.forRoot(routes, {
-    enableTracing: true // ✅ This will log route changes in the console
-})
+
 

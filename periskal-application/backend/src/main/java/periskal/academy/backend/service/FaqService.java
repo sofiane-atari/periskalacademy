@@ -4,21 +4,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
-import periskal.academy.backend.jpa.faq.*;
+import periskal.academy.backend.jpa.faq.Faq;
+import periskal.academy.backend.jpa.faq.FaqRepository;
 import periskal.academy.backend.security.exceptions.general.ResourceNotFoundException;
 import periskal.academy.backend.security.exceptions.general.ValidationException;
 
 @Slf4j
 @Service
 public class FaqService {
-    @Autowired
-    private FaqRepository faqRepository;
+
+    
+    private final FaqRepository faqRepository;
+
+    public FaqService(FaqRepository faqRepository) {
+        this.faqRepository = faqRepository;
+    }
 
     public List<Faq> getAllFaqs() {
         try {
@@ -74,8 +79,14 @@ public class FaqService {
 
             validateFaq(updatedFaq);
             Faq faq = existingFaq.get();
-            faq.setQuestion(updatedFaq.getQuestion());
-            faq.setAnswer(updatedFaq.getAnswer());
+            faq.setQuestionEn(updatedFaq.getQuestionEn());
+            faq.setAnswerEn(updatedFaq.getAnswerEn());
+            faq.setQuestionNl(updatedFaq.getQuestionNl());
+            faq.setAnswerNl(updatedFaq.getAnswerNl());
+            faq.setQuestionFr(updatedFaq.getQuestionFr());
+            faq.setAnswerFr(updatedFaq.getAnswerFr());
+            faq.setQuestionDe(updatedFaq.getQuestionDe());
+            faq.setAnswerDe(updatedFaq.getAnswerDe());
 
             Faq savedFaq = faqRepository.save(faq);
             log.info("Updated FAQ with id {}", savedFaq.getId());
@@ -105,10 +116,15 @@ public class FaqService {
 
     private void validateFaq(Faq faq) {
         List<String> errors = new ArrayList<>();
-        if (faq.getQuestion() == null || faq.getQuestion().trim().isEmpty()) {
-            errors.add("Question cannot be empty");
+        if (faq.getQuestionEn() == null || faq.getQuestionEn().trim().isEmpty() || faq.getQuestionFr() == null
+                || faq.getQuestionFr().trim().isEmpty() || faq.getQuestionNl() == null
+                || faq.getQuestionNl().trim().isEmpty() || faq.getQuestionDe() == null
+                || faq.getQuestionDe().trim().isEmpty()) {
+            errors.add("You must fill all the languages");
         }
-        if (faq.getAnswer() == null || faq.getAnswer().trim().isEmpty()) {
+        if (faq.getAnswerEn() == null || faq.getAnswerEn().trim().isEmpty() || faq.getAnswerDe() == null
+                || faq.getAnswerDe().trim().isEmpty() || faq.getAnswerFr() == null || faq.getAnswerFr().trim().isEmpty()
+                || faq.getAnswerNl() == null || faq.getAnswerNl().trim().isEmpty()) {
             errors.add("Answer cannot be empty");
         }
         if (!errors.isEmpty()) {

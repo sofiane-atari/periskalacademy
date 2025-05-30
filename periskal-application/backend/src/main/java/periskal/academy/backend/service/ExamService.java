@@ -144,7 +144,7 @@ public class ExamService {
         // Unlink from training
         Training training = exam.getTraining(); // assuming you have getTraining()
         if (training != null) {
-            training.setExam(null); // or training.setHasExam(false);
+            training.setExam(null); // or set false
             trainingRepository.save(training);
         }
 

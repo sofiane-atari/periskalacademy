@@ -1,9 +1,9 @@
 package periskal.academy.backend.service;
 
-import static org.assertj.core.api.Assertions.*;
-
 import java.time.LocalDate;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -24,9 +24,10 @@ class CryptoServiceTest {
 
         String encoded = cryptoService.encode(number, date, dayKey);
 
-        assertThat(encoded).isNotNull();
-        assertThat(encoded).contains(":");
-        assertThat(encoded.split(":")[1]).isEqualTo(String.valueOf(number % 100000));
+        assertThat(encoded)
+            .isNotNull()
+            .contains(":")
+            .matches(s -> s.split(":")[1].equals(String.valueOf(number % 100000)));
     }
 
     @Test

@@ -71,10 +71,8 @@ export class AuthenticationService {
 
     // Make a simple request to any protected endpoint to verify the token is valid on the server, genius way to validate token imo haha finally got this.
     return this.http.get<any>(`${this.baseUrl}/trainings`).pipe(
-      tap(() => console.log('Token validated successfully')),
       map(() => true),
       catchError(error => {
-        console.error('Token validation failed:', error);
         this.logout(); 
         return of(false);
       })

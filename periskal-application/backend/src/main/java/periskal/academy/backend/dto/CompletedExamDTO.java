@@ -25,7 +25,6 @@ public class CompletedExamDTO {
     // Convenience properties for UI display
     private String examName;
     private String trainingName;
-    private boolean passed;
     
     public boolean isPassed() {
         return score >= requiredScore;

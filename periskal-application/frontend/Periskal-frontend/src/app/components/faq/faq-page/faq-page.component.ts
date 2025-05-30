@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, FormControl, Validators, FormBuilder, FormsModule } from '@angular/forms';
 import { FaqService } from '../../../services/Faq/faq.service';
-import { HttpClientModule } from '@angular/common/http';
 import { Faq } from '../../../models/Faq.model';
 import { RoleAuthorizationService } from '../../../services/RoleAuthorization/role-authorization.service';
 import { trigger, transition, style, animate } from '@angular/animations';
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-faq-page',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HttpClientModule, TranslatePipe],
+  imports: [CommonModule, ReactiveFormsModule, TranslatePipe, FormsModule, MatTabsModule],
   templateUrl: './faq-page.component.html',
   styleUrl: './faq-page.component.css',
   animations: [
@@ -38,7 +38,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 })
 export class FaqPageComponent implements OnInit {
   faqs: Faq[] = [];
-  faqForm: FormGroup;
+  faqForm!: FormGroup;
   expandedFaqId: number | null = null;
   errorMessage: string | null = null;
   successMessage: string | null = null;
@@ -46,42 +46,83 @@ export class FaqPageComponent implements OnInit {
   isSubmitting = false;
   showAddForm = false;
 
+  lang: string = '';
+
+  category: string | null = null;
+  selectedCategory: string = '';
+  searchTerm: string = '';
+
   constructor(
     private fb: FormBuilder,
     public roleAuth: RoleAuthorizationService,
-    private faqService: FaqService,
-    private translate: TranslateService
-  ) {
+    private faqService: FaqService
+  ) { }
+
+  ngOnInit(): void {
+    this.lang = localStorage.getItem('lang')!;
+    this.initForm();
+    this.loadFaqs();
+  }
+
+  initForm(): void {
     this.faqForm = this.fb.group({
-      question: ['', [Validators.required, Validators.minLength(5)]],
-      answer: ['', [Validators.required, Validators.minLength(10)]]
+      questionEn: ['', [Validators.required, Validators.minLength(5)]],
+      answerEn: ['', [Validators.required, Validators.minLength(10)]],
+      questionNl: ['', [Validators.required, Validators.minLength(5)]],
+      answerNl: ['', [Validators.required, Validators.minLength(10)]],
+      questionFr: ['', [Validators.required, Validators.minLength(5)]],
+      answerFr: ['', [Validators.required, Validators.minLength(10)]],
+      questionDe: ['', [Validators.required, Validators.minLength(5)]],
+      answerDe: ['', [Validators.required, Validators.minLength(10)]],
+      category: ['', Validators.required]
     });
   }
 
-  ngOnInit(): void {
-    this.loadFaqs();
+  getControl(lang: string, field: string) {
+    return this.faqForm.get(lang)?.get(field);
+  }
+
+  getAllCategories() {
+    return ['Training', 'Exam', 'Fleetmanager', 'Certificates', 'Billing', 'Other']
+  }
+
+  getfilteredFaqs() {
+    const searchTerm = this.searchTerm.toLowerCase();
+    return this.faqs.filter(faq => {
+      const matchesSearch =
+        !searchTerm ||
+        faq.questionEn.toLowerCase().includes(searchTerm) ||
+        faq.questionNl.toLowerCase().includes(searchTerm) ||
+        faq.questionFr.toLowerCase().includes(searchTerm) ||
+        faq.questionDe.toLowerCase().includes(searchTerm) ||
+        faq.id?.toString().includes(searchTerm)
+
+      const matchesProductFilter =
+        !this.selectedCategory || faq.category == this.selectedCategory;
+
+
+      return matchesProductFilter && matchesSearch;
+    })
   }
 
   loadFaqs(): void {
     this.faqService.getFaqs().subscribe({
       next: (faqs) => {
         this.faqs = faqs;
-      },
-      error: (error) => {
-        this.showError('Er is een fout opgetreden bij het laden van de FAQ-items.');
-        console.error('Error loading FAQs:', error);
       }
     });
   }
 
   addFaq(): void {
     if (this.faqForm.invalid) return;
-    
+
     this.isSubmitting = true;
     this.clearMessages();
-    
+
+    console.log(this.faqForm.value);
     const newFaq: Faq = this.faqForm.value;
-    
+    console.log(newFaq);
+
     this.faqService.createFaq(newFaq).subscribe({
       next: (addedFaq) => {
         this.faqs = [...this.faqs, addedFaq];
@@ -114,7 +155,7 @@ export class FaqPageComponent implements OnInit {
     } else {
       // First click shows confirmation
       this.showDeleteConfirm = { [id]: true };
-      
+
       // Auto-hide after 3 seconds
       setTimeout(() => {
         this.showDeleteConfirm[id] = false;
@@ -146,5 +187,51 @@ export class FaqPageComponent implements OnInit {
   private clearMessages(): void {
     this.errorMessage = null;
     this.successMessage = null;
+  }
+
+  getFaqQuestion(faqId: number) {
+
+    const faq = this.faqs.find(f => f.id === faqId);
+
+    if (!faq) {
+      console.warn(`FAQ with ID ${faqId} not found.`);
+      return 'FAQ not found';
+    }
+    if (this.lang == 'en') {
+      return faq.questionEn;
+    }
+    if (this.lang == 'nl') {
+      return faq.questionNl;
+    }
+    if (this.lang == 'fr') {
+      return faq.questionFr;
+    }
+    if (this.lang == 'de') {
+      return faq.questionDe;
+    }
+    return 'Unknown language'
+  }
+
+  getFaqAnswer(faqId: number) {
+
+    const faq = this.faqs.find(f => f.id === faqId);
+
+    if (!faq) {
+      console.warn(`FAQ with ID ${faqId} not found.`);
+      return 'FAQ not found';
+    }
+    if (this.lang == 'en') {
+      return faq.answerEn;
+    }
+    if (this.lang == 'nl') {
+      return faq.answerNl;
+    }
+    if (this.lang == 'fr') {
+      return faq.answerFr;
+    }
+    if (this.lang == 'de') {
+      return faq.answerDe;
+    }
+    return 'Unknown language'
   }
 }

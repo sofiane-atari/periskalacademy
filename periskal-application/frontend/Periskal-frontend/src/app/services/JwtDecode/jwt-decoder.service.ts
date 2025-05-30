@@ -31,7 +31,6 @@ export class JwtDecoderService {
     try {
       return jwtDecode<JwtPayload>(token);
     } catch (error) {
-      console.error('Error decoding JWT:', error);
       return null;
     }
   }

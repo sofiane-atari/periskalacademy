@@ -26,8 +26,6 @@ import periskal.academy.backend.jpa.Exam;
 import periskal.academy.backend.jpa.ExamRepository;
 import periskal.academy.backend.jpa.Training;
 import periskal.academy.backend.jpa.TrainingRepository;
-import periskal.academy.backend.service.CertificateService;
-import periskal.academy.backend.service.CompletedExamService;
 
 @ExtendWith(MockitoExtension.class)
 class CompletedExamServiceTest {

@@ -1,13 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { JwtDecoderService } from '../../services/JwtDecode/jwt-decoder.service';
 import { AuthenticationService } from '../../services/Authentication/authentication.service';
 import { AuthenticateResponse } from '../../models/authenticate-response.model';
 import { TranslatePipe } from '@ngx-translate/core';
-import { finalize } from 'rxjs';
 import { CertificateService } from '../../services/Certificates/certificate.service';
-import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-profile',
@@ -20,6 +18,8 @@ export class ProfileComponent implements OnInit {
   userProfile: Partial<AuthenticateResponse> = {};
   activeTab: 'info' | 'products' | 'settings' = 'info';
   isDownloading = false;
+  @ViewChild('copyConfirmation') copyConfirmation!: ElementRef;
+
 
   constructor(
     private jwtDecoderService: JwtDecoderService,
@@ -27,6 +27,21 @@ export class ProfileComponent implements OnInit {
     private router: Router,
     private certificateService: CertificateService
   ) {}
+
+  copyToClipboard(text: string) {
+    navigator.clipboard.writeText(text).then(() => {
+      this.showCopyConfirmation();
+    });
+  }
+
+  showCopyConfirmation() {
+    const element = this.copyConfirmation.nativeElement;
+    element.classList.add('show');
+    
+    setTimeout(() => {
+      element.classList.remove('show');
+    }, 2000); // Hide after 2 seconds
+  }
 
   ngOnInit() {
     

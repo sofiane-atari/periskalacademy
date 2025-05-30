@@ -9,7 +9,6 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTabsModule } from '@angular/material/tabs';
-import { JsonPipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
@@ -111,14 +110,11 @@ export class AddTrainingComponent implements OnInit { // Implement OnInit
   }
 
   uploadVideoToFtp(moduleIndex: number, chapterIndex: number, lang: string, videoFile: File): void {
-    console.log('uploadVideoToFtp called with:', { moduleIndex, chapterIndex, lang, videoFile });
     this.isUploadingVideo = true;
 
     this.trainingService.uploadVideo(videoFile).subscribe({
       next: (response: Video) => {
-        console.log('Upload response:', response);
         if (!response || !response.id || !response.filePath) {
-          console.error('Invalid response from server:', response);
           this.isUploadingVideo = false;
           alert('Fout bij het uploaden van de video. Controleer de serverrespons.');
           return;
@@ -128,18 +124,12 @@ export class AddTrainingComponent implements OnInit { // Implement OnInit
         const fieldName = `video${lang.charAt(0).toUpperCase() + lang.slice(1)}`;
         // Sla het volledige Video-object op (met id en filePath)
         chapter.patchValue({ [fieldName]: { id: response.id, filePath: response.filePath } });
-        console.log('Updated chapter:', chapter.value);
-        console.log('Full form:', this.trainingForm.value);
         this.isUploadingVideo = false;
       },
       error: (error: any) => {
-        console.error('Error uploading video:', error);
         this.isUploadingVideo = false;
         alert('Fout bij het uploaden van de video: ' + (error.message || 'Onbekende fout'));
-      },
-      complete: () => {
-        console.log('Upload process completed');
-      },
+      }
     });
   }
 
@@ -171,7 +161,6 @@ export class AddTrainingComponent implements OnInit { // Implement OnInit
   postTraining(): void {
     if (this.trainingForm.valid) { // Removed checks for separate language forms
       const trainingData = this.trainingForm.value;
-      console.log(trainingData);
       const fileInput = this.trainingForm.get('image')?.value; // Assuming 'image' is a control somewhere
 
       // If there's a file, convert it to base64
@@ -193,11 +182,7 @@ export class AddTrainingComponent implements OnInit { // Implement OnInit
           this.trainingService.postTraining(trainingData).subscribe({
             next: (response) => {
               // this.resetForm();
-              console.log(trainingData);
-              this.router.navigate(['/trainingEmployee']);
-            },
-            error: (error) => {
-              console.error('Error posting training', error);
+              this.router.navigate(['/dashboard']);
             }
           });
         });
@@ -205,17 +190,12 @@ export class AddTrainingComponent implements OnInit { // Implement OnInit
         this.trainingService.postTraining(trainingData).subscribe({
           next: (response) => {
             // this.resetForm();
-            console.log(trainingData);
-            this.router.navigate(['/trainingEmployee']);
+            this.router.navigate(['/dashboard']);
           },
           error: (error) => {
-            console.error('Error posting training', error);
           }
         });
       }
-    } else {
-      console.log('Form is invalid');
-      // Optionally, trigger visual validation feedback to the user
     }
   }
 

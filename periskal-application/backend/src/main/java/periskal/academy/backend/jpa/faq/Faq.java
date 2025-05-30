@@ -1,28 +1,42 @@
 package periskal.academy.backend.jpa.faq;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-
 
 @Entity
 @Getter
 @Setter
+@Data
 public class Faq {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String question;
+    private String questionEn;
 
     @Column(nullable = false)
-    private String answer;
+    private String answerEn;
 
-    public Faq() {}
+    @Column(nullable = false)
+    private String questionNl;
 
-    public Faq(String question, String answer) {
-        this.question = question;
-        this.answer = answer;
-    }
+    @Column(nullable = false)
+    private String answerNl;
+
+    @Column(nullable = false)
+    private String questionFr;
+
+    @Column(nullable = false)
+    private String answerFr;
+
+    @Column(nullable = false)
+    private String questionDe;
+
+    @Column(nullable = false)
+    private String answerDe;
+
+    private String category;
 }

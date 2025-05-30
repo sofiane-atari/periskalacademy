@@ -1,15 +1,14 @@
 package periskal.academy.backend.util;
 
-import static org.assertj.core.api.Assertions.*;
-
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import org.junit.jupiter.api.Test;
 
-import periskal.academy.backend.util.EncryptionUtil;
 
-public class EncryptionUtilTest {
+class EncryptionUtilTest {
 
     @Test
-    public void givenUsernameAndPassword_whenEncode_thenReturnsExpectedToken() {
+    void givenUsernameAndPassword_whenEncode_thenReturnsExpectedToken() {
         String username = "Demo";
         String password = "Demo1979!";
         String expectedToken = "cCt0azhyNkdyRlFrQmc4cTFubGh2Zz09";

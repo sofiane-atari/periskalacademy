@@ -26,9 +26,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import periskal.academy.backend.jpa.Assignment.TrainingAssignment;
-import periskal.academy.backend.jpa.TrainingRepository;
+import periskal.academy.backend.jpa.assignment.TrainingAssignment;
 import periskal.academy.backend.service.TrainingAssignmentService;
+import periskal.academy.backend.util.JwtUtil;
 
 @WebMvcTest(controllers = TrainingAssignmentController.class, excludeAutoConfiguration = {
         SecurityAutoConfiguration.class })
@@ -37,14 +37,14 @@ class TrainingAssignmentControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @MockitoBean
+    private JwtUtil jwtUtil;
+
     @Autowired
     private ObjectMapper objectMapper;
 
     @MockitoBean
     private TrainingAssignmentService assignmentService;
-
-    @MockitoBean // DON'T DELETE THIS LINE, IT'S NEEDED FOR THE TEST TO WORK
-    private TrainingRepository trainingRepository; //TODO : remove this from backend and then remove this from all test
 
     private TrainingAssignment assignment1;
     private TrainingAssignment assignment2;

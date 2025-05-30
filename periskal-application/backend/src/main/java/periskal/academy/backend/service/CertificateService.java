@@ -1,13 +1,15 @@
 package periskal.academy.backend.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 import org.springframework.stereotype.Service;
 
 import periskal.academy.backend.dto.CertificateDTO;
 import periskal.academy.backend.jpa.Certificate;
 import periskal.academy.backend.jpa.CertificateRepository;
+import periskal.academy.backend.security.exceptions.general.ResourceNotFoundException;
+
 
 @Service
 public class CertificateService {
@@ -25,7 +27,7 @@ public class CertificateService {
         List<Certificate> certificates = certificateRepository.findByUserId(userId);
         return certificates.stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
     
     // Save a new certificate or update an existing one
@@ -39,8 +41,9 @@ public class CertificateService {
     public CertificateDTO getCertificateById(Long id) {
         return certificateRepository.findById(id)
                 .map(this::convertToDTO)
-                .orElse(null);
+                .orElseThrow(() -> new ResourceNotFoundException("Certificate not found with id: " + id));
     }
+    
     
  
     private CertificateDTO convertToDTO(Certificate certificate) {

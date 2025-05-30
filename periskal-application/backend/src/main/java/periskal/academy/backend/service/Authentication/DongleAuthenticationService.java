@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
 import periskal.academy.backend.model.AuthenticateResponse;
+import periskal.academy.backend.security.exceptions.general.ValidationException;
 
 @Slf4j
 @Service
@@ -28,8 +29,10 @@ public class DongleAuthenticationService extends BaseAuthenticationService {
      * Public method for dongle authentication.
      */
     public AuthenticateResponse authenticateDongle(String token) {
-        // TODO: SPRINT 3 - dongle validation here before letting it make a doomed soap
-        // request, an empty token is definitely invalid so why even bother sending it.
+        if (token == null || token.isBlank()) {
+            log.info("Authentication attempt with an invalid dongle token. Token was null or blank.");
+            throw new ValidationException("Dongle token cannot be null or blank.");
+        }       
         return super.authenticate(token);
     }
 }

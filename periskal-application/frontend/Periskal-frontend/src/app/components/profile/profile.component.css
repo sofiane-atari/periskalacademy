@@ -1,122 +1,375 @@
+/* Profile Container Styles */
 .profile-container {
-  max-width: 600px;
+  max-width: 800px;
   margin: 2rem auto;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
   background-color: white;
+  overflow: hidden;
+  transition: all 0.3s ease;
 }
 
-h2 {
-  color: #333;
+/* Profile Header */
+.profile-header {
+  padding: 1.5rem 2rem;
+  background: linear-gradient(135deg, #ffb100, #ffd700);
+  color: #1a1a1a;
+  position: relative;
+}
+
+.profile-header h2 {
+  margin: 0 0 1rem;
+  font-weight: 600;
+  font-size: 1.75rem;
+  letter-spacing: -0.02em;
+}
+
+/* Tab Navigation */
+.tabs {
+  display: flex;
+  margin-top: 1.5rem;
+  position: relative;
+  z-index: 2;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+.tab-button {
+  padding: 0.75rem 1.25rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: rgba(0, 0, 0, 0.7);
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.tab-button:hover {
+  color: #000;
+}
+
+.tab-button.active {
+  color: white;
+  font-weight: 600;
+}
+
+.tab-button.active::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: black;
+}
+
+/* Content Sections */
+[ngSwitch] > div {
+  padding: 2rem;
+  min-height: 300px;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Profile Info Section */
+.profile-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 2 kolommen */
+  gap: 1.25rem;
+  padding: 1rem;
+  width: 100%;
+}
+
+.profile-picture {
+  grid-column: 1 / span 2; /* Neemt beide kolommen in beslag */
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-bottom: 1.5rem;
 }
 
-.profile-info {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+.avatar-img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+}
+
+.info-cards {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 kolommen */
+  gap: 1.25rem;
 }
 
 .info-row {
   display: flex;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid #eee;
+  align-items: center;
+  padding: 1.25rem;
+  border-radius: 12px;
+  background: #fff9e6;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(255, 177, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  min-height: 80px; /* Vaste hoogte voor alle rijen */
+  box-sizing: border-box;
+}
+
+.info-row::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, #ffb100, #ffd700);
+}
+
+.info-row:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(255, 177, 0, 0.1);
+  background: #fff5d6;
 }
 
 .label {
-  font-weight: bold;
-  width: 120px;
-  color: #666;
+  font-weight: 500;
+  color: #996a00;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  min-width: 120px; /* Vaste breedte voor labels */
 }
 
 .value {
+  color: #1a1a1a;
+  font-weight: 600;
+  font-size: 1.1rem;
   flex: 1;
-  color: #333;
+  margin: 0 1rem;
 }
 
-.products-row {
-  align-items: flex-start;
-}
-
-.products-list {
-  padding: 0.5rem 0;
-}
-
-.products-list ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
-.products-list li {
-  padding: 0.25rem 0;
-  color: #333;
-}
-
-
-
-
-
-.profile-header {
-  margin-bottom: 2rem;
-}
-
-.tabs {
-  display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
-  border-bottom: 1px solid #eee;
-}
-
-.tab-button {
-  padding: 0.5rem 1rem;
-  border: none;
-  background: none;
+.copy-icon {
+  width: 20px; /* Smaller size */
+  height: 20px;
+  fill: #996a00;
   cursor: pointer;
-  color: #666;
-  font-size: 1rem;
-  position: relative;
+  transition: fill 0.2s ease;
 }
 
-.tab-button.active {
-  color: #007bff;
+.copy-icon:hover {
+  fill: #ffb100;
 }
 
-.tab-button.active::after {
-  content: '';
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background-color: #007bff;
+/* Copy Popup */
+.copy-popup {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1a1a1a;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  opacity: 0;
+  animation: popupFade 2s ease-in-out forwards;
+}
+
+@keyframes popupFade {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px);
+  }
+  20% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  80% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px);
+  }
+}
+
+/* Products Section */
+.products-section {
+  padding: 1rem;
 }
 
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1rem;
-  padding: 1rem 0;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1.25rem;
 }
 
 .product-card {
-  background: #f8f9fa;
-  padding: 1rem;
-  border-radius: 8px;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1.25rem;
+  border-radius: 12px;
+  background: #fff9e6;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(255, 177, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.product-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, #ffb100, #ffd700);
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(255, 177, 0, 0.1);
+  background: #fff5d6;
+}
+
+.product-card h4 {
+  margin: 0;
+  color: #1a1a1a;
+  font-weight: 600;
+  font-size: 1.1rem;
 }
 
 .no-products {
   text-align: center;
-  color: #666;
-  padding: 2rem;
+  color: #996a00;
+  padding: 1.25rem;
+  background: #fff9e6;
+  border-radius: 12px;
+  font-style: italic;
+  border: 1px solid rgba(255, 177, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.no-products::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, #ffb100, #ffd700);
+}
+
+/* Settings Section */
+.settings-section {
+  padding: 1rem;
 }
 
 .settings-placeholder {
   text-align: center;
-  color: #666;
-  padding: 2rem;
+  color: #996a00;
+  padding: 1.25rem;
+  background: #fff9e6;
+  border-radius: 12px;
   font-style: italic;
+  border: 1px solid rgba(255, 177, 0, 0.1);
+  position: relative;
+  overflow: hidden;
 }
 
+.settings-placeholder::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, #ffb100, #ffd700);
+}
+
+.copy-confirmation {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.copy-confirmation.show {
+  opacity: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .info-cards {
+    grid-template-columns: 1fr; /* 1 kolom op mobiel */
+  }
+
+  .profile-info {
+    grid-template-columns: 1fr; /* 1 kolom op mobiel */
+  }
+
+  .profile-picture {
+    grid-column: 1; /* Neemt slechts 1 kolom in beslag op mobiel */
+  }
+
+  .profile-container {
+    margin: 1rem;
+    border-radius: 12px;
+  }
+
+  .profile-header {
+    padding: 1.25rem 1.5rem;
+  }
+
+  .tabs {
+    margin-top: 1rem;
+  }
+
+  .tab-button {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  [ngSwitch] > div {
+    padding: 1.5rem;
+  }
+
+  .info-row,
+  .product-card,
+  .no-products,
+  .settings-placeholder {
+    padding: 1rem;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+
+  .avatar-img {
+    width: 100px;
+    height: 100px;
+  }
+}

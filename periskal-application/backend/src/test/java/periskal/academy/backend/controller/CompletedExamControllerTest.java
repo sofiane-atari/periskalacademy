@@ -1,16 +1,5 @@
 package periskal.academy.backend.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -18,22 +7,30 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import periskal.academy.backend.dto.CompletedExamDTO;
 import periskal.academy.backend.service.CompletedExamService;
-import periskal.academy.backend.controller.CompletedExamController;
-import periskal.academy.backend.jpa.TrainingRepository;
+import periskal.academy.backend.util.JwtUtil;
 
 @WebMvcTest(controllers = CompletedExamController.class, excludeAutoConfiguration = {SecurityAutoConfiguration.class}) 
 class CompletedExamControllerTest {
@@ -42,10 +39,10 @@ class CompletedExamControllerTest {
     private MockMvc mockMvc; 
 
     @MockitoBean
-    private CompletedExamService completedExamService;
+    private JwtUtil jwtUtil;
 
-    @MockitoBean //TODO: After removing the trainingrepository from the backendapplication, remove this from all tests
-        private TrainingRepository trainingRepository;
+    @MockitoBean
+    private CompletedExamService completedExamService;
 
     @Autowired
     private ObjectMapper objectMapper; 

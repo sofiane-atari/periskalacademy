@@ -1,23 +1,25 @@
 package periskal.academy.backend.util;
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream; 
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.encryption.AccessPermission;
+import org.apache.pdfbox.pdmodel.encryption.StandardProtectionPolicy;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
+import lombok.extern.slf4j.Slf4j;
+import periskal.academy.backend.dto.CertificatePdfDTO;
 
+@Slf4j
 public final class CertificateGeneratorUtil {
 
     private CertificateGeneratorUtil() {
@@ -109,18 +111,10 @@ public final class CertificateGeneratorUtil {
     private static final float DECO_CIRCLE_CENTER_Y = SIGNATORY_TEXT_Y - 80; 
     private static final float DECO_CIRCLE_RADIUS = 45; 
 
+    // --- PDF Security ---
+    private static final String PDF_USER_PASSWORD = ""; // Empty User password for read-only access
 
-    public static byte[] generateCertificatePdf(
-            String productName,
-            String productdetails,
-            String shipName,
-            String trainingDate,
-            List<String> crewNames,
-            String signerName,
-            String signerTitle,
-            String companyName,
-            String companyAddress,
-            String companyPhone) throws IOException {
+    public static byte[] generateCertificatePdf(CertificatePdfDTO dto, String ownerPassword) throws IOException {
 
         try (PDDocument document = new PDDocument(); ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             PDPage page = new PDPage(PDRectangle.A4);
@@ -137,10 +131,10 @@ public final class CertificateGeneratorUtil {
                 if (logoStream != null) {
                     pdLogoImage = PDImageXObject.createFromByteArray(document, logoStream.readAllBytes(), "logo");
                 } else {
-                    System.err.println("Warning: Logo image not found at " + LOGO_IMAGE_PATH);
+                    log.warn("Warning: Logo image not found at " + LOGO_IMAGE_PATH);
                 }
             } catch (Exception e) {
-                System.err.println("Warning: Could not load logo image: " + e.getMessage());
+                log.warn("Warning: Could not load logo image: " + e.getMessage());
             }
 
             PDImageXObject pdSignatureImage = null;
@@ -148,10 +142,10 @@ public final class CertificateGeneratorUtil {
                 if (pdsignatureImage != null) {
                     pdSignatureImage = PDImageXObject.createFromByteArray(document, pdsignatureImage.readAllBytes(), "signature");
                 } else {
-                    System.err.println("Warning: SignatureImage image not found at " + SIGNATURE_IMAGE_PATH);
+                    log.warn("Warning: SignatureImage image not found at " + SIGNATURE_IMAGE_PATH);
                 }
             } catch (Exception e) {
-                System.err.println("Warning: Could not load logo image: " + e.getMessage());
+                log.warn("Warning: Could not load logo image: " + e.getMessage());
             }
 
 
@@ -172,22 +166,47 @@ public final class CertificateGeneratorUtil {
                 drawTitle(contentStream, fontBold); 
 
                 // 5. Draw Product Info
-                drawProductInfo(contentStream, fontBold, fontRegular, productName);
+                drawProductInfo(contentStream, fontBold, dto.getProductName());
 
                 // 6. Draw Body Text
-                drawBodyText(contentStream, fontRegular, signerName, shipName, productdetails ,trainingDate);
+                drawBodyText(contentStream, fontRegular, dto.getSignerName(), dto.getShipName(), dto.getProductDetails(), dto.getDateInfo());
 
                 // 7. Draw Crew Names
-                drawCrewNames(contentStream, fontScript, crewNames); 
+                drawCrewNames(contentStream, fontScript, dto.getCrewNames()); 
 
                 // 8. Draw Signatory
-                drawSignatory(contentStream, fontRegular, signerName, signerTitle, pdSignatureImage);
+                drawSignatory(contentStream, fontRegular, dto.getSignerName(), dto.getSignerTitle(), pdSignatureImage);
 
                 // 9. Draw Footer
-                drawFooter(contentStream, fontRegular, companyName, companyAddress, companyPhone);
+                drawFooter(contentStream, fontRegular, dto.getCompanyName(), dto.getCompanyAddress(), dto.getCompanyPhone());
 
             } // contentStream closed automatically
 
+            // --- Apply Security to the PDF ---
+            AccessPermission ap = new AccessPermission();
+
+            // Disallow all modifications
+            ap.setCanModify(false);
+            ap.setCanAssembleDocument(false); // Disallow assembling (inserting, deleting, rotating pages)
+            ap.setCanFillInForm(false); // Disallow filling in interactive form fields
+            ap.setCanModifyAnnotations(false); // Disallow adding or modifying annotations and form fields
+            ap.setCanExtractContent(false); // Disallow copying or otherwise extracting text and graphics
+            
+
+            // Allow printing
+            ap.setCanPrint(true);
+
+
+            // Create the protection policy
+            StandardProtectionPolicy spp = new StandardProtectionPolicy(ownerPassword, PDF_USER_PASSWORD, ap);
+
+
+            spp.setEncryptionKeyLength(128); 
+
+            // Protect the document
+            document.protect(spp);
+
+            // --- Save the PDF  ---
             document.save(baos);
             return baos.toByteArray();
 
@@ -319,8 +338,8 @@ public final class CertificateGeneratorUtil {
         cs.endText();
     }
 
-    private static void drawProductInfo(PDPageContentStream cs, PDFont fontBold, PDFont fontRegular, String productName) throws IOException {
-        float fontSizeLabel = 14;
+    private static void drawProductInfo(PDPageContentStream cs, PDFont fontBold, String productName) throws IOException {
+    float fontSizeLabel = 14;
     float fontSizeValue = 14; 
     float labelIndent = 0; 
     float valueIndent = 10; 
@@ -340,78 +359,14 @@ public final class CertificateGeneratorUtil {
     // Set X for the indented product name value
     currentX = PRODUCT_X + valueIndent;
 
-
-    float availableWidth = PAGE_WIDTH - MARGIN_RIGHT - currentX - 5; // Added 5pt safety margin
-
-    // --- 3. Prepare and Wrap the Product Name Text ---
-    PDFont valueFont = fontBold; 
-    List<String> lines = new ArrayList<>();
-    String[] words = productName.trim().split("\\s+"); 
-    StringBuilder lineBuilder = new StringBuilder();
-
-    for (String word : words) {
-        // Calculate width of potential new line
-        String testLine = (lineBuilder.length() == 0) ? word : lineBuilder + " " + word;
-        float testWidth = 0;
-        try {
-             testWidth = valueFont.getStringWidth(testLine) / 1000f * fontSizeValue;
-        } catch (IOException e) {
-             System.err.println("Warning: Could not get string width. " + e.getMessage());
-             testWidth = (testLine.length() * fontSizeValue * 0.6f); 
-        }
-
-
-        if (testWidth < availableWidth) {
-            // Word fits, add it to the current line
-            if (lineBuilder.length() > 0) {
-                lineBuilder.append(" ");
-            }
-            lineBuilder.append(word);
-        } else {
-            // Word doesn't fit, finalize the previous line (if any)
-            if (lineBuilder.length() > 0) {
-                lines.add(lineBuilder.toString());
-                lineBuilder.setLength(0); // Reset builder
-            }
-            // Start the new line with the current word
-            // Handle case where a single word is longer than availableWidth
-             float wordWidth = 0;
-             try {
-                 wordWidth = valueFont.getStringWidth(word) / 1000f * fontSizeValue;
-             } catch (IOException e) {
-                 wordWidth = (word.length() * fontSizeValue * 0.6f);
-             }
-
-            if (wordWidth >= availableWidth) {
-                 // Single word is too long, add it on its own line (will overflow)
-                 lines.add(word);
-            } else {
-                 // Start new line with this word
-                 lineBuilder.append(word);
-            }
-        }
-    }
-    // Add the last remaining line
-    if (lineBuilder.length() > 0) {
-        lines.add(lineBuilder.toString());
-    }
-
-    // --- 4. Draw the Wrapped Product Name Lines ---
+    // --- 2. Draw the Product Name Line ---
     cs.beginText();
-    cs.setFont(valueFont, fontSizeValue); 
+    cs.setFont(fontBold, fontSizeValue); 
     cs.setNonStrokingColor(COLOR_PRODUCT_RED); 
-    // Set initial position for the first line of the value
     cs.newLineAtOffset(currentX, currentY);
-
-    for (int i = 0; i < lines.size(); i++) {
-        if (i > 0) {
-            // Move down for subsequent lines relative to the previous one
-            // Use negative offset because Y=0 is bottom in PDFBox
-            cs.newLineAtOffset(0, -PRODUCT_LINE_HEIGHT);
-        }
-        cs.showText(lines.get(i));
-    }
+    cs.showText(productName.trim());
     cs.endText();
+
 }
 
     private static void drawBodyText(PDPageContentStream cs, PDFont font, String signerName, String shipName,String productDetails, String trainingDate) throws IOException {
@@ -450,7 +405,7 @@ public final class CertificateGeneratorUtil {
 
         for (int i = 0; i < crewNames.size(); i++) {
             float currentX = (i % 2 == 0) ? CREW_COL1_X : CREW_COL2_X;
-            float currentY = CREW_START_Y - ((i / 2) * CREW_SPACING_Y);
+            float currentY = CREW_START_Y - (float)((i / 2.0) * CREW_SPACING_Y);
 
             cs.beginText();
             cs.newLineAtOffset(currentX, currentY);
@@ -465,7 +420,7 @@ public final class CertificateGeneratorUtil {
             try {
                 cs.drawImage(signatureImg, SIGNATURE_IMAGE_X, SIGNATURE_IMAGE_Y, SIGNATURE_IMAGE_WIDTH, SIGNATURE_IMAGE_HEIGHT);
             } catch (IOException e) {
-                System.err.println("Error drawing signature image: " + e.getMessage());
+                log.warn("Error drawing signature image: " + e.getMessage());
             }
         }
         
@@ -507,47 +462,15 @@ public final class CertificateGeneratorUtil {
                 // Embed the font subset
                 return PDType0Font.load(document, fontStream, true);
             } else {
-                System.err.println("Warning: Font file not found at " + fontPath + ", using fallback: " + fallbackFont.getName());
+                log.warn("Warning: Font file not found at " + fontPath + ", using fallback: " + fallbackFont.getName());
                 return fallbackFont;
             }
         } catch (IOException e) {
-            System.err.println("Warning: Could not load font " + fontPath + ", using fallback: " + fallbackFont.getName() + ". Error: " + e.getMessage());
+            log.warn("Warning: Could not load font " + fontPath + ", using fallback: " + fallbackFont.getName() + ". Error: " + e.getMessage());
             return fallbackFont;
         }
     }
 
-    // --- Example Usage --- TODO: remove this in production
-     public static void main(String[] args) { 
+    
 
-        // --- Test Data ---
-        String productName = "DEMO PRODUCT";
-        String productdetails = "DEMO PRODUCT DETAILS";
-        String shipName = "DEMO SHIPNAME";
-        String trainingDate = java.time.LocalDate.now().toString();
-        List<String> crewNames = List.of("DEMO CREW", "DEMO CREW2", "DEMO CREW3", "DEMO CREW4");
-        String signerName = "Marc Persoons";
-        String signerTitle = "Managing Director, Periskal bv";
-        String companyName = "PERISKAL bv";
-        String companyAddress = "Den Isomo 11, 2990 Wuustwezel, Belgium";
-        String companyPhone = "Phone +32 3 669 57 36";
-
-
-        try {
-            System.out.println("Generating certificate (V2)...");
-            // Ensure logo image and font files exist at the expected classpath locations!
-            byte[] pdfData = CertificateGeneratorUtil.generateCertificatePdf(
-                    productName, productdetails,shipName, trainingDate, crewNames, signerName, signerTitle,
-                    companyName, companyAddress, companyPhone
-            );
-
-            // Save the generated PDF to a file for inspection
-            String outputFilePath = "generated_certificate_v2.pdf";
-            Files.write(new File(outputFilePath).toPath(), pdfData);
-
-            System.out.println("Certificate generated successfully: " + outputFilePath);
-
-        } catch (IOException e) {
-            System.err.println("Error generating certificate: " + e.getMessage());
-        }
-    }
 }

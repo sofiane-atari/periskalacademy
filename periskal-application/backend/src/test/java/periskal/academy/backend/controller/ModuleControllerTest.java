@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.springframework.http.ResponseEntity;
 
-import periskal.academy.backend.controller.ModuleController;
 import periskal.academy.backend.dto.ChapterDTO;
 import periskal.academy.backend.jpa.Chapter;
 import periskal.academy.backend.service.ModuleService;
@@ -42,7 +41,7 @@ class ModuleControllerTest {
         // Assert
         assertThat(response)
                 .isNotNull()
-                .extracting(ResponseEntity::getStatusCodeValue)
+                .extracting(r -> r.getStatusCode().value())
                 .isEqualTo(201);
 
         assertThat(response.getBody())

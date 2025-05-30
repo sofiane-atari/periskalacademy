@@ -53,7 +53,6 @@ export class CertificatesComponent implements OnInit {
         }
       },
       error: (error: any) => {
-        console.error('Failed to load certificates:', error);
         this.loadError = true;
       }
     });
@@ -78,7 +77,6 @@ export class CertificatesComponent implements OnInit {
         saveAs(blob, fileName);
       },
       error: (error: any) => {
-        console.error('Download failed:', error);
       }
     });
   }

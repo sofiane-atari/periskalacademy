@@ -15,7 +15,7 @@
     <div class="table-container">
       @if (!dataSource.data || dataSource.data.length === 0) {
         <div class="no-exams">
-          <p>{{'NO_COMPLETED_EXAMS_FOUND_FOR_THIS_USER'}}</p>
+          <p>{{'NO_COMPLETED_EXAMS_FOUND_FOR_THIS_USER'| translate}}</p>
         </div>
       } @else {
         <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">

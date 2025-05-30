@@ -1,17 +1,16 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http'; 
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http'; 
+import { Observable } from 'rxjs';
 import { CompletedExam } from '../../models/completed-exam.model'; 
 
 @Injectable({
   providedIn: 'root'
 })
 export class CompletedExamService {
-  private baseUrl = 'http://localhost:8080/api/completed-exams';
+  private readonly baseUrl = 'http://localhost:8080/api/completed-exams';
 
   constructor(
-    private http: HttpClient
+    private readonly http: HttpClient
   ) {}
 
   getUserCompletedExams(userId: string): Observable<CompletedExam[]> {

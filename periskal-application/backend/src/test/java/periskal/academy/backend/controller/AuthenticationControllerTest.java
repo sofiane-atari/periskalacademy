@@ -3,7 +3,6 @@ package periskal.academy.backend.controller;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.when;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
@@ -15,12 +14,11 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import periskal.academy.backend.controller.AuthenticationController;
 import periskal.academy.backend.dto.ErrorResponse;
-import periskal.academy.backend.jpa.TrainingRepository;
 import periskal.academy.backend.model.AuthenticateResponse;
 import periskal.academy.backend.model.LoginRequest;
 import periskal.academy.backend.security.exceptions.authentication.AuthenticationCommunicationException;
@@ -43,12 +41,12 @@ class AuthenticationControllerTest {
         private AuthenticationService authenticationService;
 
         @MockitoBean
-        private DongleAuthenticationService dongleAuthenticationService; // TODO: add Dongletest
-
-        @MockitoBean // DON'T DELETE THIS LINE, IT'S NEEDED FOR THE TEST TO WORK
-        private TrainingRepository trainingRepository; //TODO : remove this from backend and then remove this from all test,This is because the backendapplication uses the trainingrepository to initalize inital dummy data
+        private DongleAuthenticationService dongleAuthenticationService; 
 
         private LoginRequest loginRequest;
+
+        @MockitoBean
+        private JwtUtil jwtUtil;
 
         @BeforeEach
         void setUp() {
@@ -70,8 +68,8 @@ class AuthenticationControllerTest {
 
                 when(authenticationService.authenticate("testUser", "testPass")).thenReturn(mockResponse);
 
-                try (var jwtUtilMocked = mockStatic(JwtUtil.class)) {
-                        jwtUtilMocked.when(() -> JwtUtil.generateToken(mockResponse)).thenReturn(mockToken);
+
+                        when( jwtUtil.generateToken(mockResponse)).thenReturn(mockToken);
 
                         // Act
                         MvcResult mvcResult = mockMvc
@@ -93,7 +91,7 @@ class AuthenticationControllerTest {
                         assertThat(actualResponse.getToken()).isEqualTo(mockToken);
                         assertThat(actualResponse.getLoginResult()).isEqualTo("SuccesByToken");
 
-                }
+                
         }
 
         @Test
@@ -169,6 +167,45 @@ class AuthenticationControllerTest {
                 assertThat(errorResponse.getDetails()).isEqualTo(exceptionMessage); // Details contain original message
                 assertThat(errorResponse.getValidationErrors()).isNull();
                 assertThat(errorResponse.getTimestamp()).isNotNull();
+        }
+
+        @Test
+        void givenValidDongleToken_whenDecodeToken_thenReturnsTokenAndOkStatus() throws Exception {
+
+                // Arrange
+                String dongleToken = "validDongleToken123";
+                
+                AuthenticateResponse mockResponse = new AuthenticateResponse();
+                mockResponse.setUsername("dongleUser");
+                mockResponse.setRole("DONGLE_USER");
+                mockResponse.setLoginResult("SuccesByToken");
+
+                String mockJwtToken = "mockJwtTokenForDongle";
+
+                when(dongleAuthenticationService.authenticateDongle(dongleToken)).thenReturn(mockResponse);
+
+
+                when( jwtUtil.generateToken(mockResponse)).thenReturn(mockJwtToken);
+
+                        // Act
+                        MvcResult mvcResult = mockMvc
+                                .perform(get("/api/auth/decode-token")
+                                        .param("login", dongleToken)
+                                        .accept(MediaType.APPLICATION_JSON))
+                                .andReturn();
+
+                        // Assert
+                        MockHttpServletResponse response = mvcResult.getResponse();
+                        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+                        assertThat(response.getContentType()).isEqualTo(MediaType.APPLICATION_JSON_VALUE);
+
+                        AuthenticateResponse actualResponse = objectMapper.readValue(response.getContentAsString(),
+                                AuthenticateResponse.class);
+
+                        assertThat(actualResponse).isNotNull();
+                        assertThat(actualResponse.getUsername()).isEqualTo("dongleUser");
+                        assertThat(actualResponse.getToken()).isEqualTo(mockJwtToken);
+                        assertThat(actualResponse.getLoginResult()).isEqualTo("SuccesByToken");
         }
 
 }

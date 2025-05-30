@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ModuleDTO } from '../add-module/add-module.component';
 import { ModuleService } from '../../../services/Module/module.service';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -75,11 +74,6 @@ export class AddChapterComponent implements OnInit {
         .subscribe({
           next: (response) => {
             this.router.navigate(['edit', this.trainingId]);
-          },
-          error: (error) => {
-            console.error('Error adding module', error.error);
-            console.error('Error status', error.status);
-            console.error('Error message', error.message);
           }
         });
 

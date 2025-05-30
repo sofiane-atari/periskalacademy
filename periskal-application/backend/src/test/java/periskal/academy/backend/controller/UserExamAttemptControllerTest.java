@@ -1,7 +1,6 @@
 package periskal.academy.backend.controller;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
@@ -14,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import periskal.academy.backend.service.UserExamAttemptService;
+import periskal.academy.backend.util.JwtUtil;
 import periskal.academy.backend.jpa.TrainingRepository;
 
 import static org.mockito.Mockito.when;
@@ -25,10 +25,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         SecurityAutoConfiguration.class,
         UserDetailsServiceAutoConfiguration.class
 })
-public class UserExamAttemptControllerTest {
+class UserExamAttemptControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @MockitoBean
+    private JwtUtil jwtUtil;
 
     @MockitoBean
     private UserExamAttemptService userExamAttemptService;

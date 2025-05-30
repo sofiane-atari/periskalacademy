@@ -56,6 +56,7 @@ public class Exam {
     public Exam(String examTitle, String examDescription, int totalQuestions) {
         this.examTitle = examTitle;
         this.examDescription = examDescription;
+        this.totalQuestions = totalQuestions;
     }
 
     @JsonProperty("trainingId")

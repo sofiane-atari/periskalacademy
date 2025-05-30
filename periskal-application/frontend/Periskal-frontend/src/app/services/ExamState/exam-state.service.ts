@@ -22,7 +22,6 @@ export class ExamStateService {
 
   startOrResumeExam(examId: number, durationSeconds: number): void {
     if (this.currentExamId === examId && this.timerSubscription && !this._examFinished.value) {
-      console.log('Exam timer already in progress for this exam, resuming.');
       return;
     }
 
@@ -42,7 +41,6 @@ export class ExamStateService {
 
   private startTimer(): void {
     if (this.totalExamDurationSeconds === null || this.startTime === null) {
-      console.warn('Cannot start timer: Total duration or start time missing.');
       return;
     }
 
@@ -86,7 +84,6 @@ export class ExamStateService {
     }
     this.stopTimer();
     this._examFinished.next(true);
-    console.log('Exam finished or manually submitted!');
     this.clearStateFromSessionStorage();
   }
 
@@ -111,7 +108,6 @@ export class ExamStateService {
         if (state.currentExamId && state.startTime && state.totalExamDurationSeconds) {
           const elapsed = Math.floor((Date.now() - state.startTime) / 1000);
           if (state.totalExamDurationSeconds - elapsed <= 0) {
-            console.log('Restored exam state indicates time has already expired. Finishing exam.');
             this.clearStateFromSessionStorage();
             this._remainingTime.next(0);
             this._examFinished.next(true);
@@ -121,11 +117,9 @@ export class ExamStateService {
             this.totalExamDurationSeconds = state.totalExamDurationSeconds;
             this._examFinished.next(false);
             this.startTimer();
-            console.log('Exam timer state restored and timer restarted.');
           }
         }
       } catch (e) {
-        console.error('Failed to parse exam timer state from session storage:', e);
         this.clearStateFromSessionStorage();
       }
     }
