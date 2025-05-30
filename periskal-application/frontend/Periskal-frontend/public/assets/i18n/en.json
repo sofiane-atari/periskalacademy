@@ -292,5 +292,9 @@
   "ADD_QUESTION": "+ Add a new question",
   "AUTHENTICATING": "Authenticating...",
   "AUTHENTICATION_FAILED": "Authentication failed.",
-  "PROCESSING": "Processing..."
+  "PROCESSING": "Processing...",
+  "deleteSuccess": "FAQ successfully deleted!",
+  "deleteError": "An error occurred while deleting the FAQ.",
+  "createSuccess": "FAQ successfully added!",
+  "createError": "An error occurred while adding the FAQ."
 }

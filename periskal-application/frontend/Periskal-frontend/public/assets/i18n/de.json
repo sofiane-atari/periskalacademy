@@ -292,5 +292,9 @@
   "ADD_QUESTION": "+ Neue Frage hinzufügen",
   "AUTHENTICATING": "Authentifizierung läuft...",
   "AUTHENTICATION_FAILED": "Authentifizierung fehlgeschlagen.",
-  "PROCESSING": "Verarbeitung läuft..."
+  "PROCESSING": "Verarbeitung läuft...",
+  "deleteSuccess": "FAQ erfolgreich gelöscht!",
+  "deleteError": "Beim Löschen der FAQ ist ein Fehler aufgetreten.",
+  "createSuccess": "FAQ erfolgreich hinzugefügt!",
+  "createError": "Beim Hinzufügen der FAQ ist ein Fehler aufgetreten."
 }
