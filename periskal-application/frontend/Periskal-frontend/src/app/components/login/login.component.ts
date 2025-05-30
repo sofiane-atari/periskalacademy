@@ -32,7 +32,12 @@ export class LoginComponent {
   ngOnInit() {
     if (this.authService.isAuthenticated()) {
       const userRole = this.jwtDecoder.getUserRole(); // debug
-      this.router.navigate(['/dashboard']); 
+      
+      if(userRole === 'Fleetmanager'){
+        this.router.navigate(['/skippers']);
+      }else{
+        this.router.navigate(['/dashboard']);
+      }
     }
   }
 
@@ -57,10 +62,13 @@ export class LoginComponent {
 
     this.loginhandler.LoginUser(this.username, this.password, () => {
       this.isLoading = false;
-      this.router.navigate(['/dashboard']); 
-    },
-
-    );
+      const userRole = this.jwtDecoder.getUserRole();
+      if (userRole === 'Fleetmanager') {
+        this.router.navigate(['/skippers']);
+      } else {
+        this.router.navigate(['/dashboard']);
+      }
+    });
 
   }
 
