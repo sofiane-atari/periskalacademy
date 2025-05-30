@@ -219,4 +219,31 @@
   "OF": "of",
   "PROCEED_TO_BILLING": "Proceed to Billing",
   "Processing": "Processing"
+
+  ,"faq": {
+    "title": "Frequently Asked Questions",
+    "emptyMessage": "There are no FAQ items yet.",
+    "deleteAriaLabel": "Delete this FAQ",
+    "confirmDeleteAriaLabel": "Confirm delete",
+    "cancelDeleteAriaLabel": "Cancel delete",
+    "addQuestion": "+ Add question",
+    "addFaqTitle": "Add new FAQ",
+    "deleteSuccess": "FAQ successfully deleted!",
+    "deleteError": "An error occurred while deleting the FAQ.",
+    "createSuccess": "FAQ successfully added!",
+    "createError": "An error occurred while adding the FAQ.",
+    "form": {
+      "questionLabel": "Question",
+      "questionRequired": "Question is required",
+      "questionMinlength": "Question must be at least 5 characters",
+      "answerLabel": "Answer",
+      "answerRequired": "Answer is required",
+      "answerMinlength": "Answer must be at least 10 characters",
+      "submitting": "Adding...",
+      "addFaqButton": "Add FAQ"
+    }
+  },
+  "common": {
+    "cancel": "Cancel"
+  }
 }

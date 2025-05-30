@@ -6,11 +6,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { Faq } from '../../../models/Faq.model';
 import { RoleAuthorizationService } from '../../../services/RoleAuthorization/role-authorization.service';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-faq-page',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HttpClientModule],
+  imports: [CommonModule, ReactiveFormsModule, HttpClientModule, TranslatePipe],
   templateUrl: './faq-page.component.html',
   styleUrl: './faq-page.component.css',
   animations: [
@@ -48,7 +49,8 @@ export class FaqPageComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     public roleAuth: RoleAuthorizationService,
-    private faqService: FaqService
+    private faqService: FaqService,
+    private translate: TranslateService
   ) {
     this.faqForm = this.fb.group({
       question: ['', [Validators.required, Validators.minLength(5)]],
@@ -84,11 +86,11 @@ export class FaqPageComponent implements OnInit {
       next: (addedFaq) => {
         this.faqs = [...this.faqs, addedFaq];
         this.faqForm.reset();
-        this.showSuccess('FAQ succesvol toegevoegd!');
+        this.showSuccess(this.translate.instant('faq.createSuccess'));
         this.isSubmitting = false;
       },
       error: (error) => {
-        this.showError('Er is een fout opgetreden bij het toevoegen van de FAQ.');
+        this.showError(this.translate.instant('faq.createError'));
         console.error('Error adding FAQ:', error);
         this.isSubmitting = false;
       }
@@ -100,11 +102,11 @@ export class FaqPageComponent implements OnInit {
       this.faqService.deleteFaq(id).subscribe({
         next: () => {
           this.faqs = this.faqs.filter(faq => faq.id !== id);
-          this.showSuccess('FAQ succesvol verwijderd!');
+          this.showSuccess(this.translate.instant('faq.deleteSuccess'));
           this.showDeleteConfirm[id] = false;
         },
         error: (error) => {
-          this.showError('Er is een fout opgetreden bij het verwijderen van de FAQ.');
+          this.showError(this.translate.instant('faq.deleteError'));
           console.error('Error deleting FAQ:', error);
           this.showDeleteConfirm[id] = false;
         }

@@ -219,4 +219,31 @@
   "OF": "van",
   "PROCEED_TO_BILLING": "Verder naar facturatie",
   "Processing": "Bezig met verwerken"
+
+  ,"faq": {
+    "title": "Veelgestelde vragen",
+    "emptyMessage": "Er zijn nog geen FAQ-items.",
+    "deleteAriaLabel": "Verwijder deze FAQ",
+    "confirmDeleteAriaLabel": "Bevestig verwijderen",
+    "cancelDeleteAriaLabel": "Annuleer verwijderen",
+    "addQuestion": "+ Vraag toevoegen",
+    "addFaqTitle": "Nieuwe FAQ toevoegen",
+    "deleteSuccess": "FAQ succesvol verwijderd!",
+    "deleteError": "Er is een fout opgetreden bij het verwijderen van de FAQ.",
+    "createSuccess": "FAQ succesvol toegevoegd!",
+    "createError": "Er is een fout opgetreden bij het toevoegen van de FAQ.",
+    "form": {
+      "questionLabel": "Vraag",
+      "questionRequired": "Vraag is verplicht",
+      "questionMinlength": "Vraag moet minimaal 5 tekens bevatten",
+      "answerLabel": "Antwoord",
+      "answerRequired": "Antwoord is verplicht",
+      "answerMinlength": "Antwoord moet minimaal 10 tekens bevatten",
+      "submitting": "Bezig met toevoegen...",
+      "addFaqButton": "Voeg FAQ toe"
+    }
+  },
+  "common": {
+    "cancel": "Annuleer"
+  }
 }

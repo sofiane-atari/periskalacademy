@@ -219,4 +219,31 @@
   "OF": "von ",
   "PROCEED_TO_BILLING": "Weiter zur Abrechnung",
   "Processing": "Wird verarbeitet"
+
+  ,"faq": {
+    "title": "Häufig gestellte Fragen",
+    "emptyMessage": "Es gibt noch keine FAQ-Einträge.",
+    "deleteAriaLabel": "Diese FAQ löschen",
+    "confirmDeleteAriaLabel": "Löschen bestätigen",
+    "cancelDeleteAriaLabel": "Löschen abbrechen",
+    "addQuestion": "+ Frage hinzufügen",
+    "addFaqTitle": "Neue FAQ hinzufügen",
+    "deleteSuccess": "FAQ erfolgreich gelöscht!",
+    "deleteError": "Beim Löschen der FAQ ist ein Fehler aufgetreten.",
+    "createSuccess": "FAQ erfolgreich hinzugefügt!",
+    "createError": "Beim Hinzufügen der FAQ ist ein Fehler aufgetreten.",
+    "form": {
+      "questionLabel": "Frage",
+      "questionRequired": "Frage ist erforderlich",
+      "questionMinlength": "Frage muss mindestens 5 Zeichen haben",
+      "answerLabel": "Antwort",
+      "answerRequired": "Antwort ist erforderlich",
+      "answerMinlength": "Antwort muss mindestens 10 Zeichen haben",
+      "submitting": "Wird hinzugefügt...",
+      "addFaqButton": "FAQ hinzufügen"
+    }
+  },
+  "common": {
+    "cancel": "Abbrechen"
+  }
 }

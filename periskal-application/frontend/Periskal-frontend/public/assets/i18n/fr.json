@@ -219,4 +219,31 @@
   "OF": "de",
   "PROCEED_TO_BILLING": "Passer à la facturation",
   "Processing": "Traitement"
+
+  ,"faq": {
+    "title": "Foire aux questions",
+    "emptyMessage": "Il n'y a pas encore de FAQ.",
+    "deleteAriaLabel": "Supprimer cette FAQ",
+    "confirmDeleteAriaLabel": "Confirmer la suppression",
+    "cancelDeleteAriaLabel": "Annuler la suppression",
+    "addQuestion": "+ Ajouter une question",
+    "addFaqTitle": "Ajouter une nouvelle FAQ",
+    "deleteSuccess": "FAQ supprimée avec succès !",
+    "deleteError": "Une erreur s'est produite lors de la suppression de la FAQ.",
+    "createSuccess": "FAQ ajoutée avec succès !",
+    "createError": "Une erreur s'est produite lors de l'ajout de la FAQ.",
+    "form": {
+      "questionLabel": "Question",
+      "questionRequired": "La question est obligatoire",
+      "questionMinlength": "La question doit contenir au moins 5 caractères",
+      "answerLabel": "Réponse",
+      "answerRequired": "La réponse est obligatoire",
+      "answerMinlength": "La réponse doit contenir au moins 10 caractères",
+      "submitting": "Ajout en cours...",
+      "addFaqButton": "Ajouter la FAQ"
+    }
+  },
+  "common": {
+    "cancel": "Annuler"
+  }
 }
