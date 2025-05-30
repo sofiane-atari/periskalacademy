@@ -275,58 +275,83 @@ export class SkippersComponent implements OnInit {
 
     this.isProcessingAction = true;
 
-    // Step 1: Fetch examAttempts for the selected trainingId
-    console.log(this.selectedTrainingId)
+    // Filter out skippers who already have active attempts
+    const assignableSkipperIds = this.selectedSkipperIds.filter(
+      skipperId => !this.skippersWithActiveTraining.includes(skipperId)
+    );
+
+    // If some skippers are already assigned, show a warning
+    if (assignableSkipperIds.length < this.selectedSkipperIds.length) {
+      const alreadyAssignedSkippers = this.selectedSkipperIds
+        .filter(id => this.skippersWithActiveTraining.includes(id))
+        .map(id => this.getSkipperName(id));
+      const warningMessage = `The following skippers already have this training assigned and will be skipped: ${alreadyAssignedSkippers.join(', ')}.`;
+      this.snackBar.open(warningMessage, 'Close', {
+        duration: 7000,
+        panelClass: ['snackbar-warning']
+      });
+    }
+
+    // If no skippers are assignable, stop the process
+    if (assignableSkipperIds.length === 0) {
+      this.isProcessingAction = false;
+      return;
+    }
+
     this.examService.getExamByTrainingId(this.selectedTrainingId).subscribe({
       next: (exam) => {
-        console.log(exam);
-        if (exam) {
-          if (!exam.id) {
-            throw new Error('Exam ID is undefined');
-          }
+        if (exam && exam.id) {
           this.billingDataForForm = {
-            userIds: this.selectedSkipperIds,
+            userIds: assignableSkipperIds,
             examId: exam.id,
             examPrice: exam.price,
             examAttempts: exam.examAttempts
           };
-
           this.assignmentDialogOpen = false;
           this.showBillingModal = true;
           this.isProcessingAction = false;
-
         } else {
-          this.saveAssignment(); // Directly save assignment without billing modal
+          this.saveAssignment(assignableSkipperIds); // Directly save assignment without billing modal
           this.isProcessingAction = false;
         }
       },
       error: (error) => {
         this.error = 'Failed to fetch exam information';
         this.isProcessingAction = false;
+        this.snackBar.open('Failed to fetch exam information.', 'Close', {
+          duration: 5000,
+          panelClass: ['snackbar-error']
+        });
       }
     });
   }
 
-  saveAssignment() {
+  saveAssignment(assignableSkipperIds: string[] = this.selectedSkipperIds) {
     this.showBillingModal = false;
     this.isProcessingAction = true;
     const fleetmanagerId = this.jwtDecoder.getId();
 
-    if (!fleetmanagerId || this.selectedTrainingId === null || this.selectedSkipperIds.length === 0) {
-      this.snackBar.open('Critical error: Missing data for final assignment. Please retry.', 'Close', { duration: 5000, panelClass: ['snackbar-error'] });
+    if (!fleetmanagerId || this.selectedTrainingId === null || assignableSkipperIds.length === 0) {
+      this.snackBar.open('Critical error: Missing data for final assignment. Please retry.', 'Close', {
+        duration: 5000,
+        panelClass: ['snackbar-error']
+      });
       this.isProcessingAction = false;
       return;
     }
 
     this.assignmentService.assignTrainingToSkippers(
       this.selectedTrainingId,
-      this.selectedSkipperIds,
+      assignableSkipperIds,
       fleetmanagerId
     ).subscribe({
       next: (response) => {
         this.assignmentDialogOpen = false;
         this.clearSkipperSelections();
-        this.snackBar.open('Training successfully assigned!', 'Close', { duration: 3000, panelClass: ['snackbar-success'] });
+        this.snackBar.open('Training successfully assigned!', 'Close', {
+          duration: 3000,
+          panelClass: ['snackbar-success']
+        });
         this.fetchSkippersData();
         this.isProcessingAction = false;
         this.selectedSkipperIndex = null;
