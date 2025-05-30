@@ -24,14 +24,14 @@ public class BillingController {
     }
 
     @PostMapping
-    @PreAuthorize(SecurityRoles.ADMIN_SKIPPER)
+    @PreAuthorize(SecurityRoles.ADMIN_SUPPORT_SKIPPER)
     public ResponseEntity<Billing> saveOrder(@RequestBody Billing entity) {
         Billing savedOrder = billingService.saveOrder(entity);
         return ResponseEntity.ok(savedOrder);
     }
 
     @PostMapping("/batch") 
-    @PreAuthorize(SecurityRoles.ADMIN_FLEETMANAGER)
+    @PreAuthorize(SecurityRoles.ADMIN_SUPPORT_FLEETMANAGER)
     public ResponseEntity<List<Billing>> saveOrdersBatch(@RequestBody List<Billing> billingList) {
         List<Billing> savedOrders = billingService.saveAttemptsBatch(billingList);
         return ResponseEntity.ok(savedOrders);
