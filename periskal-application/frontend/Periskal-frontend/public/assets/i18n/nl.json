@@ -293,6 +293,9 @@
   "AUTHENTICATING": "Bezig met verifiëren...",
   "AUTHENTICATION_FAILED": "Authenticatie mislukt.",
   "PROCESSING": "Bezig met verwerken...",
-  "SOME_SKIPPERS_HAVE_ACTIVE_ATTEMPTS": "Sommige schippers hebben mogelijk actieve pogingen."
-
+  "SOME_SKIPPERS_HAVE_ACTIVE_ATTEMPTS": "Sommige schippers hebben mogelijk actieve pogingen.",
+  "deleteSuccess": "FAQ succesvol verwijderd!",
+  "deleteError": "Er is een fout opgetreden bij het verwijderen van de FAQ.",
+  "createSuccess": "FAQ succesvol toegevoegd!",
+  "createError": "Er is een fout opgetreden bij het toevoegen van de FAQ."
 }

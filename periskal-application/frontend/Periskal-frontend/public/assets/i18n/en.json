@@ -293,5 +293,9 @@
   "AUTHENTICATING": "Authenticating...",
   "AUTHENTICATION_FAILED": "Authentication failed.",
   "PROCESSING": "Processing...",
-  "SOME_SKIPPERS_HAVE_ACTIVE_ATTEMPTS": "Some skippers may have active attempts."
+  "SOME_SKIPPERS_HAVE_ACTIVE_ATTEMPTS": "Some skippers may have active attempts.",
+  "deleteSuccess": "FAQ successfully deleted!",
+  "deleteError": "An error occurred while deleting the FAQ.",
+  "createSuccess": "FAQ successfully added!",
+  "createError": "An error occurred while adding the FAQ."
 }

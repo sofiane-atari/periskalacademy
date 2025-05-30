@@ -5,7 +5,7 @@ import { FaqService } from '../../../services/Faq/faq.service';
 import { Faq } from '../../../models/Faq.model';
 import { RoleAuthorizationService } from '../../../services/RoleAuthorization/role-authorization.service';
 import { trigger, transition, style, animate } from '@angular/animations';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { MatTabsModule } from '@angular/material/tabs';
 
 @Component({
@@ -55,7 +55,8 @@ export class FaqPageComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     public roleAuth: RoleAuthorizationService,
-    private faqService: FaqService
+    private faqService: FaqService,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -127,10 +128,12 @@ export class FaqPageComponent implements OnInit {
       next: (addedFaq) => {
         this.faqs = [...this.faqs, addedFaq];
         this.faqForm.reset();
-        this.showSuccess('FAQ succesvol toegevoegd!');
+        this.showSuccess(this.translate.instant('createSuccess'));
         this.isSubmitting = false;
       },
       error: (error) => {
+        this.showError(this.translate.instant('createError'));
+        console.error('Error adding FAQ:', error);
         this.isSubmitting = false;
       }
     });
@@ -141,10 +144,12 @@ export class FaqPageComponent implements OnInit {
       this.faqService.deleteFaq(id).subscribe({
         next: () => {
           this.faqs = this.faqs.filter(faq => faq.id !== id);
-          this.showSuccess('FAQ succesvol verwijderd!');
+          this.showSuccess(this.translate.instant('deleteSuccess'));
           this.showDeleteConfirm[id] = false;
         },
         error: (error) => {
+          this.showError(this.translate.instant('deleteError'));
+          console.error('Error deleting FAQ:', error);
           this.showDeleteConfirm[id] = false;
         }
       });

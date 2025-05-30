@@ -293,5 +293,9 @@
   "AUTHENTICATING": "Authentifizierung läuft...",
   "AUTHENTICATION_FAILED": "Authentifizierung fehlgeschlagen.",
   "PROCESSING": "Verarbeitung läuft...",
-  "SOME_SKIPPERS_HAVE_ACTIVE_ATTEMPTS": "Einige Schiffer haben möglicherweise aktive Versuche."
+  "SOME_SKIPPERS_HAVE_ACTIVE_ATTEMPTS": "Einige Schiffer haben möglicherweise aktive Versuche.",
+  "deleteSuccess": "FAQ erfolgreich gelöscht!",
+  "deleteError": "Beim Löschen der FAQ ist ein Fehler aufgetreten.",
+  "createSuccess": "FAQ erfolgreich hinzugefügt!",
+  "createError": "Beim Hinzufügen der FAQ ist ein Fehler aufgetreten."
 }
