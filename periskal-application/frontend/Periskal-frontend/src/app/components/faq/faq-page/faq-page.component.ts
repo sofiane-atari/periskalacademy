@@ -127,10 +127,12 @@ export class FaqPageComponent implements OnInit {
       next: (addedFaq) => {
         this.faqs = [...this.faqs, addedFaq];
         this.faqForm.reset();
-        this.showSuccess('FAQ succesvol toegevoegd!');
+        this.showSuccess(this.translate.instant('faq.createSuccess'));
         this.isSubmitting = false;
       },
       error: (error) => {
+        this.showError(this.translate.instant('faq.createError'));
+        console.error('Error adding FAQ:', error);
         this.isSubmitting = false;
       }
     });
@@ -141,10 +143,12 @@ export class FaqPageComponent implements OnInit {
       this.faqService.deleteFaq(id).subscribe({
         next: () => {
           this.faqs = this.faqs.filter(faq => faq.id !== id);
-          this.showSuccess('FAQ succesvol verwijderd!');
+          this.showSuccess(this.translate.instant('faq.deleteSuccess'));
           this.showDeleteConfirm[id] = false;
         },
         error: (error) => {
+          this.showError(this.translate.instant('faq.deleteError'));
+          console.error('Error deleting FAQ:', error);
           this.showDeleteConfirm[id] = false;
         }
       });
