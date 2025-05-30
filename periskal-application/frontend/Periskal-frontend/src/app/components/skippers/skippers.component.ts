@@ -20,6 +20,7 @@ import { CompletedExamService } from '../../services/CompletedExam/completed-exa
 import { CompletedExam } from '../../models/completed-exam.model';
 import { CertificateService } from '../../services/Certificates/certificate.service';
 import { Certificate } from '../../models/Certificate.model';
+import { UserAttemptService } from '../../services/UserExamAttempts/user-attempt.service';
 
 
 @Component({
@@ -73,7 +74,8 @@ export class SkippersComponent implements OnInit {
     private examService: ExamService,
     private snackBar: MatSnackBar,
     private completedExamService: CompletedExamService,
-    private certificateService: CertificateService
+    private certificateService: CertificateService,
+    private userAttemptService: UserAttemptService
   ) { }
 
   ngOnInit() {
@@ -344,20 +346,48 @@ export class SkippersComponent implements OnInit {
       next: (trainings) => {
         const observables = trainings.map(training =>
           this.examService.getExamByTrainingId(training.id).pipe(
-            map(exam => {
-              return { training, hasExam: !!exam };
+            switchMap(exam => {
+              if (!exam || !exam.id) {
+                return of({ training, hasExam: false, canAssign: false });
+              }
+              const examId = exam.id.toString(); // Converts number to string
+              // Check remaining attempts for all selected skippers
+              const attemptObservables = this.selectedSkipperIds.map(userId =>
+                this.userAttemptService.getRemainingAttempts(userId, examId).pipe(
+                  map(response => ({ userId, remainingAttempts: response.remainingAttempts })),
+                  catchError(() => of({ userId, remainingAttempts: 0 }))
+                )
+              );
+              return forkJoin(attemptObservables).pipe(
+                map(attempts => {
+                  // Training is assignable if ALL selected skippers have 0 remaining attempts
+                  const canAssign = attempts.every(attempt => attempt.remainingAttempts === 0);
+                  return { training, hasExam: true, canAssign };
+                }),
+                // Handle errors in the inner forkJoin
+                catchError(() => of({ training, hasExam: true, canAssign: false }))
+              );
             }),
-            catchError(error => {
-              return of({ training, hasExam: false });
-            })
+            // Handle errors from getExamByTrainingId
+            catchError(() => of({ training, hasExam: false, canAssign: false }))
           )
         );
 
         forkJoin(observables).subscribe(results => {
           this.availableTrainings = results
-            .filter(result => result.hasExam)
+            .filter(result => result.hasExam && result.canAssign)
             .map(result => result.training);
+          if (this.availableTrainings.length === 0) {
+            this.snackBar.open('No trainings available to assign. Some skippers may have active attempts.', 'Close', {
+              duration: 5000,
+              panelClass: ['snackbar-info']
+            });
+          }
         });
+      },
+      error: (err) => {
+        this.error = 'Failed to load available trainings.';
+        this.snackBar.open('Failed to load trainings.', 'Close', { duration: 5000, panelClass: ['snackbar-error'] });
       }
     });
   }
