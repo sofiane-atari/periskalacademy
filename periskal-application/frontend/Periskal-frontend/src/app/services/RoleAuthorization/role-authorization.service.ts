@@ -26,6 +26,11 @@ export class RoleAuthorizationService {
   canAddContent(): boolean {
     return this.hasPermission(['Administrator']);
   }
+
+  canAccessSkippers(): boolean {
+  return this.hasPermission(['Administrator', 'Fleetmanager', 'Support']);
+  }
+
   isSkipper(): boolean{
     const userRole = this.jwtDecoderService.getUserRole();
     if (userRole === 'Skipper') {
@@ -40,4 +45,5 @@ export class RoleAuthorizationService {
     }
     return false;
   }
+  
 }

@@ -2,7 +2,6 @@ package periskal.academy.backend.controller;
 
 import java.util.List;
 
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,7 +27,7 @@ public class TrainingAssignmentController {
     }
 
     @PostMapping
-    @PreAuthorize(SecurityRoles.ADMIN_FLEETMANAGER)
+    @PreAuthorize(SecurityRoles.ADMIN_SUPPORT_FLEETMANAGER)
     public ResponseEntity<List<TrainingAssignment>> createOrUpdateAssignments(@RequestBody List<TrainingAssignment> assignments) {
 
         return ResponseEntity.ok(assignmentService.createOrUpdateAssignments(assignments));
