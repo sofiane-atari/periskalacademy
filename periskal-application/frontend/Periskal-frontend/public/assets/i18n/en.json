@@ -320,6 +320,8 @@
   "ASSIGN": "Assign",
   "CERTIFICATE_VALIDITY": "Certificate Validity (In Years)",
   "PASSING_SCORE": "Passing Score (In Percent)",
-  "EXAM_PROGRESS": "Exam Progress"
+  "EXAM_PROGRESS": "Exam Progress",
+  "CERTIFICATE_VALIDITY_PLACEHOLDER": "Enter certificate validity in years",
+  "PASSING_SCORE_PLACEHOLDER": "Enter minimum passing score (1-100)"
   
 }

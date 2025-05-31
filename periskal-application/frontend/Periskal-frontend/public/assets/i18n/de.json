@@ -319,6 +319,8 @@
   "SKIPPERS_ALREADY_ASSIGNED": "Die folgenden Schiffer haben dieses Training bereits zugewiesen bekommen und werden übersprungen",
   "ASSIGN": "Zuweisen",
   "CERTIFICATE_VALIDITY": "Gültigkeit des Zertifikats (in Jahren)",
+  "CERTIFICATE_VALIDITY_PLACEHOLDER": "Gültigkeitsdauer des Zertifikats in Jahren eingeben",
+  "PASSING_SCORE_PLACEHOLDER": "Mindestpunktzahl zum Bestehen eingeben (1-100)",
   "PASSING_SCORE": "Bestehenspunktzahl (in Prozent)",
   "EXAM_PROGRESS": "Prüfungsfortschritt"
 

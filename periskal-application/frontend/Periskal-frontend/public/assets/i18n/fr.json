@@ -320,6 +320,8 @@
   "ASSIGN": "Attribuer",
   "CERTIFICATE_VALIDITY": "Validité du certificat (en années)",
   "PASSING_SCORE": "Note de passage (en pourcentage)",
-  "EXAM_PROGRESS": "Progression de l'examen"
+  "EXAM_PROGRESS": "Progression de l'examen",
+  "CERTIFICATE_VALIDITY_PLACEHOLDER": "Entrez la validité du certificat en années",
+  "PASSING_SCORE_PLACEHOLDER": "Entrez le score minimum de réussite (1-100)"
 
 }

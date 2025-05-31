@@ -320,6 +320,8 @@
   "ASSIGN": "Toewijzen",
   "CERTIFICATE_VALIDITY": "Geldigheid certificaat (in jaren)",
   "PASSING_SCORE": "Slaagcijfer (in procent)",
-  "EXAM_PROGRESS": "Examen vooruitgang"
+  "EXAM_PROGRESS": "Examen vooruitgang",
+  "CERTIFICATE_VALIDITY_PLACEHOLDER": "Voer geldigheidsduur certificaat in jaren in",
+  "PASSING_SCORE_PLACEHOLDER": "Voer minimaal slagingspercentage in (1-100)"
 
 }
