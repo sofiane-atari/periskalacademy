@@ -36,6 +36,7 @@ export class AddExamComponent implements OnInit {
       price: ['', Validators.required],
       examAttempts: ['', Validators.required],
       duration: [''],
+      certificateValidity: [''],
       questions: this.fb.array([])// Initialize empty FormArray
     });
     this.lang = localStorage.getItem('lang') || 'en';
@@ -138,7 +139,8 @@ export class AddExamComponent implements OnInit {
         })),
         price: Number(this.examForm.value.price),
         examAttempts: Number(this.examForm.value.examAttempts),
-        duration: Number(this.examForm.value.duration)
+        duration: Number(this.examForm.value.duration),
+        certificateValidty: Number(this.examForm.value.certificateValidity)
       };
 
       this.examService.createExam(examData).subscribe({
