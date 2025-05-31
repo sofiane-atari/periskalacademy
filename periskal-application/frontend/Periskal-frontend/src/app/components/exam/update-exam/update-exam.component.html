@@ -1,91 +1,109 @@
 <div class="container mt-5">
-    <div class="card shadow-sm">
-      <div class="card-header text-black">
-        <h4 class="mb-0">{{'UPDATE_EXAM' |translate}}</h4>
-      </div>
-      <div class="card-body">
-        <form (ngSubmit)="onSubmit()">
-          <div class="mb-3">
-            <label for="examTitle" class="form-label">{{'EXAM_TITLE' | translate}}</label>
+  <div class="card shadow-sm">
+    <div class="card-header text-black">
+      <h4 class="mb-0">{{ "UPDATE_EXAM" | translate }}</h4>
+    </div>
+    <div class="card-body">
+      <form (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+          <label for="examTitle" class="form-label">{{
+            "EXAM_TITLE" | translate
+          }}</label>
+          <input
+            type="text"
+            id="examTitle"
+            [(ngModel)]="exam.examTitleEn"
+            name="examTitleEn"
+            class="form-control"
+            required
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="examDescription" class="form-label">{{
+            "EXAM_DESCRIPTION" | translate
+          }}</label>
+          <textarea
+            id="examDescription"
+            class="form-control"
+            [(ngModel)]="exam.examDescriptionEn"
+            name="examDescriptionEn"
+            rows="4"
+            required
+          ></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="totalQuestions" class="form-label">Total questions</label>
+          <input
+            type="number"
+            id="totalQuestions"
+            class="form-control"
+            [(ngModel)]="exam.totalQuestions"
+            name="totalQuestions"
+            min="1"
+            required
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="price" class="form-label">Exam Price</label>
+          <input
+            type="number"
+            id="price"
+            class="form-control"
+            [(ngModel)]="exam.price"
+            name="price"
+            min="1"
+            required
+          />
+        </div>
+
+        <h4 class="mt-4">{{ "EXAM_QUESTIONS" | translate }}</h4>
+
+        @for(question of exam.questions; track $index){
+        <div class="mb-2">
+          <div class="input-group">
             <input
               type="text"
-              id="examTitle"
-              [(ngModel)]="exam.examTitle"
-              name="examTitle"
               class="form-control"
+              [(ngModel)]="question.textEn"
+              [name]="'question_' + $index"
+              placeholder="Vraagtekst"
               required
             />
+            <button
+              type="button"
+              class="btn btn-danger"
+              (click)="removeQuestion($index)"
+            >
+              {{ "REMOVE_BUTTON" | translate }}
+            </button>
           </div>
-  
-          <div class="mb-3">
-            <label for="examDescription" class="form-label">{{'EXAM_DESCRIPTION' |translate}}</label>
-            <textarea
-              id="examDescription"
-              class="form-control"
-              [(ngModel)]="exam.examDescription"
-              name="examDescription"
-              rows="4"
-              required
-            ></textarea>
-          </div>
-
-          <div class="mb-3">
-            <label for="totalQuestions" class="form-label">Total questions</label>
-            <input
-              type="number"
-              id="totalQuestions"
-              class="form-control"
-              [(ngModel)]="exam.totalQuestions"
-              name="totalQuestions"
-              min="1"
-              required
-            />
-          </div>
-
-          <div class="mb-3">
-            <label for="price" class="form-label">Exam Price</label>
-            <input
-              type="number"
-              id="price"
-              class="form-control"
-              [(ngModel)]="exam.price"
-              name="price"
-              min="1"
-              required
-            />
-          </div>
-
-          <h4 class="mt-4">{{'EXAM_QUESTIONS' | translate }}</h4>
-
-          @for(question of exam.questions; track $index){
-          <div class="mb-2">
-            <div class="input-group">
-              <input type="text"
-                     class="form-control"
-                     [(ngModel)]="question.text"
-                     [name]="'question_' + $index"
-                     placeholder="Vraagtekst"
-                     required>
-              <button type="button" class="btn btn-danger" (click)="removeQuestion($index)">
-                {{'REMOVE_BUTTON' |translate }}
-              </button>
-            </div>
-          </div>
+        </div>
         }
-      
-          <button type="button" class="btn btn-secondary mt-2" (click)="addQuestion()">
-            {{'ADD_QUESTION_BUTTON' |translate}}
-          </button>
-  
-          <button type="submit" class="btn w-100">
-            {{'SAVE_BUTTON' | translate}}
-          </button>
 
-          <button class="delete" type="button" class="btn w-100" (click)="confirmDeleteExam()">
-            {{'DELETE_BUTTON' | translate}}
-          </button>
-        </form>
-      </div>
+        <button
+          type="button"
+          class="btn btn-secondary mt-2"
+          (click)="addQuestion()"
+        >
+          {{ "ADD_QUESTION_BUTTON" | translate }}
+        </button>
+
+        <button type="submit" class="btn w-100">
+          {{ "SAVE_BUTTON" | translate }}
+        </button>
+
+        <button
+          class="delete"
+          type="button"
+          class="btn w-100"
+          (click)="confirmDeleteExam()"
+        >
+          {{ "DELETE_BUTTON" | translate }}
+        </button>
+      </form>
     </div>
   </div>
-  
+</div>

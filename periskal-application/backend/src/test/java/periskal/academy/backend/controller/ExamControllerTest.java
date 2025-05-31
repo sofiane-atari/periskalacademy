@@ -36,10 +36,10 @@ class ExamControllerTest {
     void setUp() {
         exam = new Exam();
         exam.setId(1L);
-        exam.setExamTitle("Test Exam");
+        exam.setExamTitleEn("Test Exam");
 
         examRequest = new ExamRequest();
-        examRequest.setExamTitle("Test Exam");
+        examRequest.setExamTitleEn("Test Exam");
         // Add other fields as necessary
     }
 
@@ -89,14 +89,14 @@ class ExamControllerTest {
     void givenValidExam_whenUpdateExam_thenReturnsUpdatedExam() {
         Exam updatedExam = new Exam();
         updatedExam.setId(1L);
-        updatedExam.setExamTitle("Updated Exam");
+        updatedExam.setExamTitleEn("Updated Exam");
 
         when(examService.updateExam(1L, updatedExam)).thenReturn(updatedExam);
 
         ResponseEntity<Exam> response = examController.updateExam(1L, updatedExam);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody().getExamTitle()).isEqualTo("Updated Exam");
+        assertThat(response.getBody().getExamTitleEn()).isEqualTo("Updated Exam");
     }
 
     @Test

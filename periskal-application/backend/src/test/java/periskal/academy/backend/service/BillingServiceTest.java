@@ -78,7 +78,7 @@ class BillingServiceTest {
 
         Exam mockExam = new Exam();
         mockExam.setId(1L);
-        mockExam.setExamTitle("Sample Exam Title");
+        mockExam.setExamTitleEn("Sample Exam Title");
 
         when(examService.findById(1L)).thenReturn(Optional.of(mockExam));
 

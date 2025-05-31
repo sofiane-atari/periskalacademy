@@ -1,10 +1,13 @@
-import { Photo } from "./photo.model";
-import { Answer } from "./Answer.model";
+import { Photo } from './photo.model';
+import { Answer } from './Answer.model';
 
 export interface Question {
-    id?: number;
-    text: string;
-    photos?: Photo[];
-    answers?: Answer[]; 
-    correctAnswer: Number;
-  }
+  id?: number;
+  textEn: string;
+  textNl: string;
+  textFr: string;
+  textDe: string;
+  correctAnswer: number;
+  photos?: Photo[];
+  answers?: Answer[];
+}

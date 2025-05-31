@@ -1,6 +1,6 @@
 /* Modern form styling */
 .container {
-  max-width: 600px;
+  max-width: 800px;
   margin: 2rem auto;
   padding: 2rem;
   background-color: #ffffff;
@@ -102,7 +102,7 @@ body {
   font-style: italic;
 }
 
-.question-block {
+.question-block, .tab-block {
   background-color: #fffef5;
   border: 1px solid #f0d04b;
   border-radius: 8px;

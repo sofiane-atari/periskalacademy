@@ -19,7 +19,7 @@ import { CertificateDialogComponent } from '../certificatedialog/certificatedial
   templateUrl: './take-exam.component.html',
   standalone: true,
   imports: [TranslatePipe],
-  styleUrls: ['./take-exam.component.css']
+  styleUrls: ['./take-exam.component.css'],
 })
 export class TakeExamComponent implements OnInit, OnDestroy {
   exam: Exam | null = null;
@@ -43,27 +43,27 @@ export class TakeExamComponent implements OnInit, OnDestroy {
     private completedExamService: CompletedExamService,
     private examStateService: ExamStateService,
     private dialog: MatDialog
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     const examId = Number(this.route.snapshot.paramMap.get('id'));
     this.loadExam(examId);
 
     this.timerSubscriptions.add(
-      this.examStateService.remainingTime$.subscribe(time => {
+      this.examStateService.remainingTime$.subscribe((time) => {
         this.remainingTime = time;
       })
     );
 
     this.timerSubscriptions.add(
-      this.examStateService.examFinished$.pipe(
-        filter(finished => finished)
-      ).subscribe(() => {
-        if (!this.isSubmitting) {
-          this.submissionInitiatedByTimer = true;
-          this.submitExam();
-        }
-      })
+      this.examStateService.examFinished$
+        .pipe(filter((finished) => finished))
+        .subscribe(() => {
+          if (!this.isSubmitting) {
+            this.submissionInitiatedByTimer = true;
+            this.submitExam();
+          }
+        })
     );
   }
 
@@ -78,8 +78,13 @@ export class TakeExamComponent implements OnInit, OnDestroy {
     this.examService.getExamById(examId).subscribe({
       next: (exam) => {
         exam.questions = exam.questions || [];
-        const shuffledQuestions = exam.questions.sort(() => 0.5 - Math.random());
-        const selectedQuestions = shuffledQuestions.slice(0, exam.totalQuestions);
+        const shuffledQuestions = exam.questions.sort(
+          () => 0.5 - Math.random()
+        );
+        const selectedQuestions = shuffledQuestions.slice(
+          0,
+          exam.totalQuestions
+        );
         exam.questions = selectedQuestions;
 
         this.exam = exam;
@@ -88,18 +93,18 @@ export class TakeExamComponent implements OnInit, OnDestroy {
         const examDuration = this.exam.duration * 60; // in minutes
         if (this.exam.id)
           this.examStateService.startOrResumeExam(this.exam.id, examDuration);
-
       },
       error: (err) => {
         this.error = 'Failed to load exam questions';
         this.loading = false;
         this.examStateService.resetTimerState(true);
-      }
+      },
     });
   }
 
   get currentQuestion(): Question | null {
-    if (!this.exam || !this.exam.questions || !this.exam.questions.length) return null;
+    if (!this.exam || !this.exam.questions || !this.exam.questions.length)
+      return null;
     return this.exam.questions[this.currentQuestionIndex];
   }
 
@@ -108,7 +113,11 @@ export class TakeExamComponent implements OnInit, OnDestroy {
   }
 
   nextQuestion(): void {
-    if (this.exam && this.exam.questions && this.currentQuestionIndex < this.exam.questions.length - 1) {
+    if (
+      this.exam &&
+      this.exam.questions &&
+      this.currentQuestionIndex < this.exam.questions.length - 1
+    ) {
       this.currentQuestionIndex++;
     }
   }
@@ -120,7 +129,12 @@ export class TakeExamComponent implements OnInit, OnDestroy {
   }
 
   goToQuestion(index: number): void {
-    if (this.exam && this.exam.questions && index >= 0 && index < this.exam.questions.length) {
+    if (
+      this.exam &&
+      this.exam.questions &&
+      index >= 0 &&
+      index < this.exam.questions.length
+    ) {
       this.currentQuestionIndex = index;
     }
   }
@@ -141,7 +155,9 @@ export class TakeExamComponent implements OnInit, OnDestroy {
     this.isSubmitting = true;
 
     if (this.exam.trainingId === undefined || this.exam.trainingId === null) {
-      alert('Error: Cannot submit exam. Training ID is missing from exam data. Please contact support.');
+      alert(
+        'Error: Cannot submit exam. Training ID is missing from exam data. Please contact support.'
+      );
       this.isSubmitting = false;
       return;
     }
@@ -157,9 +173,11 @@ export class TakeExamComponent implements OnInit, OnDestroy {
       });
     }
 
-
     const totalQuestions = this.exam.questions ? this.exam.questions.length : 0;
-    const scorePercentage = totalQuestions > 0 ? Math.round((correctCount / totalQuestions) * 100) : 0;
+    const scorePercentage =
+      totalQuestions > 0
+        ? Math.round((correctCount / totalQuestions) * 100)
+        : 0;
     const userId = this.jwtDecoderService.getId();
 
     const completedExamData: Omit<CompletedExam, 'id'> = {
@@ -173,60 +191,67 @@ export class TakeExamComponent implements OnInit, OnDestroy {
 
     this.examStateService.finishExam();
     console.log(completedExamData);
-    this.completedExamService.saveCompletedExam(completedExamData as CompletedExam).subscribe({
-      next: (savedExam) => {
-        this.isSubmitting = false;
+    this.completedExamService
+      .saveCompletedExam(completedExamData as CompletedExam)
+      .subscribe({
+        next: (savedExam) => {
+          this.isSubmitting = false;
 
-        const passedMessage = savedExam.passed
-          ? `Congratulations! You passed the exam with a score of ${scorePercentage}%.`
-          : `You did not pass the exam. The required score is ${savedExam.requiredScore}%. Please try again.`;
+          const passedMessage = savedExam.passed
+            ? `Congratulations! You passed the exam with a score of ${scorePercentage}%.`
+            : `You did not pass the exam. The required score is ${savedExam.requiredScore}%. Please try again.`;
 
-        const certificateMessage = savedExam.certificateId
-          ? `\n\nA certificate has been generated and is available in your certificates list.`
-          : '';
+          const certificateMessage = savedExam.certificateId
+            ? `\n\nA certificate has been generated and is available in your certificates list.`
+            : '';
 
-        if (savedExam.passed) {
-          const dialogRef = this.dialog.open(CertificateDialogComponent, {
-            width: '600px',
-            maxHeight: 'auto',
-            panelClass: 'compact-dialog',
-            data: {
-              examName: this.exam?.examTitle || 'exam',
-              issueDate: new Date().toLocaleDateString(),
-              validity: '1',
-              status: 'passed'
-            }
-          }).afterClosed().subscribe(() => {
-            this.router.navigate(['/modules']);
-          });;
-        } else {
-          this.dialog.open(CertificateDialogComponent, {
-            data: {
-              examName: this.exam?.examTitle,
-              status: 'failed'
-            }
-          });
-        }
+          if (savedExam.passed) {
+            const dialogRef = this.dialog
+              .open(CertificateDialogComponent, {
+                width: '600px',
+                maxHeight: 'auto',
+                panelClass: 'compact-dialog',
+                data: {
+                  examName: this.exam?.examTitleEn || 'exam',
+                  issueDate: new Date().toLocaleDateString(),
+                  validity: '1',
+                  status: 'passed',
+                },
+              })
+              .afterClosed()
+              .subscribe(() => {
+                this.router.navigate(['/modules']);
+              });
+          } else {
+            this.dialog.open(CertificateDialogComponent, {
+              data: {
+                examName: this.exam?.examTitleEn,
+                status: 'failed',
+              },
+            });
+          }
 
-        if (savedExam.certificateId) {
-          this.router.navigate(['/certificates'], {
-            queryParams: { newCertificateId: savedExam.certificateId }
-          });
-        } else {
-          this.router.navigate(['/exams']);
-        }
-      },
-      error: (err) => {
-        alert('Failed to save your results. Please try again later.');
-        this.isSubmitting = false;
-      }
-    });
+          if (savedExam.certificateId) {
+            this.router.navigate(['/certificates'], {
+              queryParams: { newCertificateId: savedExam.certificateId },
+            });
+          } else {
+            this.router.navigate(['/exams']);
+          }
+        },
+        error: (err) => {
+          alert('Failed to save your results. Please try again later.');
+          this.isSubmitting = false;
+        },
+      });
   }
 
   formatTime(seconds: number): string {
     if (seconds < 0) seconds = 0;
     const minutes = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    return `${minutes.toString().padStart(2, '0')}:${secs
+      .toString()
+      .padStart(2, '0')}`;
   }
 }

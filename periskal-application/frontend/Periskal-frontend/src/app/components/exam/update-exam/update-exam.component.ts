@@ -9,12 +9,20 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-update-exam',
   imports: [FormsModule, TranslatePipe],
   templateUrl: './update-exam.component.html',
-  styleUrl: './update-exam.component.css'
+  styleUrl: './update-exam.component.css',
 })
 export class UpdateExamComponent implements OnInit {
   examId!: number;
   exam: Exam = {
-    id: 0, examTitle: '', examDescription: '',
+    id: 0,
+    examTitleEn: '',
+    examTitleNl: '',
+    examTitleFr: '',
+    examTitleDe: '',
+    examDescriptionEn: '',
+    examDescriptionNl: '',
+    examDescriptionFr: '',
+    examDescriptionDe: '',
     trainingId: 0,
     totalQuestions: 0,
     questions: [],
@@ -27,7 +35,7 @@ export class UpdateExamComponent implements OnInit {
     private examService: ExamService,
     private route: ActivatedRoute,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.examId = Number(this.route.snapshot.paramMap.get('id'));
@@ -46,12 +54,12 @@ export class UpdateExamComponent implements OnInit {
     this.examService.deleteExam(trainingId).subscribe({
       next: () => {
         this.router.navigate(['/training-employee'], {
-          onSameUrlNavigation: 'reload' // Force page reload
+          onSameUrlNavigation: 'reload', // Force page reload
         });
       },
       error: (error) => {
         alert('Verwijderen mislukt: ' + error.message);
-      }
+      },
     });
     this.loadExam();
   }
@@ -66,14 +74,20 @@ export class UpdateExamComponent implements OnInit {
       next: () => {
         alert('Examen succesvol aangepast!');
         this.router.navigate(['/dashboard']);
-      }
+      },
     });
   }
 
   addQuestion(): void {
     this.exam.questions.push({
-      id: 0, text: '',
-      correctAnswer: 0
+      id: 0,
+      textEn: '',
+      textNl: '',
+      textFr: '',
+      textDe: '',
+      correctAnswer: 0,
+      photos: [],
+      answers: [],
     });
   }
 

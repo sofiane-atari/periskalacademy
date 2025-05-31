@@ -91,7 +91,7 @@ class CompletedExamServiceTest {
         // Set up exam
         exam = new Exam();
         exam.setId(5L);
-        exam.setExamTitle("Safety Exam");
+        exam.setExamTitleEn("Safety Exam");
     }
     
     @Test

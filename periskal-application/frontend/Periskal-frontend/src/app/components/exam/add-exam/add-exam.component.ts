@@ -1,26 +1,55 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { TrainingService } from '../../../services/Training/training.service';
 import { Router } from '@angular/router';
 import { Training } from '../../../models/training.model';
 import { ExamService } from '../../../services/Exam/exam.service';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { PhotoUploadComponent } from '../../photo-upload/photo-upload.component';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatInputModule } from '@angular/material/input';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatListModule, MatListOption } from '@angular/material/list';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatOptionModule } from '@angular/material/core';
+//import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @Component({
   selector: 'app-add-exam',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, PhotoUploadComponent, TranslatePipe, MatTabsModule],
+  imports: [
+    FormsModule,
+    //BrowserAnimationsModule,
+    ReactiveFormsModule,
+    PhotoUploadComponent,
+    TranslatePipe,
+    MatInputModule,
+    MatTabsModule,
+    MatCardModule,
+    MatExpansionModule,
+    MatIconModule,
+    MatDividerModule,
+    MatListModule,
+    MatOptionModule,
+  ],
   templateUrl: './add-exam.component.html',
-  styleUrl: './add-exam.component.css'
+  styleUrl: './add-exam.component.css',
 })
 export class AddExamComponent implements OnInit {
-  examForm: FormGroup;
+  examForm!: FormGroup;
   trainingsWithExams: number[] = [];
   trainingsData: any[] = [];
   isLoading = true;
-  public lang: string | null = "";
+  public lang: string | null = '';
 
   constructor(
     private fb: FormBuilder,
@@ -28,20 +57,27 @@ export class AddExamComponent implements OnInit {
     private router: Router,
     private trainingService: TrainingService
   ) {
-    this.examForm = this.fb.group({
-      trainingId: ['', Validators.required],
-      examTitle: ['', Validators.required],
-      examDescription: ['', Validators.required],
-      totalQuestions: ['', Validators.required],
-      price: ['', Validators.required],
-      examAttempts: ['', Validators.required],
-      duration: [''],
-      questions: this.fb.array([])// Initialize empty FormArray
-    });
+    this.initForm();
     this.lang = localStorage.getItem('lang') || 'en';
   }
 
   initForm(): void {
+    this.examForm = this.fb.group({
+      trainingId: ['', Validators.required],
+      examTitleEn: ['', [Validators.required, Validators.minLength(5)]],
+      examTitleNl: ['', [Validators.required, Validators.minLength(5)]],
+      examTitleFr: ['', [Validators.required, Validators.minLength(5)]],
+      examTitleDe: ['', [Validators.required, Validators.minLength(5)]],
+      examDescriptionEn: ['', [Validators.required, Validators.minLength(10)]],
+      examDescriptionNl: ['', [Validators.required, Validators.minLength(10)]],
+      examDescriptionFr: ['', [Validators.required, Validators.minLength(10)]],
+      examDescriptionDe: ['', [Validators.required, Validators.minLength(10)]],
+      totalQuestions: ['', Validators.required],
+      price: ['', Validators.required],
+      examAttempts: ['', [Validators.required, Validators.min(1)]],
+      duration: ['', [Validators.required, Validators.min(1)]],
+      questions: this.fb.array([]), // Initialize empty FormArray
+    });
   }
 
   get questions(): FormArray {
@@ -50,26 +86,35 @@ export class AddExamComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadTrainings();
+    this.addQuestion();
     this.lang = localStorage.getItem('lang');
+    console.log(this.questions.controls);
   }
 
   addQuestion(): void {
-
-    const answerGroup = () => this.fb.group({
-      text: ['', Validators.required]
-    });
+    const answerGroup = () =>
+      this.fb.group({
+        textEn: ['', [Validators.required, Validators.minLength(1)]],
+        textNl: ['', [Validators.required, Validators.minLength(1)]],
+        textFr: ['', [Validators.required, Validators.minLength(1)]],
+        textDe: ['', [Validators.required, Validators.minLength(1)]],
+      });
 
     const questionGroup = this.fb.group({
-      text: ['', Validators.required],
+      textEn: ['', [Validators.required, Validators.minLength(5)]],
+      textNl: ['', [Validators.required, Validators.minLength(5)]],
+      textFr: ['', [Validators.required, Validators.minLength(5)]],
+      textDe: ['', [Validators.required, Validators.minLength(5)]],
       photos: [[]],
       answers: this.fb.array([
         answerGroup(),
         answerGroup(),
         answerGroup(),
-        answerGroup()
+        answerGroup(),
       ]),
-      correctAnswer: ['', Validators.required]
+      correctAnswer: ['', Validators.required],
     });
+    // test
     this.questions.push(questionGroup);
   }
 
@@ -77,14 +122,9 @@ export class AddExamComponent implements OnInit {
     this.questions.removeAt(index);
   }
 
-  getQuestions(): FormArray {
-    return this.examForm.get('questions') as FormArray;
-  }
-
   getAnswers(questionIndex: number): FormArray {
     return this.questions.at(questionIndex).get('answers') as FormArray;
   }
-
 
   loadTrainings(): void {
     this.isLoading = true;
@@ -96,14 +136,16 @@ export class AddExamComponent implements OnInit {
       },
       error: (error) => {
         this.isLoading = false;
-      }
+      },
     });
   }
 
   checkExistingExams(): void {
-    const checks = this.trainingsData.map(training => {
-      return this.examService.getExamByTrainingId(training.id).toPromise()
-        .then(exam => {
+    const checks = this.trainingsData.map((training) => {
+      return this.examService
+        .getExamByTrainingId(training.id)
+        .toPromise()
+        .then((exam) => {
           if (exam) {
             this.trainingsWithExams.push(training.id);
           }
@@ -122,50 +164,60 @@ export class AddExamComponent implements OnInit {
   submitExam(): void {
     if (this.examForm.valid) {
       const examData = {
-        examTitle: this.examForm.value.examTitle,
-        examDescription: this.examForm.value.examDescription,
+        examTitleEn: this.examForm.value.examTitleEn,
+        examTitleNl: this.examForm.value.examTitleNl,
+        examTitleFr: this.examForm.value.examTitleFr,
+        examTitleDe: this.examForm.value.examTitleDe,
+        examDescriptionEn: this.examForm.value.examDescriptionEn,
+        examDescriptionNl: this.examForm.value.examDescriptionNl,
+        examDescriptionFr: this.examForm.value.examDescriptionFr,
+        examDescriptionDe: this.examForm.value.examDescriptionDe,
         totalQuestions: Number(this.examForm.value.totalQuestions),
         trainingId: Number(this.examForm.value.trainingId),
-        questions: this.questions.controls.map(q => ({
-          text: q.value.text,
+        questions: this.questions.controls.map((q: any) => ({
+          textEn: q.value.textEn,
+          textNl: q.value.textNl,
+          textFr: q.value.textFr,
+          textDe: q.value.textDe,
           photos: (q.value.photos || []).map((photo: any) => ({
-            imageData: photo.imageData
+            imageData: photo.imageData,
           })),
           answers: q.value.answers.map((a: any) => ({
-            text: a.text
+            textEn: a.textEn,
+            textNl: a.textNl,
+            textFr: a.textFr,
+            textDe: a.textDe,
           })),
-          correctAnswer: Number(q.value.correctAnswer)
+          correctAnswer: Number(q.value.correctAnswer),
         })),
         price: Number(this.examForm.value.price),
         examAttempts: Number(this.examForm.value.examAttempts),
-        duration: Number(this.examForm.value.duration)
+        duration: Number(this.examForm.value.duration),
       };
 
       this.examService.createExam(examData).subscribe({
         next: (response) => {
           this.router.navigate(['/training-employee']);
         },
-        error: (error) => {
-        }
+        error: (error) => {},
       });
     }
   }
 
   getTrainingName(training: Training) {
-    if (this.lang == "en") {
-      return training?.nameEn
+    if (this.lang == 'en') {
+      return training?.nameEn;
     }
-    if (this.lang == "nl") {
-      return training?.nameNl
+    if (this.lang == 'nl') {
+      return training?.nameNl;
     }
-    if (this.lang == "fr") {
-      return training?.nameFr
+    if (this.lang == 'fr') {
+      return training?.nameFr;
     }
-    if (this.lang == "de") {
-      return training?.nameDe
-    }
-    else {
-      return "Unknown language"
+    if (this.lang == 'de') {
+      return training?.nameDe;
+    } else {
+      return 'Unknown language';
     }
   }
 }
