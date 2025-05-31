@@ -3,12 +3,15 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, of, tap, throwError } from 'rxjs';
 import { Exam } from '../../models/exam.model';
 import { Photo } from '../../models/photo.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ExamService {
-  private baseUrl = 'http://localhost:8080/api/exams';
+  private readonly baseUrl = `${environment.apiUrl}/exams`;
+  private readonly photoUrl = `${environment.apiUrl}/photos`;
+
 
   constructor(private client: HttpClient) { }
 
@@ -83,11 +86,11 @@ export class ExamService {
   }
 
   deletePhoto(photoId: number) {
-    return this.client.delete(`http://localhost:8080/api/photos/${photoId}`);
+    return this.client.delete(`${this.photoUrl}/${photoId}`);
   }
 
   addPhotos(examId: number, photos?: Photo[]) {
-    return this.client.post(`http://localhost:8080/api/photos/${examId}`, photos)
+    return this.client.post(`${this.photoUrl}/${examId}`, photos);
   }
 
 }

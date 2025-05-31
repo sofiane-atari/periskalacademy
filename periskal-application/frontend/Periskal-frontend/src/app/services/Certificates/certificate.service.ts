@@ -3,10 +3,11 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Certificate } from '../../models/Certificate.model';
 import { JwtDecoderService } from '../JwtDecode/jwt-decoder.service';
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class CertificateService {
-  private baseUrl = 'http://localhost:8080/api';
+  private baseUrl = environment.apiUrl;
   private certificatesUrl = `${this.baseUrl}/certificate`;
 
   constructor(

@@ -6,12 +6,13 @@ import { JwtDecoderService } from '../JwtDecode/jwt-decoder.service';
 import { ReloginModalComponent } from '../../components/Modals/relogin-modal/relogin-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { LoginExpiryComponent } from '../../components/Modals/login-expiry/login-expiry.component';
+import { environment } from '../../../environments/environment';
 
 
 @Injectable({ providedIn: 'root' })
 
 export class AuthenticationService {
-  private baseUrl = 'http://localhost:8080/api'; // change to proper api path later, really have to start using environment variables for these urls
+  private baseUrl = `${environment.apiUrl}/api`; // Base URL for the API, ensure this matches your environment configuration
   private authUrl  = `${this.baseUrl}/auth/authenticate`; // Main authentication endpoint
   private dongleTokenUrl = `${this.baseUrl}/auth/decode-token`; // Dongle authentication endpoint
   private readonly TOKEN_KEY = 'jwt_token';
@@ -69,7 +70,7 @@ export class AuthenticationService {
       return of(false);
     }
 
-    // Make a simple request to any protected endpoint to verify the token is valid on the server, genius way to validate token imo haha finally got this.
+    // Make a simple request to any protected endpoint to verify the token is valid on the server
     return this.http.get<any>(`${this.baseUrl}/trainings`).pipe(
       map(() => true),
       catchError(error => {
