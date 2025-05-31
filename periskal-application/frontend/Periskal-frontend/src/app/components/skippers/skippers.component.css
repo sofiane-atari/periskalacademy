@@ -744,3 +744,23 @@ h1 {
   list-style-type: disc;
   margin-left: 20px;
 }
+.active-skippers-list {
+  max-height: 200px; /* Matches typical height for selected-skippers */
+  overflow-y: auto; /* Enables vertical scrolling */
+  border: 1px solid #dee2e6; /* Consistent border */
+  padding: 10px; /* Inner padding */
+  border-radius: 4px; /* Rounded corners */
+  background-color: #f9fafb; /* Light background for contrast */
+  list-style: none; /* Remove default bullets */
+  margin-top: 10px; /* Space from warning message */
+}
+
+.active-skippers-list li {
+  padding: 5px 0; /* Spacing between list items */
+  color: #374151; /* Text color consistent with app */
+  font-size: 0.95rem; /* Slightly smaller font for readability */
+}
+
+.active-skippers-list li:not(:last-child) {
+  border-bottom: 1px dashed #e5e7eb; /* Separator between items */
+}

@@ -40,33 +40,32 @@
               </div>
 
               <div class="answers-section mt-4">
-                  @for (answer of currentQuestion.answers; track $index) {
-                    <div class="form-check mb-3">
-                      <input 
-                        class="form-check-input custom-radio" 
-                        type="radio" 
-                        [attr.name]="'answer' + currentQuestionIndex"
-                        [attr.id]="'answer' + currentQuestionIndex + '-' + $index"
-                        [value]="$index"
-                        [checked]="selectedAnswers[currentQuestionIndex] === $index"
-                        (change)="selectAnswer(currentQuestionIndex, $index)"
-                      >
-                      <label 
-                        class="form-check-label" 
-                        [attr.for]="'answer' + currentQuestionIndex + '-' + $index"
-                        (change)="selectAnswer(currentQuestionIndex, $index)">
-                        {{ answer.text }}
-                      </label>
-                    </div>
-                  }
-                  @if (selectedAnswers[currentQuestionIndex] !== undefined) {
-                    <div class="clear-selection mt-3">
-                      <button class="btn btn-sm btn-outline-danger" (click)="clearSelection()">
-                        <i class="bi bi-x-circle"></i> {{'ERASE_SELECTION' | translate}}
-                      </button>
-                    </div>
-                  }
-                </div>
+                @for (answer of currentQuestion.answers; track $index) {
+                  <div class="form-check mb-3">
+                    <input 
+                      class="form-check-input custom-radio" 
+                      type="radio" 
+                      [attr.name]="'answer' + currentQuestionIndex"
+                      [attr.id]="'answer' + currentQuestionIndex + '-' + $index"
+                      [value]="$index"
+                      [checked]="selectedAnswers[currentQuestionIndex] === $index"
+                      (change)="selectAnswer(currentQuestionIndex, $index)"
+                    >
+                    <label 
+                      class="form-check-label" 
+                      [attr.for]="'answer' + currentQuestionIndex + '-' + $index">
+                      {{ answer.text }}
+                    </label>
+                  </div>
+                }
+                @if (isQuestionAnswered(currentQuestionIndex)) {
+                  <div class="clear-selection mt-3">
+                    <button class="btn btn-sm btn-outline-danger" (click)="clearSelection()">
+                      <i class="bi bi-x-circle"></i> {{'ERASE_SELECTION' | translate}}
+                    </button>
+                  </div>
+                }
+              </div>
 
               <div class="d-flex justify-content-between align-items-center mt-4 pt-4 border-top">
                 <button
@@ -101,9 +100,9 @@
             <div class="d-flex flex-wrap justify-content-center mb-4">
               @for (question of exam.questions; track $index) {
                 <div class="question-number" 
-                    [class.active]="$index === currentQuestionIndex"
-                    [class.answered]="selectedAnswers[$index] !== undefined"
-                    (click)="goToQuestion($index)">
+                     [class.active]="$index === currentQuestionIndex"
+                     [class.answered]="isQuestionAnswered($index)"
+                     (click)="goToQuestion($index)">
                   {{ $index + 1 }}
                 </div>
               }

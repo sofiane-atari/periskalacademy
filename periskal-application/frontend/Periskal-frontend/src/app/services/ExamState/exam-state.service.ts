@@ -144,8 +144,7 @@ export class ExamStateService {
         answers: q.answers ? q.answers.map(a => ({ id: a.id, text: a.text })) : undefined,
         correctAnswer: Number(q.correctAnswer)
       })) || null,
-      selectedAnswers: this._examState.value.selectedAnswers
-    };
+      selectedAnswers: this._examState.value.selectedAnswers.map(answer => answer === undefined ? null : answer)    };
     try {
       sessionStorage.setItem('activeExamTimerState', JSON.stringify(state));
       console.log('Saved state to sessionStorage:', state);
@@ -171,9 +170,10 @@ export class ExamStateService {
             this.currentExamId = state.currentExamId;
             this.startTime = state.startTime;
             this.totalExamDurationSeconds = state.totalExamDurationSeconds;
+            const selectedAnswers = state.selectedAnswers?.map((answer: number | null) => answer === null ? undefined : answer) || [];
             this._examState.next({
               questions: state.questions || null,
-              selectedAnswers: state.selectedAnswers || []
+              selectedAnswers
             });
             this._examFinished.next(false);
             this.startTimer();

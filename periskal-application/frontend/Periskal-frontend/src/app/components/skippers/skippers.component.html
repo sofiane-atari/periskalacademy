@@ -300,15 +300,15 @@
                     </option>
                     }
                 </select>
-                    @if (skippersWithActiveTraining.length > 0) {
+                        @if (skippersWithActiveTraining.length > 0) {
                         <p class="warning-message">
                             {{'SKIPPERS_ALREADY_ASSIGNED' | translate}}
-                            <ul>
-                                @for (skipperId of skippersWithActiveTraining; track skipperId) {
+                            <ul class="active-skippers-list">
+                            @for (skipperId of skippersWithActiveTraining; track skipperId) {
                                 <li>{{ getSkipperName(skipperId) }}</li>
-                                }
+                            }
                             </ul>
-                    }
+                        }
                     @if (!availableTrainings || availableTrainings.length === 0) {
                         <p class="no-data">{{'NO_TRAININGS_ABLE_TO_ASSIGN' | translate}}</p>
                     }

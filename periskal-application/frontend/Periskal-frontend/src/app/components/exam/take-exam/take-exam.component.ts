@@ -46,8 +46,7 @@ export class TakeExamComponent implements OnInit, OnDestroy {
   unloadHandler(event: BeforeUnloadEvent): void {
     if (!this.examStateService.isExamFinished()) {
       event.preventDefault();
-      // Modern browsers ignore custom messages, but setting returnValue triggers the prompt
-      event.returnValue = ''; // Empty string is sufficient to trigger the default prompt
+      event.returnValue = '';
     }
   }
 
@@ -115,7 +114,11 @@ export class TakeExamComponent implements OnInit, OnDestroy {
         passingScore: 100,
         trainingId: 0
       } as Exam;
-      this.selectedAnswers = savedState.selectedAnswers || [];
+      // Ensure selectedAnswers matches questions length
+      this.selectedAnswers = savedState.selectedAnswers?.slice(0, savedState.questions.length) || [];
+      while (this.selectedAnswers.length < savedState.questions.length) {
+        this.selectedAnswers.push(undefined);
+      }
       this.loading = false;
     } else {
       this.examService.getExamById(examId).subscribe({
@@ -174,6 +177,10 @@ export class TakeExamComponent implements OnInit, OnDestroy {
   selectAnswer(questionIndex: number, answerIndex: number): void {
     this.selectedAnswers[questionIndex] = answerIndex;
     this.examStateService.updateSelectedAnswers(this.selectedAnswers);
+  }
+
+  isQuestionAnswered(index: number): boolean {
+    return this.selectedAnswers[index] !== undefined && this.selectedAnswers[index] !== null;
   }
 
   submitExam(): void {
