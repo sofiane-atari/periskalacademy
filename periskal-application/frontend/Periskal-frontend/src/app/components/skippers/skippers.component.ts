@@ -409,12 +409,49 @@ export class SkippersComponent implements OnInit {
   }
 
   loadAvailableTrainings() {
-    this.trainingService.getTrainingData().subscribe({
-      next: (trainings) => {
-        // Load all trainings without filtering based on remaining attempts
+    this.trainingService.getTrainingData().pipe(
+      switchMap((trainings: Training[]) => {
+        if (!trainings || trainings.length === 0) {
+          return of([]);
+        }
+
+        // Create an array of observables to check for exams for each training
+        const examChecks = trainings.map(training =>
+          this.examService.getExamByTrainingId(training.id).pipe(
+            map(exam => ({
+              training,
+              hasExam: !!exam && !!exam.id // Check if exam exists and has an ID
+            })),
+            catchError(err => {
+              // If there's an error fetching the exam, assume no exam
+              return of({ training, hasExam: false });
+            })
+          )
+        );
+
+        // Use forkJoin to wait for all exam checks to complete
+        return forkJoin(examChecks).pipe(
+          map(results => {
+            // Filter trainings that have an associated exam
+            return results
+              .filter(result => result.hasExam)
+              .map(result => result.training);
+          })
+        );
+      }),
+      catchError(err => {
+        this.error = 'Failed to load available trainings.';
+        this.snackBar.open('Failed to load trainings.', 'Close', {
+          duration: 5000,
+          panelClass: ['snackbar-error']
+        });
+        return of([]);
+      })
+    ).subscribe({
+      next: (trainings: Training[]) => {
         this.availableTrainings = trainings;
         if (this.availableTrainings.length === 0) {
-          this.snackBar.open('No trainings available to assign.', 'Close', {
+          this.snackBar.open('No trainings with associated exams available to assign.', 'Close', {
             duration: 5000,
             panelClass: ['snackbar-info']
           });
@@ -451,12 +488,6 @@ export class SkippersComponent implements OnInit {
                 const attemptObservables = this.selectedSkipperIds.map(userId =>
                     this.userAttemptService.getRemainingAttempts(userId, examId).pipe(
                         map(response => {
-                            if (response.remainingAttempts === 0) {
-                                this.snackBar.open(`No exam attempts available for user ${userId}`, 'Close', {
-                                    duration: 5000,
-                                    panelClass: ['snackbar-warning']
-                                });
-                            }
                             return { userId, hasAttempts: response.remainingAttempts > 0 };
                         }),
                         catchError(err => {
