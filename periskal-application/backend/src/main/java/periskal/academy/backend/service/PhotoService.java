@@ -7,6 +7,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import periskal.academy.backend.jpa.Chapter;
 import periskal.academy.backend.jpa.ChapterRepository;

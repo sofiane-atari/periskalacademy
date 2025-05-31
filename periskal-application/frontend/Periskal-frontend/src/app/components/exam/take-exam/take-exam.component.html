@@ -10,8 +10,8 @@
   } @else if (exam) {
   <div class="exam-container">
     <div class="exam-header p-4 mb-4">
-      <h1 class="h2 mb-2">{{ exam.examTitleEn }}</h1>
-      <p class="text-muted mb-0">{{ exam.examDescriptionEn }}</p>
+      <h1 class="h2 mb-2">{{ getExamTitle() }}</h1>
+      <p class="text-muted mb-0">{{ getExamDescription() }}</p>
     </div>
 
     <div class="timer">
@@ -32,7 +32,7 @@
 
           @if (currentQuestion) {
           <div class="question-content">
-            <p class="lead mb-4">{{ currentQuestion.textEn }}</p>
+            <p class="lead mb-4">{{ getQuestionText(currentQuestion) }}</p>
 
             @if (currentQuestion.photos?.length) {
             <div class="question-images">
@@ -64,7 +64,7 @@
                 [attr.for]="'answer' + currentQuestionIndex + '-' + $index"
                 (change)="selectAnswer(currentQuestionIndex, $index)"
               >
-                {{ answer.textEn }}
+                {{ getAnswerText(answer) }}
               </label>
             </div>
             } @if (selectedAnswers[currentQuestionIndex] !== undefined) {
@@ -126,7 +126,7 @@
           </div>
           <div class="progress-section">
             <h4 class="h6 mb-2 text-center">
-              {{ "EXAM_PROGRESS" | translate }}
+              {{ "PROGRESS" | translate }}
             </h4>
             <div class="progress">
               <div
@@ -144,8 +144,8 @@
               ></div>
             </div>
             <p class="text-muted text-center mt-2">
-              {{ currentQuestionIndex + 1 }} of
-              {{ exam.questions.length }} answered
+              {{ currentQuestionIndex + 1 }} {{ "OF" | translate }}
+              {{ exam.questions.length }} {{ "QUESTIONS_ANSWERED" | translate }}
             </p>
           </div>
         </div>

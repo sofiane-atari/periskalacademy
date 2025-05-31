@@ -21,14 +21,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatOptionModule } from '@angular/material/core';
-//import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @Component({
   selector: 'app-add-exam',
   standalone: true,
   imports: [
     FormsModule,
-    //BrowserAnimationsModule,
     ReactiveFormsModule,
     PhotoUploadComponent,
     TranslatePipe,
@@ -55,7 +53,8 @@ export class AddExamComponent implements OnInit {
     private fb: FormBuilder,
     private examService: ExamService,
     private router: Router,
-    private trainingService: TrainingService
+    private trainingService: TrainingService,
+    public translate: TranslateService
   ) {
     this.initForm();
     this.lang = localStorage.getItem('lang') || 'en';
@@ -76,7 +75,7 @@ export class AddExamComponent implements OnInit {
       price: ['', Validators.required],
       examAttempts: ['', [Validators.required, Validators.min(1)]],
       duration: ['', [Validators.required, Validators.min(1)]],
-      questions: this.fb.array([]), // Initialize empty FormArray
+      questions: this.fb.array([]), 
     });
   }
 
@@ -114,7 +113,6 @@ export class AddExamComponent implements OnInit {
       ]),
       correctAnswer: ['', Validators.required],
     });
-    // test
     this.questions.push(questionGroup);
   }
 
@@ -219,5 +217,20 @@ export class AddExamComponent implements OnInit {
     } else {
       return 'Unknown language';
     }
+  }
+
+  private getLangKey(): string {
+    switch (this.lang) {
+      case 'en': return 'En';
+      case 'nl': return 'Nl';
+      case 'fr': return 'Fr';
+      case 'de': return 'De';
+      default: return 'En';
+    }
+  }
+  getQuestionDisplayText(questionIndex: number): string {
+    const langKey = this.getLangKey();
+    return this.questions.at(questionIndex)?.get(`text${langKey}`)?.value 
+      || this.translate.instant('NO_QUESTION_ENTERED');
   }
 }

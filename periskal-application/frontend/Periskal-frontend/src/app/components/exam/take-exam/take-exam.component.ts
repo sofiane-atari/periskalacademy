@@ -28,6 +28,7 @@ export class TakeExamComponent implements OnInit, OnDestroy {
   error: string | null = null;
   isAssigned: boolean = false;
   selectedAnswers: (number | undefined)[] = [];
+  public lang: string = localStorage.getItem('lang') || 'en';
 
   remainingTime: number = 0;
   private submissionInitiatedByTimer: boolean = false;
@@ -253,5 +254,49 @@ export class TakeExamComponent implements OnInit, OnDestroy {
     return `${minutes.toString().padStart(2, '0')}:${secs
       .toString()
       .padStart(2, '0')}`;
+  }
+
+  getExamTitle(): string {
+  if (!this.exam) return 'Unknown exam';
+  
+  switch(this.lang) {
+    case 'en': return this.exam.examTitleEn || '';
+    case 'nl': return this.exam.examTitleNl || '';
+    case 'fr': return this.exam.examTitleFr || '';
+    case 'de': return this.exam.examTitleDe || '';
+    default: return this.exam.examTitleEn || 'Unknown exam';
+  }
+}
+
+  getExamDescription(): string {
+    if (!this.exam) return '';
+    
+    switch(this.lang) {
+      case 'en': return this.exam.examDescriptionEn || '';
+      case 'nl': return this.exam.examDescriptionNl || '';
+      case 'fr': return this.exam.examDescriptionFr || '';
+      case 'de': return this.exam.examDescriptionDe || '';
+      default: return this.exam.examDescriptionEn || '';
+    }
+  }
+
+  getQuestionText(question: Question): string {
+    switch(this.lang) {
+      case 'en': return question.textEn || '';
+      case 'nl': return question.textNl || '';
+      case 'fr': return question.textFr || '';
+      case 'de': return question.textDe || '';
+      default: return question.textEn || '';
+    }
+  }
+
+  getAnswerText(answer: any): string {
+    switch(this.lang) {
+      case 'en': return answer.textEn || '';
+      case 'nl': return answer.textNl || '';
+      case 'fr': return answer.textFr || '';
+      case 'de': return answer.textDe || '';
+      default: return answer.textEn || '';
+    }
   }
 }

@@ -45,7 +45,7 @@ public class PhotoController {
 
         photoService.addPhotos(chapterId, photos);
         Map<String, String> response = new HashMap<>();
-        response.put("message", "Photo(s) addedsuccessfully");
+        response.put("message", "Photo(s) added successfully");
         return ResponseEntity.ok(response);
     }
 }
