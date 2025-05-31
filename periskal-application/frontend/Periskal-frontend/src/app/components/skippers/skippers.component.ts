@@ -21,6 +21,7 @@ import { CompletedExam } from '../../models/completed-exam.model';
 import { CertificateService } from '../../services/Certificates/certificate.service';
 import { Certificate } from '../../models/Certificate.model';
 import { UserAttemptService } from '../../services/UserExamAttempts/user-attempt.service';
+import { RoleAuthorizationService } from '../../services/RoleAuthorization/role-authorization.service';
 
 
 @Component({
@@ -76,7 +77,8 @@ export class SkippersComponent implements OnInit {
     private snackBar: MatSnackBar,
     private completedExamService: CompletedExamService,
     private certificateService: CertificateService,
-    private userAttemptService: UserAttemptService
+    private userAttemptService: UserAttemptService,
+    public roleAuth: RoleAuthorizationService
   ) { }
 
   ngOnInit() {
@@ -265,11 +267,19 @@ export class SkippersComponent implements OnInit {
 
     if (fleetmanagerId === null) {
       this.error = 'Failed to retrieve fleetmanager ID.';
+      this.snackBar.open('Failed to retrieve fleetmanager ID.', 'Close', {
+        duration: 5000,
+        panelClass: ['snackbar-error']
+      });
       return;
     }
 
     if (this.selectedTrainingId === null) {
       this.error = 'Please select a training to assign.';
+      this.snackBar.open('Please select a training to assign.', 'Close', {
+        duration: 5000,
+        panelClass: ['snackbar-error']
+      });
       return;
     }
 
@@ -294,10 +304,31 @@ export class SkippersComponent implements OnInit {
 
     // If no skippers are assignable, stop the process
     if (assignableSkipperIds.length === 0) {
+      this.error = 'No assignable skippers selected.';
+      this.snackBar.open('No assignable skippers selected.', 'Close', {
+        duration: 5000,
+        panelClass: ['snackbar-error']
+      });
       this.isProcessingAction = false;
       return;
     }
 
+    // Check if user is admin or support
+    if (this.roleAuth.isAdmin() || this.roleAuth.isSupport()) {
+        if (this.selectedTrainingId === null) {
+            this.snackBar.open('Please select a training to assign.', 'Close', {
+                duration: 5000,
+                panelClass: ['snackbar-error']
+            });
+            this.isProcessingAction = false;
+            return;
+        }
+        this.saveAssignment(assignableSkipperIds);
+        this.isProcessingAction = false;
+        return;
+    }
+
+    // For non-admin/support users, proceed with billing
     this.examService.getExamByTrainingId(this.selectedTrainingId).subscribe({
       next: (exam) => {
         if (exam && exam.id) {
@@ -311,17 +342,18 @@ export class SkippersComponent implements OnInit {
           this.showBillingModal = true;
           this.isProcessingAction = false;
         } else {
-          this.saveAssignment(assignableSkipperIds); // Directly save assignment without billing modal
+          // If no exam is associated, proceed without billing
+          this.saveAssignment(assignableSkipperIds);
           this.isProcessingAction = false;
         }
       },
       error: (error) => {
         this.error = 'Failed to fetch exam information';
-        this.isProcessingAction = false;
         this.snackBar.open('Failed to fetch exam information.', 'Close', {
           duration: 5000,
           panelClass: ['snackbar-error']
         });
+        this.isProcessingAction = false;
       }
     });
   }
@@ -331,39 +363,52 @@ export class SkippersComponent implements OnInit {
     this.isProcessingAction = true;
     const fleetmanagerId = this.jwtDecoder.getId();
 
-    if (!fleetmanagerId || this.selectedTrainingId === null || assignableSkipperIds.length === 0) {
-      this.snackBar.open('Critical error: Missing data for final assignment. Please retry.', 'Close', {
-        duration: 5000,
-        panelClass: ['snackbar-error']
-      });
-      this.isProcessingAction = false;
-      return;
+    if (!fleetmanagerId) {
+        console.error('Fleetmanager ID is null. User role:', {
+            isAdmin: this.roleAuth.isAdmin(),
+            isSupport: this.roleAuth.isSupport()
+        });
+        this.snackBar.open('Error: Unable to retrieve user ID. Please contact support.', 'Close', {
+            duration: 5000,
+            panelClass: ['snackbar-error']
+        });
+        this.isProcessingAction = false;
+        return;
+    }
+
+    if (this.selectedTrainingId === null || assignableSkipperIds.length === 0) {
+        this.snackBar.open('Critical error: Missing training or skipper data. Please retry.', 'Close', {
+            duration: 5000,
+            panelClass: ['snackbar-error']
+        });
+        this.isProcessingAction = false;
+        return;
     }
 
     this.assignmentService.assignTrainingToSkippers(
-      this.selectedTrainingId,
-      assignableSkipperIds,
-      fleetmanagerId
+        this.selectedTrainingId,
+        assignableSkipperIds,
+        fleetmanagerId
     ).subscribe({
-      next: (response) => {
-        this.assignmentDialogOpen = false;
-        this.clearSkipperSelections();
-        this.snackBar.open('Training successfully assigned!', 'Close', {
-          duration: 3000,
-          panelClass: ['snackbar-success']
-        });
-        this.fetchSkippersData();
-        this.isProcessingAction = false;
-        this.selectedSkipperIndex = null;
-      },
-      error: (error) => {
-        this.error = 'Failed to assign training. Please try again later.';
-        this.snackBar.open('CRITICAL: Billing was successful, but training assignment failed. Please contact support.', 'Close', {
-          duration: 7000,
-          panelClass: ['snackbar-error']
-        });
-        this.isProcessingAction = false;
-      }
+        next: (response) => {
+            this.assignmentDialogOpen = false;
+            this.clearSkipperSelections();
+            this.snackBar.open('Training successfully assigned!', 'Close', {
+                duration: 3000,
+                panelClass: ['snackbar-success']
+            });
+            this.fetchSkippersData();
+            this.isProcessingAction = false;
+            this.selectedSkipperIndex = null;
+        },
+        error: (error) => {
+            this.error = 'Failed to assign training. Please try again later.';
+            this.snackBar.open('CRITICAL: Training assignment failed. Please contact support.', 'Close', {
+                duration: 7000,
+                panelClass: ['snackbar-error']
+            });
+            this.isProcessingAction = false;
+        }
     });
   }
 
@@ -388,36 +433,69 @@ export class SkippersComponent implements OnInit {
       }
     });
   }
-  checkSkippersWithActiveTraining(trainingId: number | null) {
+
+ checkSkippersWithActiveTraining(trainingId: number | null) {
     if (!trainingId || this.selectedSkipperIds.length === 0) {
-      this.skippersWithActiveTraining = [];
-      return;
+        console.log('No training ID or skippers selected:', { trainingId, selectedSkipperIds: this.selectedSkipperIds });
+        this.skippersWithActiveTraining = [];
+        return;
     }
 
-    this.examService.getExamByTrainingId(trainingId).pipe(
-      switchMap(exam => {
-        if (!exam || !exam.id) {
-          this.skippersWithActiveTraining = [];
-          return of([]);
-        }
-        const examId = exam.id.toString();
-        const attemptObservables = this.selectedSkipperIds.map(userId =>
-          this.userAttemptService.getRemainingAttempts(userId, examId).pipe(
-            map(response => ({ userId, hasAttempts: response.remainingAttempts > 0 })),
-            catchError(() => of({ userId, hasAttempts: false }))
-          )
-        );
-        return forkJoin(attemptObservables);
-      }),
-      catchError(() => {
-        this.skippersWithActiveTraining = [];
-        return of([]);
-      })
-    ).subscribe(results => {
-      this.skippersWithActiveTraining = results
-        .filter(result => result.hasAttempts)
-        .map(result => result.userId);
-    });
+    setTimeout(() => { // Add 500ms delay to ensure backend transaction completes
+        this.examService.getExamByTrainingId(trainingId).pipe(
+            switchMap(exam => {
+                console.log('Exam for training:', { trainingId, exam });
+                if (!exam || !exam.id) {
+                    console.log('No exam found for training ID:', trainingId);
+                    this.snackBar.open('No exam associated with training ID: ' + trainingId, 'Close', {
+                        duration: 5000,
+                        panelClass: ['snackbar-warning']
+                    });
+                    this.skippersWithActiveTraining = [];
+                    return of([]);
+                }
+                const examId = exam.id.toString();
+                const attemptObservables = this.selectedSkipperIds.map(userId =>
+                    this.userAttemptService.getRemainingAttempts(userId, examId).pipe(
+                        map(response => {
+                            console.log('Remaining attempts for user:', { userId, examId, response });
+                            if (response.remainingAttempts === 0) {
+                                console.warn('No remaining attempts for user:', { userId, examId });
+                                this.snackBar.open(`No exam attempts available for user ${userId}`, 'Close', {
+                                    duration: 5000,
+                                    panelClass: ['snackbar-warning']
+                                });
+                            }
+                            return { userId, hasAttempts: response.remainingAttempts > 0 };
+                        }),
+                        catchError(err => {
+                            console.error('Error fetching attempts for user:', { userId, examId, err });
+                            this.snackBar.open(`Failed to check attempts for user ${userId}: ${err.message}`, 'Close', {
+                                duration: 5000,
+                                panelClass: ['snackbar-error']
+                            });
+                            return of({ userId, hasAttempts: false });
+                        })
+                    )
+                );
+                return forkJoin(attemptObservables);
+            }),
+            catchError(err => {
+                console.error('Error fetching exam for training:', { trainingId, err });
+                this.snackBar.open('Failed to fetch exam for training ID: ' + trainingId, 'Close', {
+                    duration: 5000,
+                    panelClass: ['snackbar-error']
+                });
+                this.skippersWithActiveTraining = [];
+                return of([]);
+            })
+        ).subscribe(results => {
+            this.skippersWithActiveTraining = results
+                .filter(result => result.hasAttempts)
+                .map(result => result.userId);
+            console.log('Skippers with active training:', this.skippersWithActiveTraining);
+        });
+    }, 500);
   }
 
 

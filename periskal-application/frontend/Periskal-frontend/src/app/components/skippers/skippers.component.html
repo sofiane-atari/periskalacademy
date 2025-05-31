@@ -319,11 +319,19 @@
             }
 
             <div class="actions modal-actions">
-                <button
-                    (click)="InitiateBillingAndAssignment()"
-                    [disabled]="!selectedTrainingId || selectedSkipperIds.length === 0 || isProcessingAction">
-                    {{ isProcessingAction ? ('Processing...' | translate) : ('PROCEED_TO_BILLING' | translate) }}
-                </button>
+                @if (roleAuth.isFleetManager()) {
+                    <button
+                        (click)="InitiateBillingAndAssignment()"
+                        [disabled]="!selectedTrainingId || selectedSkipperIds.length === 0">
+                        {{ 'PROCEED_TO_BILLING' | translate }}
+                    </button>
+                } @else {
+                    <button
+                        (click)="InitiateBillingAndAssignment()"
+                        [disabled]="!selectedTrainingId || selectedSkipperIds.length === 0">
+                        {{ 'ASSIGN' | translate }}
+                    </button>
+                }
                 <button class="cancel-btn" (click)="closeAssignmentDialog()"[disabled]="isProcessingAction">{{'CANCEL' | translate}}</button>
             </div>
         </div>
