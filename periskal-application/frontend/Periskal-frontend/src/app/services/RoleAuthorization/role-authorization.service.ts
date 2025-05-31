@@ -52,9 +52,10 @@ export class RoleAuthorizationService {
     }
     return false;
   }
+
   isAdmin(): boolean{
     const userRole = this.jwtDecoderService.getUserRole();
-    if (userRole === 'Admin') {
+    if (userRole === 'Administrator') {
       return true;
     }
     return false;

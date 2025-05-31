@@ -7,7 +7,6 @@ import { JwtDecoderService } from '../../services/JwtDecode/jwt-decoder.service'
 import { ExamService } from '../../services/Exam/exam.service';
 import { TranslatePipe } from '@ngx-translate/core';
 import { MatStepperModule } from '@angular/material/stepper';
-import { RoleAuthorizationService } from '../../services/RoleAuthorization/role-authorization.service';
 
 @Component({
   selector: 'app-order',
@@ -22,7 +21,7 @@ export class BillingComponent implements OnInit {
   examAttempts!: number;
   examPrice!: number;
 
-  constructor(private fb: FormBuilder, private billingSvc: BillingService, private snackBar: MatSnackBar, private router: Router, private route: ActivatedRoute, private jwtDecoderService: JwtDecoderService, private examService: ExamService, public roleAuth: RoleAuthorizationService) { }
+  constructor(private fb: FormBuilder, private billingSvc: BillingService, private snackBar: MatSnackBar, private router: Router, private route: ActivatedRoute, private jwtDecoderService: JwtDecoderService, private examService: ExamService) { }
 
   ngOnInit() {
     const rawExamId = this.route.snapshot.paramMap.get('examid');
