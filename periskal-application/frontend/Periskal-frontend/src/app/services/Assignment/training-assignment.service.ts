@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { TrainingAssignment } from '../../models/training-assignment.model';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TrainingAssignmentService {
 
-  private baseUrl = 'http://backend.localhost:8080/api/assignments';
+  private baseUrl = `${environment.apiUrl}/assignments`;
 
   constructor(private http: HttpClient) { }
 

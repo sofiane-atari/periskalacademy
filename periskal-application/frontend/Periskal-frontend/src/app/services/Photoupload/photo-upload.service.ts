@@ -1,12 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PhotoUploadService {
   constructor(private http: HttpClient) { }
+
+  private readonly baseUrl = `${environment.apiUrl}/trainings`;
 
   uploadChapterPhotos(
     trainingId: number,
@@ -18,10 +21,8 @@ export class PhotoUploadService {
       formData.append(`photos`, file, `chapter_${chapterIndex}_photo_${index}`);
     });
 
-    return this.http.post<PhotoUploadResponse[]>(
-      `/api/trainings/${trainingId}/chapters/${chapterIndex}/upload-photos`,
-      formData
-    );
+    const url = `${this.baseUrl}/${trainingId}/chapters/${chapterIndex}/upload-photos`;
+    return this.http.post<PhotoUploadResponse[]>(url, formData);
   }
 
   createFilePreview(file: File): Observable<string> {

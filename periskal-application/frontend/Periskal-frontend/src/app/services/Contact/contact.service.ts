@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { JwtDecoderService } from '../JwtDecode/jwt-decoder.service';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ContactService {
 
-  private baseUrl = 'http://localhost:8080/api';
+  private baseUrl = environment.apiUrl;
   private apiUrl = `${this.baseUrl}/contact`;
 
   constructor(

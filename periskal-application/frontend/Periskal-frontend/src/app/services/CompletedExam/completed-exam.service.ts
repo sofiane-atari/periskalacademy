@@ -2,12 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http'; 
 import { Observable } from 'rxjs';
 import { CompletedExam } from '../../models/completed-exam.model'; 
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CompletedExamService {
-  private readonly baseUrl = 'http://localhost:8080/api/completed-exams';
+
+  
+  private readonly baseUrl = `${environment.apiUrl}/completed-exams`;
 
   constructor(
     private readonly http: HttpClient
