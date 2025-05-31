@@ -299,5 +299,7 @@
   "createSuccess": "FAQ erfolgreich hinzugefügt!",
   "createError": "Beim Hinzufügen der FAQ ist ein Fehler aufgetreten.",
   "SKIPPERS_ALREADY_ASSIGNED": "Die folgenden Schiffer haben dieses Training bereits zugewiesen bekommen und werden übersprungen",
-  "ASSIGN": "Zuweisen"
+  "ASSIGN": "Zuweisen",
+  "CERTIFICATE_VALIDITY": "Gültigkeit des Zertifikats (in Jahren)",
+  "PASSING_SCORE": "Bestehenspunktzahl (in Prozent)"
 }

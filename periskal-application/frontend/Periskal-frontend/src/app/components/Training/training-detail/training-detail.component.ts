@@ -12,6 +12,7 @@ import { UserAttemptService } from '../../../services/UserExamAttempts/user-atte
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { RoleAuthorizationService } from '../../../services/RoleAuthorization/role-authorization.service';
 import { BillingService } from '../../../services/Billing/billing.service';
+import { ExamStateService } from '../../../services/ExamState/exam-state.service';
 
 
 @Component({
@@ -65,7 +66,7 @@ export class TrainingDetailComponent {
     this.router.navigate(['/dashboard'])
   }
 
-   startExam() {
+  startExam() {
     // Ensure training, exam, and id are defined
     if (!this.training || !this.training.exam || !this.training.exam.id) {
       return;

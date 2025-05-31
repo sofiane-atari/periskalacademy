@@ -28,6 +28,7 @@ export class TakeExamComponent implements OnInit, OnDestroy {
   error: string | null = null;
   selectedAnswers: (number | undefined)[] = [];
   remainingTime: number = 0;
+  savedExam!: Exam;
   private submissionInitiatedByTimer: boolean = false;
   private isSubmitting: boolean = false;
   private timerSubscriptions: Subscription = new Subscription();
@@ -40,7 +41,7 @@ export class TakeExamComponent implements OnInit, OnDestroy {
     private completedExamService: CompletedExamService,
     private examStateService: ExamStateService,
     private dialog: MatDialog
-  ) {}
+  ) { }
 
   @HostListener('window:beforeunload', ['$event'])
   unloadHandler(event: BeforeUnloadEvent): void {
@@ -63,7 +64,8 @@ export class TakeExamComponent implements OnInit, OnDestroy {
             duration: this.exam?.duration || 0,
             totalQuestions: state.questions.length,
             passingScore: this.exam?.passingScore || 100,
-            trainingId: this.exam?.trainingId || 0
+            trainingId: this.exam?.trainingId || 0,
+            certificateValidity: this.exam?.certificateValidity || 1
           } as Exam;
           this.selectedAnswers = state.selectedAnswers;
           this.loading = false;
@@ -103,22 +105,32 @@ export class TakeExamComponent implements OnInit, OnDestroy {
     const savedState = this.examStateService.getCurrentExamState();
 
     if (currentExamId === examId && savedState.questions && savedState.questions.length > 0) {
-      this.exam = {
-        id: examId,
-        questions: savedState.questions,
-        examTitle: '',
-        examDescription: '',
-        duration: 0,
-        totalQuestions: savedState.questions.length,
-        passingScore: 100,
-        trainingId: 0
-      } as Exam;
-      // Ensure selectedAnswers matches questions length
-      this.selectedAnswers = savedState.selectedAnswers?.slice(0, savedState.questions.length) || [];
-      while (this.selectedAnswers.length < savedState.questions.length) {
-        this.selectedAnswers.push(undefined);
-      }
-      this.loading = false;
+      this.examService.getExamById(currentExamId).subscribe({
+        next: (savedExam) => {
+          this.savedExam = savedExam;
+          this.exam = {
+            id: examId,
+            questions: savedState.questions,
+            examTitle: this.savedExam.examTitle,
+            examDescription: this.savedExam.examDescription,
+            duration: 0,
+            totalQuestions: savedState.questions?.length,
+            passingScore: this.savedExam.duration,
+            trainingId: this.savedExam.trainingId,
+            certificateValidity: this.savedExam.certificateValidity
+          } as Exam;
+          // Ensure selectedAnswers matches questions length
+          this.selectedAnswers = savedState.selectedAnswers?.slice(0, savedState.questions?.length) || [];
+          while (this.selectedAnswers.length < savedState.questions!.length) {
+            this.selectedAnswers.push(undefined);
+          }
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error(err);
+        }
+      });
+
     } else {
       this.examService.getExamById(examId).subscribe({
         next: (exam) => {
@@ -195,12 +207,62 @@ export class TakeExamComponent implements OnInit, OnDestroy {
     return;
   }
 
-  let correctCount = 0;
-  if (this.exam.questions) {
-    this.exam.questions.forEach((question, index) => {
-      const selected = this.selectedAnswers[index];
-      if (selected !== undefined && selected + 1 === question.correctAnswer) {
-        correctCount++;
+    let correctCount = 0;
+    if (this.exam.questions) {
+      this.exam.questions.forEach((question, index) => {
+        const selected = this.selectedAnswers[index];
+        if (selected !== undefined && selected + 1 === question.correctAnswer) {
+          correctCount++;
+        }
+      });
+    }
+
+    const totalQuestions = this.exam.questions ? this.exam.questions.length : 0;
+    const scorePercentage = totalQuestions > 0 ? Math.round((correctCount / totalQuestions) * 100) : 0;
+    const userId = this.jwtDecoderService.getId();
+
+    const completedExamData: Omit<CompletedExam, 'id'> = {
+      userId: userId ?? 'unknown-user',
+      examId: this.exam.id ?? 0,
+      trainingId: this.exam.trainingId,
+      requiredScore: this.exam.passingScore || 100,
+      score: scorePercentage,
+      completedDate: new Date(),
+    };
+
+    this.examStateService.finishExam();
+    this.completedExamService.saveCompletedExam(completedExamData as CompletedExam).subscribe({
+      next: (savedExam) => {
+        this.isSubmitting = false;
+
+        if (savedExam.passed) {
+          this.dialog.open(CertificateDialogComponent, {
+            width: '600px',
+            maxHeight: 'auto',
+            panelClass: 'compact-dialog',
+            data: {
+              examName: this.exam?.examTitle || 'exam',
+              issueDate: new Date().toLocaleDateString(),
+              validity: this.exam?.certificateValidity,
+              status: 'passed'
+            }
+          }).afterClosed().subscribe(() => {
+            this.router.navigate(['/modules']);
+          });
+        } else {
+          this.dialog.open(CertificateDialogComponent, {
+            data: {
+              examName: this.exam?.examTitle,
+              status: 'failed'
+            }
+          });
+        }
+
+        this.router.navigate(savedExam.certificateId ? ['/certificates', { newCertificateId: savedExam.certificateId }] : ['/exams']);
+      },
+      error: (err) => {
+        alert('Failed to save your results. Please try again later.');
+        this.isSubmitting = false;
       }
     });
   }

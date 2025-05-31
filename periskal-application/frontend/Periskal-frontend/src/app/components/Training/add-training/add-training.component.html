@@ -108,7 +108,7 @@
           {{ 'ADD_NEW_MODULE' | translate }}
         </button>
         <div class="stepper-buttons">
-          <button mat-raised-button color="accent" class="gold-button" matStepperPrevious>{{ 'BACK' | translate }}</button>
+          <button mat-raised-button color="accent" class="gold-button" (click)="goBack()">{{ 'BACK' | translate }}</button>
           <button mat-raised-button color="accent" class="gold-button" matStepperNext>{{ 'NEXT' | translate }}</button>
         </div>
       </form>

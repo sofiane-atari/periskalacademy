@@ -4,6 +4,7 @@ import { ExamService } from '../../../services/Exam/exam.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-update-exam',
@@ -21,12 +22,14 @@ export class UpdateExamComponent implements OnInit {
     price: 0,
     examAttempts: 0,
     duration: 0,
+    certificateValidity: 0,
   };
 
   constructor(
     private examService: ExamService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -64,7 +67,14 @@ export class UpdateExamComponent implements OnInit {
   onSubmit(): void {
     this.examService.updateExam(this.examId, this.exam).subscribe({
       next: () => {
-        alert('Examen succesvol aangepast!');
+        const snackBarConfig: MatSnackBarConfig = {
+          duration: 3000,
+          verticalPosition: 'bottom',
+          horizontalPosition: 'left',
+          panelClass: ['snackbar-success'],
+          politeness: 'assertive'
+        };
+        this.snackBar.open('Exam updated successfully!', 'Close', snackBarConfig);
         this.router.navigate(['/dashboard']);
       }
     });

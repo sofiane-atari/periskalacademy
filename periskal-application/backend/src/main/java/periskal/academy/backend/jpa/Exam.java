@@ -41,6 +41,8 @@ public class Exam {
     private int examAttempts;
     private int duration;
 
+    private int certificateValidity;
+
     @OneToMany(mappedBy = "exam", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference("exam-questions")
     private List<Question> questions = new ArrayList<>();

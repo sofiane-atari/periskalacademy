@@ -11,4 +11,5 @@ export interface Exam {
   price: number;
   examAttempts: number;
   duration: number;
+  certificateValidity: number;
 }
