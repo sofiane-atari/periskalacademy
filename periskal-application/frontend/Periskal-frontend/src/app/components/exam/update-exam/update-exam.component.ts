@@ -36,6 +36,7 @@ export class UpdateExamComponent implements OnInit {
     price: 0,
     examAttempts: 0,
     duration: 0,
+    certificateValidity: 0,
   };
 
   constructor(

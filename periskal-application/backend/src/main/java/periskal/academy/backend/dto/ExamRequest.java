@@ -21,4 +21,5 @@ public class ExamRequest {
     private int price;
     private int examAttempts;
     private int duration;
+    private int certificateValidity;
 }

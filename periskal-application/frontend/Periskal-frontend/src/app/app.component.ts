@@ -31,16 +31,15 @@ export class AppComponent implements OnInit {
   showNavbar = true;
   mobileMenuOpen = false;
   userName?: string;
-  userRole = '';
+  userRole = "";
 
   lang: string = '';
 
-  constructor(
-    private router: Router,
-    private authService: AuthenticationService,
-    private translateService: TranslateService,
-    public roleAuth: RoleAuthorizationService,
-    private jwtDecoderService: JwtDecoderService
+  constructor(private router: Router
+    , private authService: AuthenticationService
+    , private translateService: TranslateService
+    , public roleAuth: RoleAuthorizationService
+    , private jwtDecoderService: JwtDecoderService
   ) {
     this.translateService.setDefaultLang('nl');
     this.translateService.use(localStorage.getItem('lang') || 'nl');
@@ -59,28 +58,33 @@ export class AppComponent implements OnInit {
     );
   }
 
+  goToHome() {
+    this.router.navigate(['/dashboard'])
+  }
+
   ngOnInit(): void {
     this.refreshUserData();
     // Only validate token when not on login-related pages
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe(() => {
-        // Check if we're on a page that needs authentication
-        if (!this.isLoginPage()) {
-          this.authService.validateToken().subscribe((isValid) => {
-            if (!isValid) {
-              // Redirect to login if token is invalid
-              this.router.navigate(['/login']);
-            } else {
-              this.refreshUserData();
-            }
-          });
-          this.lang = localStorage.getItem('lang') || 'nl';
-        } else {
-          this.userName = undefined;
-          this.userRole = '';
-        }
-      });
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      // Check if we're on a page that needs authentication
+      if (!this.isLoginPage()) {
+        this.authService.validateToken().subscribe(isValid => {
+          if (!isValid) {
+            // Redirect to login if token is invalid
+            this.router.navigate(['/login']);
+          } else {
+            this.refreshUserData();
+          }
+        });
+        this.lang = localStorage.getItem('lang') || 'nl';
+      } else {
+        this.userName = undefined;
+        this.userRole = '';
+      }
+    }
+    )
 
     this.authService.ExpiryTimeChecker();
   }

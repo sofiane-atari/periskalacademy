@@ -37,7 +37,7 @@
                 @if (billingForm.get('email')?.touched && billingForm.get('email')?.invalid) {
                 <div class="error-message">
                   @if (billingForm.get('email')?.errors?.['required']) {
-                  <span>{{'EMAIL_REQUIRED'|translate}}</span>
+                  <span>{{'CONTACT_EMAIL_REQUIRED'|translate}}</span>
                   }
                   @if (billingForm.get('email')?.errors?.['email']) {
                   <span>{{'ENTER_A_VALID_EMAIL' | translate}}</span>

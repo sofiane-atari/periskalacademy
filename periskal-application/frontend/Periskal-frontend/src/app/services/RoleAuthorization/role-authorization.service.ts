@@ -26,6 +26,11 @@ export class RoleAuthorizationService {
   canAddContent(): boolean {
     return this.hasPermission(['Administrator']);
   }
+
+  canAccessSkippers(): boolean {
+  return this.hasPermission(['Administrator', 'Fleetmanager', 'Support']);
+  }
+
   isSkipper(): boolean{
     const userRole = this.jwtDecoderService.getUserRole();
     if (userRole === 'Skipper') {
@@ -40,4 +45,20 @@ export class RoleAuthorizationService {
     }
     return false;
   }
+  isSupport(): boolean{
+    const userRole = this.jwtDecoderService.getUserRole();
+    if (userRole === 'Support') {
+      return true;
+    }
+    return false;
+  }
+
+  isAdmin(): boolean{
+    const userRole = this.jwtDecoderService.getUserRole();
+    if (userRole === 'Administrator') {
+      return true;
+    }
+    return false;
+  }
+  
 }

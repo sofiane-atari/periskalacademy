@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,15 +21,15 @@ import periskal.academy.backend.jpa.TrainingRepository;
 @Service
 @Slf4j
 public class CompletedExamService {
-    
+
     private final CompletedExamRepository completedExamRepository;
     private final ExamRepository examRepository;
     private final TrainingRepository trainingRepository;
     private final CertificateService certificateService;
 
     public CompletedExamService(
-            CompletedExamRepository completedExamRepository, 
-            ExamRepository examRepository, 
+            CompletedExamRepository completedExamRepository,
+            ExamRepository examRepository,
             TrainingRepository trainingRepository,
             CertificateService certificateService) {
         this.completedExamRepository = completedExamRepository;
@@ -44,38 +43,38 @@ public class CompletedExamService {
         CompletedExam entity = convertToEntity(completedExamDTO);
         CompletedExam saved = completedExamRepository.save(entity);
         CompletedExamDTO result = convertToDTO(saved);
-        
+
         // Check if the exam was passed
         boolean passed = completedExamDTO.isPassed();
-        
+
         // Generate certificate if passed
         if (passed) {
             // Get exam details for certificate
             Optional<Exam> exam = examRepository.findById(completedExamDTO.getExamId());
             Optional<Training> training = trainingRepository.findById(completedExamDTO.getTrainingId());
-            
+
             if (exam.isPresent() && training.isPresent()) {
                 // Create certificate object
                 CertificateDTO certificateDTO = new CertificateDTO();
                 certificateDTO.setUserId(completedExamDTO.getUserId());
-                certificateDTO.setName(training.get().getNameEn() + " Certificate");  
+                certificateDTO.setName(training.get().getNameEn() + " Certificate");
                 certificateDTO.setIssueDate(LocalDate.now());
-                certificateDTO.setExpiryDate(LocalDate.now().plusYears(5));  //TODO: get from exam later , make a seperate issue for this
+                certificateDTO.setExpiryDate(LocalDate.now().plusYears(exam.get().getCertificateValidity()));
                 certificateDTO.setTraining(training.get().getNameEn());
-                certificateDTO.setReadyForDownload(true); 
-                
+                certificateDTO.setReadyForDownload(true);
+
                 // Save the certificate
                 CertificateDTO savedCertificate = certificateService.saveCertificate(certificateDTO);
-                
+
                 // Update completed exam with certificate reference
                 saved.setCertificateId(savedCertificate.getId());
                 completedExamRepository.save(saved);
-                
+
                 // Update result DTO
                 result.setCertificateId(savedCertificate.getId());
             }
         }
-        
+
         return result;
     }
 
@@ -97,8 +96,8 @@ public class CompletedExamService {
     public List<CompletedExamDTO> getCompletedExamsByUserIdAndTrainingId(String userId, Long trainingId) {
         List<CompletedExam> exams = completedExamRepository.findByUserIdAndTrainingId(userId, trainingId);
         return exams.stream()
-                    .map(this::convertToDTO)
-                    .toList();
+                .map(this::convertToDTO)
+                .toList();
     }
 
     private CompletedExamDTO convertToDTO(CompletedExam completedExam) {
@@ -113,14 +112,14 @@ public class CompletedExamService {
         dto.setCertificateId(completedExam.getCertificateId());
 
         dto.setExamName(examRepository.findById(completedExam.getExamId())
-        .map(Exam::getExamTitleEn)
-        .orElse("N/A")); 
+                .map(Exam::getExamTitle)
+                .orElse("N/A"));
         dto.setTrainingName(trainingRepository.findById(completedExam.getTrainingId())
-        .map(Training::getNameEn)
-        .orElse("N/A"));
+                .map(Training::getNameEn)
+                .orElse("N/A"));
         return dto;
     }
-    
+
     private CompletedExam convertToEntity(CompletedExamDTO dto) {
         CompletedExam entity = new CompletedExam();
         entity.setId(dto.getId());
@@ -133,7 +132,5 @@ public class CompletedExamService {
         entity.setCertificateId(dto.getCertificateId());
         return entity;
     }
-    
-
 
 }

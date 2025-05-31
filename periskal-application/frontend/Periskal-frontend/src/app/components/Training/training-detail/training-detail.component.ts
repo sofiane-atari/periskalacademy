@@ -10,6 +10,10 @@ import { ProgressBarComponent } from '../../progress-bar/progress-bar.component'
 import { JwtDecoderService } from '../../../services/JwtDecode/jwt-decoder.service';
 import { UserAttemptService } from '../../../services/UserExamAttempts/user-attempt.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { RoleAuthorizationService } from '../../../services/RoleAuthorization/role-authorization.service';
+import { BillingService } from '../../../services/Billing/billing.service';
+import { ExamStateService } from '../../../services/ExamState/exam-state.service';
+
 
 @Component({
   selector: 'app-training-detail',
@@ -35,7 +39,9 @@ export class TrainingDetailComponent {
     private ProgressService: ProgressService,
     private jwtDecoderService: JwtDecoderService,
     private userAttemptSvc: UserAttemptService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private roleAuth: RoleAuthorizationService,
+    private billingSvc: BillingService
   ) { }
 
   ngOnInit(): void {
@@ -61,21 +67,42 @@ export class TrainingDetailComponent {
   }
 
   startExam() {
-    if (this.training?.exam?.id) {
-      this.userAttemptSvc.startExam(this.training.exam.id, this.userId).subscribe({
-        next: (response) => {
-          this.router.navigate(['/take-exam', this.training?.exam?.id]);
-        },
-        error: (err) => {
-          // If 400 response, route to billing
-          if (err.status === 400) {
-            this.goToBilling();
-          } else {
-            alert('An unexpected error occurred.');
-          }
-        }
-      });
+    // Ensure training, exam, and id are defined
+    if (!this.training || !this.training.exam || !this.training.exam.id) {
+      return;
     }
+
+    const examId = this.training.exam.id; // Safe to access now
+    if (this.userId === null) {
+      return;
+    }
+
+    this.userAttemptSvc.startExam(examId, this.userId).subscribe({
+      next: (response) => {
+        this.router.navigate(['/take-exam', examId]);
+      },
+      error: (err) => {
+        if (err.status === 400 && !this.roleAuth.isAdmin() && !this.roleAuth.isSupport()) {
+          // Route to billing for non-admin/support users
+          this.goToBilling();
+        } else if (err.status === 400 && (this.roleAuth.isAdmin() || this.roleAuth.isSupport())) {
+          // Bypass billing for admin/support users
+          this.billingSvc.postBilling({
+            examId: examId,
+            userId: this.userId,
+            examAttempts: 1, // Default; replace with actual value if available
+            price: null // No price for admin/support
+          }).subscribe({
+            next: (billingResponse) => {
+              this.router.navigate(['/take-exam', examId]);
+            },
+            error: (billingErr) => {
+            }
+          });
+        } else {
+        }
+      }
+    });
   }
 
 

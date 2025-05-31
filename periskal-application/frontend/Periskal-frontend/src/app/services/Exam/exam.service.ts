@@ -75,7 +75,9 @@ export class ExamService {
     })),
       price: examData.price,
       examAttempts: examData.examAttempts,
-      duration: examData.duration
+      duration: examData.duration,
+      certificateValidity: examData.certificateValidity,
+      passingScore: examData.passingScore
     };
     return this.client.post<Exam>(this.baseUrl, payload);
   }

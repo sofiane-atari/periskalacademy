@@ -19,6 +19,7 @@ import { ExamsListComponent } from './components/exams-list/exams-list.component
 import { BillingComponent } from './components/billing/billing.component';
 import { FaqPageComponent } from './components/faq/faq-page/faq-page.component';
 import { ContactPageComponent } from './components/contact/contact-page.component';
+import { ExamInProgressGuard } from './guards/exam-in-progress.guard';
 
 export const routes: Routes = [
 
@@ -40,7 +41,11 @@ export const routes: Routes = [
             { path: 'add-training', component: AddTrainingComponent },
             { path: 'add-exam', component: AddExamComponent },
             { path: 'update-exam/:id', component: UpdateExamComponent },
-            { path: 'take-exam/:id', component: TakeExamComponent },
+            {
+                path: 'take-exam/:id',
+                component: TakeExamComponent,
+                canDeactivate: [ExamInProgressGuard]
+            },
             { path: 'training/:id', component: TrainingDetailComponent },
             { path: 'edit/:id', component: UpdateTrainingComponent },
             { path: 'add/:id/module', component: AddModuleComponent },
@@ -51,8 +56,8 @@ export const routes: Routes = [
             { path: 'certificates', component: CertificatesComponent },
             { path: 'exams', component: ExamsListComponent },
             { path: 'billing/:examid', component: BillingComponent },
-            { path: 'faq-page', component: FaqPageComponent},
-            { path: 'contact', component: ContactPageComponent}
+            { path: 'faq-page', component: FaqPageComponent },
+            { path: 'contact', component: ContactPageComponent }
         ]
     },
 

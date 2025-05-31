@@ -5,6 +5,7 @@ import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,5 +40,14 @@ public class UserExamAttemptController {
                     .body(Map.of("message", "No remaining attempts."));
 
         }
+    }
+
+    @GetMapping("/{userId}/{examId}/remaining")
+    @PreAuthorize(SecurityRoles.ADMIN_SUPPORT_FLEETMANAGER)
+    public ResponseEntity<Map<String, Integer>> getRemainingAttempts(
+            @PathVariable String userId,
+            @PathVariable String examId) {
+        int remainingAttempts = userExamAttemptService.getRemainingAttempts(userId, examId);
+        return ResponseEntity.ok(Map.of("remainingAttempts", remainingAttempts));
     }
 }

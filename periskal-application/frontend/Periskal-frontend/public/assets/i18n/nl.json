@@ -293,6 +293,7 @@
   "AUTHENTICATING": "Bezig met verifiëren...",
   "AUTHENTICATION_FAILED": "Authenticatie mislukt.",
   "PROCESSING": "Bezig met verwerken...",
+  "SOME_SKIPPERS_HAVE_ACTIVE_ATTEMPTS": "Sommige schippers hebben mogelijk actieve pogingen.",
   "deleteSuccess": "FAQ succesvol verwijderd!",
   "deleteError": "Er is een fout opgetreden bij het verwijderen van de FAQ.",
   "createSuccess": "FAQ succesvol toegevoegd!",
@@ -314,5 +315,11 @@
   "PROGRESS_BAR_LABEL": "Examen voltooiing",
   "NO_QUESTION_ENTERED": "Geen vraag ingevoerd",
   "SELECT_CORRECT_ANSWER": "Selecteer het juiste antwoord",
-  "CORRECT_ANSWER_REQUIRED": "Correct antwoord is verplicht"
+  "CORRECT_ANSWER_REQUIRED": "Correct antwoord is verplicht",
+  "SKIPPERS_ALREADY_ASSIGNED": "De volgende schippers hebben deze training al toegewezen gekregen en worden overgeslagen",
+  "ASSIGN": "Toewijzen",
+  "CERTIFICATE_VALIDITY": "Geldigheid certificaat (in jaren)",
+  "PASSING_SCORE": "Slaagcijfer (in procent)",
+  "EXAM_PROGRESS": "Examen vooruitgang"
+
 }

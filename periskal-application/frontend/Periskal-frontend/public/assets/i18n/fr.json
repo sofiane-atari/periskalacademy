@@ -293,6 +293,7 @@
   "AUTHENTICATING": "Authentification en cours...",
   "AUTHENTICATION_FAILED": "Échec de l'authentification.",
   "PROCESSING": "Traitement en cours...",
+  "SOME_SKIPPERS_HAVE_ACTIVE_ATTEMPTS": "Certains capitaines ont peut-être des tentatives en cours.",
   "deleteSuccess": "FAQ supprimée avec succès !",
   "deleteError": "Une erreur s'est produite lors de la suppression de la FAQ.",
   "createSuccess": "FAQ ajoutée avec succès !",
@@ -314,5 +315,11 @@
   "PROGRESS_BAR_LABEL": "Progression de l'examen",
   "NO_QUESTION_ENTERED": "Aucune question saisie",
   "SELECT_CORRECT_ANSWER": "Sélectionnez la bonne réponse",
-  "CORRECT_ANSWER_REQUIRED": "La bonne réponse est obligatoire"
+  "CORRECT_ANSWER_REQUIRED": "La bonne réponse est obligatoire",
+  "SKIPPERS_ALREADY_ASSIGNED": "Les capitaines suivants ont déjà cette formation attribuée et seront ignorés",
+  "ASSIGN": "Attribuer",
+  "CERTIFICATE_VALIDITY": "Validité du certificat (en années)",
+  "PASSING_SCORE": "Note de passage (en pourcentage)",
+  "EXAM_PROGRESS": "Progression de l'examen"
+
 }

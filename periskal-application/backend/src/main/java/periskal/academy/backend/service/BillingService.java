@@ -26,19 +26,19 @@ public class BillingService {
     @Value("${spring.mail.username}")
     private String companyEmail;
 
-    public BillingService(BillingRepository billingRepository, UserExamAttemptRepository userExamAttemptRepository, EmailService emailService, ExamService examService) {
+    public BillingService(BillingRepository billingRepository, UserExamAttemptRepository userExamAttemptRepository,
+            EmailService emailService, ExamService examService) {
         this.billingRepository = billingRepository;
         this.userExamAttemptRepository = userExamAttemptRepository;
         this.emailService = emailService;
         this.examService = examService;
-    }   
+    }
 
     public Billing saveOrder(Billing entity) {
         Billing saved = billingRepository.save(entity);
         saveAttempts(entity);
 
         sendBillingConfirmationEmail(saved);
-            
 
         return saved;
     }
@@ -47,13 +47,13 @@ public class BillingService {
         UserExamAttempt newUserExamAttempt = new UserExamAttempt();
         newUserExamAttempt.setExamId(entity.getExamId());
         newUserExamAttempt.setTotalAttempts(entity.getExamAttempts());
-        newUserExamAttempt.setUsedAttempts(1);
+        newUserExamAttempt.setUsedAttempts(0);
         newUserExamAttempt.setUserId(entity.getUserId());
         userExamAttemptRepository.save(newUserExamAttempt);
         return "ok";
     }
 
-     public List<Billing> saveAttemptsBatch(List<Billing> entity) {
+    public List<Billing> saveAttemptsBatch(List<Billing> entity) {
         List<Billing> savedBillingEntities = (List<Billing>) billingRepository.saveAll(entity);
 
         List<UserExamAttempt> attemptsToSave = new ArrayList<>();
@@ -72,7 +72,7 @@ public class BillingService {
 
         return savedBillingEntities;
     }
-    
+
     private void sendBillingConfirmationEmail(Billing billing) {
         if (billing.getEmail() == null || billing.getEmail().isEmpty()) {
             log.warn("Cannot send billing email: recipient email is missing for order ID {}", billing.getId());
@@ -101,7 +101,8 @@ public class BillingService {
         contentBuilder.append(listItem("Zip Code", billing.getZipCode()));
         contentBuilder.append(listItem("Country", billing.getCountryCode()));
         contentBuilder.append("</ul>");
-        contentBuilder.append("<p><strong>Tax Information:</strong> ").append(billing.getTax() != null ? billing.getTax() : "N/A").append("</p>");
+        contentBuilder.append("<p><strong>Tax Information:</strong> ")
+                .append(billing.getTax() != null ? billing.getTax() : "N/A").append("</p>");
         contentBuilder.append("<p>1 Exam of ").append(examName).append("</p>");
         contentBuilder.append("<p>Price is:</p>");
         contentBuilder.append("</body></html>");
@@ -116,8 +117,6 @@ public class BillingService {
         return "<li><strong>" + label + ":</strong> " + (value != null ? value : "N/A") + "</li>";
     }
 
-
-
     private void sendFleetManagerBatchOrderEmail(int numberOfBillings, String examId) {
         if (numberOfBillings <= 0) {
             log.warn("Not sending fleet manager email: number of billings is zero or negative.");
@@ -125,11 +124,11 @@ public class BillingService {
         }
         if (examId == null || examId.isEmpty()) {
             log.warn("Not sending fleet manager email: Exam ID is missing for the batch order.");
-            return; 
+            return;
         }
 
         String fromAddress = companyEmail; // Email is from the system
-        String toAddress = companyEmail;   // Email is to the fleet manager (using companyEmail as placeholder)
+        String toAddress = companyEmail; // Email is to the fleet manager (using companyEmail as placeholder)
         String subject = "Fleet Manager Batch Order Processed - Exam: " + examId;
 
         StringBuilder contentBuilder = new StringBuilder();
@@ -148,10 +147,12 @@ public class BillingService {
 
         try {
             emailService.sendHtmlEmail(fromAddress, toAddress, subject, content);
-            log.info("Fleet manager batch order email sent to {} (from {}) for exam ID {} ({} users).", toAddress, fromAddress, examId, numberOfBillings);
+            log.info("Fleet manager batch order email sent to {} (from {}) for exam ID {} ({} users).", toAddress,
+                    fromAddress, examId, numberOfBillings);
         } catch (Exception e) {
-            log.error("Failed to send fleet manager batch order email for exam ID {} to {}: {}", examId, toAddress, e.getMessage(), e);
+            log.error("Failed to send fleet manager batch order email for exam ID {} to {}: {}", examId, toAddress,
+                    e.getMessage(), e);
         }
     }
-    
+
 }

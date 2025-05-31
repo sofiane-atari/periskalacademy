@@ -292,7 +292,7 @@
 
             <div class="training-selection">
                 <h3>{{'SELECT_TRAINING' | translate}}</h3>
-                <select [(ngModel)]="selectedTrainingId">
+                <select [(ngModel)]="selectedTrainingId" (ngModelChange)="checkSkippersWithActiveTraining($event)">
                     <option [ngValue]="null" disabled>{{'SELECT_A_TRAINING' | translate}}</option>
                     @for (training of availableTrainings; track training.id) {
                     <option [value]="training.id">
@@ -300,21 +300,38 @@
                     </option>
                     }
                 </select>
-                @if (!availableTrainings || availableTrainings.length === 0) {
-                <p class="no-data">{{'NO_TRAININGS_ABLE_TO_ASSIGN'}}</p>
-                }
-            </div>
+                        @if (selectedTrainingId && skippersWithActiveTraining.length > 0) {
+                        <p class="warning-message">
+                            {{'SKIPPERS_ALREADY_ASSIGNED' | translate}}
+                            <ul class="active-skippers-list">
+                            @for (skipperId of skippersWithActiveTraining; track skipperId) {
+                                <li>{{ getSkipperName(skipperId) }}</li>
+                            }
+                            </ul>
+                        }
+                    @if (!availableTrainings || availableTrainings.length === 0) {
+                        <p class="no-data">{{'NO_TRAININGS_ABLE_TO_ASSIGN' | translate}}</p>
+                    }
+                </div>
 
             @if (error && assignmentDialogOpen) {
             <p class="error-message modal-error">{{ error }}</p>
             }
 
             <div class="actions modal-actions">
-                <button
-                    (click)="InitiateBillingAndAssignment()"
-                    [disabled]="!selectedTrainingId || selectedSkipperIds.length === 0 || isProcessingAction">
-                    {{ isProcessingAction ? ('Processing...' | translate) : ('PROCEED_TO_BILLING' | translate) }}
-                </button>
+                @if (roleAuth.isFleetManager()) {
+                    <button
+                        (click)="InitiateBillingAndAssignment()"
+                        [disabled]="!selectedTrainingId || selectedSkipperIds.length === 0">
+                        {{ 'PROCEED_TO_BILLING' | translate }}
+                    </button>
+                } @else {
+                    <button
+                        (click)="InitiateBillingAndAssignment()"
+                        [disabled]="!selectedTrainingId || selectedSkipperIds.length === 0">
+                        {{ 'ASSIGN' | translate }}
+                    </button>
+                }
                 <button class="cancel-btn" (click)="closeAssignmentDialog()"[disabled]="isProcessingAction">{{'CANCEL' | translate}}</button>
             </div>
         </div>

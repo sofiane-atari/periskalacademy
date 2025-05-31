@@ -38,9 +38,101 @@
         </mat-tab>
       </mat-tab-group>
 
+          <div class="mb-3">
+            <label for="totalQuestions" class="form-label">{{'QUESTION_AMOUNT' |translate}}</label>
+            <input
+              type="number"
+              id="totalQuestions"
+              class="form-control"
+              [(ngModel)]="exam.totalQuestions"
+              name="totalQuestions"
+              min="1"
+              required
+            />
+          </div>
 
-      <label for="totalQuestions">{{'QUESTION_AMOUNT' | translate}}</label>
-      <input id="totalQuestions" type="number" [(ngModel)]="exam.totalQuestions" name="totalQuestions" min="1" required>
+          <div class="mb-3">
+            <label for="price" class="form-label">{{'PRICE' | translate}}</label>
+            <input
+              type="number"
+              id="price"
+              class="form-control"
+              [(ngModel)]="exam.price"
+              name="price"
+              min="1"
+              required
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="certificateValidity" class="form-label">{{'CERTIFICATE_VALIDITY' | translate}}</label>
+            <input
+              type="number"
+              id="certificateValidity"
+              class="form-control"
+              [(ngModel)]="exam.certificateValidity"
+              name="certificateValidity"
+              min="1"
+              required
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="examAttempts" class="form-label">{{'EXAM_ATTEMPTS' | translate}}</label>
+            <input
+              type="number"
+              id="examAttempts"
+              class="form-control"
+              [(ngModel)]="exam.examAttempts"
+              name="examAttempts"
+              min="1"
+              required
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="duration" class="form-label">{{'EXAM_DURATION'|translate}}</label>
+            <input
+              type="number"
+              id="duration"
+              class="form-control"
+              [(ngModel)]="exam.duration"
+              name="duration"
+              min="1"
+              required
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="passingScore" class="form-label">{{'PASSING_SCORE' | translate}}</label>
+            <input
+              type="number"
+              id="passingScore"
+              class="form-control"
+              [(ngModel)]="exam.passingScore"
+              name="passingScore"
+              min="1"
+              required
+            />
+          </div>
+
+          <h4 class="mt-4">{{'EXAM_QUESTIONS' | translate }}</h4>
+
+          @for(question of exam.questions; track $index){
+          <div class="mb-2">
+            <div class="input-group">
+              <input type="text"
+                     class="form-control"
+                     [(ngModel)]="question.text"
+                     [name]="'question_' + $index"
+                     placeholder="Vraagtekst"
+                     required>
+              <button type="button" class="btn btn-danger" (click)="removeQuestion($index)">
+                {{'REMOVE_BUTTON' |translate }}
+              </button>
+            </div>
+          </div>
+        }
       
       <label for="price">{{'PRICE' | translate}}</label>
       <input id="price" type="number" [(ngModel)]="exam.price" name="price" min="0" step="0.01" required>

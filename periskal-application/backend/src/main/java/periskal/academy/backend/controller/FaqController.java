@@ -52,7 +52,7 @@ public class FaqController {
     }
 
     @PostMapping
-    @PreAuthorize(SecurityRoles.ADMIN)
+    @PreAuthorize(SecurityRoles.ADMIN_SUPPORT)
     public ResponseEntity<Faq> createFaq(@RequestBody Faq faq) {
         log.info("Received request to create FAQ with question: {}", faq.getQuestionEn());
         log.info("Received request to create FAQ with category: {}", faq.getCategory());
@@ -62,7 +62,7 @@ public class FaqController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize(SecurityRoles.ADMIN)
+    @PreAuthorize(SecurityRoles.ADMIN_SUPPORT)
     public ResponseEntity<Faq> updateFaq(@PathVariable Long id, @RequestBody Faq faq) {
         log.info("Received request to update FAQ with id {}", id);
         Faq updatedFaq = faqService.updateFaq(id, faq);
@@ -71,7 +71,7 @@ public class FaqController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize(SecurityRoles.ADMIN)
+    @PreAuthorize(SecurityRoles.ADMIN_SUPPORT)
     public ResponseEntity<Void> deleteFaq(@PathVariable Long id) {
         log.info("Received request to delete FAQ with id {}", id);
         faqService.deleteFaq(id);
