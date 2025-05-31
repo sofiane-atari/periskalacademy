@@ -3,15 +3,15 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { BillingService } from '../../services/Billing/billing.service';
 import { JwtDecoderService } from '../../services/JwtDecode/jwt-decoder.service';
+import { RoleAuthorizationService } from '../../services/RoleAuthorization/role-authorization.service';
 import { TranslatePipe } from '@ngx-translate/core';
-import { MatTab, MatTabGroup } from '@angular/material/tabs';
-import { MatStep, MatStepperModule } from '@angular/material/stepper';
+import { MatStepperModule } from '@angular/material/stepper';
 
 @Component({
   selector: 'app-billing-fleetmanager',
   imports: [ReactiveFormsModule, TranslatePipe, MatStepperModule],
   templateUrl: './billing-fleetmanager.component.html',
-  styleUrl: './billing-fleetmanager.component.css'
+  styleUrls: ['./billing-fleetmanager.component.css']
 })
 export class FleetManagerBillingComponent implements OnInit {
   @Input() userIdsToBill: string[] = [];
@@ -23,14 +23,15 @@ export class FleetManagerBillingComponent implements OnInit {
   @Output() billingCancel = new EventEmitter<void>();
 
   billingForm!: FormGroup;
-  fleetManagerId!: string | null;
+  fleetManagerId: string | null = null;
 
   constructor(
     private fb: FormBuilder,
     private billingSvc: BillingService,
     private snackBar: MatSnackBar,
-    private jwtDecoderService: JwtDecoderService
-  ) { }
+    private jwtDecoderService: JwtDecoderService,
+    private roleAuth: RoleAuthorizationService
+  ) {}
 
   ngOnInit() {
     this.fleetManagerId = this.jwtDecoderService.getId();
@@ -39,10 +40,17 @@ export class FleetManagerBillingComponent implements OnInit {
       userIdsToBill: this.userIdsToBill,
       examId: this.examId,
       examAttemptsToBill: this.examAttemptsToBill,
-      examPrice: this.examPrice
+      examPrice: this.examPrice,
+      isAdmin: this.roleAuth.isAdmin(),
+      isSupport: this.roleAuth.isSupport()
     });
 
-    // Get fleetmanager info and use it later to pre-fill the form
+    // Bypass billing for admin/support users
+    if (this.roleAuth.isAdmin() || this.roleAuth.isSupport()) {
+      this.billingSuccess.emit({ bypassed: true }); // Emit success without billing
+      return;
+    }
+
     this.billingForm = this.fb.group({
       fullName: ['', Validators.required],
       companyName: ['', Validators.required],
@@ -54,37 +62,27 @@ export class FleetManagerBillingComponent implements OnInit {
       zipCode: ['', Validators.required],
       countryCode: ['', Validators.required],
       examId: ['']
-
     });
   }
 
   onSubmit() {
     if (this.billingForm.valid) {
-      const payerBillingDetails = this.billingForm.value; // Fleet Manager's details
+      const payerBillingDetails = this.billingForm.value;
 
-      // Construct the list of Billing objects for the batch endpoint
-      const billingBatchPayload = this.userIdsToBill.map(userId => {
-        return {
-          // Payer's (Fleet Manager's) details
-          fullName: payerBillingDetails.fullName,
-          companyName: payerBillingDetails.companyName,
-          email: payerBillingDetails.email,
-          tax: payerBillingDetails.tax,
-          address: payerBillingDetails.address,
-          city: payerBillingDetails.city,
-          state: payerBillingDetails.state,
-          zipCode: payerBillingDetails.zipCode,
-          countryCode: payerBillingDetails.countryCode,
-
-          // Exam and specific user details
-          examId: this.examId,
-          userId: userId,
-          examAttempts: this.examAttemptsToBill,
-
-
-        };
-      });
-
+      const billingBatchPayload = this.userIdsToBill.map(userId => ({
+        fullName: payerBillingDetails.fullName,
+        companyName: payerBillingDetails.companyName,
+        email: payerBillingDetails.email,
+        tax: payerBillingDetails.tax,
+        address: payerBillingDetails.address,
+        city: payerBillingDetails.city,
+        state: payerBillingDetails.state,
+        zipCode: payerBillingDetails.zipCode,
+        countryCode: payerBillingDetails.countryCode,
+        examId: this.examId,
+        userId: userId,
+        examAttempts: this.examAttemptsToBill
+      }));
 
       this.billingSvc.postBillingBatch(billingBatchPayload).subscribe({
         next: (response) => {
@@ -92,7 +90,7 @@ export class FleetManagerBillingComponent implements OnInit {
             duration: 3000,
             verticalPosition: 'bottom',
             horizontalPosition: 'center',
-            panelClass: ['snackbar-success'],
+            panelClass: ['snackbar-success']
           };
           this.snackBar.open('Billing processed successfully for selected users!', 'Close', snackBarConfig);
           this.billingSuccess.emit(response);
@@ -106,15 +104,18 @@ export class FleetManagerBillingComponent implements OnInit {
             duration: 7000,
             verticalPosition: 'bottom',
             horizontalPosition: 'center',
-            panelClass: ['snackbar-error'],
+            panelClass: ['snackbar-error']
           };
           this.snackBar.open(errorMessage, 'Close', snackBarConfig);
-
         }
       });
     } else {
       this.billingForm.markAllAsTouched();
-      this.snackBar.open('Please fill all required billing fields.', 'Close', { duration: 3000, verticalPosition: 'bottom', horizontalPosition: 'center' });
+      this.snackBar.open('Please fill all required billing fields.', 'Close', {
+        duration: 3000,
+        verticalPosition: 'bottom',
+        horizontalPosition: 'center'
+      });
     }
   }
 
@@ -122,4 +123,3 @@ export class FleetManagerBillingComponent implements OnInit {
     this.billingCancel.emit();
   }
 }
-

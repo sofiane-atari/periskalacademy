@@ -298,5 +298,7 @@
   "deleteError": "An error occurred while deleting the FAQ.",
   "createSuccess": "FAQ successfully added!",
   "createError": "An error occurred while adding the FAQ.",
-  "SKIPPERS_ALREADY_ASSIGNED": "The following skippers already have this training assigned and will be skipped"
+  "SKIPPERS_ALREADY_ASSIGNED": "The following skippers already have this training assigned and will be skipped",
+  "ASSIGN": "Assign"
 }
+
