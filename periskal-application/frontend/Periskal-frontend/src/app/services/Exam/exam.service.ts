@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, of, tap, throwError } from 'rxjs';
 import { Exam } from '../../models/exam.model';
+import { Photo } from '../../models/photo.model';
 
 @Injectable({
   providedIn: 'root'
@@ -46,18 +47,32 @@ export class ExamService {
   }
   createExam(examData: any): Observable<Exam> {
     const payload = {
-      examTitle: examData.examTitle,
-      examDescription: examData.examDescription,
+      examTitleEn: examData.examTitleEn,
+      examTitleNl: examData.examTitleNl,
+      examTitleFr: examData.examTitleFr,
+      examTitleDe: examData.examTitleDe,
+      examDescriptionEn: examData.examDescriptionEn,
+      examDescriptionNl: examData.examDescriptionNl,
+      examDescriptionFr: examData.examDescriptionFr,
+      examDescriptionDe: examData.examDescriptionDe,
       totalQuestions: examData.totalQuestions,
       trainingId: examData.trainingId,
       questions: examData.questions.map((q: any) => ({
-        text: q.text,
-        photos: (q.photos || []).map((photo: any) => ({
-          imageData: photo.imageData
-        })),
-        answers: q.answers.map((a: any) => ({ text: a.text })),
-        correctAnswer: q.correctAnswer
+      textEn: q.textEn,
+      textNl: q.textNl,
+      textFr: q.textFr,
+      textDe: q.textDe,
+      photos: (q.photos || []).map((photo: any) => ({
+        imageData: photo.imageData
       })),
+      answers: q.answers.map((a: any) => ({
+        textEn: a.textEn,
+        textNl: a.textNl,
+        textFr: a.textFr,
+        textDe: a.textDe,
+      })),
+      correctAnswer: q.correctAnswer
+    })),
       price: examData.price,
       examAttempts: examData.examAttempts,
       duration: examData.duration,
@@ -66,4 +81,13 @@ export class ExamService {
     };
     return this.client.post<Exam>(this.baseUrl, payload);
   }
+
+  deletePhoto(photoId: number) {
+    return this.client.delete(`http://localhost:8080/api/photos/${photoId}`);
+  }
+
+  addPhotos(examId: number, photos?: Photo[]) {
+    return this.client.post(`http://localhost:8080/api/photos/${examId}`, photos)
+  }
+
 }

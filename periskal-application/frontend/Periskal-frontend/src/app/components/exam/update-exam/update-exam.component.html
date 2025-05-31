@@ -1,33 +1,42 @@
-<div class="container mt-5">
-    <div class="card shadow-sm">
-      <div class="card-header text-black">
-        <h4 class="mb-0">{{'UPDATE_EXAM' |translate}}</h4>
-      </div>
-      <div class="card-body">
-        <form (ngSubmit)="onSubmit()">
-          <div class="mb-3">
-            <label for="examTitle" class="form-label">{{'EXAM_TITLE' | translate}}</label>
-            <input
-              type="text"
-              id="examTitle"
-              [(ngModel)]="exam.examTitle"
-              name="examTitle"
-              class="form-control"
-              required
-            />
-          </div>
-  
-          <div class="mb-3">
-            <label for="examDescription" class="form-label">{{'EXAM_DESCRIPTION' |translate}}</label>
-            <textarea
-              id="examDescription"
-              class="form-control"
-              [(ngModel)]="exam.examDescription"
-              name="examDescription"
-              rows="4"
-              required
-            ></textarea>
-          </div>
+<div class="container">
+  <h2>{{'UPDATE_EXAM' | translate}}</h2>
+  @if (isLoading) {
+    <p>{{'LOADING_EXAM'|translate}}</p>
+  } @else {
+    <form (ngSubmit)="onSubmit()">
+      <mat-tab-group class="tab-block">
+        <mat-tab [label]="('LANGUAGE_NL' | translate)">
+          <label>{{'EXAM_TITLE' | translate}}</label>
+          <input type="text" [(ngModel)]="exam.examTitleNl" name="examTitleNl" placeholder="{{'PLACEHOLDER_EXAM_TITLE'|translate}}" required>
+          
+          <label>{{'EXAM_DESCRIPTION' | translate}}</label>
+          <textarea [(ngModel)]="exam.examDescriptionNl" name="examDescriptionNl" placeholder="{{'PLACEHOLDER_EXAM_DESCRIPTION'|translate}}" required></textarea>
+        </mat-tab>
+        
+        <mat-tab [label]="('LANGUAGE_FR' | translate)">
+          <label>{{'EXAM_TITLE' | translate}}</label>
+          <input type="text" [(ngModel)]="exam.examTitleFr" name="examTitleFr" placeholder="{{'PLACEHOLDER_EXAM_TITLE'|translate}}" required>
+          
+          <label>{{'EXAM_DESCRIPTION' | translate}}</label>
+          <textarea [(ngModel)]="exam.examDescriptionFr" name="examDescriptionFr" placeholder="{{'PLACEHOLDER_EXAM_DESCRIPTION'|translate}}" required></textarea>
+        </mat-tab>
+        
+        <mat-tab [label]="('LANGUAGE_DE' | translate)">
+          <label>{{'EXAM_TITLE' | translate}}</label>
+          <input type="text" [(ngModel)]="exam.examTitleDe" name="examTitleDe" placeholder="{{'PLACEHOLDER_EXAM_TITLE'|translate}}" required>
+          
+          <label>{{'EXAM_DESCRIPTION' | translate}}</label>
+          <textarea [(ngModel)]="exam.examDescriptionDe" name="examDescriptionDe" placeholder="{{'PLACEHOLDER_EXAM_DESCRIPTION'|translate}}" required></textarea>
+        </mat-tab>
+        
+        <mat-tab [label]="('LANGUAGE_EN' | translate)">
+          <label>{{'EXAM_TITLE' | translate}}</label>
+          <input type="text" [(ngModel)]="exam.examTitleEn" name="examTitleEn" placeholder="{{'PLACEHOLDER_EXAM_TITLE'|translate}}" required>
+          
+          <label>{{'EXAM_DESCRIPTION' | translate}}</label>
+          <textarea [(ngModel)]="exam.examDescriptionEn" name="examDescriptionEn" placeholder="{{'PLACEHOLDER_EXAM_DESCRIPTION'|translate}}" required></textarea>
+        </mat-tab>
+      </mat-tab-group>
 
           <div class="mb-3">
             <label for="totalQuestions" class="form-label">{{'QUESTION_AMOUNT' |translate}}</label>
@@ -125,19 +134,110 @@
           </div>
         }
       
-          <button type="button" class="btn btn-secondary mt-2" (click)="addQuestion()">
-            {{'ADD_QUESTION_BUTTON' |translate}}
-          </button>
-  
-          <button type="submit" class="btn w-100">
-            {{'SAVE_BUTTON' | translate}}
-          </button>
+      <label for="price">{{'PRICE' | translate}}</label>
+      <input id="price" type="number" [(ngModel)]="exam.price" name="price" min="0" step="0.01" required>
+      
+      <label for="examAttempts">{{'EXAM_ATTEMPTS' | translate}}</label>
+      <input id="examAttempts" type="number" [(ngModel)]="exam.examAttempts" name="examAttempts" min="1" required>
+      
+      <label for="duration">{{'EXAM_DURATION' | translate}}</label>
+      <input id="duration" type="number" [(ngModel)]="exam.duration" name="duration" min="1" placeholder="{{'PLACEHOLDER_DURATION'|translate}}">
 
-          <button class="delete" type="button" class="btn w-100" (click)="confirmDeleteExam()">
-            {{'DELETE_BUTTON' | translate}}
-          </button>
-        </form>
+      <div class="questions-section">
+        <h3>{{'EXAM_QUESTIONS' | translate}}</h3>
+        @for (question of exam.questions; track $index) {
+          <mat-tab-group>
+            <mat-tab label="{{'QUESTION' | translate}}">
+              <div class="question-block">
+                <h4>{{'QUESTION' | translate}} {{ $index + 1 }}</h4>
+                <mat-tab-group>
+                  <mat-tab [label]="('LANGUAGE_NL' | translate)">
+                    <textarea [(ngModel)]="question.textNl" [name]="'questionTextNl' + $index" placeholder="{{'QUESTION_TEXT_NL_PLACEHOLDER' | translate}}"></textarea>
+                  </mat-tab>
+                  <mat-tab [label]="('LANGUAGE_FR' | translate)">
+                    <textarea [(ngModel)]="question.textFr" [name]="'questionTextFr' + $index" placeholder="{{'QUESTION_TEXT_FR_PLACEHOLDER' | translate}}"></textarea>
+                  </mat-tab>
+                  <mat-tab [label]="('LANGUAGE_DE' | translate)">
+                    <textarea [(ngModel)]="question.textDe" [name]="'questionTextDe' + $index" placeholder="{{'QUESTION_TEXT_DE_PLACEHOLDER' | translate}}"></textarea>
+                  </mat-tab>
+                  <mat-tab [label]="('LANGUAGE_EN' | translate)">
+                    <textarea [(ngModel)]="question.textEn" [name]="'questionTextEn' + $index" placeholder="{{'QUESTION_TEXT_PLACEHOLDER' | translate}}"></textarea>
+                  </mat-tab>
+                </mat-tab-group>
+                
+                <label>{{'IMAGES_QUESTIONS' | translate}} {{ $index + 1 }}</label>
+                @if (exam.questions[$index].photos?.length != null) {
+                <div class="existing-photos">
+                  @for (photo of exam.questions[$index].photos; track $index; let photoIndex = $index) {
+                    <div class="photo-item">
+                      <img [src]="photo.imageData" alt="Question photo">
+                      <button type="button" (click)="removeQuestionPhoto($index, photoIndex)">
+                        {{'REMOVE_BUTTON' | translate}}
+                      </button>
+                    </div>
+                  }
+                </div>
+              }
+              <app-photo-upload></app-photo-upload>
+              
+              <button type="button" (click)="removeQuestion($index)">
+                {{'REMOVE_BUTTON' | translate}}
+              </button>
+              </div>
+            </mat-tab>
+            
+
+            <mat-tab label="{{'ANSWERS' | translate}}">
+              <div class="question-block">
+                <h4>{{'ANSWERS_QUESTION' | translate}} {{ $index + 1 }}</h4>
+                
+
+                <div class="question-display">
+                  <h5>{{'QUESTION_TEXT' | translate}}:</h5>
+                  {{ getQuestionText(question)}}
+                </div>
+                
+
+                <div class="answers-container">
+                  @for (answer of question.answers; track $index) {
+                    <div class="answer-group">
+                      <mat-tab-group>
+                        <mat-tab [label]="('LANGUAGE_NL' | translate)">
+                          <input type="text" [(ngModel)]="answer.textNl" [name]="'answerNl' + $index" placeholder="{{'ANSWER_NL' | translate}} {{$index + 1}}">
+                        </mat-tab>
+                        <mat-tab [label]="('LANGUAGE_FR' | translate)">
+                          <input type="text" [(ngModel)]="answer.textFr" [name]="'answerFr' + $index" placeholder="{{'ANSWER_FR' | translate}} {{$index + 1}}">
+                        </mat-tab>
+                        <mat-tab [label]="('LANGUAGE_DE' | translate)">
+                          <input type="text" [(ngModel)]="answer.textDe" [name]="'answerDe' + $index" placeholder="{{'ANSWER_DE' | translate}} {{$index + 1}}">
+                        </mat-tab>
+                        <mat-tab [label]="('LANGUAGE_EN' | translate)">
+                          <input type="text" [(ngModel)]="answer.textEn" [name]="'answerEn' + $index" placeholder="{{'ANSWER_EN' | translate}} {{$index + 1}}">
+                        </mat-tab>
+                      </mat-tab-group>
+                    </div>
+                  }
+                </div>
+                
+                <label>{{'CORRECT_ANSWER' | translate}} (1-4):</label>
+                <select [(ngModel)]="question.correctAnswer" [name]="'correctAnswer' + $index" class="form-control">
+                  <option value="" disabled selected>{{ "SELECT_CORRECT_ANSWER" | translate }}</option>
+                  @for (answer of question.answers; track $index) {
+                    <option [value]="$index + 1">{{ "ANSWER" | translate }} {{$index + 1}}</option>
+                  }
+                </select>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+        }
+        
+        <button type="button" (click)="addQuestion()">{{'ADD_QUESTION_BUTTON' | translate}}</button>
       </div>
-    </div>
-  </div>
-  
+
+      <div class="action-buttons">
+        <button type="submit">{{'SAVE_BUTTON' | translate}}</button>
+        <button type="button" (click)="confirmDeleteExam()" class="delete-button">{{'DELETE_BUTTON' | translate}}</button>
+      </div>
+    </form>
+  }
+</div>

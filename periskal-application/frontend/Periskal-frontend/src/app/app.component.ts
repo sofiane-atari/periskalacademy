@@ -11,15 +11,21 @@ import { RoleAuthorizationService } from './services/RoleAuthorization/role-auth
 import { filter, Observable } from 'rxjs';
 import { AuthenticationService } from './services/Authentication/authentication.service';
 import { JwtDecoderService } from '../app/services/JwtDecode/jwt-decoder.service';
-
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, TranslatePipe],
+  standalone: true,
+  imports: [
+    RouterOutlet,
+    RouterLink,
+    RouterLinkActive,
+    TranslatePipe,
+    CommonModule,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
-
 export class AppComponent implements OnInit {
   title = 'Periskal-frontend';
   showNavbar = true;
@@ -35,20 +41,21 @@ export class AppComponent implements OnInit {
     , public roleAuth: RoleAuthorizationService
     , private jwtDecoderService: JwtDecoderService
   ) {
-
     this.translateService.setDefaultLang('nl');
     this.translateService.use(localStorage.getItem('lang') || 'nl');
 
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe(() => {
-      this.showNavbar = !this.isLoginPage();
-    });
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe(() => {
+        this.showNavbar = !this.isLoginPage();
+      });
   }
 
   isLoginPage(): boolean {
     if (!this.router.url) return false;
-    return this.router.url === '/login' || this.router.url.includes('decode-token');
+    return (
+      this.router.url === '/login' || this.router.url.includes('decode-token')
+    );
   }
 
   goToHome() {
@@ -80,8 +87,7 @@ export class AppComponent implements OnInit {
     )
 
     this.authService.ExpiryTimeChecker();
-
-  };
+  }
 
   ChangeLang(Lang: any) {
     const selectedLanguage = Lang.target.value;
@@ -107,7 +113,3 @@ export class AppComponent implements OnInit {
     this.userRole = this.jwtDecoderService.getUserRole()!;
   }
 }
-
-
-
-

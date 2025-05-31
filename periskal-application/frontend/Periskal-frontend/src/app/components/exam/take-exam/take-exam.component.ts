@@ -27,6 +27,8 @@ export class TakeExamComponent implements OnInit, OnDestroy {
   loading = true;
   error: string | null = null;
   selectedAnswers: (number | undefined)[] = [];
+  public lang: string = localStorage.getItem('lang') || 'en';
+
   remainingTime: number = 0;
   savedExam!: Exam;
   private submissionInitiatedByTimer: boolean = false;
@@ -41,7 +43,7 @@ export class TakeExamComponent implements OnInit, OnDestroy {
     private completedExamService: CompletedExamService,
     private examStateService: ExamStateService,
     private dialog: MatDialog
-  ) { }
+  ) {}
 
   @HostListener('window:beforeunload', ['$event'])
   unloadHandler(event: BeforeUnloadEvent): void {
@@ -76,20 +78,20 @@ export class TakeExamComponent implements OnInit, OnDestroy {
     );
 
     this.timerSubscriptions.add(
-      this.examStateService.remainingTime$.subscribe(time => {
+      this.examStateService.remainingTime$.subscribe((time) => {
         this.remainingTime = time;
       })
     );
 
     this.timerSubscriptions.add(
-      this.examStateService.examFinished$.pipe(
-        filter(finished => finished)
-      ).subscribe(() => {
-        if (!this.isSubmitting) {
-          this.submissionInitiatedByTimer = true;
-          this.submitExam();
-        }
-      })
+      this.examStateService.examFinished$
+        .pipe(filter((finished) => finished))
+        .subscribe(() => {
+          if (!this.isSubmitting) {
+            this.submissionInitiatedByTimer = true;
+            this.submitExam();
+          }
+        })
     );
 
     this.loadExam(examId);
@@ -168,7 +170,8 @@ export class TakeExamComponent implements OnInit, OnDestroy {
   }
 
   get currentQuestion(): Question | null {
-    if (!this.exam || !this.exam.questions || !this.exam.questions.length) return null;
+    if (!this.exam || !this.exam.questions || !this.exam.questions.length)
+      return null;
     return this.exam.questions[this.currentQuestionIndex];
   }
 
@@ -178,7 +181,11 @@ export class TakeExamComponent implements OnInit, OnDestroy {
   }
 
   nextQuestion(): void {
-    if (this.exam && this.exam.questions && this.currentQuestionIndex < this.exam.questions.length - 1) {
+    if (
+      this.exam &&
+      this.exam.questions &&
+      this.currentQuestionIndex < this.exam.questions.length - 1
+    ) {
       this.currentQuestionIndex++;
     }
   }
@@ -190,7 +197,12 @@ export class TakeExamComponent implements OnInit, OnDestroy {
   }
 
   goToQuestion(index: number): void {
-    if (this.exam && this.exam.questions && index >= 0 && index < this.exam.questions.length) {
+    if (
+      this.exam &&
+      this.exam.questions &&
+      index >= 0 &&
+      index < this.exam.questions.length
+    ) {
       this.currentQuestionIndex = index;
     }
   }
@@ -212,7 +224,9 @@ export class TakeExamComponent implements OnInit, OnDestroy {
     this.isSubmitting = true;
 
     if (this.exam.trainingId === undefined || this.exam.trainingId === null) {
-      alert('Error: Cannot submit exam. Training ID is missing from exam data. Please contact support.');
+      alert(
+        'Error: Cannot submit exam. Training ID is missing from exam data. Please contact support.'
+      );
       this.isSubmitting = false;
       return;
     }
@@ -228,7 +242,10 @@ export class TakeExamComponent implements OnInit, OnDestroy {
     }
 
     const totalQuestions = this.exam.questions ? this.exam.questions.length : 0;
-    const scorePercentage = totalQuestions > 0 ? Math.round((correctCount / totalQuestions) * 100) : 0;
+    const scorePercentage =
+      totalQuestions > 0
+        ? Math.round((correctCount / totalQuestions) * 100)
+        : 0;
     const userId = this.jwtDecoderService.getId();
 
     const completedExamData: Omit<CompletedExam, 'id'> = {
@@ -281,6 +298,52 @@ export class TakeExamComponent implements OnInit, OnDestroy {
     if (seconds < 0) seconds = 0;
     const minutes = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    return `${minutes.toString().padStart(2, '0')}:${secs
+      .toString()
+      .padStart(2, '0')}`;
+  }
+
+  getExamTitle(): string {
+  if (!this.exam) return 'Unknown exam';
+  
+  switch(this.lang) {
+    case 'en': return this.exam.examTitleEn || '';
+    case 'nl': return this.exam.examTitleNl || '';
+    case 'fr': return this.exam.examTitleFr || '';
+    case 'de': return this.exam.examTitleDe || '';
+    default: return this.exam.examTitleEn || 'Unknown exam';
+  }
+}
+
+  getExamDescription(): string {
+    if (!this.exam) return '';
+    
+    switch(this.lang) {
+      case 'en': return this.exam.examDescriptionEn || '';
+      case 'nl': return this.exam.examDescriptionNl || '';
+      case 'fr': return this.exam.examDescriptionFr || '';
+      case 'de': return this.exam.examDescriptionDe || '';
+      default: return this.exam.examDescriptionEn || '';
+    }
+  }
+
+  getQuestionText(question: Question): string {
+    switch(this.lang) {
+      case 'en': return question.textEn || '';
+      case 'nl': return question.textNl || '';
+      case 'fr': return question.textFr || '';
+      case 'de': return question.textDe || '';
+      default: return question.textEn || '';
+    }
+  }
+
+  getAnswerText(answer: any): string {
+    switch(this.lang) {
+      case 'en': return answer.textEn || '';
+      case 'nl': return answer.textNl || '';
+      case 'fr': return answer.textFr || '';
+      case 'de': return answer.textDe || '';
+      default: return answer.textEn || '';
+    }
   }
 }

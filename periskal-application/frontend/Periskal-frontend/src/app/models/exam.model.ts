@@ -1,10 +1,16 @@
-import { Question } from "./question.model";
+import { Question } from './question.model';
 
 export interface Exam {
   id?: number; // Optional because it's assigned by the backend
   trainingId: number;
-  examTitle: string;
-  examDescription: string;
+  examTitleEn: string;
+  examTitleNl: string;
+  examTitleFr: string;
+  examTitleDe: string;
+  examDescriptionEn: string;
+  examDescriptionNl: string;
+  examDescriptionFr: string;
+  examDescriptionDe: string;
   totalQuestions: number;
   questions: Question[];
   passingScore?: number; // optional for now until we can enter it during exam creation

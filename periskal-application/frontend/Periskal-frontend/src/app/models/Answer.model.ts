@@ -1,6 +1,7 @@
 export interface Answer {
-
-    id?: number;
-    text: string;
-
+  id?: number;
+  textEn: string;
+  textNl: string;
+  textFr: string;
+  textDe: string;
 }

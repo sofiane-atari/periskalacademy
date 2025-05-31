@@ -42,8 +42,8 @@ class ExamServiceTest {
 
         exam = new Exam();
         exam.setId(1L);
-        exam.setExamTitle("Test Exam");
-        exam.setExamDescription("Sample description");
+        exam.setExamTitleEn("Test Exam");
+        exam.setExamDescriptionEn("Sample description");
         exam.setTotalQuestions(2);
         exam.setTraining(training);
     }
@@ -55,7 +55,7 @@ class ExamServiceTest {
         Optional<Exam> result = examService.findById(1L);
 
         assertThat(result).isPresent();
-        assertThat(result.get().getExamTitle()).isEqualTo("Test Exam");
+        assertThat(result.get().getExamTitleEn()).isEqualTo("Test Exam");
     }
 
     @Test
@@ -81,13 +81,13 @@ class ExamServiceTest {
     @Test
     void givenValidExamRequest_whenCreateExam_thenReturnsSavedExam() {
         ExamRequest request = new ExamRequest();
-        request.setExamTitle("New Exam");
-        request.setExamDescription("New Desc");
+        request.setExamTitleEn("New Exam");
+        request.setExamDescriptionEn("New Desc");
         request.setTotalQuestions(1);
         request.setTrainingId(1L);
 
         QuestionDTO questionDTO = new QuestionDTO();
-        questionDTO.setText("Question 1");
+        questionDTO.setTextEn("Question 1");
         request.setQuestions(List.of(questionDTO));
 
         when(trainingRepository.findById(1L)).thenReturn(Optional.of(training));
@@ -96,7 +96,7 @@ class ExamServiceTest {
         Exam result = examService.createExam(request);
 
         assertThat(result).isNotNull();
-        assertThat(result.getExamTitle()).isEqualTo("Test Exam"); // Because of stubbed return
+        assertThat(result.getExamTitleEn()).isEqualTo("Test Exam"); // Because of stubbed return
         verify(examRepository).save(any(Exam.class));
     }
 
@@ -114,12 +114,12 @@ class ExamServiceTest {
     @Test
     void givenExistingExam_whenUpdateExam_thenReturnsUpdatedExam() {
         Exam updatedExam = new Exam();
-        updatedExam.setExamTitle("Updated Title");
-        updatedExam.setExamDescription("Updated Desc");
+        updatedExam.setExamTitleEn("Updated Title");
+        updatedExam.setExamDescriptionEn("Updated Desc");
         updatedExam.setTotalQuestions(3);
 
         Question q = new Question();
-        q.setText("Updated Question");
+        q.setTextEn("Updated Question");
         updatedExam.setQuestions(List.of(q));
 
         when(examRepository.findById(1L)).thenReturn(Optional.of(exam));

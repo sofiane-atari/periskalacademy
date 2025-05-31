@@ -27,8 +27,15 @@ public class Exam {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String examTitle;
-    private String examDescription;
+    private String examTitleEn;
+    private String examTitleNl;
+    private String examTitleFr;
+    private String examTitleDe;
+
+    private String examDescriptionEn;
+    private String examDescriptionNl;
+    private String examDescriptionFr;
+    private String examDescriptionDe;
 
     @Column(nullable = false)
     private int totalQuestions;
@@ -37,7 +44,6 @@ public class Exam {
     private int passingScore = 100; // Default 100% passing score
 
     private int price;
-
     private int examAttempts;
     private int duration;
 
@@ -55,9 +61,9 @@ public class Exam {
     public Exam() {
     }
 
-    public Exam(String examTitle, String examDescription, int totalQuestions) {
-        this.examTitle = examTitle;
-        this.examDescription = examDescription;
+    public Exam(String examTitleEn, String examDescriptionEn, int totalQuestions) {
+        this.examTitleEn = examTitleEn;
+        this.examDescriptionEn = examDescriptionEn;
         this.totalQuestions = totalQuestions;
     }
 
@@ -65,5 +71,4 @@ public class Exam {
     public Long getDerivedTrainingId() {
         return (this.training != null) ? this.training.getId() : null;
     }
-
 }

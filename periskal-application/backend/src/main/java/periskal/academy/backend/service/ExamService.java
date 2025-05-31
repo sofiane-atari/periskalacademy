@@ -51,8 +51,14 @@ public class ExamService {
     public Exam createExam(ExamRequest examRequest) {
         // 1) Prepare Exam entity
         Exam exam = new Exam();
-        exam.setExamTitle(examRequest.getExamTitle());
-        exam.setExamDescription(examRequest.getExamDescription());
+        exam.setExamTitleEn(examRequest.getExamTitleEn());
+        exam.setExamTitleNl(examRequest.getExamTitleNl());
+        exam.setExamTitleFr(examRequest.getExamTitleFr());
+        exam.setExamTitleDe(examRequest.getExamTitleDe());
+        exam.setExamDescriptionEn(examRequest.getExamDescriptionEn());
+        exam.setExamDescriptionNl(examRequest.getExamDescriptionNl());
+        exam.setExamDescriptionFr(examRequest.getExamDescriptionFr());
+        exam.setExamDescriptionDe(examRequest.getExamDescriptionDe());
         exam.setTotalQuestions(examRequest.getTotalQuestions());
         exam.setPrice(examRequest.getPrice());
         exam.setExamAttempts(examRequest.getExamAttempts());
@@ -70,7 +76,10 @@ public class ExamService {
         List<Question> questions = new ArrayList<>();
         for (QuestionDTO qdto : examRequest.getQuestions()) {
             Question q = new Question();
-            q.setText(qdto.getText());
+            q.setTextEn(qdto.getTextEn());
+            q.setTextNl(qdto.getTextNl());
+            q.setTextFr(qdto.getTextFr());
+            q.setTextDe(qdto.getTextDe());
             q.setExam(exam);
             q.setCorrectAnswer(qdto.getCorrectAnswer());
 
@@ -86,7 +95,10 @@ public class ExamService {
                 List<Answer> answers = new ArrayList<>();
                 for (AnswerDTO adto : qdto.getAnswers()) {
                     Answer a = new Answer();
-                    a.setText(adto.getText());
+                    a.setTextEn(adto.getTextEn());
+                    a.setTextNl(adto.getTextNl());
+                    a.setTextFr(adto.getTextFr());
+                    a.setTextDe(adto.getTextDe());
                     a.setQuestion(q);
                     answers.add(a);
                 }
@@ -106,8 +118,14 @@ public class ExamService {
         if (examOpt.isPresent()) {
             Exam exam = examOpt.get();
 
-            exam.setExamTitle(updatedExam.getExamTitle());
-            exam.setExamDescription(updatedExam.getExamDescription());
+            exam.setExamTitleEn(updatedExam.getExamTitleEn());
+            exam.setExamTitleNl(updatedExam.getExamTitleNl());
+            exam.setExamTitleFr(updatedExam.getExamTitleFr());
+            exam.setExamTitleDe(updatedExam.getExamTitleDe());
+            exam.setExamDescriptionEn(updatedExam.getExamDescriptionEn());
+            exam.setExamDescriptionNl(updatedExam.getExamDescriptionNl());
+            exam.setExamDescriptionFr(updatedExam.getExamDescriptionFr());
+            exam.setExamDescriptionDe(updatedExam.getExamDescriptionDe());
             exam.setTotalQuestions(updatedExam.getTotalQuestions());
             exam.setPassingScore(updatedExam.getPassingScore());
             exam.setCertificateValidity(updatedExam.getCertificateValidity());
