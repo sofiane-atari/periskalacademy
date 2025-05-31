@@ -545,6 +545,8 @@ export class SkippersComponent implements OnInit {
     this.selectedTrainingId = null;
     this.billingDataForForm = null;
     this.isProcessingAction = false;
+    this.skippersWithActiveTraining = [];
+    this.error = null;
   }
 
   handleBillingCancel() {
