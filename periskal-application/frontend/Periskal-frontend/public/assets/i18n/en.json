@@ -301,5 +301,6 @@
   "SKIPPERS_ALREADY_ASSIGNED": "The following skippers already have this training assigned and will be skipped",
   "ASSIGN": "Assign",
   "CERTIFICATE_VALIDITY": "Certificate Validity (In Years)",
-  "PASSING_SCORE": "Passing Score (In Percent)"
+  "PASSING_SCORE": "Passing Score (In Percent)",
+  "EXAM_PROGRESS": "Exam Progress"
 }

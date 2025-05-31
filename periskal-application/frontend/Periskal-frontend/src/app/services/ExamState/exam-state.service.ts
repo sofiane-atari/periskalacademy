@@ -142,9 +142,9 @@ export class ExamStateService {
         text: q.text,
         photos: q.photos ? q.photos.map(p => ({ imageData: p.imageData })) : undefined,
         answers: q.answers ? q.answers.map(a => ({ id: a.id, text: a.text })) : undefined,
-        correctAnswer: Number(q.correctAnswer)
       })) || null,
-      selectedAnswers: this._examState.value.selectedAnswers.map(answer => answer === undefined ? null : answer)    };
+      selectedAnswers: this._examState.value.selectedAnswers.map(answer => answer === undefined ? null : answer)
+    };
     try {
       sessionStorage.setItem('activeExamTimerState', JSON.stringify(state));
     } catch (e) {

@@ -60,7 +60,6 @@
             @for (photo of getActiveChapter()?.photos; track $index) {
               <div class="photo">
                 <img [src]="photo.imageData" alt="Chapter Image">
-                <div class="photo-caption">Fig {{$index + 1}}: {{photo || 'Chapter image'}}</div>
               </div>
             }
           </div>
