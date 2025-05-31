@@ -49,7 +49,7 @@ export class CertificateDialogComponent {
       })
     ).subscribe({
       next: (blob: Blob) => {
-        const fileName = `${this.data.examName.replace(/\s+/g, '_')}.pdf`;
+        const fileName = `Certificate_For_${this.data.examName.replace(/\s+/g, '_')}.pdf`;
         saveAs(blob, fileName);
       },
       error: (error: any) => {
