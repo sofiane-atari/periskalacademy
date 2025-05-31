@@ -103,7 +103,6 @@ export class TakeExamComponent implements OnInit, OnDestroy {
 
     const currentExamId = this.examStateService.getCurrentExamId();
     const savedState = this.examStateService.getCurrentExamState();
-    console.log('Saved state:', savedState);
 
     if (currentExamId === examId && savedState.questions && savedState.questions.length > 0) {
       this.examService.getExamById(currentExamId).subscribe({
@@ -195,18 +194,18 @@ export class TakeExamComponent implements OnInit, OnDestroy {
     return this.selectedAnswers[index] !== undefined && this.selectedAnswers[index] !== null;
   }
 
-  submitExam(): void {
-    if (!this.exam || this.isSubmitting) {
-      return;
-    }
+ submitExam(): void {
+  if (!this.exam || this.isSubmitting) {
+    return;
+  }
 
-    this.isSubmitting = true;
+  this.isSubmitting = true;
 
-    if (this.exam.trainingId === undefined || this.exam.trainingId === null) {
-      alert('Error: Cannot submit exam. Training ID is missing from exam data. Please contact support.');
-      this.isSubmitting = false;
-      return;
-    }
+  if (this.exam.trainingId === undefined || this.exam.trainingId === null) {
+    alert('Error: Cannot submit exam. Training ID is missing from exam data. Please contact support.');
+    this.isSubmitting = false;
+    return;
+  }
 
     let correctCount = 0;
     if (this.exam.questions) {
@@ -267,6 +266,57 @@ export class TakeExamComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  const totalQuestions = this.exam.questions ? this.exam.questions.length : 0;
+  const scorePercentage = totalQuestions > 0 ? Math.round((correctCount / totalQuestions) * 100) : 0;
+  const userId = this.jwtDecoderService.getId();
+
+  const completedExamData: Omit<CompletedExam, 'id'> = {
+    userId: userId ?? 'unknown-user',
+    examId: this.exam.id ?? 0,
+    trainingId: this.exam.trainingId,
+    requiredScore: this.exam.passingScore || 100,
+    score: scorePercentage,
+    completedDate: new Date(),
+  };
+
+  this.examStateService.finishExam();
+  this.completedExamService.saveCompletedExam(completedExamData as CompletedExam).subscribe({
+    next: (savedExam) => {
+      this.isSubmitting = false;
+
+      if (savedExam.passed) {
+        this.dialog.open(CertificateDialogComponent, {
+          width: '600px',
+          maxHeight: 'auto',
+          panelClass: 'compact-dialog',
+          data: {
+            examName: this.exam?.examTitle || 'exam',
+            issueDate: new Date().toLocaleDateString(),
+            validity: '1',
+            status: 'passed',
+            certificateId: savedExam.certificateId // Pass certificateId
+          }
+        }).afterClosed().subscribe(() => {
+          this.router.navigate(['/certificates'], { queryParams: { newCertificateId: savedExam.certificateId } });
+        });
+      } else {
+        this.dialog.open(CertificateDialogComponent, {
+          data: {
+            examName: this.exam?.examTitle,
+            status: 'failed'
+          }
+        }).afterClosed().subscribe(() => {
+          this.router.navigate(['/exams']);
+        });
+      }
+    },
+    error: (err) => {
+      alert(`Failed to save your results. Please try again later.`);
+      this.isSubmitting = false;
+    }
+  });
+}
 
   formatTime(seconds: number): string {
     if (seconds < 0) seconds = 0;
