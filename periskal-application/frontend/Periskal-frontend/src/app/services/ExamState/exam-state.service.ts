@@ -147,9 +147,7 @@ export class ExamStateService {
       selectedAnswers: this._examState.value.selectedAnswers.map(answer => answer === undefined ? null : answer)    };
     try {
       sessionStorage.setItem('activeExamTimerState', JSON.stringify(state));
-      console.log('Saved state to sessionStorage:', state);
     } catch (e) {
-      console.error('Error saving to sessionStorage:', e);
     }
   }
 
@@ -158,7 +156,6 @@ export class ExamStateService {
     if (storedState) {
       try {
         const state = JSON.parse(storedState);
-        console.log('Restored state from sessionStorage:', state);
         if (state.currentExamId && state.startTime && state.totalExamDurationSeconds) {
           const elapsed = Math.floor((Date.now() - state.startTime) / 1000);
           if (state.totalExamDurationSeconds - elapsed <= 0) {
@@ -181,7 +178,6 @@ export class ExamStateService {
           }
         }
       } catch (e) {
-        console.error('Error parsing sessionStorage state:', e);
         this.clearStateFromSessionStorage();
       }
     }
