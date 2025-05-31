@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ExamService } from '../../../services/Exam/exam.service';
 import { Exam } from '../../../models/exam.model';
@@ -11,14 +11,14 @@ import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { ExamStateService } from '../../../services/ExamState/exam-state.service';
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmPromptComponent } from '../../confirm-prompt/confirm-prompt.component';
 import { CertificateDialogComponent } from '../certificatedialog/certificatedialog.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-take-exam',
-  templateUrl: './take-exam.component.html',
   standalone: true,
-  imports: [TranslatePipe],
+  imports: [CommonModule, TranslatePipe],
+  templateUrl: './take-exam.component.html',
   styleUrls: ['./take-exam.component.css']
 })
 export class TakeExamComponent implements OnInit, OnDestroy {
@@ -26,13 +26,10 @@ export class TakeExamComponent implements OnInit, OnDestroy {
   currentQuestionIndex = 0;
   loading = true;
   error: string | null = null;
-  isAssigned: boolean = false;
   selectedAnswers: (number | undefined)[] = [];
-
   remainingTime: number = 0;
   private submissionInitiatedByTimer: boolean = false;
   private isSubmitting: boolean = false;
-
   private timerSubscriptions: Subscription = new Subscription();
 
   constructor(
@@ -43,11 +40,37 @@ export class TakeExamComponent implements OnInit, OnDestroy {
     private completedExamService: CompletedExamService,
     private examStateService: ExamStateService,
     private dialog: MatDialog
-  ) { }
+  ) {}
+
+  @HostListener('window:beforeunload', ['$event'])
+  unloadHandler(event: BeforeUnloadEvent): void {
+    if (!this.examStateService.isExamFinished()) {
+      event.preventDefault();
+      // Modern browsers ignore custom messages, but setting returnValue triggers the prompt
+      event.returnValue = ''; // Empty string is sufficient to trigger the default prompt
+    }
+  }
 
   ngOnInit(): void {
     const examId = Number(this.route.snapshot.paramMap.get('id'));
-    this.loadExam(examId);
+    this.timerSubscriptions.add(
+      this.examStateService.examState$.subscribe(state => {
+        if (state.questions && this.examStateService.getCurrentExamId() === examId) {
+          this.exam = {
+            id: examId,
+            questions: state.questions,
+            examTitle: this.exam?.examTitle || '',
+            examDescription: this.exam?.examDescription || '',
+            duration: this.exam?.duration || 0,
+            totalQuestions: state.questions.length,
+            passingScore: this.exam?.passingScore || 100,
+            trainingId: this.exam?.trainingId || 0
+          } as Exam;
+          this.selectedAnswers = state.selectedAnswers;
+          this.loading = false;
+        }
+      })
+    );
 
     this.timerSubscriptions.add(
       this.examStateService.remainingTime$.subscribe(time => {
@@ -65,6 +88,8 @@ export class TakeExamComponent implements OnInit, OnDestroy {
         }
       })
     );
+
+    this.loadExam(examId);
   }
 
   ngOnDestroy(): void {
@@ -75,27 +100,47 @@ export class TakeExamComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.error = null;
 
-    this.examService.getExamById(examId).subscribe({
-      next: (exam) => {
-        exam.questions = exam.questions || [];
-        const shuffledQuestions = exam.questions.sort(() => 0.5 - Math.random());
-        const selectedQuestions = shuffledQuestions.slice(0, exam.totalQuestions);
-        exam.questions = selectedQuestions;
+    const currentExamId = this.examStateService.getCurrentExamId();
+    const savedState = this.examStateService.getCurrentExamState();
+    console.log('Saved state:', savedState);
 
-        this.exam = exam;
-        this.loading = false;
+    if (currentExamId === examId && savedState.questions && savedState.questions.length > 0) {
+      this.exam = {
+        id: examId,
+        questions: savedState.questions,
+        examTitle: '',
+        examDescription: '',
+        duration: 0,
+        totalQuestions: savedState.questions.length,
+        passingScore: 100,
+        trainingId: 0
+      } as Exam;
+      this.selectedAnswers = savedState.selectedAnswers || [];
+      this.loading = false;
+    } else {
+      this.examService.getExamById(examId).subscribe({
+        next: (exam) => {
+          exam.questions = exam.questions || [];
+          const shuffledQuestions = exam.questions.sort(() => 0.5 - Math.random());
+          const selectedQuestions = shuffledQuestions.slice(0, exam.totalQuestions);
+          exam.questions = selectedQuestions;
 
-        const examDuration = this.exam.duration * 60; // in minutes
-        if (this.exam.id)
-          this.examStateService.startOrResumeExam(this.exam.id, examDuration);
+          this.exam = exam;
+          this.selectedAnswers = new Array(exam.questions.length).fill(undefined);
+          this.loading = false;
 
-      },
-      error: (err) => {
-        this.error = 'Failed to load exam questions';
-        this.loading = false;
-        this.examStateService.resetTimerState(true);
-      }
-    });
+          const examDuration = exam.duration * 60;
+          if (exam.id) {
+            this.examStateService.startOrResumeExam(exam.id, examDuration, exam.questions);
+          }
+        },
+        error: (err) => {
+          this.error = 'Failed to load exam questions';
+          this.loading = false;
+          this.examStateService.resetTimerState(true);
+        }
+      });
+    }
   }
 
   get currentQuestion(): Question | null {
@@ -103,8 +148,9 @@ export class TakeExamComponent implements OnInit, OnDestroy {
     return this.exam.questions[this.currentQuestionIndex];
   }
 
-  clearSelection() {
+  clearSelection(): void {
     this.selectedAnswers[this.currentQuestionIndex] = undefined;
+    this.examStateService.updateSelectedAnswers(this.selectedAnswers);
   }
 
   nextQuestion(): void {
@@ -125,16 +171,13 @@ export class TakeExamComponent implements OnInit, OnDestroy {
     }
   }
 
-  selectAnswer(questionIndex: number, answerIndex: number) {
+  selectAnswer(questionIndex: number, answerIndex: number): void {
     this.selectedAnswers[questionIndex] = answerIndex;
+    this.examStateService.updateSelectedAnswers(this.selectedAnswers);
   }
 
   submitExam(): void {
-    if (!this.exam) {
-      return;
-    }
-
-    if (this.isSubmitting) {
+    if (!this.exam || this.isSubmitting) {
       return;
     }
 
@@ -147,7 +190,6 @@ export class TakeExamComponent implements OnInit, OnDestroy {
     }
 
     let correctCount = 0;
-
     if (this.exam.questions) {
       this.exam.questions.forEach((question, index) => {
         const selected = this.selectedAnswers[index];
@@ -156,7 +198,6 @@ export class TakeExamComponent implements OnInit, OnDestroy {
         }
       });
     }
-
 
     const totalQuestions = this.exam.questions ? this.exam.questions.length : 0;
     const scorePercentage = totalQuestions > 0 ? Math.round((correctCount / totalQuestions) * 100) : 0;
@@ -172,21 +213,12 @@ export class TakeExamComponent implements OnInit, OnDestroy {
     };
 
     this.examStateService.finishExam();
-    console.log(completedExamData);
     this.completedExamService.saveCompletedExam(completedExamData as CompletedExam).subscribe({
       next: (savedExam) => {
         this.isSubmitting = false;
 
-        const passedMessage = savedExam.passed
-          ? `Congratulations! You passed the exam with a score of ${scorePercentage}%.`
-          : `You did not pass the exam. The required score is ${savedExam.requiredScore}%. Please try again.`;
-
-        const certificateMessage = savedExam.certificateId
-          ? `\n\nA certificate has been generated and is available in your certificates list.`
-          : '';
-
         if (savedExam.passed) {
-          const dialogRef = this.dialog.open(CertificateDialogComponent, {
+          this.dialog.open(CertificateDialogComponent, {
             width: '600px',
             maxHeight: 'auto',
             panelClass: 'compact-dialog',
@@ -198,7 +230,7 @@ export class TakeExamComponent implements OnInit, OnDestroy {
             }
           }).afterClosed().subscribe(() => {
             this.router.navigate(['/modules']);
-          });;
+          });
         } else {
           this.dialog.open(CertificateDialogComponent, {
             data: {
@@ -208,13 +240,7 @@ export class TakeExamComponent implements OnInit, OnDestroy {
           });
         }
 
-        if (savedExam.certificateId) {
-          this.router.navigate(['/certificates'], {
-            queryParams: { newCertificateId: savedExam.certificateId }
-          });
-        } else {
-          this.router.navigate(['/exams']);
-        }
+        this.router.navigate(savedExam.certificateId ? ['/certificates', { newCertificateId: savedExam.certificateId }] : ['/exams']);
       },
       error: (err) => {
         alert('Failed to save your results. Please try again later.');

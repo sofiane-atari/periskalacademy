@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription, takeWhile, timer } from 'rxjs';
+import { Question } from '../../models/question.model';
 
 @Injectable({
   providedIn: 'root'
@@ -16,11 +17,32 @@ export class ExamStateService {
   private _examFinished = new BehaviorSubject<boolean>(false);
   public readonly examFinished$: Observable<boolean> = this._examFinished.asObservable();
 
+  private _examState = new BehaviorSubject<{
+    questions: Question[] | null;
+    selectedAnswers: (number | undefined)[];
+  }>({
+    questions: null,
+    selectedAnswers: []
+  });
+  public readonly examState$: Observable<{
+    questions: Question[] | null;
+    selectedAnswers: (number | undefined)[];
+  }> = this._examState.asObservable();
+
   constructor() {
     this.restoreStateFromSessionStorage();
   }
 
-  startOrResumeExam(examId: number, durationSeconds: number): void {
+  getCurrentExamState(): { questions: Question[] | null; selectedAnswers: (number | undefined)[] } {
+    return this._examState.value;
+  }
+
+  // New method to get the current exam finished state
+  isExamFinished(): boolean {
+    return this._examFinished.value;
+  }
+
+  startOrResumeExam(examId: number, durationSeconds: number, questions?: Question[]): void {
     if (this.currentExamId === examId && this.timerSubscription && !this._examFinished.value) {
       return;
     }
@@ -34,9 +56,28 @@ export class ExamStateService {
       this.startTime = Date.now();
     }
 
+    const savedState = this.restoreStateFromSessionStorage();
+    if (savedState && savedState.questions && savedState.currentExamId === examId) {
+      this._examState.next({
+        questions: savedState.questions,
+        selectedAnswers: savedState.selectedAnswers || []
+      });
+    } else if (questions) {
+      this._examState.next({
+        questions,
+        selectedAnswers: new Array(questions.length).fill(undefined)
+      });
+    }
+
     this.startTimer();
     this.saveStateToSessionStorage();
     this._examFinished.next(false);
+  }
+
+  updateSelectedAnswers(selectedAnswers: (number | undefined)[]): void {
+    const currentState = this._examState.value;
+    this._examState.next({ ...currentState, selectedAnswers });
+    this.saveStateToSessionStorage();
   }
 
   private startTimer(): void {
@@ -96,37 +137,60 @@ export class ExamStateService {
       currentExamId: this.currentExamId,
       startTime: this.startTime,
       totalExamDurationSeconds: this.totalExamDurationSeconds,
+      questions: this._examState.value.questions?.map(q => ({
+        id: q.id,
+        text: q.text,
+        photos: q.photos ? q.photos.map(p => ({ imageData: p.imageData })) : undefined,
+        answers: q.answers ? q.answers.map(a => ({ id: a.id, text: a.text })) : undefined,
+        correctAnswer: Number(q.correctAnswer)
+      })) || null,
+      selectedAnswers: this._examState.value.selectedAnswers
     };
-    sessionStorage.setItem('activeExamTimerState', JSON.stringify(state));
+    try {
+      sessionStorage.setItem('activeExamTimerState', JSON.stringify(state));
+      console.log('Saved state to sessionStorage:', state);
+    } catch (e) {
+      console.error('Error saving to sessionStorage:', e);
+    }
   }
 
-  private restoreStateFromSessionStorage(): void {
+  private restoreStateFromSessionStorage(): any {
     const storedState = sessionStorage.getItem('activeExamTimerState');
     if (storedState) {
       try {
         const state = JSON.parse(storedState);
+        console.log('Restored state from sessionStorage:', state);
         if (state.currentExamId && state.startTime && state.totalExamDurationSeconds) {
           const elapsed = Math.floor((Date.now() - state.startTime) / 1000);
           if (state.totalExamDurationSeconds - elapsed <= 0) {
             this.clearStateFromSessionStorage();
             this._remainingTime.next(0);
             this._examFinished.next(true);
+            return null;
           } else {
             this.currentExamId = state.currentExamId;
             this.startTime = state.startTime;
             this.totalExamDurationSeconds = state.totalExamDurationSeconds;
+            this._examState.next({
+              questions: state.questions || null,
+              selectedAnswers: state.selectedAnswers || []
+            });
             this._examFinished.next(false);
             this.startTimer();
+            return state;
           }
         }
       } catch (e) {
+        console.error('Error parsing sessionStorage state:', e);
         this.clearStateFromSessionStorage();
       }
     }
+    return null;
   }
 
   private clearStateFromSessionStorage(): void {
     sessionStorage.removeItem('activeExamTimerState');
+    this._examState.next({ questions: null, selectedAnswers: [] });
   }
 
   resetTimerState(clearStorage: boolean = true): void {
