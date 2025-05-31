@@ -12,7 +12,7 @@ import { environment } from '../../../environments/environment';
 @Injectable({ providedIn: 'root' })
 
 export class AuthenticationService {
-  private baseUrl = `${environment.apiUrl}/api`; // Base URL for the API, ensure this matches your environment configuration
+  private baseUrl = `${environment.apiUrl}`; // Base URL for the API, ensure this matches your environment configuration
   private authUrl  = `${this.baseUrl}/auth/authenticate`; // Main authentication endpoint
   private dongleTokenUrl = `${this.baseUrl}/auth/decode-token`; // Dongle authentication endpoint
   private readonly TOKEN_KEY = 'jwt_token';
