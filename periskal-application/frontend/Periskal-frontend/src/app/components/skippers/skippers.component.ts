@@ -364,10 +364,6 @@ export class SkippersComponent implements OnInit {
     const fleetmanagerId = this.jwtDecoder.getId();
 
     if (!fleetmanagerId) {
-        console.error('Fleetmanager ID is null. User role:', {
-            isAdmin: this.roleAuth.isAdmin(),
-            isSupport: this.roleAuth.isSupport()
-        });
         this.snackBar.open('Error: Unable to retrieve user ID. Please contact support.', 'Close', {
             duration: 5000,
             panelClass: ['snackbar-error']
@@ -436,7 +432,6 @@ export class SkippersComponent implements OnInit {
 
  checkSkippersWithActiveTraining(trainingId: number | null) {
     if (!trainingId || this.selectedSkipperIds.length === 0) {
-        console.log('No training ID or skippers selected:', { trainingId, selectedSkipperIds: this.selectedSkipperIds });
         this.skippersWithActiveTraining = [];
         return;
     }
@@ -444,9 +439,7 @@ export class SkippersComponent implements OnInit {
     setTimeout(() => { // Add 500ms delay to ensure backend transaction completes
         this.examService.getExamByTrainingId(trainingId).pipe(
             switchMap(exam => {
-                console.log('Exam for training:', { trainingId, exam });
                 if (!exam || !exam.id) {
-                    console.log('No exam found for training ID:', trainingId);
                     this.snackBar.open('No exam associated with training ID: ' + trainingId, 'Close', {
                         duration: 5000,
                         panelClass: ['snackbar-warning']
@@ -458,9 +451,7 @@ export class SkippersComponent implements OnInit {
                 const attemptObservables = this.selectedSkipperIds.map(userId =>
                     this.userAttemptService.getRemainingAttempts(userId, examId).pipe(
                         map(response => {
-                            console.log('Remaining attempts for user:', { userId, examId, response });
                             if (response.remainingAttempts === 0) {
-                                console.warn('No remaining attempts for user:', { userId, examId });
                                 this.snackBar.open(`No exam attempts available for user ${userId}`, 'Close', {
                                     duration: 5000,
                                     panelClass: ['snackbar-warning']
@@ -469,7 +460,6 @@ export class SkippersComponent implements OnInit {
                             return { userId, hasAttempts: response.remainingAttempts > 0 };
                         }),
                         catchError(err => {
-                            console.error('Error fetching attempts for user:', { userId, examId, err });
                             this.snackBar.open(`Failed to check attempts for user ${userId}: ${err.message}`, 'Close', {
                                 duration: 5000,
                                 panelClass: ['snackbar-error']
@@ -481,7 +471,6 @@ export class SkippersComponent implements OnInit {
                 return forkJoin(attemptObservables);
             }),
             catchError(err => {
-                console.error('Error fetching exam for training:', { trainingId, err });
                 this.snackBar.open('Failed to fetch exam for training ID: ' + trainingId, 'Close', {
                     duration: 5000,
                     panelClass: ['snackbar-error']
@@ -493,7 +482,6 @@ export class SkippersComponent implements OnInit {
             this.skippersWithActiveTraining = results
                 .filter(result => result.hasAttempts)
                 .map(result => result.userId);
-            console.log('Skippers with active training:', this.skippersWithActiveTraining);
         });
     }, 500);
   }
