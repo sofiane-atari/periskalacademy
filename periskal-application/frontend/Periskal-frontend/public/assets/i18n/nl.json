@@ -299,5 +299,7 @@
   "createSuccess": "FAQ succesvol toegevoegd!",
   "createError": "Er is een fout opgetreden bij het toevoegen van de FAQ.",
   "SKIPPERS_ALREADY_ASSIGNED": "De volgende schippers hebben deze training al toegewezen gekregen en worden overgeslagen",
-  "ASSIGN": "Toewijzen"
+  "ASSIGN": "Toewijzen",
+  "CERTIFICATE_VALIDITY": "Geldigheid certificaat (in jaren)",
+  "PASSING_SCORE": "Slaagcijfer (in procent)"
 }

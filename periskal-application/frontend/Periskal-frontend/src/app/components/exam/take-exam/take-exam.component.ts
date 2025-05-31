@@ -28,6 +28,7 @@ export class TakeExamComponent implements OnInit, OnDestroy {
   error: string | null = null;
   selectedAnswers: (number | undefined)[] = [];
   remainingTime: number = 0;
+  savedExam!: Exam;
   private submissionInitiatedByTimer: boolean = false;
   private isSubmitting: boolean = false;
   private timerSubscriptions: Subscription = new Subscription();
@@ -40,7 +41,7 @@ export class TakeExamComponent implements OnInit, OnDestroy {
     private completedExamService: CompletedExamService,
     private examStateService: ExamStateService,
     private dialog: MatDialog
-  ) {}
+  ) { }
 
   @HostListener('window:beforeunload', ['$event'])
   unloadHandler(event: BeforeUnloadEvent): void {
@@ -63,7 +64,8 @@ export class TakeExamComponent implements OnInit, OnDestroy {
             duration: this.exam?.duration || 0,
             totalQuestions: state.questions.length,
             passingScore: this.exam?.passingScore || 100,
-            trainingId: this.exam?.trainingId || 0
+            trainingId: this.exam?.trainingId || 0,
+            certificateValidity: this.exam?.certificateValidity || 1
           } as Exam;
           this.selectedAnswers = state.selectedAnswers;
           this.loading = false;
@@ -104,22 +106,32 @@ export class TakeExamComponent implements OnInit, OnDestroy {
     console.log('Saved state:', savedState);
 
     if (currentExamId === examId && savedState.questions && savedState.questions.length > 0) {
-      this.exam = {
-        id: examId,
-        questions: savedState.questions,
-        examTitle: '',
-        examDescription: '',
-        duration: 0,
-        totalQuestions: savedState.questions.length,
-        passingScore: 100,
-        trainingId: 0
-      } as Exam;
-      // Ensure selectedAnswers matches questions length
-      this.selectedAnswers = savedState.selectedAnswers?.slice(0, savedState.questions.length) || [];
-      while (this.selectedAnswers.length < savedState.questions.length) {
-        this.selectedAnswers.push(undefined);
-      }
-      this.loading = false;
+      this.examService.getExamById(currentExamId).subscribe({
+        next: (savedExam) => {
+          this.savedExam = savedExam;
+          this.exam = {
+            id: examId,
+            questions: savedState.questions,
+            examTitle: this.savedExam.examTitle,
+            examDescription: this.savedExam.examDescription,
+            duration: 0,
+            totalQuestions: savedState.questions?.length,
+            passingScore: this.savedExam.duration,
+            trainingId: this.savedExam.trainingId,
+            certificateValidity: this.savedExam.certificateValidity
+          } as Exam;
+          // Ensure selectedAnswers matches questions length
+          this.selectedAnswers = savedState.selectedAnswers?.slice(0, savedState.questions?.length) || [];
+          while (this.selectedAnswers.length < savedState.questions!.length) {
+            this.selectedAnswers.push(undefined);
+          }
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error(err);
+        }
+      });
+
     } else {
       this.examService.getExamById(examId).subscribe({
         next: (exam) => {
@@ -232,7 +244,7 @@ export class TakeExamComponent implements OnInit, OnDestroy {
             data: {
               examName: this.exam?.examTitle || 'exam',
               issueDate: new Date().toLocaleDateString(),
-              validity: '1',
+              validity: this.exam?.certificateValidity,
               status: 'passed'
             }
           }).afterClosed().subscribe(() => {

@@ -61,6 +61,9 @@
       <label for="certificateValidity">{{'CERTIFICATE_VALIDITY' | translate}}</label>
       <input id="certificateValidity" formControlName="certificateValidity" type="number" value="1" min="1" placeholder="{{'CERTIFICATE_VALIDITY_PLACEHOLDER' |translate}}">
 
+      <label for="passingScore">{{'PASSING_SCORE' | translate}}</label>
+      <input id="passingScore" formControlName="passingScore" type="number" value="1" min="1" placeholder="{{'PASSING_SCORE_PLACEHOLDER' |translate}}">
+
       @if (examForm.get('questions')) {
         <div class="questions-section">
           <h3>{{'QUESTIONS' | translate}}</h3>

@@ -105,8 +105,8 @@ export class AddTrainingComponent implements OnInit { // Implement OnInit
     });
   }
 
-  onVideoSelected(moduleIndex: number, chapterIndex: number,lang: string, file: File): void {
-    this.uploadVideoToFtp(moduleIndex, chapterIndex,lang, file);
+  onVideoSelected(moduleIndex: number, chapterIndex: number, lang: string, file: File): void {
+    this.uploadVideoToFtp(moduleIndex, chapterIndex, lang, file);
   }
 
   uploadVideoToFtp(moduleIndex: number, chapterIndex: number, lang: string, videoFile: File): void {
@@ -209,5 +209,9 @@ export class AddTrainingComponent implements OnInit { // Implement OnInit
       reader.onerror = reject;
       reader.readAsDataURL(file);
     });
+  }
+
+  goBack() {
+    this.router.navigate(['/dashboard']);
   }
 }

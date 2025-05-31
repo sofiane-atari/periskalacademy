@@ -58,6 +58,7 @@ public class ExamService {
         exam.setExamAttempts(examRequest.getExamAttempts());
         exam.setPassingScore(examRequest.getPassingScore());
         exam.setDuration(examRequest.getDuration());
+        exam.setCertificateValidity(examRequest.getCertificateValidity());
 
         // 2) Link Training
         Training training = trainingRepository.findById(examRequest.getTrainingId())
@@ -109,7 +110,10 @@ public class ExamService {
             exam.setExamDescription(updatedExam.getExamDescription());
             exam.setTotalQuestions(updatedExam.getTotalQuestions());
             exam.setPassingScore(updatedExam.getPassingScore());
-
+            exam.setCertificateValidity(updatedExam.getCertificateValidity());
+            exam.setDuration(updatedExam.getDuration());
+            exam.setPrice(updatedExam.getPrice());
+            exam.setExamAttempts(updatedExam.getExamAttempts());
             // Oude vragen verwijderen
             exam.getQuestions().clear();
 

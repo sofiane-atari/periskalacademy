@@ -299,6 +299,7 @@
   "createSuccess": "FAQ successfully added!",
   "createError": "An error occurred while adding the FAQ.",
   "SKIPPERS_ALREADY_ASSIGNED": "The following skippers already have this training assigned and will be skipped",
-  "ASSIGN": "Assign"
+  "ASSIGN": "Assign",
+  "CERTIFICATE_VALIDITY": "Certificate Validity (In Years)",
+  "PASSING_SCORE": "Passing Score (In Percent)"
 }
-

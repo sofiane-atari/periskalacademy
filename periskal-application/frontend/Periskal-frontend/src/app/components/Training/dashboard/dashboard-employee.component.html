@@ -42,7 +42,7 @@
                 </svg>
               </div>
               <div class="assigned-item-info">
-                <h3>{{ getAssignedTrainingName($index) }}</h3>
+                <h3>{{ getAssignedTrainingName(training) }}</h3>
                 @if (training.assignedDate) {
                   <p class="assignment-date">{{ 'ASSIGNED_ON' | translate }} {{ training.assignedDate | date:'dd-MM-yyyy' }}</p>
                 } @else {
@@ -50,7 +50,7 @@
                 }
               </div>
               <div class="assigned-item-actions">
-                <button class="start-now-btn" (click)="goToTrainingDetails(training.id)">
+                <button class="start-now-btn" (click)="goToTrainingDetails(training)">
                   {{ 'START_NOW' | translate }}
                 </button>
               </div>
@@ -66,15 +66,15 @@
       @if (allTrainingsData.length > 0) {
         <div class="training-grid">
           @for (training of allTrainingsData; track $index) {
-            <div class="training-card" (click)="goToTrainingDetails(training.id)">
+            <div class="training-card" (click)="goToTrainingDetails(training)">
               <div class="card-header">
-                <h2>{{ getTrainingName($index) }}</h2>
+                <h2>{{ getTrainingName(training) }}</h2>
                 <div class="card-badges">
                   @if(roleAuth.isSkipper()){
                     @if (training.isAssigned) {
                       <span class="assigned-badge">{{ 'ASSIGNED_BADGE' | translate }}</span>
                     }
-                    @if(hasExam(training.id)){
+                    @if(hasExam(training)){
                       <span class="certificate-badge">{{ 'CERTIFICATE_BADGE' | translate }}</span>
                     }
                   }
@@ -82,7 +82,7 @@
                 @if (roleAuth.canEditContent()) {
                   <div class="card-actions">
                     <div class="dropdown-container">
-                      <button class="icon-btn pencil-btn" (click)="toggleMenuEdit(training.id); $event.stopPropagation()">
+                      <button class="icon-btn pencil-btn" (click)="toggleMenuEdit(training); $event.stopPropagation()">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                           <path d="M12 20h9"></path>
                           <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
@@ -90,11 +90,11 @@
                       </button>
                       @if (openMenus[training.id]) {
                         <div class="edit-dropdown" (click)="$event.stopPropagation()">
-                          <button (click)="goToEditTrainingPage(training.id); $event.stopPropagation()">
+                          <button (click)="goToEditTrainingPage(training); $event.stopPropagation()">
                             {{ 'EDIT_TRAINING' | translate }}
                           </button>
-                          @if (hasExam(training.id)) {
-                            <button (click)="goToEditExamPage(training.id); $event.stopPropagation()">
+                          @if (hasExam(training)) {
+                            <button (click)="goToEditExamPage(training); $event.stopPropagation()">
                               {{ 'EDIT_EXAM' | translate }}
                             </button>
                           }
@@ -104,13 +104,13 @@
                   </div>
                 }
               </div>
-              <p class="card-description">{{ getTrainingDescription($index) }}</p>
+              <p class="card-description">{{ getTrainingDescription(training) }}</p>
               <div class="card-footer">
                 <span class="training-count">
                   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path>
                   </svg>
-                  {{ getCountModules(training.id) }} {{ 'MODULES' | translate }}
+                  {{ getCountModules(training) }} {{ 'MODULES' | translate }}
                 </span>
               </div>
               <div class="language-tags">

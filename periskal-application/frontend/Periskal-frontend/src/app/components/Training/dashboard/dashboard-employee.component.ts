@@ -87,7 +87,7 @@ export class DashboardComponent implements OnInit {
       }
     });
   }
-    private sortByDate(a: DisplayTraining, b: DisplayTraining): number {
+  private sortByDate(a: DisplayTraining, b: DisplayTraining): number {
     const dateA = a.assignedDate ? new Date(a.assignedDate).getTime() : 0;
     const dateB = b.assignedDate ? new Date(b.assignedDate).getTime() : 0;
     return dateB - dateA; // Newest date comes first
@@ -150,42 +150,40 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  hasExam(trainingId: number): boolean {
-    return this.examsMap.has(trainingId);
+  hasExam(training: Training): boolean {
+    const exam = this.examsMap.get(training.id);
+    return !!exam;
   }
 
-  goToExam(trainingId: number): void {
-    const exam = this.examsMap.get(trainingId);
+  goToExam(training: Training): void {
+    const exam = training.exam
     if (exam) {
       this.router.navigate(['/take-exam', exam.id]);
     }
   }
 
-  goToTrainingDetails(trainingId: number) {
-    this.router.navigate(['/training', trainingId]);
+  goToTrainingDetails(training: Training) {
+    this.router.navigate(['/training', training.id]);
   }
 
-  getTrainingName(index: number) {
+  getTrainingName(training: Training) {
     if (this.lang == "en") {
-      return this.trainingsData[index].nameEn
+      return training.nameEn;
     }
     if (this.lang == "nl") {
-      return this.trainingsData[index].nameNl
+      return training.nameNl;
     }
     if (this.lang == "de") {
-      return this.trainingsData[index].nameDe
+      return training.nameDe;
     }
     if (this.lang == "fr") {
-      return this.trainingsData[index].nameFr
+      return training.nameFr
     } else {
       return "Unknown language"
     }
   }
 
-  getAssignedTrainingName(index: number) {
-    const trainingId = this.trainingsData[index].id;
-    const training = this.trainingsData.find(t => t.id === trainingId);
-
+  getAssignedTrainingName(training: Training) {
     if (!training) {
       return "Training Not Found";
     }
@@ -206,30 +204,30 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  getTrainingDescription(index: number) {
+  getTrainingDescription(training: Training) {
     if (this.lang == "en") {
-      return this.trainingsData[index].descriptionEn
+      return training.descriptionEn
     }
     if (this.lang == "nl") {
-      return this.trainingsData[index].descriptionNl
+      return training.descriptionNl
     }
     if (this.lang == "de") {
-      return this.trainingsData[index].descriptionDe
+      return training.descriptionDe
     }
     if (this.lang == "fr") {
-      return this.trainingsData[index].descriptionFr
+      return training.descriptionFr
     } else {
       return "Unknown language"
     }
   }
 
-  toggleMenuEdit(trainingId: number) {
+  toggleMenuEdit(training: Training) {
     // Sluit alle andere open dropdowns
     Object.keys(this.openMenus).forEach(key => {
       this.openMenus[+key] = false;
     });
     // Toggle de huidige
-    this.openMenus[trainingId] = !this.openMenus[trainingId];
+    this.openMenus[training.id] = !this.openMenus[training.id];
   }
 
   toggleMenuAdd() {
@@ -240,23 +238,23 @@ export class DashboardComponent implements OnInit {
     this.router.navigate(['/add-training'])
   }
 
-  goToEditTrainingPage(trainingId: number) {
-    this.router.navigate(['/edit', trainingId])
+  goToEditTrainingPage(training: Training) {
+    this.router.navigate(['/edit', training.id])
   }
 
   goToAddExamPage() {
     this.router.navigate(['/add-exam'])
   }
 
-  goToEditExamPage(trainingId: number) {
-    const exam = this.examsMap.get(trainingId);
+  goToEditExamPage(training: Training) {
+    const exam = this.examsMap.get(training.id);
     if (exam) {
       this.router.navigate(['/update-exam', exam.id]);
     }
   }
 
-  getCountModules(trainingId: number): number {
-    return this.trainingsData.find(t => t.id === trainingId)?.modules?.length ?? 0;
+  getCountModules(training: Training): number {
+    return this.trainingsData.find(t => t.id === training.id)?.modules?.length ?? 0;
   }
 
 }

@@ -37,6 +37,7 @@ export class AddExamComponent implements OnInit {
       examAttempts: ['', Validators.required],
       duration: [''],
       certificateValidity: [''],
+      passingScore: [''],
       questions: this.fb.array([])// Initialize empty FormArray
     });
     this.lang = localStorage.getItem('lang') || 'en';
@@ -121,6 +122,7 @@ export class AddExamComponent implements OnInit {
   }
 
   submitExam(): void {
+    console.log(this.examForm);
     if (this.examForm.valid) {
       const examData = {
         examTitle: this.examForm.value.examTitle,
@@ -140,11 +142,13 @@ export class AddExamComponent implements OnInit {
         price: Number(this.examForm.value.price),
         examAttempts: Number(this.examForm.value.examAttempts),
         duration: Number(this.examForm.value.duration),
-        certificateValidty: Number(this.examForm.value.certificateValidity)
+        certificateValidity: Number(this.examForm.value.certificateValidity),
+        passingScore: Number(this.examForm.value.passingScore),
       };
-
+      console.log(examData);
       this.examService.createExam(examData).subscribe({
         next: (response) => {
+          console.log(response);
           this.router.navigate(['/training-employee']);
         },
         error: (error) => {
