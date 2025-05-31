@@ -250,7 +250,7 @@ export class TakeExamComponent implements OnInit, OnDestroy {
       }
     },
     error: (err) => {
-      alert('Failed to save your results. Please try again later.');
+      alert(`Failed to save your results. Please try again later.`);
       this.isSubmitting = false;
     }
   });
