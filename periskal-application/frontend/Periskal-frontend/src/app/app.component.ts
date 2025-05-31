@@ -24,7 +24,7 @@ export class AppComponent implements OnInit {
   title = 'Periskal-frontend';
   showNavbar = true;
   mobileMenuOpen = false;
-  userName ?: string;
+  userName?: string;
   userRole = "";
 
   lang: string = '';
@@ -32,8 +32,8 @@ export class AppComponent implements OnInit {
   constructor(private router: Router
     , private authService: AuthenticationService
     , private translateService: TranslateService
-    ,public roleAuth: RoleAuthorizationService
-    ,private jwtDecoderService: JwtDecoderService
+    , public roleAuth: RoleAuthorizationService
+    , private jwtDecoderService: JwtDecoderService
   ) {
 
     this.translateService.setDefaultLang('nl');
@@ -49,6 +49,10 @@ export class AppComponent implements OnInit {
   isLoginPage(): boolean {
     if (!this.router.url) return false;
     return this.router.url === '/login' || this.router.url.includes('decode-token');
+  }
+
+  goToHome() {
+    this.router.navigate(['/dashboard'])
   }
 
   ngOnInit(): void {
@@ -68,7 +72,7 @@ export class AppComponent implements OnInit {
           }
         });
         this.lang = localStorage.getItem('lang') || 'nl';
-      }else{
+      } else {
         this.userName = undefined;
         this.userRole = '';
       }
@@ -94,7 +98,7 @@ export class AppComponent implements OnInit {
   toggleMobileMenu(): void {
     this.mobileMenuOpen = !this.mobileMenuOpen;
   }
-  logout() { 
+  logout() {
     this.authService.logout();
     this.router.navigate(['/login']);
   }

@@ -52,6 +52,8 @@ export class TakeExamComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    history.pushState(null, '', location.href);
+    window.addEventListener('popstate', this.preventBackNavigation);
     const examId = Number(this.route.snapshot.paramMap.get('id'));
     this.timerSubscriptions.add(
       this.examStateService.examState$.subscribe(state => {
@@ -94,8 +96,16 @@ export class TakeExamComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    window.removeEventListener('popstate', this.preventBackNavigation);
     this.timerSubscriptions.unsubscribe();
   }
+
+  preventBackNavigation = () => {
+    if (!this.examStateService.isExamFinished()) {
+      history.pushState(null, '', location.href);
+      alert('You cannot go back during the exam.');
+    }
+  };
 
   loadExam(examId: number): void {
     this.loading = true;
