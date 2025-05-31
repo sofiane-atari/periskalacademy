@@ -139,9 +139,17 @@ export class ExamStateService {
       totalExamDurationSeconds: this.totalExamDurationSeconds,
       questions: this._examState.value.questions?.map(q => ({
         id: q.id,
-        text: q.text,
+        textEn: q.textEn,
+        textNl: q.textNl,
+        textFr: q.textFr,
+        textDe: q.textDe,
         photos: q.photos ? q.photos.map(p => ({ imageData: p.imageData })) : undefined,
-        answers: q.answers ? q.answers.map(a => ({ id: a.id, text: a.text })) : undefined,
+        answers: q.answers ? q.answers.map(a => ({ 
+        id: a.id,
+        textEn: a.textEn,
+        textNl: a.textNl,
+        textFr: a.textFr,
+        textDe: a.textDe, })) : undefined,
       })) || null,
       selectedAnswers: this._examState.value.selectedAnswers.map(answer => answer === undefined ? null : answer)
     };

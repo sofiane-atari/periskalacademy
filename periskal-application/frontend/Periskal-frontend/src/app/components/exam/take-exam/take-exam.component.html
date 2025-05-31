@@ -57,8 +57,11 @@
                     >
                     <label 
                       class="form-check-label" 
-                      [attr.for]="'answer' + currentQuestionIndex + '-' + $index">
-                      {{ answer.text }}
+                      [attr.for]="'answer' + currentQuestionIndex + '-' + $index"
+                      (change)="selectAnswer(currentQuestionIndex, $index)"
+                    >
+                      {{ getAnswerText(answer) }}
+
                     </label>
                   </div>
                 }
@@ -111,11 +114,10 @@
                 </div>
               }
             </div>
-            }
           </div>
 
           <div class="answers-section mt-4">
-            @for (answer of currentQuestion.answers; track $index) {
+            @for (answer of currentQuestion?.answers; track $index) {
             <div class="form-check mb-3">
               <input
                 class="form-check-input custom-radio"
@@ -172,7 +174,6 @@
             </button>
             }
           </div>
-          }
         </div>
       </div>
 
@@ -218,6 +219,5 @@
         </div>
       </div>
     </div>
-  </div>
   }
 </div>

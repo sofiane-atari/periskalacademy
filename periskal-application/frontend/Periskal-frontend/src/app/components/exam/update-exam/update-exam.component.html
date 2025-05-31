@@ -115,24 +115,6 @@
               required
             />
           </div>
-
-          <h4 class="mt-4">{{'EXAM_QUESTIONS' | translate }}</h4>
-
-          @for(question of exam.questions; track $index){
-          <div class="mb-2">
-            <div class="input-group">
-              <input type="text"
-                     class="form-control"
-                     [(ngModel)]="question.text"
-                     [name]="'question_' + $index"
-                     placeholder="Vraagtekst"
-                     required>
-              <button type="button" class="btn btn-danger" (click)="removeQuestion($index)">
-                {{'REMOVE_BUTTON' |translate }}
-              </button>
-            </div>
-          </div>
-        }
       
       <label for="price">{{'PRICE' | translate}}</label>
       <input id="price" type="number" [(ngModel)]="exam.price" name="price" min="0" step="0.01" required>

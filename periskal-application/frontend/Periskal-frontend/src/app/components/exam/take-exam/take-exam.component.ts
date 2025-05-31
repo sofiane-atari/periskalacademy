@@ -63,8 +63,14 @@ export class TakeExamComponent implements OnInit, OnDestroy {
           this.exam = {
             id: examId,
             questions: state.questions,
-            examTitle: this.exam?.examTitle || '',
-            examDescription: this.exam?.examDescription || '',
+            examTitleEn: this.exam?.examTitleEn || '',
+            examTitleDe: this.exam?.examTitleDe || '',
+            examTitleNl: this.exam?.examTitleNl || '',
+            examTitleFr: this.exam?.examTitleFr || '',
+            examDescriptionEn: this.exam?.examDescriptionEn || '',
+            examDescriptionDe: this.exam?.examDescriptionDe || '',
+            examDescriptionFr: this.exam?.examDescriptionFr || '',
+            examDescriptionNl: this.exam?.examDescriptionNl || '',
             duration: this.exam?.duration || 0,
             totalQuestions: state.questions.length,
             passingScore: this.exam?.passingScore || 100,
@@ -123,8 +129,14 @@ export class TakeExamComponent implements OnInit, OnDestroy {
           this.exam = {
             id: examId,
             questions: savedState.questions,
-            examTitle: this.savedExam.examTitle,
-            examDescription: this.savedExam.examDescription,
+            examTitleEn: this.savedExam.examTitleEn,
+            examTitleDe: this.savedExam.examTitleDe,
+            examTitleNl: this.savedExam.examTitleNl,
+            examTitleFr: this.savedExam.examTitleFr,
+            examDescriptionEn: this.savedExam.examDescriptionEn,
+            examDescriptionDe: this.savedExam.examDescriptionDe,
+            examDescriptionFr: this.savedExam.examDescriptionFr,
+            examDescriptionNl: this.savedExam.examDescriptionNl,
             duration: 0,
             totalQuestions: savedState.questions?.length,
             passingScore: this.savedExam.duration,
@@ -268,7 +280,7 @@ export class TakeExamComponent implements OnInit, OnDestroy {
             maxHeight: 'auto',
             panelClass: 'compact-dialog',
             data: {
-              examName: this.exam?.examTitle || 'exam',
+              examName: this.exam?.examTitleEn || 'exam',
               issueDate: new Date().toLocaleDateString(),
               validity: this.exam?.certificateValidity,
               status: 'passed'
@@ -279,7 +291,7 @@ export class TakeExamComponent implements OnInit, OnDestroy {
         } else {
           this.dialog.open(CertificateDialogComponent, {
             data: {
-              examName: this.exam?.examTitle,
+              examName: this.exam?.examTitleEn,
               status: 'failed'
             }
           });
