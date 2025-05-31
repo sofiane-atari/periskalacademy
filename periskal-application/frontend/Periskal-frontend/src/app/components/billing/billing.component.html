@@ -6,6 +6,7 @@
         </div>
         <mat-horizontal-stepper>
           <mat-step>
+            @if(roleAuth.isAdmin() || roleAuth.isSupport()){
             <ng-template matStepLabel>{{'BILLING_INFORMATION' | translate}}</ng-template>
         <form [formGroup]="billingForm">
           <!-- Personal Information -->
@@ -113,6 +114,7 @@
           </div>
           <input type="hidden" formControlName="examId">
         </form>
+      }
         </mat-step>
         <mat-step>
               <ng-template matStepLabel>{{'ORDER_OVERVIEW' | translate}}</ng-template>

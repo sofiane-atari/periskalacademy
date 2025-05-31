@@ -45,5 +45,19 @@ export class RoleAuthorizationService {
     }
     return false;
   }
+  isSupport(): boolean{
+    const userRole = this.jwtDecoderService.getUserRole();
+    if (userRole === 'Support') {
+      return true;
+    }
+    return false;
+  }
+  isAdmin(): boolean{
+    const userRole = this.jwtDecoderService.getUserRole();
+    if (userRole === 'Admin') {
+      return true;
+    }
+    return false;
+  }
   
 }
