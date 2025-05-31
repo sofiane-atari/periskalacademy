@@ -20,14 +20,12 @@ import periskal.academy.backend.service.CompletedExamService;
 @RequestMapping("/api/completed-exams")
 @Slf4j
 public class CompletedExamController {
-    
+
     private final CompletedExamService completedExamService;
 
-    
     public CompletedExamController(CompletedExamService completedExamService) {
         this.completedExamService = completedExamService;
     }
-    
 
     @GetMapping("/user/{userId}")
     @PreAuthorize(SecurityRoles.ALL_ROLES)
@@ -35,14 +33,12 @@ public class CompletedExamController {
         List<CompletedExamDTO> completedExams = completedExamService.getCompletedExamsByUserId(userId);
         return ResponseEntity.ok(completedExams);
     }
-    
 
     @PostMapping
-    @PreAuthorize(SecurityRoles.ADMIN_SKIPPER)
+    @PreAuthorize(SecurityRoles.ADMIN_SUPPORT_SKIPPER)
     public ResponseEntity<CompletedExamDTO> saveCompletedExam(@RequestBody CompletedExamDTO completedExamDTO) {
         CompletedExamDTO savedExam = completedExamService.saveCompletedExam(completedExamDTO);
         return ResponseEntity.ok(savedExam);
     }
-    
 
 }
