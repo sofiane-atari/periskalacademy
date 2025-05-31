@@ -64,21 +64,21 @@ export class AddExamComponent implements OnInit {
   initForm(): void {
     this.examForm = this.fb.group({
       trainingId: ['', Validators.required],
-      examTitleEn: ['', [Validators.required, Validators.minLength(5)]],
-      examTitleNl: ['', [Validators.required, Validators.minLength(5)]],
-      examTitleFr: ['', [Validators.required, Validators.minLength(5)]],
-      examTitleDe: ['', [Validators.required, Validators.minLength(5)]],
-      examDescriptionEn: ['', [Validators.required, Validators.minLength(10)]],
-      examDescriptionNl: ['', [Validators.required, Validators.minLength(10)]],
-      examDescriptionFr: ['', [Validators.required, Validators.minLength(10)]],
-      examDescriptionDe: ['', [Validators.required, Validators.minLength(10)]],
+      examTitleEn: ['', [Validators.required]],
+      examTitleNl: ['', [Validators.required]],
+      examTitleFr: ['', [Validators.required]],
+      examTitleDe: ['', [Validators.required]],
+      examDescriptionEn: ['', [Validators.required]],
+      examDescriptionNl: ['', [Validators.required]],
+      examDescriptionFr: ['', [Validators.required]],
+      examDescriptionDe: ['', [Validators.required]],
       totalQuestions: ['', Validators.required],
       price: ['', Validators.required],
-      examAttempts: ['', [Validators.required, Validators.min(1)]],
-      duration: ['', [Validators.required, Validators.min(1)]],
+      examAttempts: ['', [Validators.required]],
+      duration: ['', [Validators.required]],
       certificateValidity: [''],
       passingScore: [''],
-      questions: this.fb.array([]), 
+      questions: this.fb.array([]),
     });
   }
 
@@ -96,17 +96,17 @@ export class AddExamComponent implements OnInit {
   addQuestion(): void {
     const answerGroup = () =>
       this.fb.group({
-        textEn: ['', [Validators.required, Validators.minLength(1)]],
-        textNl: ['', [Validators.required, Validators.minLength(1)]],
-        textFr: ['', [Validators.required, Validators.minLength(1)]],
-        textDe: ['', [Validators.required, Validators.minLength(1)]],
+        textEn: ['', [Validators.required]],
+        textNl: ['', [Validators.required]],
+        textFr: ['', [Validators.required]],
+        textDe: ['', [Validators.required]],
       });
 
     const questionGroup = this.fb.group({
-      textEn: ['', [Validators.required, Validators.minLength(5)]],
-      textNl: ['', [Validators.required, Validators.minLength(5)]],
-      textFr: ['', [Validators.required, Validators.minLength(5)]],
-      textDe: ['', [Validators.required, Validators.minLength(5)]],
+      textEn: ['', [Validators.required]],
+      textNl: ['', [Validators.required]],
+      textFr: ['', [Validators.required]],
+      textDe: ['', [Validators.required]],
       photos: [[]],
       answers: this.fb.array([
         answerGroup(),
@@ -205,7 +205,7 @@ export class AddExamComponent implements OnInit {
           console.log(response);
           this.router.navigate(['/training-employee']);
         },
-        error: (error) => {},
+        error: (error) => { },
       });
     }
   }
@@ -238,7 +238,7 @@ export class AddExamComponent implements OnInit {
   }
   getQuestionDisplayText(questionIndex: number): string {
     const langKey = this.getLangKey();
-    return this.questions.at(questionIndex)?.get(`text${langKey}`)?.value 
+    return this.questions.at(questionIndex)?.get(`text${langKey}`)?.value
       || this.translate.instant('NO_QUESTION_ENTERED');
   }
 }
